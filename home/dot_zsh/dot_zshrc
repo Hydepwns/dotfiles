@@ -1,0 +1,239 @@
+# shellcheck disable=all
+# This file contains chezmoi template syntax which will be processed by chezmoi
+# Ruby/rbenv configuration (must be at top)
+{{- if .rbenv -}}
+export PATH="{{ .chezmoi.homeDir }}/.rbenv/shims:$PATH"
+eval "$(rbenv init -)"
+{{- end -}}
+
+# PATH
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
+
+# Autoload completions
+autoload -U compinit
+compinit -i
+
+# OS-specific PATH setup
+{{- if eq .chezmoi.os "darwin" -}}
+# macOS paths
+export PATH="{{ .brewPrefix }}/bin:{{ .brewPrefix }}/sbin:$PATH"
+eval "$({{ .brewPrefix }}/bin/brew shellenv)"
+
+# Multiple Homebrews on Apple Silicon
+if [ "$(arch)" = "arm64" ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+    {{- if .llvm -}}export PATH="/opt/homebrew/opt/llvm/bin:$PATH"{{- end -}}
+    {{- if .postgres -}}export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"{{- end -}}
+    export PATH="/opt/homebrew/opt/python@3.8/bin:$PATH"
+else
+    eval "$(/usr/local/bin/brew shellenv)"
+    export PATH="/usr/local/opt/python@3.9/bin:$PATH"
+fi
+
+{{- if .psql -}}# Export psql
+export PATH="/Applications/Postgres.app/Contents/Versions/15/bin:$PATH"{{- end -}}
+
+{{- if .foundry -}}# Export foundry
+export PATH="$PATH:/Users/droo/.foundry/bin"{{- end -}}
+
+{{- if .huff -}}# Export huff
+export PATH="$PATH:{{ .chezmoi.homeDir }}/.huff/bin"{{- end -}}
+
+{{- if .solana -}}# Export Solana
+export PATH="{{ .chezmoi.homeDir }}/.local/share/solana/install/active_release/bin:$PATH"{{- end -}}
+
+{{- else if eq .chezmoi.os "linux" -}}
+# Linux paths
+{{- if .nix -}}
+# Nix paths are handled by Nix itself
+{{- else -}}
+export PATH="/usr/local/bin:$PATH"
+{{- end -}}
+{{- end -}}
+
+# Oh My Zsh configuration
+{{- if .ohmyzsh -}}
+# Path to your oh-my-zsh installation.
+export ZSH="{{ .chezmoi.homeDir }}/.oh-my-zsh"
+
+# Set name of the theme to load
+ZSH_THEME="robbyrussell"
+
+# Which plugins would you like to load?
+plugins=(git)
+
+source $ZSH/oh-my-zsh.sh
+{{- end -}}
+
+# Rust configuration
+export PATH="{{ .chezmoi.homeDir }}/.cargo/bin:$PATH"
+
+# NVM configuration
+{{- if .nvm -}}
+export NVM_DIR="{{ .chezmoi.homeDir }}/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+{{- end -}}
+
+# Additional Node.js configuration
+{{- if .nodejs -}}
+export PATH="{{ .chezmoi.homeDir }}/.asdf/installs/nodejs/18.19.0/bin:$PATH"
+{{- end -}}
+
+# asdf configuration
+{{- if .asdf -}}
+. {{ .brewPrefix }}/opt/asdf/libexec/asdf.sh
+{{- end -}}
+
+# Additional asdf configuration (always loaded if asdf is present)
+if command -v asdf &> /dev/null; then
+    . {{ .brewPrefix }}/opt/asdf/libexec/asdf.sh
+fi
+
+# Elixir configuration
+{{- if .elixir -}}
+# Add Elixir to PATH (assuming installed via Homebrew or asdf)
+export PATH="$PATH:{{ .chezmoi.homeDir }}/.mix/escripts"
+# Initialize Elixir version manager if using kiex
+if command -v kiex &> /dev/null; then
+    eval "$(kiex init)"
+fi
+{{- end -}}
+
+# Erlang configuration
+{{- if .erlang -}}
+export PATH="{{ .brewPrefix }}/opt/erlang/bin:$PATH"
+{{- end -}}
+
+# Lua configuration
+{{- if .lua -}}
+# Add Lua to PATH (assuming installed via Homebrew or asdf)
+export PATH="$PATH:{{ .chezmoi.homeDir }}/.luarocks/bin"
+# Initialize Lua version manager if using luaenv
+if command -v luaenv &> /dev/null; then
+    eval "$(luaenv init -)"
+fi
+{{- end -}}
+
+# direnv configuration
+{{- if .direnv -}}
+# direnv - automatically load environment variables from .envrc files
+eval "$(direnv hook zsh)"
+{{- end -}}
+
+# devenv configuration
+{{- if .devenv -}}
+# devenv - Nix-based development environment manager
+export DEVENV_DOTFILE=.devenv
+export DEVENV_PROFILE=.devenv/.profile
+{{- end -}}
+
+# Nix-specific settings
+{{- if .nix -}}
+# Nix shell integration
+if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then
+    . ~/.nix-profile/etc/profile.d/nix.sh
+fi
+. /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+export PATH="/nix/var/nix/profiles/default/bin:$PATH"
+{{- end -}}
+
+# Additional Nix configuration (always loaded if Nix is present)
+if command -v nix &> /dev/null; then
+    . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+    export PATH="/nix/var/nix/profiles/default/bin:$PATH"
+fi
+
+# pnpm configuration
+{{- if eq .chezmoi.os "darwin" -}}
+export PNPM_HOME="{{ .chezmoi.homeDir }}/Library/pnpm"
+{{- else if eq .chezmoi.os "linux" -}}
+export PNPM_HOME="{{ .chezmoi.homeDir }}/.local/share/pnpm"
+{{- end -}}
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+
+# pipx configuration
+export PATH="$PATH:{{ .chezmoi.homeDir }}/.local/bin"
+
+# Additional tool configurations
+{{- if .llvm -}}
+# LLVM configuration
+export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+{{- end -}}
+
+{{- if .postgres -}}
+# PostgreSQL configuration
+export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
+export PATH="/Applications/Postgres.app/Contents/Versions/15/bin:$PATH"
+{{- end -}}
+
+{{- if .foundry -}}
+# Foundry configuration
+export PATH="$PATH:{{ .chezmoi.homeDir }}/.foundry/bin"
+{{- end -}}
+
+{{- if .huff -}}
+# Huff configuration
+export PATH="$PATH:{{ .chezmoi.homeDir }}/.huff/bin"
+{{- end -}}
+
+# Universal settings
+export EDITOR="vim"
+export LANG="en_US.UTF-8"
+
+# macOS-specific aliases
+{{- if eq .chezmoi.os "darwin" -}}
+alias copy="pbcopy"
+alias paste="pbpaste"
+alias ls="ls -G"
+alias flushdns="sudo dscacheutil -flushcache"
+{{- else if eq .chezmoi.os "linux" -}}
+# Linux-specific aliases
+alias copy="xclip -selection clipboard"
+alias paste="xclip -selection clipboard -o"
+alias ls="ls --color=auto"
+alias open="xdg-open"
+{{- end -}}
+
+# Common aliases
+alias ll="ls -la"
+alias g="git"
+alias cm="chezmoi"
+
+# VS Code integration
+code () { VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $* ;}
+
+# Terminal integration
+{{- if eq .chezmoi.os "darwin" -}}
+# iTerm2 integration
+test -e "{{ .chezmoi.homeDir }}/.iterm2_shell_integration.zsh" && source "{{ .chezmoi.homeDir }}/.iterm2_shell_integration.zsh"
+{{- else if eq .chezmoi.os "linux" -}}
+# Kitty terminal integration
+if [[ "$TERM" == "xterm-kitty" ]]; then
+    alias icat="kitty +kitten icat"
+    alias ssh="kitty +kitten ssh"
+fi
+{{- end -}}
+
+# DappSnap - Automatically use the correct Node.js version
+{{- if .nvm -}}
+cd() { builtin cd "$@" && if [ -f ".nvmrc" ]; then nvm use; elif [ -d "node_modules" ]; then nvm use 23.4.0; fi }
+# Initial setup for current directory
+if [ -d "{{ .chezmoi.homeDir }}/Documents/CODE/dappsnap/node_modules" ]; then nvm use 23.4.0; fi
+{{- end -}}
+
+# Work-specific settings
+{{- if .work -}}
+export GIT_AUTHOR_EMAIL="{{ .email }}"
+export GIT_COMMITTER_EMAIL="{{ .email }}"
+export GITHUB_TOKEN=your_personal_access_token
+# Add work-specific configs here
+{{- end -}}
+
+# GitHub token (if not in work mode)
+{{- if not .work -}}
+export GITHUB_TOKEN=your_personal_access_token
+{{- end -}}

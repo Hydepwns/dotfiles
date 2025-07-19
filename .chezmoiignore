@@ -1,0 +1,67 @@
+# chezmoi ignore file - not a shell script
+# shellcheck disable=all
+# Git
+.git/
+.gitignore
+
+# Documentation
+README.md
+LICENSE
+docs/
+
+# Scripts and utilities
+scripts/
+templates/
+
+# IDE and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs and debugging
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# Chezmoi
+.chezmoiignore
+.chezmoi.toml
+
+# Claude
+.claude.json
+
+# Development tools
+.cargo/
+.rustup/
+.rustup.sh
+node_modules/
+.npm/
+.yarn/
+
+# SSH (optional 1Password templates - only ignore if not using 1Password)
+# Uncomment these lines if you don't want to use 1Password for SSH key management:
+# home/dot_ssh/id_rsa.pub.tmpl
+# home/dot_ssh/private_id_rsa.tmpl

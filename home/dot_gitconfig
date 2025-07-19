@@ -1,0 +1,65 @@
+[user]
+    name = {{ .chezmoi.fullname | quote }}
+    email = {{ .email | quote }}
+    {{- if .work -}}
+    signingkey = 1938C94528268692
+    {{- end -}}
+
+[core]
+    editor = vim
+    {{- if eq .chezmoi.os "darwin" -}}
+    excludesfile = {{ .chezmoi.homeDir }}/.gitignore_global
+    autocrlf = input
+    # macOS-specific settings
+    trustctime = false
+    precomposeunicode = false
+    {{- end -}}
+
+[init]
+    defaultBranch = main
+
+[color]
+    ui = true
+
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+
+[merge "npm-merge-driver"]
+    name = automatically merge npm lockfiles
+    driver = npx npm-merge-driver merge %A %O %B %P
+
+[gpg]
+    program = gpg
+
+[commit]
+    gpgsign = false
+
+[alias]
+    st = status
+    co = checkout
+    br = branch
+    {{- if .work -}}
+    push-clean = !git fetch upstream main && git rebase upstream/main && git push -f
+    {{- end -}}
+
+{{- if .work -}}
+[url "ssh://git@github.work.com/"]
+    insteadOf = https://github.work.com/
+{{- end -}}
+
+# OS-specific credential helpers
+{{- if eq .chezmoi.os "darwin" -}}
+[credential]
+    helper = osxkeychain
+{{- else if eq .chezmoi.os "linux" -}}
+[credential]
+    helper = cache --timeout=3600
+{{- end -}}
+
+{{- if .work -}}
+[safe]
+    directory = {{ .chezmoi.homeDir }}/Documents/CODE/
+{{- end -}}

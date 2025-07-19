@@ -1,0 +1,16 @@
+# chezmoi rc
+
+# Enable personal configuration for SSH keys
+personal = true
+
+# Data for templates
+data:
+  # Your GitHub username for SSH key fetching
+  github_username: "hydepwns"
+  
+  # Personal configuration flag
+  personal: true
+  
+  # Oh My Zsh configuration
+  oh_my_zsh_theme: "robbyrussell"
+  oh_my_zsh_plugins: "git"
