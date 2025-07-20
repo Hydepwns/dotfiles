@@ -1,56 +1,29 @@
-{{- $email := promptStringOnce . "email" "Email address" -}}
-{{- $fullname := promptStringOnce . "fullname" "Full name" -}}
-{{- $work := promptBoolOnce . "work" "Is this a work machine (y/n)" -}}
-{{- $nix := promptBoolOnce . "nix" "Do you use Nix on this machine (y/n)" -}}
-{{- $ohmyzsh := promptBoolOnce . "ohmyzsh" "Do you use Oh My Zsh (y/n)" -}}
-{{- $asdf := promptBoolOnce . "asdf" "Do you use asdf version manager (y/n)" -}}
-{{- $nvm := promptBoolOnce . "nvm" "Do you use NVM for Node.js (y/n)" -}}
-{{- $rbenv := promptBoolOnce . "rbenv" "Do you use rbenv for Ruby (y/n)" -}}
-{{- $orbstack := promptBoolOnce . "orbstack" "Do you use OrbStack (y/n)" -}}
-{{- $elixir := promptBoolOnce . "elixir" "Do you use Elixir (y/n)" -}}
-{{- $lua := promptBoolOnce . "lua" "Do you use Lua (y/n)" -}}
-{{- $direnv := promptBoolOnce . "direnv" "Do you use direnv (y/n)" -}}
-{{- $devenv := promptBoolOnce . "devenv" "Do you use devenv (y/n)" -}}
-{{- $neovim := promptBoolOnce . "neovim" "Do you use Neovim (y/n)" -}}
-
 [data]
-    email = {{ $email | quote }}
-    fullname = {{ $fullname | quote }}
-    work = {{ $work }}
-    nix = {{ $nix }}
-    ohmyzsh = {{ $ohmyzsh }}
-    asdf = {{ $asdf }}
-    nvm = {{ $nvm }}
-    rbenv = {{ $rbenv }}
-    orbstack = {{ $orbstack }}
-    elixir = {{ $elixir }}
-    lua = {{ $lua }}
-    direnv = {{ $direnv }}
-    devenv = {{ $devenv }}
-    neovim = {{ $neovim }}
-    
-    # Additional tool configurations
-    erlang = true
-    nodejs = true
-    
-{{- if eq .chezmoi.os "darwin" }}
-    # macOS-specific data
-    brewPrefix = {{ if eq .chezmoi.arch "arm64" }}"/opt/homebrew"{{ else }}"/usr/local"{{ end }}
-    macports = true
-    solana = true
-    foundry = true
-    huff = true
-    llvm = true
-    postgres = true
-    psql = true
-{{- else if eq .chezmoi.os "linux" }}
-    # Linux-specific data
-    brewPrefix = "/home/linuxbrew/.linuxbrew"
-    macports = false
-    solana = false
-    foundry = false
-    huff = false
-    llvm = false
-    postgres = false
-    psql = false
-{{- end }}
+# User information
+email = "droo@axol.io"
+name = "hydepwns"
+
+# Tool configurations
+rbenv = false
+ohmyzsh = true
+nvm = true
+nodejs = true
+asdf = true
+elixir = true
+erlang = false
+lua = true
+direnv = true
+devenv = false
+nix = true
+llvm = false
+postgres = false
+psql = false
+foundry = false
+huff = false
+solana = false
+orbstack = false
+work = false
+personal = false
+
+# Platform-specific
+brewPrefix = "/opt/homebrew"
