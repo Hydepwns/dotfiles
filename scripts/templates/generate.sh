@@ -461,7 +461,7 @@ create_rust_project() {
 name = "$name"
 version = "0.1.0"
 edition = "2021"
-authors = ["Your Name <your.email@example.com>"]
+authors = ["DROO <drew@axol.io>"]
 description = "Generated Rust project"
 license = "MIT"
 repository = ""
