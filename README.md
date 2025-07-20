@@ -1,99 +1,156 @@
 # DROO's Dotfiles
 
+[![Plugins](https://dotfyle.com/Hydepwns/dotfiles-config-nvim/badges/plugins?style=flat)](https://dotfyle.com/Hydepwns/dotfiles-config-nvim)
+[![Leader Key](https://dotfyle.com/Hydepwns/dotfiles-config-nvim/badges/leaderkey?style=flat)](https://dotfyle.com/Hydepwns/dotfiles-config-nvim)
+[![Plugin Manager](https://dotfyle.com/Hydepwns/dotfiles-config-nvim/badges/plugin-manager?style=flat)](https://dotfyle.com/Hydepwns/dotfiles-config-nvim)
+
 Cross-platform dotfiles managed with [chezmoi](https://www.chezmoi.io/) - featuring modular tool loading, project templates, and development automation.
 
-[![CI](https://github.com/hydepwns/dotfiles/workflows/CI/badge.svg)](https://github.com/hydepwns/dotfiles/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![chezmoi](https://img.shields.io/badge/chezmoi-managed-blue.svg)](https://www.chezmoi.io/)
+```bash
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    🚀 DROO's Dotfiles Configuration Matrix                               │
+├─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│  📊 Status: MIT License | macOS/Linux | Zsh/Bash | 1.3s → 0.4s | Active Development                      │
+├─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│  🛠️  Core Tools          │  💻 Languages & Runtimes    │  🔧 Version Managers    │  🌐 Web3 & Frameworks │
+│  ─────────────────────── │  ───────────────────────── │  ───────────────────── │  ───────────────────────  │
+│  🏠 chezmoi (Latest)     │  🟢 Node.js 23.4.0         │  📦 asdf 0.13.1        │  ⚡ Ethereum             │
+│  🐚 Zsh 5.9             │  🐍 Python 3.10.13         │  🔄 direnv 2.32.3      │  🔨 Foundry              │
+│  🐱 Kitty 0.30.1        │  🦀 Rust 1.88.0            │  🐧 devenv 0.10.0      │  🟣 Solana               │
+│  📝 Neovim 0.10.0       │  💜 Elixir 1.18.3          │  ❄️  Nix 2.18.0         │  ⚛️  Next.js            │
+│  🎯 Cursor 0.1.0        │  ☕ Erlang 26.2.4           │  ───────────────────── │  ⚛️  React              │
+│  ─────────────────────── │  🔵 Lua 5.4.8              │  🛠️  Development Tools  │  🔷 TypeScript          │
+│  🎨 Project Templates   │  ───────────────────────── │  ───────────────────── │  🎨 Tailwind CSS          │
+│  ─────────────────────── │  📋 Available Templates    │  🔧 Git                │  ───────────────────────  │
+│  ⛓️  web3               │  ───────────────────────── │  🐙 GitHub             │  ⚡ Features & Workflow     │
+│  ⚛️  nextjs             │  🏗️  Full-stack blockchain  │  🐳 Docker             │  ───────────────────────  │
+│  ⚛️  react              │  ⚛️  Modern React apps      │  🍺 Homebrew           │  ⚡ Lazy Loading           │
+│  🦀 rust                │  🦀 CLI tools & services    │  ✅ Pre-commit         │  📋 8 Template Types      │
+│  💜 elixir              │  💜 Phoenix web apps        │  ───────────────────── │  🧩 Modular Architecture │
+│  🟢 node                │  🟢 Node.js APIs            │  📊 Performance Tools  │  📊 Performance Monitor  │
+│  🐍 python              │  🐍 Python applications     │  ───────────────────── │  ⛓️  Web3 Ready          │
+│  🔵 go                  │  🔵 Go services             │  ⏱️  Startup: 0.4s     │  🚀 0.9s Saved per Shell │
+│  ─────────────────────── │  ───────────────────────── │  💾 Memory: Optimized  │  🎯 Auto-completion      │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+<!-- markdownlint-disable MD033 -->
+<details open>
+<summary>🔗 Neovim Plugins</summary>
+
+```bash
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    🎯 Neovim Plugin Configuration Matrix                                 │
+├─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│  📊 Status: 50+ plugins | Lazy Loading | Performance Optimized | 15 Categories                           │
+├─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│  🎨 UI/Theme          │  💬 Comments          │  ⚡ Completion        │  🔍 Fuzzy Finder         │
+│  ───────────────────── │  ─────────────────── │  ─────────────────── │  ───────────────────── │
+│  🌙 twilight.nvim     │   Comment.nvim     │   nvim-cmp         │  🔭 telescope.nvim     │
+│  🎨 mini.hipatterns   │  ✅ todo-comments     │   LuaSnip          │  📍 mini.visits        │
+│  🌆 synthwave84.nvim  │   ts-context       │   friendly-snippets│  🔍 mini.extra         │
+│  ───────────────────── │  ─────────────────── │  ─────────────────── │  ───────────────────── │
+│  📁 File Explorer     │   LSP/Diagnostics  │   Git              │  ⌨️  Keybindings       │
+│  ───────────────────── │  ─────────────────── │  ─────────────────── │  ───────────────────── │
+│  📂 mini.files        │   nvim-lspconfig   │   mini.diff        │  ⌨️  which-key.nvim    │
+│  🌳 nvim-tree.lua     │  🛠️  mason.nvim      │   gitsigns.nvim    │  ⚡ flash.nvim         │
+│  ───────────────────── │  ⚠️  trouble.nvim    │  ─────────────────── │  ───────────────────── │
+│  📝 Editing           │   Status/Tabs      │   Testing          │  📚 Note-taking        │
+│  ───────────────────── │  ─────────────────── │  ─────────────────── │  ───────────────────── │
+│  🔗 mini.pairs        │   mini.statusline  │   neotest          │  📖 orgmode            │
+│  🔄 mini.surround     │   lualine.nvim     │   neotest-*        │   neorg               │
+│  🤖 mini.ai           │   mini.tabline     │  ─────────────────── │  ───────────────────── │
+│  ➡️  mini.move        │  ─────────────────── │   Fonts            │  🛠️  Utilities         │
+│  ⚙️  mini.operators   │  ─────────────────── │  ─────────────────── │  ───────────────────── │
+│  ───────────────────── │  ─────────────────── │   mona.nvim       │  🧩 mini.nvim          │
+│  ───────────────────── │  ─────────────────── │  ─────────────────── │  🔊 noice.nvim         │
+│  ───────────────────── │  ─────────────────── │  ─────────────────── │  🔔 nvim-notify        │
+│  ───────────────────── │  ─────────────────── │  ─────────────────── │  🎛️  dressing.nvim     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Key Features**: Lazy loading, modular architecture, performance optimized, 15 categories
+</details>
+<!-- markdownlint-enable MD033 -->
+
+| Template | 🎨 Icon | 📝 Description | 🛠️ Tech Stack | ⚙️ Options | 📋 Template Types |
+|----------|---------|---------------|---------------|------------|-----------------|
+| **web3** | ⛓️ | Full-stack blockchain | Ethereum/Foundry, Solana/Anchor | `--web3-type`, `--with-tests`, `--with-ci` | 8 |
+| **nextjs** | ⚛️ | Modern React apps | TypeScript, Tailwind, Testing | `--with-tests`, `--with-ci`, `--with-docs` | 8 |
+| **react** | ⚛️ | React with Vite | TypeScript, Vite, Testing | `--with-tests`, `--with-ci` | 8 |
+| **rust** | 🦀 | CLI tools & services | Rust, Common deps, Web frameworks | `--with-docs`, `--with-ci` | 8 |
+| **elixir** | 💜 | Phoenix web apps | Elixir, Phoenix, LiveView | `--with-docs`, `--with-ci` | 8 |
+| **node** | 🟢 | Node.js APIs | Node.js, TypeScript, Express | `--with-tests`, `--with-ci` | 8 |
+| **python** | 🐍 | Python applications | Python, Virtual env, Testing | `--with-docs`, `--with-ci` | 8 |
+| **go** | 🔵 | Go services | Go modules, Testing, CLI | `--with-tests`, `--with-ci` | 8 |
+
+---
 
 ## 🚀 Quick Start
 
-### One-Command Setup (Recommended)
+### 📦 Install
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/hydepwns/dotfiles/main/scripts/setup/quick-setup.sh | bash
 ```
 
-### Alternative Setup Options
+### 🔄 Alternative
 
 ```bash
-# Manual setup
 brew install chezmoi && chezmoi init --apply https://github.com/hydepwns/dotfiles.git
-
-# Full bootstrap (with dependencies)
-curl -fsSL https://raw.githubusercontent.com/hydepwns/dotfiles/main/scripts/setup/bootstrap.sh | bash
 ```
-
-### Setup Scripts Reference
-
-| Script | Purpose | Use Case |
-|--------|---------|----------|
-| `quick-setup.sh` | One-command setup | New machines |
-| `bootstrap.sh` | Complete setup | Full system with dependencies |
-| `setup-cursor.sh` | Cursor IDE config | After initial setup |
-| `setup-ci.sh` | CI/CD tools | Development workflow |
 
 ## ✨ Key Features
 
-- **🚀 Lazy Loading**: Version managers load only when used (~48% faster startup)
+- **🚀 Lazy Loading**: Version managers load only when used (saves 0.9s per shell startup)
 - **📊 Performance Monitoring**: Real-time tracking of shell startup times
 - **🧩 Modular Configuration**: Organized shell modules in `home/dot_zsh/core/`
 - **🎯 Project Templates**: Web3, Next.js, Rust CLI generators
 
 ### Performance Metrics
-- **Shell Startup**: Reduced from 2.69s to 1.40s (~48% improvement)
-- **Tool Loading**: Lazy-loaded version managers (NVM, rbenv, asdf, direnv)
+
+- **Shell Startup**: 1.3s → 0.4s (0.9s saved per startup)
+- **Tool Loading**: NVM (0.21s), rbenv (0.06s), pyenv (0.15s) - lazy loaded
 - **Memory Usage**: Optimized PATH management and module loading
 - **Development Speed**: Pre-configured templates and automation
 
-## 🛠️ Development Stack
+### ⚡ Lazy Loading Performance Breakdown
 
-| Category | Tools |
-|----------|-------|
-| **Shell & Terminal** | ![Zsh](https://img.shields.io/badge/Zsh-1.2.0-000000?style=flat&logo=gnu-bash&logoColor=white) ![Kitty](https://img.shields.io/badge/Kitty-0.30.1-000000?style=flat&logo=kitty&logoColor=white) |
-| **Editors & IDEs** | ![Neovim](https://img.shields.io/badge/Neovim-57C3C2?style=flat&logo=neovim&logoColor=white) ![Zed](https://img.shields.io/badge/Zed-000000?style=flat&logo=zed&logoColor=white) ![Cursor](https://img.shields.io/badge/Cursor-000000?style=flat&logo=cursor&logoColor=white) |
-| **Languages** | ![Rust](https://img.shields.io/badge/Rust-000000?style=flat&logo=rust&logoColor=white) ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=nodedotjs&logoColor=white) ![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white) ![Go](https://img.shields.io/badge/Go-00ADD8?style=flat&logo=go&logoColor=white) ![Elixir](https://img.shields.io/badge/Elixir-4B275F?style=flat&logo=elixir&logoColor=white) ![Lua](https://img.shields.io/badge/Lua-2C2D72?style=flat&logo=lua&logoColor=white) |
-| **Web3 & Frameworks** | ![Ethereum](https://img.shields.io/badge/Ethereum-3C3C3D?style=flat&logo=ethereum&logoColor=white) ![Foundry](https://img.shields.io/badge/Foundry-000000?style=flat&logo=foundry&logoColor=white) ![Solana](https://img.shields.io/badge/Solana-14F46D?style=flat&logo=solana&logoColor=white) ![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=nextdotjs&logoColor=white) |
-| **Version Managers** | ![asdf](https://img.shields.io/badge/asdf-000000?style=flat&logo=asdf&logoColor=white) ![NVM](https://img.shields.io/badge/NVM-000000?style=flat&logo=nvm&logoColor=white) ![rbenv](https://img.shields.io/badge/rbenv-000000?style=flat&logo=ruby&logoColor=white) ![direnv](https://img.shields.io/badge/direnv-000000?style=flat&logo=direnv&logoColor=white) |
+| Tool | Eager Load | Lazy Load | Time Saved |
+|------|------------|-----------|------------|
+| **NVM** | 0.21s | 0.003s | **0.21s** |
+| **rbenv** | 0.06s | 0.003s | **0.06s** |
+| **pyenv** | 0.15s | 0.003s | **0.15s** |
+| **asdf** | 0.008s | 0.003s | **0.005s** |
+| **Total** | **0.43s** | **0.012s** | **0.42s** |
 
-### Project Templates
+> Based on 10-iteration benchmarks on M1 macbook pro
 
-| Template | Description | Tech Stack |
-|----------|-------------|------------|
-| **Web3 Development** | Full-stack blockchain | Ethereum/Foundry, Solana/Anchor |
-| **Next.js App** | Modern React apps | TypeScript, Tailwind, Testing |
-| **React App** | React with Vite | TypeScript, Vite, Testing |
-| **Rust CLI** | Command-line tools | Rust, Common deps, Web frameworks |
-| **Elixir Phoenix** | Web applications | Elixir, Phoenix, LiveView |
-| **Node.js API** | Backend services | Node.js, TypeScript, Express |
-| **Python App** | Python applications | Python, Virtual env, Testing |
-| **Go Service** | Go applications | Go modules, Testing, CLI |
+## 🛠️ Usage & Commands
 
-## 🛠️ Usage
+| Category | Command | Description |
+|----------|---------|-------------|
+| **🏠 Core** | `make install` | Install dotfiles |
+| **🔄 Sync** | `make update` | Update from remote |
+| **🏥 Health** | `make doctor` | System health check |
+| **📡 Sync** | `make sync` | Sync local changes |
 
-### Essential Commands
+### 🎨 Project Generation
 
 ```bash
-# Core operations
-make install          # Install dotfiles
-make update           # Update from remote
-make doctor           # Health check
-make sync             # Sync local changes
+# Quick examples (see template table above for all options)
+make generate-template web3 my-project --web3-type both --with-tests --with-ci
+make generate-template nextjs my-app --with-tests --with-ci --with-docs
+make generate-template rust my-cli --with-docs --with-ci
 
-# Project generation
-make generate-template web3 my-defi-project ethereum solana
-make generate-template nextjs my-webapp typescript tailwind jest
-make generate-template rust my-cli-tool
-make generate-template elixir my-phoenix-app
-make generate-template react my-react-app --with-tests
-make generate-template python my-python-app --with-docs
-make generate-template go my-go-service --with-ci
+# List all templates and options
+make generate-template
 ```
 
-### Optional Setup
+### ⚙️ Optional Enhancements
 
 ```bash
-# Install optional tools
+# Install additional tools
 make install-optional
 
 # Setup Cursor IDE
@@ -103,126 +160,98 @@ make install-optional
 make performance-monitor ACTION=measure
 ```
 
-## ⚙️ Configuration
+---
 
-### Initial Setup
+## ⚙️ Configuration & Setup
 
-The setup prompts for:
+### 🎯 Initial Configuration
 
-- **Email & username** - Git configuration
-- **Tool preferences** - Nix, Oh My Zsh, asdf, etc.
-- **Machine type** - Personal (includes SSH keys) or work
+The setup process will prompt you for:
 
-### SSH Setup (Optional)
+| Setting | Purpose | Example |
+|---------|---------|---------|
+| **📧 Email** | Git configuration | `user@example.com` |
+| **👤 Username** | Git configuration | `Your Name` |
+| **🛠️ Tool Preferences** | Nix, Oh My Zsh, asdf | `y/n` for each tool |
+| **💻 Machine Type** | Personal (SSH keys) or Work | `personal` or `work` |
+
+### 🔑 SSH & GitHub Setup (Optional)
 
 ```bash
-export GITHUB_TOKEN="your_token_here"
+# Set GitHub token for SSH key fetching
+export GITHUB_TOKEN="your_personal_access_token"
+
+# Apply configuration with SSH keys
 chezmoi apply
+
+# Or use the setup script
+./scripts/setup/setup-github-token.sh
 ```
 
 ## 🔧 Command Reference
 
-| Category | Commands |
-|----------|---------|
-| **Core** | `install`, `update`, `diff`, `status` |
-| **Health** | `doctor`, `bootstrap` |
-| **Sync** | `sync`, `sync-from-remote` |
-| **Optional** | `install-optional`, `performance-monitor` |
+### 🎯 Core Commands
+
+| Category | Commands | Description |
+|----------|----------|-------------|
+| **🏠 Core** | `install`, `update`, `diff`, `status` | Basic dotfiles management |
+| **🏥 Health** | `doctor`, `bootstrap` | System diagnostics & setup |
+| **📡 Sync** | `sync`, `sync-from-remote` | Synchronization operations |
+| **⚙️ Optional** | `install-optional`, `performance-monitor` | Additional tools & monitoring |
+| **🛠️ Advanced** | `backup`, `clean`, `performance-test` | Maintenance & optimization |
 
 ## 🚀 Advanced Usage
 
-### Customization
 ```bash
-# Edit configuration
+# Edit specific configuration files
 chezmoi edit ~/.zshrc
+chezmoi edit ~/.gitconfig
+chezmoi edit ~/.tmux.conf
 
-# Apply specific templates
+# Apply specific templates only
 chezmoi apply --source-path ~/.local/share/chezmoi
 
-# Check configuration
+# Verify configuration integrity
 chezmoi verify
 ```
 
-### Development Workflow
 ```bash
-# Performance testing
-make performance-test
-
-# Health monitoring
-make doctor
-
-# Backup before changes
-make backup
-
-# Sync changes
-make sync
+# 1. Health check → 2. Backup → 3. Edit → 4. Test → 5. Sync
+make doctor && make backup && chezmoi edit ~/.zshrc && make performance-test && make sync
 ```
 
-### Template Options
 ```bash
-# Generate with specific options
-make generate-template web3 my-project --web3-type both --with-tests --with-ci
-
-# List available templates
+# List all templates and options
 make generate-template
 
-# Update tool versions
-make tool-versions COMMAND=update
+# Generate with all options
+make generate-template web3 my-project --web3-type both --with-tests --with-ci --with-direnv --with-devenv
 ```
 
-## 🚨 Quick Troubleshooting
+## 🚨 Troubleshooting & Support
 
-| Issue | Quick Fix |
-|-------|-----------|
-| **Template errors** | Check chezmoi syntax: `{{-` and `-}}` |
-| **Path issues** | Verify Homebrew prefix for your architecture |
-| **Tool not found** | Install tool before applying configuration |
-| **Performance issues** | Run `make performance-monitor ACTION=measure` |
-| **Cursor setup** | Use `./scripts/setup/setup-cursor-simple.sh` |
+| Issue | 🎯 Quick Fix | 🔍 Diagnostic |
+|-------|--------------|---------------|
+| **Template errors** | Check chezmoi syntax: `{{-` and `-}}` | `chezmoi verify` |
+| **Path issues** | Verify Homebrew prefix for your architecture | `make doctor` |
+| **Tool not found** | Install tool before applying configuration | `which <tool>` |
+| **Performance issues** | Run performance monitoring | `make performance-monitor ACTION=measure` |
+| **Cursor setup** | Use the simple setup script | `./scripts/setup/setup-cursor-simple.sh` |
+| **SSH key issues** | Check GitHub token setup | `./scripts/setup/setup-github-token.sh` |
 
-## 🆘 Getting Help
-
-- **Documentation**: Check `home/dot_zsh/core/` for modular configuration
-- **Templates**: Use `make generate-template` for project help
-- **Performance**: Use `make performance-monitor` for diagnostics
-- **Issues**: Check the troubleshooting table above
-
-## 🤝 Contributing
-
-We welcome contributions! Here's how to get started:
-
-### Quick Start for Contributors
 ```bash
-# Fork and clone the repository
-git clone https://github.com/your-username/dotfiles.git
-cd dotfiles
+make doctor                    # System health check
+make performance-monitor analyze # Performance analysis
+chezmoi verify                 # Configuration verification
 
-# Setup development environment
-make bootstrap
-
-# Make your changes
-chezmoi edit ~/.zshrc
-
-# Test your changes
-make doctor
-make performance-test
-
-# Commit and push
-make sync
+make performance-monitor for detailed metrics
+make generate-template to see all options
 ```
 
-### Contribution Guidelines
-- **Test changes**: Run `make doctor` and `make performance-test`
-- **Follow conventions**: Use existing patterns and structure
-- **Document updates**: Update README for new features
-- **Performance**: Ensure changes don't impact startup time
+---
 
-### Areas for Contribution
-- **New templates**: Add project templates for other frameworks
-- **Performance**: Optimize shell startup and tool loading
-- **Documentation**: Improve guides and examples
-- **Testing**: Add more comprehensive test coverage
+## 🌟 tldr; launch Gundam?
 
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) file for details.
+```bash
+curl -fsSL https://raw.githubusercontent.com/hydepwns/dotfiles/main/scripts/setup/quick-setup.sh | bash
+```
