@@ -31,4 +31,4 @@ if [[ -d "$ZSH_MODULES_DIR" ]]; then
             source "$module_file"
         fi
     done
-fi 
+fi

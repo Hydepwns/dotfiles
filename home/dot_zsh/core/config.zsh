@@ -24,7 +24,7 @@ tool_available() {
 load_tool_config() {
     local tool="$1"
     local config_file="{{ .chezmoi.homeDir }}/.zsh/tools/${tool}.zsh"
-    
+
     if [[ -f "$config_file" ]]; then
         source "$config_file"
     fi
@@ -51,4 +51,4 @@ alias g="git"
 alias cm="chezmoi"
 
 # VS Code integration
-code () { VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args "$@" ;} 
+code () { VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args "$@" ;}

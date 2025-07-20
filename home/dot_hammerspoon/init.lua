@@ -29,7 +29,7 @@ local function moveWindowToScreen(direction)
         local screens = screen.allScreens()
         local currentIndex = fnutils.indexOf(screens, currentScreen)
         local targetIndex = nil
-        
+
         if direction == "left" then
             targetIndex = currentIndex - 1
             if targetIndex < 1 then targetIndex = #screens end
@@ -37,7 +37,7 @@ local function moveWindowToScreen(direction)
             targetIndex = currentIndex + 1
             if targetIndex > #screens then targetIndex = 1 end
         end
-        
+
         if targetIndex then
             win:moveToScreen(screens[targetIndex])
             alert.show("Moved window to screen " .. targetIndex)
@@ -98,14 +98,14 @@ end
 -- Development tools launcher
 local function launchDevTools()
     local devApps = {
-        "kitty", 
+        "kitty",
         "Cursor",
         "Neovim",
         "Zed",
         "Brave Browser",
         "Firefox Developer Edition",
     }
-    
+
     for _, appName in ipairs(devApps) do
         local app = application.get(appName)
         if app then
@@ -150,13 +150,13 @@ local function cycleBrowsers()
     local browsers = {"Brave Browser", "Firefox Developer Edition", "Ladybird"}
     local currentApp = application.frontmostApplication()
     local currentIndex = fnutils.indexOf(browsers, currentApp:name())
-    
+
     local nextIndex = 1
     if currentIndex then
         nextIndex = currentIndex + 1
         if nextIndex > #browsers then nextIndex = 1 end
     end
-    
+
     launchOrFocus(browsers[nextIndex])
 end
 
@@ -205,7 +205,7 @@ local function showClipboardHistory()
             if #content > 50 then preview = preview .. "..." end
             table.insert(choices, {text = preview, subText = content})
         end
-        
+
         local chooser = hs.chooser.new(function(choice)
             if choice then
                 hs.pasteboard.setContents(choice.subText)
@@ -322,4 +322,4 @@ print("System:")
 print("  Cmd+Alt + w: Toggle WiFi")
 print("  Cmd+Alt + v: Clipboard history")
 print("  Cmd+Alt + r: Reload config")
-print("=============================") 
+print("=============================")

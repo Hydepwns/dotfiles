@@ -15,4 +15,4 @@ Host github.com
 # Host myserver
 #   HostName myserver.example.com
 #   User username
-#   ForwardAgent yes 
+#   ForwardAgent yes

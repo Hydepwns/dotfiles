@@ -14,4 +14,4 @@ case ":$PATH:" in
 esac
 
 # pipx configuration
-export PATH="$PATH:{{ .chezmoi.homeDir }}/.local/bin" 
+export PATH="$PATH:{{ .chezmoi.homeDir }}/.local/bin"

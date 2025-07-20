@@ -1,12 +1,8 @@
 # shellcheck disable=all
-# Main zsh configuration for DROO's dotfiles
 # This file contains chezmoi template syntax which will be processed by chezmoi
 
-# Ruby/rbenv configuration (must be at top)
-{{- if .rbenv -}}
-export PATH="{{ .chezmoi.homeDir }}/.rbenv/shims:$PATH"
-eval "$(rbenv init -)"
-{{- end -}}
+# Load modular PATH management first
+source "{{ .chezmoi.homeDir }}/.zsh/core/paths.zsh"
 
 # Autoload completions
 autoload -U compinit
@@ -26,11 +22,114 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 {{- end -}}
 
-# Load core configuration
-source "{{ .chezmoi.homeDir }}/.zsh/core/config.zsh"
+# NVM configuration
+{{- if .nvm -}}
+export NVM_DIR="{{ .chezmoi.homeDir }}/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+{{- end -}}
 
-# Load centralized PATH management
-source "{{ .chezmoi.homeDir }}/.zsh/core/paths.zsh"
+# asdf configuration
+{{- if .asdf -}}
+. {{ .brewPrefix }}/opt/asdf/libexec/asdf.sh
+{{- end -}}
+
+# Additional asdf configuration (always loaded if asdf is present)
+if command -v asdf &> /dev/null; then
+    . {{ .brewPrefix }}/opt/asdf/libexec/asdf.sh
+fi
+
+# Elixir configuration
+{{- if .elixir -}}
+# Initialize Elixir version manager if using kiex
+if command -v kiex &> /dev/null; then
+    eval "$(kiex init)"
+fi
+{{- end -}}
+
+# Lua configuration
+{{- if .lua -}}
+# Initialize Lua version manager if using luaenv
+if command -v luaenv &> /dev/null; then
+    eval "$(luaenv init -)"
+fi
+{{- end -}}
+
+# direnv configuration
+{{- if .direnv -}}
+# direnv - automatically load environment variables from .envrc files
+eval "$(direnv hook zsh)"
+{{- end -}}
+
+# devenv configuration
+{{- if .devenv -}}
+# devenv - Nix-based development environment manager
+export DEVENV_DOTFILE=.devenv
+export DEVENV_PROFILE=.devenv/.profile
+{{- end -}}
+
+# Nix-specific settings
+{{- if .nix -}}
+# Nix shell integration
+if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then
+    . ~/.nix-profile/etc/profile.d/nix.sh
+fi
+. /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+{{- end -}}
+
+# Additional Nix configuration (always loaded if Nix is present)
+if command -v nix &> /dev/null; then
+    . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+fi
+
+# pnpm configuration
+{{- if eq .chezmoi.os "darwin" -}}
+export PNPM_HOME="{{ .chezmoi.homeDir }}/Library/pnpm"
+{{- else if eq .chezmoi.os "linux" -}}
+export PNPM_HOME="{{ .chezmoi.homeDir }}/.local/share/pnpm"
+{{- end -}}
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+
+# Universal settings
+export EDITOR="vim"
+export LANG="en_US.UTF-8"
+
+# macOS-specific aliases
+{{- if eq .chezmoi.os "darwin" -}}
+alias copy="pbcopy"
+alias paste="pbpaste"
+alias ls="ls -G"
+alias flushdns="sudo dscacheutil -flushcache"
+{{- else if eq .chezmoi.os "linux" -}}
+# Linux-specific aliases
+alias copy="xclip -selection clipboard"
+alias paste="xclip -selection clipboard -o"
+alias ls="ls --color=auto"
+alias open="xdg-open"
+{{- end -}}
+
+# Common aliases
+alias ll="ls -la"
+alias g="git"
+alias cm="chezmoi"
+
+# VS Code integration
+code () { VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $* ;}
+
+# Terminal integration
+{{- if eq .chezmoi.os "darwin" -}}
+# iTerm2 integration
+test -e "{{ .chezmoi.homeDir }}/.iterm2_shell_integration.zsh" && source "{{ .chezmoi.homeDir }}/.iterm2_shell_integration.zsh"
+{{- else if eq .chezmoi.os "linux" -}}
+# Kitty terminal integration
+if [[ "$TERM" == "xterm-kitty" ]]; then
+    alias icat="kitty +kitten icat"
+    alias ssh="kitty +kitten ssh"
+fi
+{{- end -}}
 
 # DappSnap - Automatically use the correct Node.js version
 {{- if .nvm -}}

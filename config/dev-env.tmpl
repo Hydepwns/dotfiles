@@ -1,69 +1,69 @@
 [dev_environment]
     # Language versions
-    node_version = "18.19.0"
-    python_version = "3.10.13"
+    node_version = "23.4.0"
+    python_version = "3.13.0"
     rust_version = "1.88.0"
     go_version = "1.24.2"
-    elixir_version = "26.2.4"
-    erlang_version = "26.2.4"
+    elixir_version = "1.18.3-otp-27"
+    erlang_version = "28.3.1"
     lua_version = "5.4.8"
-    
+
     # Development tools
     docker = true
     kubernetes = true
     terraform = true
     helm = true
-    
+
     # Web3 tools
     foundry = true
     solana = true
     anchor = true
     huff = true
-    
+
     # Database tools
     postgresql = true
     redis = true
-    
+
     # Build tools
     cmake = true
     make = true
     ninja = true
-    
+
     # Version control
     git = true
-    
+
     # Shell
     zsh = true
-    
+
     # Editors
     neovim = true
     zed = true
     vscode = true
-    
+
     # Package managers
     brew = true
     pnpm = true
     pipx = true
-    
+
     # Environment managers
     direnv = true
     devenv = true
     asdf = true
-    
+
     # Performance settings
     [dev_environment.performance]
         lazy_load_nvm = true
         lazy_load_rbenv = true
         lazy_load_pyenv = true
-    
+
     # Security settings
     [dev_environment.security]
         ssh_key_rotation = 90
         gpg_signing = true
         work_safe_directories = true
-    
+
     # Platform specific
     [dev_environment.platform]
         macos = true
         linux = false
-        apple_silicon = true 
+        apple_silicon = true

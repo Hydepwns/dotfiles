@@ -1,3 +1,3 @@
-# SSH authorized keys
-# This file is managed by chezmoi
-# Add your SSH public keys here manually or configure GitHub token for automatic fetching 
+{{ range (gitHubKeys "hydepwns") -}}
+{{   .Key }}
+{{ end -}}

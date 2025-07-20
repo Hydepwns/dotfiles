@@ -79,7 +79,7 @@ require("lazy").setup({
     end,
     config = function()
       local wk = require("which-key")
-      
+
       wk.setup({
         plugins = {
           marks = true,     -- shows a list of your marks on ' and `
@@ -1000,4 +1000,4 @@ require("lazy").setup({
 })
 
 -- Load LazyNvim configuration
-require("lazy").setup("plugins") 
+require("lazy").setup("plugins")

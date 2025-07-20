@@ -1,7 +1,8 @@
+#!/bin/zsh
 # Docker-related functions
 
-# Docker compose up detached (renamed to avoid conflict with alias)
-dcu_detached() {
+# Docker compose up detached
+dcu() {
     docker-compose up -d
 }
 
@@ -159,17 +160,17 @@ dlt() {
 
 # Docker stop all
 dsa() {
-    docker stop $(docker ps -q)
+    docker stop "$(docker ps -q)"
 }
 
 # Docker rm all stopped
 dra() {
-    docker rm $(docker ps -aq)
+    docker rm "$(docker ps -aq)"
 }
 
 # Docker rmi all
 dria() {
-    docker rmi $(docker images -q)
+    docker rmi "$(docker images -q)"
 }
 
 # Docker build with tag
@@ -222,4 +223,4 @@ dif() {
 # Docker stats
 dst() {
     docker stats --format "table {{.Container}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.NetIO}}\t{{.BlockIO}}\t{{.PIDs}}"
-} 
+}

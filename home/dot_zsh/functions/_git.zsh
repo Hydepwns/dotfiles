@@ -1,7 +1,8 @@
+#!/bin/zsh
 # Git-related functions
 
-# Quick git status (renamed to avoid conflict with alias)
-gst_short() {
+# Quick git status
+gst() {
     git status --short
 }
 
@@ -154,4 +155,4 @@ gdiff() {
         return 1
     fi
     git diff --name-only "$commit1" "$commit2"
-} 
+}

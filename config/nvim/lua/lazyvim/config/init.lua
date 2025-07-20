@@ -435,4 +435,4 @@ add_if_loaded("synthwave84.nvim", {
   n = {
     ["<leader>tg"] = { "<cmd>lua require('synthwave84').toggle_glow()<cr>", "Toggle glow effect" },
   },
-}) 
+})

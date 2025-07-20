@@ -429,4 +429,4 @@ function M.on_insert_insert(fn)
   })
 end
 
-return M 
+return M

@@ -1,3 +1,4 @@
+#!/bin/zsh
 # Git aliases
 
 # Basic git aliases
@@ -153,4 +154,4 @@ alias gunignore='git update-index --no-assume-unchanged'
 alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
 alias gup='git pull --rebase'
 alias gupv='git pull --rebase -v'
-alias gwch='git whatchanged -p --abbrev-commit --pretty=medium' 
+alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'

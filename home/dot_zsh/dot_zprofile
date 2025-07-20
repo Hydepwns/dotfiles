@@ -42,4 +42,4 @@ eval "$(rbenv init - --no-rehash zsh)"
 
 # pipx
 export PATH="$PATH:{{ .chezmoi.homeDir }}/.local/bin"
-{{- end -}} 
+{{- end -}}

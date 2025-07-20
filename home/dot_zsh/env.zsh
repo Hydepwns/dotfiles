@@ -3,8 +3,8 @@
 
 # Automatically use the correct Node.js version with asdf
 if command -v asdf &> /dev/null; then
-    cd() { 
-        builtin cd "$@" 
+    cd() {
+        builtin cd "$@"
         if [ -f ".tool-versions" ]; then
             asdf install
         elif [ -f ".nvmrc" ]; then
@@ -58,4 +58,4 @@ export RUSTUP_HOME="$HOME/.rustup"
 export GOPATH="$HOME/go"
 export GOROOT="/opt/homebrew/opt/go/libexec"
 
-# Add work-specific configs here if needed 
+# Add work-specific configs here if needed

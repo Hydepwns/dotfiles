@@ -1,3 +1,4 @@
+#!/bin/zsh
 # Development workflow aliases
 alias dev="cd ~/Documents/CODE"
 alias work="cd ~/Documents/CODE/work"
@@ -83,4 +84,4 @@ alias speedtest="curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/m
 # Development environment
 alias reload="source ~/.zshrc"
 alias dotfiles="cd ~/Documents/CODE/dotfiles"
-alias backup-dotfiles="chezmoi diff && chezmoi add . && chezmoi commit" 
+alias backup-dotfiles="chezmoi diff && chezmoi add . && chezmoi commit"

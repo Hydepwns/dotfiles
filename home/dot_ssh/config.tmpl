@@ -1,11 +1,11 @@
 HashKnownHosts no
 
-# Platform-specific settings
-if [[ "$OSTYPE" == "darwin"* ]]; then
+{{- if eq .chezmoi.os "darwin" }}
+
 Host *
   AddKeysToAgent yes
   UseKeychain yes
-fi
+{{- end }}
 
 Host github.com
   User git
@@ -15,4 +15,4 @@ Host github.com
 # Host myserver
 #   HostName myserver.example.com
 #   User username
-#   ForwardAgent yes 
+#   ForwardAgent yes

@@ -1,3 +1,4 @@
+#!/bin/zsh
 # Development-related functions
 
 # Create a new directory and cd into it
@@ -7,7 +8,7 @@ mkcd() {
         echo "Usage: mkcd <directory>"
         return 1
     fi
-    mkdir -p "$dir" && cd "$dir"
+    mkdir -p "$dir" && cd "$dir" || exit
 }
 
 # Create a new file and open it in editor
@@ -27,7 +28,7 @@ extract() {
         echo "Usage: extract <archive>"
         return 1
     fi
-    
+
     if [[ -f "$file" ]]; then
         case "$file" in
             *.tar.bz2)   tar xjf "$file"     ;;
@@ -117,10 +118,10 @@ newproject() {
         echo "Usage: newproject <name> [type]"
         return 1
     fi
-    
+
     mkcd "$name"
     git init
-    
+
     case "$type" in
         "node"|"npm")
             npm init -y
@@ -143,24 +144,24 @@ newproject() {
             echo "# $name" > README.md
             ;;
     esac
-    
+
     git add .
     git commit -m "Initial commit"
 }
 
-# Quick directory navigation (renamed to avoid conflict with alias)
-cd_up() {
+# Quick directory navigation
+..() {
     local levels="${1:-1}"
     local path=""
     for ((i=1; i<=levels; i++)); do
         path="../$path"
     done
-    cd "$path"
+    cd "$path" || exit
 }
 
 # Go to git root
 gr() {
-    cd "$(git rev-parse --show-toplevel)"
+    cd "$(git rev-parse --show-toplevel)" || exit
 }
 
 # Quick edit
@@ -187,9 +188,9 @@ v() {
 tmp() {
     local name="$1"
     if [[ -n "$name" ]]; then
-        cd "$(mktemp -d "/tmp/$name.XXXXXX")"
+        cd "$(mktemp -d "/tmp/$name.XXXXXX")" || exit
     else
-        cd "$(mktemp -d)"
+        cd "$(mktemp -d)" || exit
     fi
 }
 
@@ -278,5 +279,5 @@ lt() {
 
 # Quick directory listing sorted by size
 ls() {
-    ls -laS "$@"
-} 
+    command ls -laS "$@"
+}

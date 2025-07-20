@@ -1,3 +1,4 @@
+#!/bin/zsh
 # Language-specific environment setup functions
 
 # Rust development environment
@@ -71,7 +72,7 @@ function setup_k8s() {
 # Development environment setup
 function setup_dev_env() {
     local lang=$1
-    
+
     case $lang in
         "rust"|"rs")
             setup_rust
@@ -122,7 +123,7 @@ function setup_dev_env() {
 # Quick environment setup for common project types
 function setup_project() {
     local project_type=$1
-    
+
     case $project_type in
         "rust")
             setup_rust
@@ -168,4 +169,4 @@ function cleanup_env() {
     unset REDIS_URL
     unset DOCKER_BUILDKIT
     echo "Environment variables cleaned up"
-} 
+}

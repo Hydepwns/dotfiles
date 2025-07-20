@@ -1,13 +1,6 @@
 # shellcheck disable=all
-# Linux-specific PATH and environment setup
+# Linux-specific environment setup
 # This file contains chezmoi template syntax which will be processed by chezmoi
-
-# Linux paths
-{{- if .nix -}}
-# Nix paths are handled by Nix itself
-{{- else -}}
-export PATH="/usr/local/bin:$PATH"
-{{- end -}}
 
 # Linux-specific aliases
 alias copy="xclip -selection clipboard"
@@ -19,4 +12,4 @@ alias open="xdg-open"
 if [[ "$TERM" == "xterm-kitty" ]]; then
     alias icat="kitty +kitten icat"
     alias ssh="kitty +kitten ssh"
-fi 
+fi
