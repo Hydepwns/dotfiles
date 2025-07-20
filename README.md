@@ -3,9 +3,6 @@
 [![Plugins](https://dotfyle.com/Hydepwns/dotfiles-config-nvim/badges/plugins?style=flat)](https://dotfyle.com/Hydepwns/dotfiles-config-nvim)
 [![Leader Key](https://dotfyle.com/Hydepwns/dotfiles-config-nvim/badges/leaderkey?style=flat)](https://dotfyle.com/Hydepwns/dotfiles-config-nvim)
 [![Plugin Manager](https://dotfyle.com/Hydepwns/dotfiles-config-nvim/badges/plugin-manager?style=flat)](https://dotfyle.com/Hydepwns/dotfiles-config-nvim)
-[![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/Hydepwns/dotfiles)
-[![Shell](https://img.shields.io/badge/Shell-Zsh%20%7C%20Bash-green.svg)](https://github.com/Hydepwns/dotfiles)
-[![Performance](https://img.shields.io/badge/Performance-1.3s%20%E2%86%92%200.4s-brightgreen.svg)](https://github.com/Hydepwns/dotfiles)
 
 Cross-platform dotfiles managed with [chezmoi](https://www.chezmoi.io/) - featuring modular tool loading, project templates, and development automation.
 
