@@ -2,6 +2,10 @@
 
 Cross-platform dotfiles managed with [chezmoi](https://www.chezmoi.io/) - featuring modular tool loading, project templates, and development automation.
 
+[![CI](https://github.com/hydepwns/dotfiles/workflows/CI/badge.svg)](https://github.com/hydepwns/dotfiles/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![chezmoi](https://img.shields.io/badge/chezmoi-managed-blue.svg)](https://www.chezmoi.io/)
+
 ## 🚀 Quick Start
 
 ```bash
@@ -16,28 +20,22 @@ chezmoi init --apply https://github.com/hydepwns/dotfiles.git
 
 ## ✨ Features
 
-### 🛠️ Core Tools
+### 🛠️ Core Tools & Languages
 
-- **Shell**: Zsh with Oh My Zsh, modular cross-platform support
-- **Terminal**: Kitty with One Dark Pro theme, Monaspace font
-- **Git**: Work/personal separation, SSH with GitHub key fetching
-- **Editors**: Neovim (LazyNvim), Zed, VS Code integration
-- **Package Managers**: Homebrew, pnpm, pipx
-
-### 🎯 Development Languages
-
-- **Rust**: Full toolchain with Cargo
-- **Node.js**: NVM support
-- **Python**: pipx for global tools
-- **Elixir**: Mix and Kiex support
-- **Lua**: LuaRocks and Luaenv
-- **Go**: Standard toolchain
+| Category | Tools |
+|----------|-------|
+| **Shell & Terminal** | ![Zsh](https://img.shields.io/badge/Zsh-1.2.0-000000?style=flat&logo=gnu-bash&logoColor=white) ![Kitty](https://img.shields.io/badge/Kitty-0.30.1-000000?style=flat&logo=kitty&logoColor=white) |
+| **Version Control** | ![Git](https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white) |
+| **Editors** | ![Neovim](https://img.shields.io/badge/Neovim-57C3C2?style=flat&logo=neovim&logoColor=white) ![Zed](https://img.shields.io/badge/Zed-000000?style=flat&logo=zed&logoColor=white) ![Cursor](https://img.shields.io/badge/Cursor-000000?style=flat&logo=cursor&logoColor=white) |
+| **Package Managers** | ![Homebrew](https://img.shields.io/badge/Homebrew-FBB040?style=flat&logo=homebrew&logoColor=black) ![pnpm](https://img.shields.io/badge/pnpm-F69220?style=flat&logo=pnpm&logoColor=white) ![pipx](https://img.shields.io/badge/pipx-000000?style=flat&logo=python&logoColor=white) |
+| **Languages** | ![Rust](https://img.shields.io/badge/Rust-000000?style=flat&logo=rust&logoColor=white) ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=nodedotjs&logoColor=white) ![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white) ![Elixir](https://img.shields.io/badge/Elixir-4B275F?style=flat&logo=elixir&logoColor=white) ![Lua](https://img.shields.io/badge/Lua-2C2D72?style=flat&logo=lua&logoColor=white) ![Go](https://img.shields.io/badge/Go-00ADD8?style=flat&logo=go&logoColor=white) |
+| **Web3 & Frameworks** | ![Ethereum](https://img.shields.io/badge/Ethereum-3C3C3D?style=flat&logo=ethereum&logoColor=white) ![Foundry](https://img.shields.io/badge/Foundry-000000?style=flat&logo=foundry&logoColor=white) ![Solana](https://img.shields.io/badge/Solana-14F46D?style=flat&logo=solana&logoColor=white) ![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=nextdotjs&logoColor=white) |
 
 ### 🚀 Project Templates
 
-- **Web3**: Ethereum/Foundry and Solana/Anchor development
-- **Next.js**: TypeScript, Tailwind, testing setup
-- **Rust**: Common dependencies and web framework options
+- **Web3**: ![Ethereum](https://img.shields.io/badge/Ethereum-3C3C3D?style=flat&logo=ethereum&logoColor=white)/![Foundry](https://img.shields.io/badge/Foundry-000000?style=flat&logo=foundry&logoColor=white) and ![Solana](https://img.shields.io/badge/Solana-14F46D?style=flat&logo=solana&logoColor=white)/![Anchor](https://img.shields.io/badge/Anchor-000000?style=flat&logo=anchor&logoColor=white) development
+- **Next.js**: ![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=nextdotjs&logoColor=white) TypeScript, Tailwind, testing setup
+- **Rust**: ![Rust](https://img.shields.io/badge/Rust-000000?style=flat&logo=rust&logoColor=white) Common dependencies and web framework options
 
 ## ⚙️ Configuration
 
@@ -59,42 +57,26 @@ chezmoi apply
 
 ## 🎨 Editor Configurations
 
-### Neovim
+### Core Editors
 
-- **LazyNvim** with lazy loading
-- **synthwave84.nvim** retro colorscheme
-- Comprehensive plugin suite (Telescope, Treesitter, LSP, Mason)
+![Neovim](https://img.shields.io/badge/Neovim-57C3C2?style=flat&logo=neovim&logoColor=white) ![Zed](https://img.shields.io/badge/Zed-000000?style=flat&logo=zed&logoColor=white) ![Cursor](https://img.shields.io/badge/Cursor-000000?style=flat&logo=cursor&logoColor=white) ![Kitty](https://img.shields.io/badge/Kitty-0.30.1-000000?style=flat&logo=kitty&logoColor=white)
 
-### Zed
-
-- **Monaspace Variable** font with ligatures
-- **One Dark Pro** theme
-- Pre-configured for Rust, TypeScript, Python, Go, Elixir, Lua
-
-### Kitty Terminal
-
-- **One Dark Pro** theme (matches Zed editor)
-- **Monaspace Variable** font with coding ligatures
-- Development shortcuts for project navigation and tools
+**Features**: LazyNvim, SynthWave themes, Monaspace fonts, AI-powered development, comprehensive plugin suites
 
 ## 🏗️ Architecture
 
 ### Modular Shell Configuration
 
-- **Core modules**: paths, platforms, tools, config
-- **Centralized PATH management** - Single source of truth for all tool paths
-- **DRY principles** - Eliminated code duplication across files
-- **Cross-platform compatibility** with standardized shebangs
+![Zsh](https://img.shields.io/badge/Zsh-Modular-000000?style=flat&logo=gnu-bash&logoColor=white) ![Cross-Platform](https://img.shields.io/badge/Cross--Platform-Compatible-blue)
+
+**Core modules**: paths, platforms, tools, config
+**Principles**: DRY, centralized PATH management, cross-platform compatibility
 
 ### Centralized PATH Management
 
-All tool paths are managed through a comprehensive registry system in `home/dot_zsh/core/paths.zsh`:
+All tool paths managed through `home/dot_zsh/core/paths.zsh`:
 
-- Version managers (rbenv, nvm, asdf, erlang, elixir, lua)
-- Development tools (LLVM, PostgreSQL, Python)
-- Web3 tools (Foundry, Huff, Solana)
-- Package managers (Homebrew, pnpm, pipx)
-- Nix paths
+![Version Managers](https://img.shields.io/badge/Version_Managers-rbenv,nvm,asdf,erlang,elixir,lua-orange) ![Dev Tools](https://img.shields.io/badge/Dev_Tools-LLVM,PostgreSQL,Python-blue) ![Web3](https://img.shields.io/badge/Web3-Foundry,Huff,Solana-purple) ![Package Managers](https://img.shields.io/badge/Package_Managers-Homebrew,pnpm,pipx-green) ![Nix](https://img.shields.io/badge/Nix-Paths-red)
 
 ## 🛠️ Usage
 
@@ -138,45 +120,25 @@ make install-optional
 
 # Update tool versions
 make tool-versions COMMAND=update
+
+# Setup Cursor configuration
+./scripts/setup/setup-cursor-simple.sh
 ```
 
 ## 🔧 Available Commands
 
 Run `make help` to see all available commands:
 
-### Core Operations
+### Command Categories
 
-- `make install` - Install dotfiles
-- `make update` - Update from remote
-- `make diff` - Show differences
-- `make status` - Show status
+![Core](https://img.shields.io/badge/Core-Operations-blue) ![Backup](https://img.shields.io/badge/Backup-Operations-orange) ![Health](https://img.shields.io/badge/Health-Maintenance-green) ![Sync](https://img.shields.io/badge/Sync-Operations-purple) ![Optional](https://img.shields.io/badge/Optional-Commands-gray) ![Testing](https://img.shields.io/badge/Testing-Development-red)
 
-### Backup Operations
-
-- `make backup` - Create backup
-- `make backup-full` - Create full backup with archive
-- `make clean` - Clean up temporary files and backups
-
-### Health and Maintenance
-
-- `make doctor` - Health check
-- `make bootstrap` - Run bootstrap script
-
-### Sync Operations
-
-- `make sync` - Sync local changes
-- `make sync-from-remote` - Sync from remote
-
-### Optional Commands
-
-- `make install-optional` - Install optional tools interactively
-
-### Testing and Development
-
-- `make performance-test` - Run performance tests
-- `make generate-template` - Generate project templates
-- `make tool-versions` - Update tool versions
-- `make setup-ci` - Setup CI/CD tools and pre-commit hooks
+**Core**: `install`, `update`, `diff`, `status`
+**Backup**: `backup`, `backup-full`, `clean`
+**Health**: `doctor`, `bootstrap`
+**Sync**: `sync`, `sync-from-remote`
+**Optional**: `install-optional`
+**Testing**: `performance-test`, `generate-template`, `tool-versions`, `setup-ci`
 
 ## 🚨 Troubleshooting
 
@@ -186,6 +148,7 @@ Run `make help` to see all available commands:
 - **Project templates**: Use `make generate-template` for help
 - **Shell issues**: Check modular configuration in `home/dot_zsh/core/`
 - **PATH problems**: All PATH management is centralized in `home/dot_zsh/core/paths.zsh`
+- **Cursor setup**: Use `./scripts/setup/setup-cursor-simple.sh` for reliable configuration
 
 ## 📄 License
 
