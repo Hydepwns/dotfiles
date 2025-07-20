@@ -6,7 +6,7 @@
     {{- end -}}
 
 [core]
-    editor = vim
+    editor = nvim
     {{- if eq .chezmoi.os "darwin" -}}
     excludesfile = {{ .chezmoi.homeDir }}/.gitignore_global
     autocrlf = input

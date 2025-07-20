@@ -135,6 +135,16 @@ local function quickEditor()
     end
 end
 
+-- Quick Zed access
+local function quickZed()
+    local zed = application.get("Zed")
+    if zed then
+        zed:activate()
+    else
+        application.launchOrFocus("Zed")
+    end
+end
+
 -- Browser management
 local function cycleBrowsers()
     local browsers = {"Brave Browser", "Firefox Developer Edition", "Ladybird"}
@@ -233,6 +243,7 @@ hotkey.bind(cmd_alt, "s", setupSplitLayout)
 -- Application launchers
 hotkey.bind(cmd_alt, "t", quickTerminal)
 hotkey.bind(cmd_alt, "e", quickEditor)
+hotkey.bind(cmd_alt, "z", quickZed)
 hotkey.bind(cmd_alt, "b", cycleBrowsers)
 hotkey.bind(cmd_alt, "a", launchDevTools)
 
@@ -303,6 +314,7 @@ print("")
 print("Application Launchers:")
 print("  Cmd+Alt + t: Terminal")
 print("  Cmd+Alt + e: Code Editor")
+print("  Cmd+Alt + z: Zed Editor")
 print("  Cmd+Alt + b: Cycle browsers")
 print("  Cmd+Alt + a: Launch dev tools")
 print("")
