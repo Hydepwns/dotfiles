@@ -50,17 +50,22 @@ show_usage() {
     echo "  --with-tests          - Include comprehensive test setup"
     echo "  --with-docs           - Include documentation setup"
     echo "  --with-ci             - Include CI/CD configuration"
+    echo "  --with-direnv         - Include direnv environment setup"
+    echo "  --with-devenv         - Include devenv environment setup"
     echo ""
     echo "Examples:"
     echo "  $0 web3 my-defi-project"
     echo "  $0 nextjs my-webapp --with-tests --with-ci"
     echo "  $0 rust my-cli-tool --with-docs"
+    echo "  $0 web3 my-project --with-direnv --with-devenv"
 }
 
 # Function to create web3 project
 create_web3_project() {
     local name="$1"
     local web3_type="${2:-ethereum}"
+    local with_direnv="$3"
+    local with_devenv="$4"
 
     print_status "INFO" "Creating web3 project: $name ($web3_type)"
 
@@ -363,6 +368,8 @@ create_nextjs_project() {
     local name="$1"
     local with_tests="$2"
     local with_ci="$3"
+    local with_direnv="$4"
+    local with_devenv="$5"
 
     print_status "INFO" "Creating Next.js project: $name"
 
@@ -449,6 +456,8 @@ EOF
 create_rust_project() {
     local name="$1"
     local with_docs="$2"
+    local with_direnv="$3"
+    local with_devenv="$4"
 
     print_status "INFO" "Creating Rust project: $name"
 
@@ -524,6 +533,8 @@ EOF
 # Function to create Elixir project
 create_elixir_project() {
     local name="$1"
+    local with_direnv="$2"
+    local with_devenv="$3"
 
     print_status "INFO" "Creating Elixir project: $name"
 
@@ -596,6 +607,8 @@ main() {
     local with_tests="false"
     local with_docs="false"
     local with_ci="false"
+    local with_direnv="true"
+    local with_devenv="false"
 
     # Parse additional arguments
     shift 2
@@ -615,6 +628,14 @@ main() {
                 ;;
             --with-ci)
                 with_ci="true"
+                shift
+                ;;
+            --with-direnv)
+                with_direnv="true"
+                shift
+                ;;
+            --with-devenv)
+                with_devenv="true"
                 shift
                 ;;
             *)
@@ -640,16 +661,16 @@ main() {
     # Create project based on template type
     case "$template_type" in
         "web3")
-            create_web3_project "$project_name" "$web3_type"
+            create_web3_project "$project_name" "$web3_type" "$with_direnv" "$with_devenv"
             ;;
         "nextjs")
-            create_nextjs_project "$project_name" "$with_tests" "$with_ci"
+            create_nextjs_project "$project_name" "$with_tests" "$with_ci" "$with_direnv" "$with_devenv"
             ;;
         "rust")
-            create_rust_project "$project_name" "$with_docs"
+            create_rust_project "$project_name" "$with_docs" "$with_direnv" "$with_devenv"
             ;;
         "elixir")
-            create_elixir_project "$project_name"
+            create_elixir_project "$project_name" "$with_direnv" "$with_devenv"
             ;;
         *)
             print_status "ERROR" "Unknown template type: $template_type"
@@ -662,6 +683,12 @@ main() {
     echo ""
     echo "Next steps:"
     echo "  cd $project_name"
+    if [[ "$with_direnv" == "true" ]]; then
+        echo "  direnv allow  # Allow direnv environment"
+    fi
+    if [[ "$with_devenv" == "true" ]]; then
+        echo "  devenv up     # Start devenv environment"
+    fi
     echo "  git add ."
     echo "  git commit -m 'Initial commit'"
     echo ""

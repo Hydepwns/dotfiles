@@ -57,6 +57,23 @@ alias forge-build="forge build"
 alias solana-test="solana-test-validator"
 alias anchor-test="anchor test"
 
+# direnv shortcuts
+alias da="direnv allow"
+alias dr="direnv reload"
+alias de="direnv edit"
+alias ds="direnv status"
+
+# devenv shortcuts
+alias dv="devenv"
+alias dvi="devenv init"
+alias dvb="devenv build"
+alias dvr="devenv run"
+alias dvs="devenv shell"
+alias dvc="devenv clean"
+
+# Environment management
+alias env-status="echo '=== direnv status ===' && direnv status && echo '=== devenv status ===' && devenv status 2>/dev/null || echo 'devenv not available'"
+
 # System utilities
 alias ports="lsof -i -P -n | grep LISTEN"
 alias kill-port="kill -9 \$(lsof -ti:"

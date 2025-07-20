@@ -1,5 +1,224 @@
 #!/bin/zsh
-# Development-related functions
+# Development workflow functions
+
+# Start a development session
+dev_session() {
+    local project="$1"
+    cd "$project" || exit 1
+
+    # Auto-load environment
+    if [[ -f .envrc ]]; then
+        direnv allow
+    fi
+
+    # Start development server based on project type
+    if [[ -f package.json ]]; then
+        npm run dev
+    elif [[ -f Cargo.toml ]]; then
+        cargo run
+    elif [[ -f mix.exs ]]; then
+        mix phx.server
+    fi
+}
+
+# direnv helpers
+function direnv_setup() {
+    local project_type="${1:-default}"
+
+    case "$project_type" in
+        "node"|"js"|"ts")
+            cat > .envrc << EOF
+export NODE_ENV=development
+export PATH="\$PWD/node_modules/.bin:\$PATH"
+export NPM_CONFIG_LOGLEVEL=warn
+EOF
+            ;;
+        "python"|"py")
+            cat > .envrc << EOF
+export PYTHONPATH="\$PWD:\$PYTHONPATH"
+export PIPENV_VENV_IN_PROJECT=1
+export PYTHONUNBUFFERED=1
+EOF
+            ;;
+        "rust")
+            cat > .envrc << EOF
+export RUST_BACKTRACE=1
+export CARGO_INCREMENTAL=1
+export RUST_LOG=info
+EOF
+            ;;
+        "go")
+            cat > .envrc << EOF
+export GOPATH="\$PWD"
+export PATH="\$PWD/bin:\$PATH"
+export GO111MODULE=on
+EOF
+            ;;
+        "web3")
+            cat > .envrc << EOF
+export FOUNDRY_PROFILE=default
+export ANCHOR_PROVIDER_URL=http://127.0.0.1:8899
+export ANCHOR_WALLET=~/.config/solana/id.json
+EOF
+            ;;
+        *)
+            cat > .envrc << EOF
+# Auto-generated .envrc for $project_type
+export PROJECT_ROOT="\$PWD"
+export PATH="\$PWD/bin:\$PATH"
+EOF
+            ;;
+    esac
+
+    direnv allow
+    echo "✅ Created .envrc for $project_type project"
+}
+
+# devenv helpers
+function devenv_setup() {
+    local project_type="${1:-default}"
+
+    case "$project_type" in
+        "node"|"js"|"ts")
+            cat > devenv.nix << EOF
+{ pkgs, ... }:
+
+{
+  packages = [ pkgs.git ];
+
+  enterShell = ''
+    echo "Node.js development environment loaded"
+    echo "Available commands: node, npm, yarn, pnpm"
+  '';
+
+  scripts.hello = "echo 'Hello from devenv!'";
+}
+EOF
+            ;;
+        "python"|"py")
+            cat > devenv.nix << EOF
+{ pkgs, ... }:
+
+{
+  packages = [ pkgs.git pkgs.python311 ];
+
+  enterShell = ''
+    echo "Python development environment loaded"
+    echo "Available commands: python, pip, poetry"
+  '';
+
+  scripts.hello = "echo 'Hello from devenv!'";
+}
+EOF
+            ;;
+        "rust")
+            cat > devenv.nix << EOF
+{ pkgs, ... }:
+
+{
+  packages = [ pkgs.git pkgs.rustc pkgs.cargo ];
+
+  enterShell = ''
+    echo "Rust development environment loaded"
+    echo "Available commands: rustc, cargo"
+  '';
+
+  scripts.hello = "echo 'Hello from devenv!'";
+}
+EOF
+            ;;
+        "go")
+            cat > devenv.nix << EOF
+{ pkgs, ... }:
+
+{
+  packages = [ pkgs.git pkgs.go ];
+
+  enterShell = ''
+    echo "Go development environment loaded"
+    echo "Available commands: go"
+  '';
+
+  scripts.hello = "echo 'Hello from devenv!'";
+}
+EOF
+            ;;
+        *)
+            cat > devenv.nix << EOF
+{ pkgs, ... }:
+
+{
+  packages = [ pkgs.git ];
+
+  enterShell = ''
+    echo "Development environment loaded"
+  '';
+
+  scripts.hello = "echo 'Hello from devenv!'";
+}
+EOF
+            ;;
+    esac
+
+    echo "✅ Created devenv.nix for $project_type project"
+    echo "Run 'devenv up' to start the environment"
+}
+
+# Combined environment setup
+function setup_dev_env() {
+    local project_type="$1"
+    local use_direnv="${2:-true}"
+    local use_devenv="${3:-false}"
+
+    echo "Setting up development environment for $project_type..."
+
+    if [[ "$use_direnv" == "true" ]]; then
+        direnv_setup "$project_type"
+    fi
+
+    if [[ "$use_devenv" == "true" ]]; then
+        devenv_setup "$project_type"
+    fi
+
+    echo "✅ Development environment setup complete!"
+}
+
+# Environment status checker
+function check_env_status() {
+    echo "🔍 Checking environment status..."
+
+    # Check direnv
+    if command -v direnv &> /dev/null; then
+        echo "✅ direnv: $(direnv --version)"
+        if [[ -f .envrc ]]; then
+            echo "📁 .envrc found: $(direnv status)"
+        else
+            echo "📁 No .envrc found"
+        fi
+    else
+        echo "❌ direnv not installed"
+    fi
+
+    # Check devenv
+    if command -v devenv &> /dev/null; then
+        echo "✅ devenv: $(devenv --version)"
+        if [[ -f devenv.nix ]]; then
+            echo "📁 devenv.nix found"
+            devenv status 2>/dev/null || echo "⚠️  devenv status unavailable"
+        else
+            echo "📁 No devenv.nix found"
+        fi
+    else
+        echo "❌ devenv not installed"
+    fi
+
+    # Check Nix
+    if command -v nix &> /dev/null; then
+        echo "✅ Nix: $(nix --version)"
+    else
+        echo "❌ Nix not installed"
+    fi
+}
 
 # Create a new directory and cd into it
 mkcd() {
