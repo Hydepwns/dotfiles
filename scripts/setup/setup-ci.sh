@@ -7,8 +7,11 @@ set -e
 
 # Source shared utilities
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=../utils/constants.sh
 source "$SCRIPT_DIR/../utils/constants.sh"
+# shellcheck source=../utils/helpers.sh
 source "$SCRIPT_DIR/../utils/helpers.sh"
+# shellcheck source=../utils/colors.sh
 source "$SCRIPT_DIR/../utils/colors.sh"
 
 log_info "Setting up CI/CD tools and pre-commit hooks..."

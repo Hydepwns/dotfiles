@@ -30,7 +30,7 @@ sync_local() {
     # Check if we're in a git repository
     if ! is_git_repo; then
         log_error "Not in a git repository"
-        return $EXIT_FAILURE
+        return "$EXIT_FAILURE"
     fi
 
     # Show differences
@@ -40,14 +40,14 @@ sync_local() {
     # Ask for confirmation
     if ! confirm "Apply changes?" "n"; then
         log_info "Sync cancelled"
-        return $EXIT_SUCCESS
+        return "$EXIT_SUCCESS"
     fi
 
     # Add changes
     log_info "Adding changes..."
     if ! chezmoi add .; then
         log_error "Failed to add changes"
-        return $EXIT_FAILURE
+        return "$EXIT_FAILURE"
     fi
 
     # Commit changes
@@ -56,18 +56,18 @@ sync_local() {
     log_info "Committing changes: $commit_message"
     if ! chezmoi commit -m "$commit_message"; then
         log_error "Failed to commit changes"
-        return $EXIT_FAILURE
+        return "$EXIT_FAILURE"
     fi
 
     # Push to remote
     log_info "Pushing to remote..."
     if ! git push origin main; then
         log_error "Failed to push to remote"
-        return $EXIT_FAILURE
+        return "$EXIT_FAILURE"
     fi
 
     log_success "Changes synced successfully"
-    return $EXIT_SUCCESS
+    return "$EXIT_SUCCESS"
 }
 
 # Function to sync from remote
@@ -77,25 +77,25 @@ sync_remote() {
     # Check if we're in a git repository
     if ! is_git_repo; then
         log_error "Not in a git repository"
-        return $EXIT_FAILURE
+        return "$EXIT_FAILURE"
     fi
 
     # Update from remote
     log_info "Updating from remote..."
     if ! chezmoi update; then
         log_error "Failed to update from remote"
-        return $EXIT_FAILURE
+        return "$EXIT_FAILURE"
     fi
 
     # Apply changes
     log_info "Applying changes..."
     if ! chezmoi apply; then
         log_error "Failed to apply changes"
-        return $EXIT_FAILURE
+        return "$EXIT_FAILURE"
     fi
 
     log_success "Remote changes applied successfully"
-    return $EXIT_SUCCESS
+    return "$EXIT_SUCCESS"
 }
 
 # Function to check sync status
@@ -105,7 +105,7 @@ check_sync_status() {
     # Check if we're in a git repository
     if ! is_git_repo; then
         log_error "Not in a git repository"
-        return $EXIT_FAILURE
+        return "$EXIT_FAILURE"
     fi
 
     # Check chezmoi status
@@ -119,10 +119,10 @@ check_sync_status() {
     # Check for uncommitted changes
     if has_uncommitted_changes; then
         log_warning "There are uncommitted changes"
-        return $EXIT_FAILURE
+        return "$EXIT_FAILURE"
     else
         log_success "No uncommitted changes"
-        return $EXIT_SUCCESS
+        return "$EXIT_SUCCESS"
     fi
 }
 
@@ -142,13 +142,13 @@ resolve_conflicts() {
             chezmoi merge
         else
             log_info "Please resolve conflicts manually"
-            return $EXIT_FAILURE
+            return "$EXIT_FAILURE"
         fi
     else
         log_success "No conflicts found"
     fi
 
-    return $EXIT_SUCCESS
+    return "$EXIT_SUCCESS"
 }
 
 # Main function
@@ -168,7 +168,7 @@ main() {
             ;;
         *)
             show_usage
-            exit $EXIT_INVALID_ARGS
+            exit "$EXIT_INVALID_ARGS"
             ;;
     esac
 }
