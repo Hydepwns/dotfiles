@@ -9,8 +9,16 @@ PERF_START_TIME=$(date +%s.%N)
 track_loading() {
     local tool_name="$1"
     local start_time="$2"
-    local end_time=$(date +%s.%N)
-    local duration=$(echo "$end_time - $start_time" | bc -l 2>/dev/null || echo "0")
+    local end_time
+    end_time=$(date +%s.%N)
+    local duration
+    duration=$(echo "$end_time - $start_time" | bc -l 2>/dev/null || echo "0")
+    local tool_name
+    tool_name="$1"
+    local start_time
+    start_time="$2"
+    local duration
+    duration=$(echo "$end_time - $start_time" | bc -l 2>/dev/null || echo "0")
 
     # Store timing data for reporting
     export LAZY_LOAD_TIMES="${LAZY_LOAD_TIMES}${tool_name}:${duration}s "
@@ -86,6 +94,28 @@ lazy_load_direnv() {
     direnv "$@"
 }
 
+# Lazy loading function for devenv
+lazy_load_devenv() {
+    local start_time=$(date +%s.%N)
+
+    # Only load if not already loaded
+    if ! command -v devenv &> /dev/null; then
+        # Check if devenv is available via Nix
+        if command -v nix &> /dev/null; then
+            export PATH="/nix/var/nix/profiles/default/bin:$PATH"
+            # Try to load devenv from Nix profile
+            if nix profile list | grep -q devenv; then
+                echo "Loading devenv from Nix profile..."
+            fi
+        fi
+    fi
+
+    track_loading "devenv" "$start_time"
+
+    # Execute the original command
+    devenv "$@"
+}
+
 # Setup lazy loading aliases
 {{- if .nvm -}}
 alias nvm='lazy_load_nvm'
@@ -105,6 +135,10 @@ alias asdf='lazy_load_asdf'
 
 {{- if .direnv -}}
 alias direnv='lazy_load_direnv'
+{{- end -}}
+
+{{- if .devenv -}}
+alias devenv='lazy_load_devenv'
 {{- end -}}
 
 # Performance reporting function
