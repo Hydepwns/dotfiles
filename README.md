@@ -51,8 +51,11 @@ Choose the right setup script for your needs:
 ## ✨ Features
 
 > **Lazy Loading**: Version managers (NVM, rbenv, asdf, direnv) load only when used
+>
 > **Performance Monitoring**: Real-time tracking of shell startup and tool loading times
+>
 > **Smart Caching**: Tools remain available once loaded in session (~48% faster startup time)
+>
 > **Modular Configuration**: Modular shell configuration modules in `home/dot_zsh/core/`
 
 ### 🛠️ Core Tools & Languages
