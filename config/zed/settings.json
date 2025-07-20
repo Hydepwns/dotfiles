@@ -1,0 +1,187 @@
+{
+  "theme": "One Dark Pro",
+  "font_family": "Monaspace Variable",
+  "font_size": 14,
+  "line_height": 1.4,
+  "tab_size": 2,
+  "insert_spaces": true,
+  "trim_trailing_whitespace": true,
+  "insert_final_newline": true,
+  "word_wrap": "bounded",
+  "rulers": [80, 100],
+  "minimap": {
+    "enabled": true,
+    "max_column": 120
+  },
+  "editor": {
+    "format_on_save": true,
+    "format_on_paste": true,
+    "word_wrap": "bounded",
+    "bracket_pair_colorization": {
+      "enabled": true
+    },
+    "guides": {
+      "bracket_pairs": true,
+      "indentation": true
+    },
+    "font_ligatures": true,
+    "font_features": {
+      "Monaspace Variable": {
+        "liga": true,
+        "calt": true,
+        "ss01": true,
+        "ss02": true,
+        "ss03": true,
+        "ss04": true,
+        "ss05": true,
+        "ss06": true,
+        "ss07": true,
+        "ss08": true,
+        "zero": true,
+        "cv01": true,
+        "cv02": true,
+        "cv03": true,
+        "cv04": true,
+        "cv05": true,
+        "cv06": true,
+        "cv07": true,
+        "cv08": true,
+        "cv09": true,
+        "cv10": true,
+        "cv11": true,
+        "cv12": true,
+        "cv13": true,
+        "cv14": true,
+        "cv15": true,
+        "cv16": true
+      }
+    },
+    "suggestSelection": "first",
+    "acceptSuggestionOnCommitCharacter": false,
+    "acceptSuggestionOnEnter": "on",
+    "tabCompletion": "on",
+    "wordBasedSuggestions": "off",
+    "parameterHints": {
+      "enabled": true
+    },
+    "autoClosingBrackets": "always",
+    "autoClosingQuotes": "always",
+    "autoSurround": "quotes",
+    "codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.organizeImports": "explicit"
+    }
+  },
+  "terminal": {
+    "font_family": "Monaspace Variable",
+    "font_size": 13,
+    "font_features": {
+      "Monaspace Variable": {
+        "liga": true,
+        "calt": true,
+        "zero": true
+      }
+    }
+  },
+  "workbench": {
+    "color_theme": "One Dark Pro",
+    "icon_theme": "material-icon-theme",
+    "tree": {
+      "indent": 16,
+      "render_indent_guides": "always"
+    }
+  },
+  "files": {
+    "exclude": {
+      "**/node_modules": true,
+      "**/.git": true,
+      "**/.DS_Store": true,
+      "**/dist": true,
+      "**/build": true,
+      "**/.next": true,
+      "**/.nuxt": true,
+      "**/target": true,
+      "**/coverage": true,
+      "**/.nyc_output": true,
+      "**/.env.local": true,
+      "**/.env.production": true
+    },
+    "associations": {
+      "*.sol": "solidity",
+      "*.huff": "huff",
+      "*.rs": "rust",
+      "*.go": "go",
+      "*.py": "python",
+      "*.js": "javascript",
+      "*.ts": "typescript",
+      "*.jsx": "javascriptreact",
+      "*.tsx": "typescriptreact",
+      "*.ex": "elixir",
+      "*.exs": "elixir",
+      "*.lua": "lua"
+    },
+    "auto_save": "onFocusChange"
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-vscode.vscode-typescript-next",
+      "bradlc.vscode-tailwindcss",
+      "esbenp.prettier-vscode",
+      "ms-vscode.vscode-json",
+      "rust-lang.rust-analyzer",
+      "elixir-lsp.elixir-ls",
+      "ms-python.python",
+      "golang.go",
+      "tamasfe.even-better-toml",
+      "ms-vscode.vscode-yaml",
+      "JuanBlanco.solidity",
+      "ms-vscode.vscode-eslint",
+      "ms-vscode.vscode-prettier",
+      "formulahendry.auto-rename-tag",
+      "christian-kohler.path-intellisense",
+      "ms-vscode.vscode-css-peek",
+      "bradlc.vscode-tailwindcss",
+      "ms-vscode.vscode-html-css-support"
+    ]
+  },
+  "emmet": {
+    "includeLanguages": {
+      "javascript": "javascriptreact",
+      "typescript": "typescriptreact"
+    }
+  },
+  "typescript": {
+    "preferences": {
+      "includePackageJsonAutoImports": "auto"
+    }
+  },
+  "javascript": {
+    "preferences": {
+      "includePackageJsonAutoImports": "auto"
+    }
+  },
+  "git": {
+    "autofetch": true,
+    "confirmSync": false,
+    "enableSmartCommit": true
+  },
+  "search": {
+    "exclude": {
+      "**/node_modules": true,
+      "**/bower_components": true,
+      "**/*.code-search": true,
+      "**/dist": true,
+      "**/build": true,
+      "**/.git": true,
+      "**/target": true,
+      "**/coverage": true
+    }
+  },
+  "explorer": {
+    "sortOrder": "type"
+  },
+  "breadcrumbs": {
+    "enabled": true
+  }
+
+} 

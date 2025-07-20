@@ -337,57 +337,19 @@ require("lazy").setup({
   {
     "folke/twilight.nvim",
     opts = {
-      dimming = {
-        alpha = 0.25,
-        disabled = false,
-        inactive = true,
-        term_bg = "#000000",
-      },
-      context = 10,
-      treesitter = true,
-      expand = {
-        "function",
-        "method",
-        "table",
-        "if_statement",
-      },
-      exclude = {},
+        dimming = {
+            alpha = 0.25,
+        },
     },
-  },
-  {
+},
+{
     "folke/zen-mode.nvim",
-    cmd = "ZenMode",
     opts = {
-      window = {
-        backdrop = 0.95,
-        width = 120,
-        height = 1,
-        options = {
-          signcolumn = "no",
-          number = false,
-          relativenumber = false,
-          cursorline = false,
-          cursorcolumn = false,
-          foldcolumn = "0",
-          list = false,
+        window = {
+            backdrop = 0.95,
         },
-      },
-      plugins = {
-        options = {
-          enabled = true,
-          ruler = false,
-          showcmd = false,
-        },
-        twilight = { enabled = true },
-        gitsigns = { enabled = false },
-        tmux = { enabled = false },
-        kitty = { enabled = false, font = "+2" },
-      },
-      on_open = function(win)
-        require("lazy").show()
-      end,
     },
-  },
+},
   {
     "nvim-orgmode/orgmode",
     dependencies = {
