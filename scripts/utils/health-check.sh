@@ -86,6 +86,12 @@ else
     print_status "WARN" "Python 3 is not installed"
 fi
 
+# Check Python version from .tool-versions
+if [[ -f .tool-versions ]] && grep -q "^python " .tool-versions; then
+    expected_version=$(grep "^python " .tool-versions | cut -d' ' -f2)
+    print_status "INFO" "Expected Python version: $expected_version"
+fi
+
 # Check asdf
 if command -v asdf &> /dev/null; then
     print_status "OK" "asdf is installed"
@@ -162,8 +168,20 @@ fi
 # Check SSH and GitHub configuration
 print_subsection "SSH and GitHub"
 check_ssh_keys() {
-    if [[ -f ~/.ssh/id_rsa ]]; then
-        print_status "OK" "SSH private key exists"
+    # Check for various SSH key types
+    local ssh_keys=()
+    [[ -f ~/.ssh/id_rsa ]] && ssh_keys+=("id_rsa")
+    [[ -f ~/.ssh/id_ed25519 ]] && ssh_keys+=("id_ed25519")
+    [[ -f ~/.ssh/id_ecdsa ]] && ssh_keys+=("id_ecdsa")
+    [[ -f ~/.ssh/id_dsa ]] && ssh_keys+=("id_dsa")
+
+    # Check for loaded SSH keys
+    if ssh-add -l &> /dev/null && [[ $(ssh-add -l | wc -l) -gt 0 ]]; then
+        local loaded_keys
+        loaded_keys=$(ssh-add -l | head -1 | cut -d' ' -f3)
+        print_status "OK" "SSH keys loaded: $loaded_keys"
+    elif [[ ${#ssh_keys[@]} -gt 0 ]]; then
+        print_status "OK" "SSH private keys found: ${ssh_keys[*]}"
     else
         print_status "WARN" "SSH private key not found"
     fi
