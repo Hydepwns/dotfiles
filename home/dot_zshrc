@@ -1,0 +1,30 @@
+# shellcheck disable=all
+# Main zsh configuration for DROO's dotfiles
+# This file contains chezmoi template syntax which will be processed by chezmoi
+
+# Autoload completions
+autoload -U compinit
+compinit -i
+
+# Oh My Zsh configuration
+{{- if .ohmyzsh -}}
+# Path to your oh-my-zsh installation.
+export ZSH="{{ .chezmoi.homeDir }}/.oh-my-zsh"
+
+# Set name of the theme to load
+ZSH_THEME="robbyrussell"
+
+# Which plugins would you like to load?
+plugins=(git)
+
+source $ZSH/oh-my-zsh.sh
+{{- end -}}
+
+# Universal settings
+export EDITOR="nvim"
+export LANG="en_US.UTF-8"
+
+# Source modular configuration
+if [[ -f "{{ .chezmoi.homeDir }}/.zsh/modules.zsh" ]]; then
+    source "{{ .chezmoi.homeDir }}/.zsh/modules.zsh"
+fi
