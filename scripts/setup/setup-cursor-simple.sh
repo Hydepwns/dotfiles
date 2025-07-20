@@ -228,7 +228,7 @@ install_cursor_settings() {
 
   // Kubernetes settings
   "vs-kubernetes": {
-    "vscode-kubernetes.minikube-path-mac": "/Users/droo/.vs-kubernetes/tools/minikube/darwin-arm64/minikube"
+    "vscode-kubernetes.minikube-path-mac": "$HOME/.vs-kubernetes/tools/minikube/darwin-arm64/minikube"
   },
 
   // Kilo Code settings
@@ -245,7 +245,21 @@ install_cursor_settings() {
   "diffEditor.maxComputationTime": 0,
 
   // Todo highlight settings
-  "todohighlight.defaultStyle": {},
+  "todohighlight.defaultStyle": {
+    "backgroundColor": "#ffeb3b",
+    "color": "#000000",
+    "fontWeight": "bold"
+  },
+  "todohighlight.keywords": [
+    "BUG",
+    "HACK",
+    "FIXME",
+    "TODO",
+    "XXX",
+    "TEMP",
+    "placeholder"
+  ],
+  "todohighlight.isEnable": true,
 
   // Elixir settings
   "elixir.projectPath": "/axol_events"
