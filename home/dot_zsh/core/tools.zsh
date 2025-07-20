@@ -1,15 +1,11 @@
 # shellcheck disable=all
 # Tool-specific configurations for DROO's dotfiles
 
-# asdf configuration (primary version manager)
-if command -v asdf &> /dev/null; then
-    . /opt/homebrew/opt/asdf/libexec/asdf.sh
-fi
+# Load lazy loading system
+source "{{ .chezmoi.homeDir }}/.zsh/core/lazy-loading.zsh"
 
-# direnv configuration
-if command -v direnv &> /dev/null; then
-    eval "$(direnv hook zsh)"
-fi
+# Note: Version managers are now lazy-loaded for better performance
+# They will be loaded only when first used
 
 # devenv configuration
 if command -v devenv &> /dev/null; then

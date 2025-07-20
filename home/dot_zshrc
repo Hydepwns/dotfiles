@@ -1,9 +1,8 @@
 # shellcheck disable=all
 # This file contains chezmoi template syntax which will be processed by chezmoi
-# Ruby/rbenv configuration (must be at top)
+# Ruby/rbenv configuration (lazy-loaded for better performance)
 {{- if .rbenv -}}
-export PATH="{{ .chezmoi.homeDir }}/.rbenv/shims:$PATH"
-eval "$(rbenv init -)"
+# rbenv is now lazy-loaded for better performance
 {{- end -}}
 
 # PATH
@@ -68,11 +67,10 @@ source $ZSH/oh-my-zsh.sh
 # Rust configuration
 export PATH="{{ .chezmoi.homeDir }}/.cargo/bin:$PATH"
 
-# NVM configuration
+# NVM configuration (lazy-loaded)
 {{- if .nvm -}}
 export NVM_DIR="{{ .chezmoi.homeDir }}/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# NVM is now lazy-loaded for better performance
 {{- end -}}
 
 # Additional Node.js configuration
@@ -80,15 +78,10 @@ export NVM_DIR="{{ .chezmoi.homeDir }}/.nvm"
 export PATH="{{ .chezmoi.homeDir }}/.asdf/installs/nodejs/18.19.0/bin:$PATH"
 {{- end -}}
 
-# asdf configuration
+# asdf configuration (lazy-loaded)
 {{- if .asdf -}}
-. {{ .brewPrefix }}/opt/asdf/libexec/asdf.sh
+# asdf is now lazy-loaded for better performance
 {{- end -}}
-
-# Additional asdf configuration (always loaded if asdf is present)
-if command -v asdf &> /dev/null; then
-    . {{ .brewPrefix }}/opt/asdf/libexec/asdf.sh
-fi
 
 # Elixir configuration
 {{- if .elixir -}}
@@ -115,10 +108,10 @@ if command -v luaenv &> /dev/null; then
 fi
 {{- end -}}
 
-# direnv configuration
+# direnv configuration (lazy-loaded)
 {{- if .direnv -}}
 # direnv - automatically load environment variables from .envrc files
-eval "$(direnv hook zsh)"
+# direnv is now lazy-loaded for better performance
 {{- end -}}
 
 # devenv configuration

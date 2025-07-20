@@ -60,6 +60,13 @@ install-optional: ## Install optional tools interactively
 performance-test: ## Run performance tests
 	@$(SCRIPTS_DIR)/utils/performance-test.sh
 
+performance-monitor: ## Run performance monitoring
+	@if [ -n "$(ACTION)" ]; then \
+		$(SCRIPTS_DIR)/utils/performance-monitor.sh "$(ACTION)"; \
+	else \
+		$(SCRIPTS_DIR)/utils/performance-monitor.sh measure; \
+	fi
+
 # CI/CD setup
 setup-ci: ## Setup CI/CD tools and pre-commit hooks
 	@$(SCRIPTS_DIR)/setup/setup-ci.sh
