@@ -6,7 +6,7 @@ name = "hydepwns"
 # Tool configurations
 rbenv = false
 ohmyzsh = true
-nvm = true
+nvm = false
 nodejs = true
 asdf = true
 elixir = false
