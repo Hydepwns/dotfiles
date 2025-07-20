@@ -3,16 +3,10 @@
 [![Plugins](https://dotfyle.com/Hydepwns/dotfiles-config-nvim/badges/plugins?style=flat)](https://dotfyle.com/Hydepwns/dotfiles-config-nvim)
 [![Leader Key](https://dotfyle.com/Hydepwns/dotfiles-config-nvim/badges/leaderkey?style=flat)](https://dotfyle.com/Hydepwns/dotfiles-config-nvim)
 [![Plugin Manager](https://dotfyle.com/Hydepwns/dotfiles-config-nvim/badges/plugin-manager?style=flat)](https://dotfyle.com/Hydepwns/dotfiles-config-nvim)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/Hydepwns/dotfiles)
-[![Shell](https://img.shields.io/badge/Shell-Zsh%20%7C%20Bash-green.svg)](https://github.com/Hydepwns/dotfiles)
-[![Performance](https://img.shields.io/badge/Performance-1.3s%20%E2%86%92%200.4s-brightgreen.svg)](https://github.com/Hydepwns/dotfiles)
 
 Cross-platform dotfiles managed with [chezmoi](https://www.chezmoi.io/) - featuring modular tool loading, project templates, and development automation.
 
 ## 🚀 Configuration Overview
-
-**Status:** Active Development
 
 ### 🛠️ Core Tools & Languages
 
@@ -28,8 +22,6 @@ Cross-platform dotfiles managed with [chezmoi](https://www.chezmoi.io/) - featur
 | ![Ethereum](https://img.shields.io/badge/Ethereum-⚡-orange.svg) ![Foundry](https://img.shields.io/badge/Foundry-🔨-orange.svg) ![Solana](https://img.shields.io/badge/Solana-🟣-purple.svg) ![Next.js](https://img.shields.io/badge/Next.js-⚛️-black.svg) ![React](https://img.shields.io/badge/React-⚛️-blue.svg) ![TypeScript](https://img.shields.io/badge/TypeScript-🔷-blue.svg) ![Tailwind](https://img.shields.io/badge/Tailwind-🎨-cyan.svg) | ![Lazy Loading](https://img.shields.io/badge/Lazy%20Loading-⚡-green.svg) ![Templates](https://img.shields.io/badge/8%20Template%20Types-📋-blue.svg) ![Monitor](https://img.shields.io/badge/Performance%20Monitor-📊-orange.svg) ![Web3 Ready](https://img.shields.io/badge/Web3%20Ready-⛓️-purple.svg) ![Speed](https://img.shields.io/badge/0.9s%20Saved%20per%20Shell-🚀-brightgreen.svg) ![Memory](https://img.shields.io/badge/Memory%20Optimized-💾-blue.svg) ![Auto-completion](https://img.shields.io/badge/Auto--completion-🎯-green.svg) | ![Speed](https://img.shields.io/badge/0.9s%20Saved%20per%20Shell-🚀-brightgreen.svg) ![Architecture](https://img.shields.io/badge/Modular%20Architecture-🧩-purple.svg) ![Monitor](https://img.shields.io/badge/Performance%20Monitor-📊-orange.svg) ![Auto-completion](https://img.shields.io/badge/Auto--completion-🎯-green.svg) |
 
 ## 🔗 Neovim Plugins
-
-**Status:** 50+ plugins | Lazy Loading | Performance Optimized | 15 Categories
 
 ### 🎨 UI & Theme
 
