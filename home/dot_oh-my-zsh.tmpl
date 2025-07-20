@@ -2,7 +2,7 @@
 export ZSH="/Users/{{ .chezmoi.username }}/.oh-my-zsh"
 
 # Set name of the theme to load
-ZSH_THEME="{{ .oh_my_zsh_theme | default "robbyrussell" }}"
+ZSH_THEME="robbyrussell"
 
 # Uncomment the following lines to use case-sensitive or hyphen-insensitive completion.
 # CASE_SENSITIVE="true"
@@ -55,7 +55,7 @@ ZSH_THEME="{{ .oh_my_zsh_theme | default "robbyrussell" }}"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=({{ .oh_my_zsh_plugins | default "git" }})
+plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 

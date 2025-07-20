@@ -1,0 +1,35 @@
+[data]
+# User information
+email = "drew@axol.io"
+name = "Hydepwns"
+
+# Oh My Zsh configuration
+oh_my_zsh_theme = "robbyrussell"
+oh_my_zsh_plugins = "git"
+
+# Personal flag for SSH templates
+personal = true
+
+# Tool configurations
+rbenv = false
+ohmyzsh = true
+nvm = false
+nodejs = true
+asdf = true
+elixir = false
+erlang = false
+lua = true
+direnv = true
+devenv = false
+nix = true
+llvm = false
+postgres = false
+psql = false
+foundry = false
+huff = false
+solana = false
+orbstack = false
+work = false
+
+# Platform-specific
+brewPrefix = "/opt/homebrew"
