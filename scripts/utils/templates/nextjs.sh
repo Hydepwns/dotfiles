@@ -1,33 +1,39 @@
-#!/opt/homebrew/bin/bash
+#!/bin/bash
 # Next.js template generator for DROO's dotfiles
+
+# Source helpers for consistent logging
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -f "$SCRIPT_DIR/../helpers.sh" ]]; then
+    source "$SCRIPT_DIR/../helpers.sh"
+fi
 
 # Function to generate Next.js project
 generate_nextjs_project() {
     local name="$1"
     local features="$2"
-    
+
     echo "Creating Next.js project: $name"
-    
+
     # Use create-next-app
     npx create-next-app@latest "$name" --typescript --tailwind --eslint --app --src-dir --import-alias "@/*" --yes
-    
+
     cd "$name" || return 1
-    
+
     # Add additional dependencies
     npm install @types/node @types/react @types/react-dom
-    
+
     # Add testing if requested
     if [[ "$features" == *"jest"* ]]; then
         echo "Adding Jest testing setup..."
         generate_jest_setup
     fi
-    
+
     # Add Storybook if requested
     if [[ "$features" == *"storybook"* ]]; then
         echo "Adding Storybook..."
         npx storybook@latest init --yes
     fi
-    
+
     # Add Prettier if requested
     if [[ "$features" == *"prettier"* ]]; then
         echo "Adding Prettier configuration..."
@@ -39,7 +45,7 @@ generate_nextjs_project() {
 generate_jest_setup() {
     npm install --save-dev jest @testing-library/react @testing-library/jest-dom jest-environment-jsdom
     npm install --save-dev @types/jest
-    
+
     # Create jest.config.js
     cat > jest.config.js << EOF
 const nextJest = require('next/jest')
@@ -58,12 +64,12 @@ const customJestConfig = {
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
 module.exports = createJestConfig(customJestConfig)
 EOF
-    
+
     # Create jest.setup.js
     cat > jest.setup.js << EOF
 import '@testing-library/jest-dom'
 EOF
-    
+
     # Update package.json scripts
     if [[ -f "package.json" ]]; then
         # Add test script if it doesn't exist
@@ -77,7 +83,7 @@ EOF
 # Function to generate Prettier setup
 generate_prettier_setup() {
     npm install --save-dev prettier
-    
+
     # Create .prettierrc
     cat > .prettierrc << EOF
 {
@@ -89,7 +95,7 @@ generate_prettier_setup() {
   "useTabs": false
 }
 EOF
-    
+
     # Create .prettierignore
     cat > .prettierignore << EOF
 node_modules
@@ -99,7 +105,7 @@ build
 dist
 *.log
 EOF
-    
+
     # Update package.json scripts
     if [[ -f "package.json" ]]; then
         # Add format script if it doesn't exist
@@ -108,4 +114,4 @@ EOF
             rm package.json.bak
         fi
     fi
-} 
+}

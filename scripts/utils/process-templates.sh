@@ -38,4 +38,4 @@ cp -r home/dot_zsh/aliases "$OUTPUT_DIR/"
 cp -r home/dot_zsh/functions "$OUTPUT_DIR/"
 
 print_status "OK" "Templates processed successfully to $OUTPUT_DIR"
-print_status "INFO" "You can test the modular system by sourcing $OUTPUT_DIR/zshrc" 
+print_status "INFO" "You can test the modular system by sourcing $OUTPUT_DIR/zshrc"

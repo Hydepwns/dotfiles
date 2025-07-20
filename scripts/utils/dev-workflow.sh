@@ -5,12 +5,12 @@
 dev_session() {
     local project="$1"
     cd "$project" || exit 1
-    
+
     # Auto-load environment
     if [[ -f .envrc ]]; then
         direnv allow
     fi
-    
+
     # Start development server based on project type
     if [[ -f package.json ]]; then
         npm run dev

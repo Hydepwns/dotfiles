@@ -11,18 +11,18 @@ fi
 generate_rust_project() {
     local name="$1"
     local features="$2"
-    
+
     echo "Creating Rust project: $name"
-    
+
     # Initialize Cargo project
     cargo init --name "$name"
-    
+
     # Update Cargo.toml with common dependencies
     generate_cargo_toml "$name" "$features"
-    
+
     # Create basic structure
     mkdir -p src tests examples
-    
+
     # Create main.rs
     cat > src/main.rs << EOF
 use anyhow::Result;
@@ -33,7 +33,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 EOF
-    
+
     # Create lib.rs
     cat > src/lib.rs << EOF
 use anyhow::Result;
@@ -52,26 +52,26 @@ mod tests {
     }
 }
 EOF
-    
+
     # Add additional features if requested
     if [[ "$features" == *"axum"* ]]; then
         echo "Adding Axum web framework..."
         generate_axum_setup "$name"
     fi
-    
+
     if [[ "$features" == *"serde"* ]]; then
         echo "Adding Serde serialization..."
         # Serde is already included in base dependencies
     fi
-    
+
     if [[ "$features" == *"tokio"* ]]; then
         echo "Adding Tokio async runtime..."
         # Tokio is already included in base dependencies
     fi
-    
+
     # Create .gitignore
     generate_rust_gitignore
-    
+
     # Create README
     generate_rust_readme "$name"
 }
@@ -80,7 +80,7 @@ EOF
 generate_cargo_toml() {
     local name="$1"
     local features="$2"
-    
+
     cat > Cargo.toml << EOF
 [package]
 name = "$name"
@@ -98,7 +98,7 @@ thiserror = "1.0"
 log = "0.4"
 env_logger = "0.10"
 EOF
-    
+
     # Add Axum if requested
     if [[ "$features" == *"axum"* ]]; then
         cat >> Cargo.toml << EOF
@@ -107,7 +107,7 @@ tower = "0.4"
 tower-http = { version = "0.5", features = ["cors"] }
 EOF
     fi
-    
+
     cat >> Cargo.toml << EOF
 
 [dev-dependencies]
@@ -124,7 +124,7 @@ EOF
 # Function to generate Axum setup
 generate_axum_setup() {
     local name="$1"
-    
+
     # Create web module
     cat > src/web.rs << EOF
 use axum::{
@@ -165,7 +165,7 @@ pub async fn start_server() {
         .unwrap();
 }
 EOF
-    
+
     # Update main.rs to use web server
     cat > src/main.rs << EOF
 use anyhow::Result;
@@ -175,13 +175,13 @@ use $name::web;
 async fn main() -> Result<()> {
     env_logger::init();
     println!("Starting {} server...", env!("CARGO_PKG_NAME"));
-    
+
     web::start_server().await;
-    
+
     Ok(())
 }
 EOF
-    
+
     # Update lib.rs to include web module
     cat > src/lib.rs << EOF
 use anyhow::Result;
@@ -233,7 +233,7 @@ EOF
 # Function to generate Rust README
 generate_rust_readme() {
     local name="$1"
-    
+
     cat > README.md << EOF
 # $name
 
@@ -288,4 +288,4 @@ cargo clippy
 
 MIT
 EOF
-} 
+}

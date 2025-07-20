@@ -24,6 +24,7 @@ solana = false
 orbstack = false
 work = false
 personal = false
+cursor = true
 
 # Platform-specific
 brewPrefix = "/opt/homebrew"

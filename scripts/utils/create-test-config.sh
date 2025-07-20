@@ -29,7 +29,7 @@ cat > "$OUTPUT_DIR/zshrc" << EOF
 autoload -U compinit
 compinit -i
 
-# Universal settings  
+# Universal settings
 export EDITOR="nvim"
 export LANG="en_US.UTF-8"
 
@@ -149,4 +149,4 @@ cp -r home/dot_zsh/aliases "$OUTPUT_DIR/aliases"
 cp -r home/dot_zsh/functions "$OUTPUT_DIR/functions"
 
 print_status "OK" "Test configuration created successfully in $OUTPUT_DIR"
-print_status "INFO" "You can test the modular system by sourcing $OUTPUT_DIR/zshrc" 
+print_status "INFO" "You can test the modular system by sourcing $OUTPUT_DIR/zshrc"

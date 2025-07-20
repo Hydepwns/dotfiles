@@ -1,58 +1,64 @@
-#!/opt/homebrew/bin/bash
+#!/bin/bash
 # Common template utilities for DROO's dotfiles
+
+# Source helpers for consistent logging
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -f "$SCRIPT_DIR/../helpers.sh" ]]; then
+    source "$SCRIPT_DIR/../helpers.sh"
+fi
 
 # Function to validate project name
 validate_project_name() {
     local name="$1"
-    
+
     # Check if name is empty
     if [[ -z "$name" ]]; then
-        echo "Error: Project name cannot be empty"
+        log_error "Project name cannot be empty"
         return 1
     fi
-    
+
     # Check if name contains invalid characters
     if [[ ! "$name" =~ ^[a-zA-Z0-9_-]+$ ]]; then
-        echo "Error: Project name can only contain letters, numbers, hyphens, and underscores"
+        log_error "Project name can only contain letters, numbers, hyphens, and underscores"
         return 1
     fi
-    
+
     # Check if name starts with a number
     if [[ "$name" =~ ^[0-9] ]]; then
-        echo "Error: Project name cannot start with a number"
+        log_error "Project name cannot start with a number"
         return 1
     fi
-    
+
     return 0
 }
 
 # Function to check if project directory exists
 check_project_exists() {
     local name="$1"
-    
+
     if [[ -d "$name" ]]; then
-        echo "Error: Project directory '$name' already exists"
+        log_error "Project directory '$name' already exists"
         return 1
     fi
-    
+
     return 0
 }
 
 # Function to create basic project structure
 create_basic_structure() {
     local name="$1"
-    
+
     # Create project directory
     mkdir -p "$name"
     cd "$name" || return 1
-    
+
     # Initialize git
     git init
-    
+
     # Create basic directories
     mkdir -p src tests docs
-    
-    echo "Created basic project structure for $name"
+
+    log_info "Created basic project structure for $name"
 }
 
 # Function to generate common .gitignore
@@ -110,7 +116,7 @@ EOF
 generate_basic_readme() {
     local name="$1"
     local description="$2"
-    
+
     cat > README.md << EOF
 # $name
 
@@ -163,7 +169,7 @@ generate_package_json() {
     local name="$1"
     local description="$2"
     local keywords="$3"
-    
+
     cat > package.json << EOF
 {
   "name": "$name",
@@ -253,7 +259,7 @@ generate_prettier_config() {
   "useTabs": false
 }
 EOF
-    
+
     cat > .prettierignore << EOF
 node_modules
 dist
@@ -265,23 +271,23 @@ EOF
 # Function to install common Node.js dependencies
 install_common_node_deps() {
     local features="$1"
-    
+
     # Install base dependencies
     npm install @types/node typescript
-    
+
     # Install development dependencies
     npm install --save-dev eslint prettier
-    
+
     # Install TypeScript ESLint if TypeScript is enabled
     if [[ "$features" == *"typescript"* ]]; then
         npm install --save-dev @typescript-eslint/parser @typescript-eslint/eslint-plugin
     fi
-    
+
     # Install testing dependencies if testing is enabled
     if [[ "$features" == *"jest"* ]]; then
         npm install --save-dev jest @types/jest
     fi
-    
+
     # Install Vite if Vite is enabled
     if [[ "$features" == *"vite"* ]]; then
         npm install --save-dev vite @vitejs/plugin-react
@@ -291,7 +297,7 @@ install_common_node_deps() {
 # Function to print success message
 print_success() {
     local name="$1"
-    
+
     echo ""
     echo "✅ Project '$name' created successfully!"
     echo ""
@@ -306,18 +312,18 @@ print_success() {
 # Function to print error message
 print_error() {
     local message="$1"
-    echo "❌ Error: $message"
+    log_error "$message"
     exit 1
 }
 
 # Function to print info message
 print_info() {
     local message="$1"
-    echo "ℹ️  $message"
+    log_info "$message"
 }
 
 # Function to print warning message
 print_warning() {
     local message="$1"
-    echo "⚠️  Warning: $message"
-} 
+    log_warning "$message"
+}

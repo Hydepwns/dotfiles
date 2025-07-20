@@ -20,26 +20,26 @@ else
     echo "5. Click 'Generate token'"
     echo "6. Copy the generated token"
     echo ""
-    
+
     read -r -p "Enter your GitHub Personal Access Token: " token
-    
+
     if [ -n "$token" ]; then
         # Add to current session
         export GITHUB_TOKEN="$token"
-        
+
         # Add to shell profile
         if [[ "$SHELL" == *"zsh"* ]]; then
             profile="$HOME/.zshrc"
         else
             profile="$HOME/.bash_profile"
         fi
-        
+
         {
             echo ""
             echo "# GitHub token for chezmoi SSH key fetching"
             echo "export GITHUB_TOKEN=\"$token\""
         } >> "$profile"
-        
+
         echo "✅ Token added to $profile"
         echo "🔄 Please restart your terminal or run: source $profile"
         echo ""
@@ -57,4 +57,4 @@ if curl -s -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/user |
 else
     echo "❌ GitHub API access failed. Please check your token."
     exit 1
-fi 
+fi

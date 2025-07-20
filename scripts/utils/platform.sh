@@ -86,4 +86,4 @@ print_platform_info() {
     if [[ -n "$BREW_PREFIX" ]]; then
         echo "  Homebrew Prefix: $BREW_PREFIX"
     fi
-} 
+}

@@ -7,35 +7,15 @@ set -e
 
 # Source shared utilities
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [[ -f "$SCRIPT_DIR/colors.sh" ]]; then
-    # shellcheck disable=SC1091
-    source "$SCRIPT_DIR/colors.sh"
-else
-    echo "Warning: colors.sh not found, using fallback colors"
-    # Fallback color definitions
-    RED='\033[0;31m'
-    GREEN='\033[0;32m'
-    YELLOW='\033[1;33m'
-    BLUE='\033[0;34m'
-    NC='\033[0m'
-    
-    print_status() {
-        local status=$1
-        local message=$2
-        case $status in
-            "OK") echo -e "${GREEN}✓${NC} $message" ;;
-            "WARN") echo -e "${YELLOW}⚠${NC} $message" ;;
-            "ERROR") echo -e "${RED}✗${NC} $message" ;;
-            "INFO") echo -e "${BLUE}ℹ${NC} $message" ;;
-        esac
-    }
-fi
+source "$SCRIPT_DIR/constants.sh"
+source "$SCRIPT_DIR/helpers.sh"
+source "$SCRIPT_DIR/colors.sh"
 
-echo "🔍 Running dotfiles health check..."
-echo "=================================="
+log_info "Running dotfiles health check..."
+print_section "Health Check"
 
 # Check chezmoi installation
-echo -e "\n${BLUE}Checking chezmoi...${NC}"
+print_subsection "Chezmoi"
 if command -v chezmoi &> /dev/null; then
     print_status "OK" "chezmoi is installed ($(chezmoi --version))"
 else
@@ -43,7 +23,7 @@ else
 fi
 
 # Check git configuration
-echo -e "\n${BLUE}Checking git configuration...${NC}"
+print_subsection "Git Configuration"
 if git config --global --get user.name &> /dev/null; then
     print_status "OK" "Git user.name is set: $(git config --global --get user.name)"
 else
@@ -57,7 +37,7 @@ else
 fi
 
 # Check shell configuration
-echo -e "\n${BLUE}Checking shell configuration...${NC}"
+print_subsection "Shell Configuration"
 print_status "INFO" "Current shell: $SHELL"
 
 if command -v zsh &> /dev/null; then
@@ -74,7 +54,7 @@ else
 fi
 
 # Check development tools
-echo -e "\n${BLUE}Checking development tools...${NC}"
+print_subsection "Development Tools"
 
 # Check Homebrew (macOS)
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -165,7 +145,7 @@ else
 fi
 
 # Check chezmoi data
-echo -e "\n${BLUE}Checking chezmoi configuration...${NC}"
+print_subsection "Chezmoi Configuration"
 if [[ -f "$HOME/.config/chezmoi/chezmoi.toml" ]]; then
     print_status "OK" "chezmoi configuration exists"
 else
@@ -179,7 +159,8 @@ else
     print_status "WARN" "Dotfiles may not be properly applied"
 fi
 
-# Add these checks
+# Check SSH and GitHub configuration
+print_subsection "SSH and GitHub"
 check_ssh_keys() {
     if [[ -f ~/.ssh/id_rsa ]]; then
         print_status "OK" "SSH private key exists"
@@ -196,5 +177,7 @@ check_github_token() {
     fi
 }
 
-echo -e "\n${BLUE}Health check complete!${NC}"
-echo "==================================" 
+check_ssh_keys
+check_github_token
+
+log_success "Health check complete!"

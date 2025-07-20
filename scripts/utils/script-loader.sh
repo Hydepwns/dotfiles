@@ -13,15 +13,15 @@ declare -A SCRIPT_CATEGORIES=(
 load_script_category() {
     local category="$1"
     local script_info="${SCRIPT_CATEGORIES[$category]}"
-    
+
     if [[ -z "$script_info" ]]; then
         echo "Unknown script category: $category"
         return 1
     fi
-    
+
     local script_dir="${script_info%%:*}"
     local scripts="${script_info##*:}"
-    
+
     if [[ -d "$script_dir" ]]; then
         IFS=',' read -ra script_array <<< "$scripts"
         for script in "${script_array[@]}"; do
@@ -50,16 +50,16 @@ run_script() {
     local category="$1"
     local script_name="$2"
     local args="$3"
-    
+
     local script_info="${SCRIPT_CATEGORIES[$category]}"
     if [[ -z "$script_info" ]]; then
         echo "Unknown script category: $category"
         return 1
     fi
-    
+
     local script_dir="${script_info%%:*}"
     local script_path="$script_dir/$script_name"
-    
+
     if [[ -f "$script_path" ]]; then
         chmod +x "$script_path"
         ./"$script_path" "$args"
@@ -73,15 +73,15 @@ run_script() {
 script_exists() {
     local category="$1"
     local script_name="$2"
-    
+
     local script_info="${SCRIPT_CATEGORIES[$category]}"
     if [[ -z "$script_info" ]]; then
         return 1
     fi
-    
+
     local script_dir="${script_info%%:*}"
     local script_path="$script_dir/$script_name"
-    
+
     [[ -f "$script_path" ]]
 }
 
@@ -89,12 +89,12 @@ script_exists() {
 get_script_path() {
     local category="$1"
     local script_name="$2"
-    
+
     local script_info="${SCRIPT_CATEGORIES[$category]}"
     if [[ -z "$script_info" ]]; then
         return 1
     fi
-    
+
     local script_dir="${script_info%%:*}"
     echo "$script_dir/$script_name"
 }
@@ -102,7 +102,7 @@ get_script_path() {
 # Function to validate script dependencies
 validate_script_dependencies() {
     local missing_deps=()
-    
+
     # Check for required commands
     local required_commands=("chezmoi" "git" "zsh")
     for cmd in "${required_commands[@]}"; do
@@ -110,7 +110,7 @@ validate_script_dependencies() {
             missing_deps+=("$cmd")
         fi
     done
-    
+
     # Check for required directories
     local required_dirs=("scripts" "home" "config")
     for dir in "${required_dirs[@]}"; do
@@ -118,12 +118,12 @@ validate_script_dependencies() {
             missing_deps+=("$dir")
         fi
     done
-    
+
     if [[ ${#missing_deps[@]} -gt 0 ]]; then
         echo "Missing dependencies: ${missing_deps[*]}"
         return 1
     fi
-    
+
     return 0
 }
 
@@ -132,22 +132,22 @@ init_script_env() {
     # Set script directory
     SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     DOTFILES_ROOT="$(dirname "$(dirname "$(dirname "$SCRIPT_DIR")")")"
-    
+
     # Export variables
     export SCRIPT_DIR
     export DOTFILES_ROOT
-    
+
     # Load common utilities
     if [[ -f "$SCRIPT_DIR/helpers.sh" ]]; then
         # shellcheck disable=SC1091
         source "$SCRIPT_DIR/helpers.sh"
     fi
-    
+
     if [[ -f "$SCRIPT_DIR/colors.sh" ]]; then
         # shellcheck disable=SC1091
         source "$SCRIPT_DIR/colors.sh"
     fi
-    
+
     if [[ -f "$SCRIPT_DIR/platform.sh" ]]; then
         # shellcheck disable=SC1091
         source "$SCRIPT_DIR/platform.sh"
@@ -194,4 +194,4 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
 else
     # Script is being sourced
     init_script_env
-fi 
+fi

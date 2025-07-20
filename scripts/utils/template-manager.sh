@@ -1,158 +1,239 @@
-#!/opt/homebrew/bin/bash
-# Template management system for DROO's dotfiles
+#!/bin/bash
+# Centralized template management for DROO's dotfiles
 
 # Source common utilities
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# shellcheck disable=SC1091
-source "$SCRIPT_DIR/templates/common.sh"
+source "$SCRIPT_DIR/constants.sh"
+source "$SCRIPT_DIR/helpers.sh"
+source "$SCRIPT_DIR/colors.sh"
 
-# Template registry with metadata
-declare -A TEMPLATES=(
-    ["web3"]="ethereum,solana,foundry,huff:Web3 smart contract development"
-    ["nextjs"]="typescript,tailwind,eslint:Next.js with TypeScript and Tailwind"
-    ["react"]="typescript,vite,eslint:React with TypeScript and Vite"
-    ["rust"]="cargo,clippy,rustfmt:Rust project with common dependencies"
-    ["elixir"]="mix,phoenix,exunit:Elixir Phoenix project"
-    ["node"]="typescript,jest,eslint:Node.js project with TypeScript"
-    ["python"]="poetry,pytest,black:Python project with virtual environment"
-    ["go"]="modules,test,go-mod:Go project with modules"
-)
-
-# Template features registry
-# shellcheck disable=SC2034
-declare -A TEMPLATE_FEATURES=(
-    ["web3"]="ethereum,solana,foundry,huff,hardhat,anchor"
-    ["nextjs"]="typescript,tailwind,eslint,prettier,jest,storybook"
-    ["react"]="typescript,vite,eslint,prettier,jest,testing-library"
-    ["rust"]="cargo,clippy,rustfmt,tokio,serde,axum"
-    ["elixir"]="mix,phoenix,exunit,credo,ex_doc,ecto"
-    ["node"]="typescript,jest,eslint,prettier,nodemon,ts-node"
-    ["python"]="poetry,pytest,black,flake8,mypy,fastapi"
-    ["go"]="modules,test,go-mod,gin,viper,cobra"
-)
-
-# Function to generate project template
-generate_template() {
-    local type="$1"
-    local name="$2"
-    shift 2
-    local features=("$@")
-    
-    # Validate inputs
-    if ! validate_project_name "$name"; then
-        return 1
-    fi
-    
-    if ! check_project_exists "$name"; then
-        return 1
-    fi
-    
-    # Validate template type
-    if [[ ! -v TEMPLATES[$type] ]]; then
-        print_error "Unknown template type: $type"
-        echo "Available templates: ${!TEMPLATES[*]}"
-        return 1
-    fi
-    
-    # Source template-specific modules
-    # shellcheck disable=SC1091
-    case "$type" in
-        "web3")
-            source "$SCRIPT_DIR/templates/web3.sh"
-            ;;
-        "nextjs")
-            source "$SCRIPT_DIR/templates/nextjs.sh"
-            ;;
-        "rust")
-            source "$SCRIPT_DIR/templates/rust.sh"
-            ;;
-        *)
-            print_error "Template generation not implemented for: $type"
-            return 1
-            ;;
+# Template registry (using functions for compatibility)
+get_template_script() {
+    local template_type="$1"
+    case "$template_type" in
+        "web3") echo "scripts/templates/web3.sh" ;;
+        "nextjs") echo "scripts/templates/nextjs.sh" ;;
+        "react") echo "scripts/templates/react.sh" ;;
+        "rust") echo "scripts/templates/rust.sh" ;;
+        "elixir") echo "scripts/templates/elixir.sh" ;;
+        "node") echo "scripts/templates/node.sh" ;;
+        "python") echo "scripts/templates/python.sh" ;;
+        "go") echo "scripts/templates/go.sh" ;;
+        *) echo "" ;;
     esac
-    
-    # Create project structure
-    create_basic_structure "$name"
-    
-    # Generate based on type
-    local features_str="${features[*]}"
-    if [[ "$type" == "web3" ]]; then
-        generate_web3_project "$name" "$features_str"
-    elif [[ "$type" == "nextjs" ]]; then
-        generate_nextjs_project "$name" "$features_str"
-    elif [[ "$type" == "rust" ]]; then
-        generate_rust_project "$name" "$features_str"
-    else
-        print_error "Template generation not implemented for: $type"
-        return 1
-    fi
-    
-    print_success "$name"
 }
 
+# Template descriptions (using functions for compatibility)
+get_template_description() {
+    local template_type="$1"
+    case "$template_type" in
+        "web3") echo "Ethereum/Solana smart contract project" ;;
+        "nextjs") echo "Next.js with TypeScript and Tailwind" ;;
+        "react") echo "React with TypeScript and Vite" ;;
+        "rust") echo "Rust project with common dependencies" ;;
+        "elixir") echo "Elixir Phoenix project" ;;
+        "node") echo "Node.js project with TypeScript" ;;
+        "python") echo "Python project with virtual environment" ;;
+        "go") echo "Go project with modules" ;;
+        *) echo "" ;;
+    esac
+}
 
-
-
-
-
+# Template options (using functions for compatibility)
+get_template_options() {
+    local template_type="$1"
+    case "$template_type" in
+        "web3") echo "--web3-type <type> --with-tests --with-docs --with-ci" ;;
+        "nextjs") echo "--with-tests --with-docs --with-ci --with-auth" ;;
+        "react") echo "--with-tests --with-docs --with-ci --with-router" ;;
+        "rust") echo "--with-tests --with-docs --with-ci --with-cli" ;;
+        "elixir") echo "--with-tests --with-docs --with-ci --with-api" ;;
+        "node") echo "--with-tests --with-docs --with-ci --with-express" ;;
+        "python") echo "--with-tests --with-docs --with-ci --with-fastapi" ;;
+        "go") echo "--with-tests --with-docs --with-ci --with-gin" ;;
+        *) echo "" ;;
+    esac
+}
 
 # Function to list available templates
 list_templates() {
     echo "Available templates:"
-    for template in "${!TEMPLATES[@]}"; do
-        local info="${TEMPLATES[$template]}"
-        local features_str
-        features_str="${info%%:*}"
-        local description="${info##*:}"
-        echo "  $template: $description"
-        echo "    Features: $features_str"
+    echo
+    local template_types=("web3" "nextjs" "react" "rust" "elixir" "node" "python" "go")
+
+    for template in "${template_types[@]}"; do
+        local description
+        description=$(get_template_description "$template")
+        local options
+        options=$(get_template_options "$template")
+        printf "  %-15s - %s\n" "$template" "$description"
+        if [[ -n "$options" ]]; then
+            printf "    Options: %s\n" "$options"
+        fi
+        echo
     done
+}
+
+# Function to validate template
+validate_template() {
+    local template_type="$1"
+    local template_script
+
+    template_script=$(get_template_script "$template_type")
+
+    if [[ -z "$template_script" ]]; then
+        log_error "Unknown template type: $template_type"
+        return $EXIT_INVALID_ARGS
+    fi
+
+    if [[ ! -f "$template_script" ]]; then
+        log_error "Template script not found: $template_script"
+        return $EXIT_FILE_NOT_FOUND
+    fi
+
+    return $EXIT_SUCCESS
+}
+
+
+
+# Function to generate template
+generate_template() {
+    local template_type="$1"
+    local project_name="$2"
+    local options="$3"
+
+    # Validate template
+    if ! validate_template "$template_type"; then
+        return $?
+    fi
+
+    # Validate project name
+    if ! validate_required_args "$project_name"; then
+        return $EXIT_INVALID_ARGS
+    fi
+
+    local template_script
+    template_script=$(get_template_script "$template_type")
+
+    log_info "Generating $template_type template: $project_name"
+
+    # Execute template with common validation
+    if [[ -x "$template_script" ]]; then
+        "$template_script" "$project_name" "$options"
+    else
+        chmod +x "$template_script"
+        "$template_script" "$project_name" "$options"
+    fi
+
+    local exit_code=$?
+    if [[ $exit_code -eq 0 ]]; then
+        log_success "Template generated successfully: $project_name"
+    else
+        log_error "Template generation failed"
+    fi
+
+    return $exit_code
 }
 
 # Function to show template help
 show_template_help() {
-    echo "Template generator for DROO's dotfiles"
-    echo "Usage: $0 <template-type> <project-name> [features...]"
-    echo ""
-    list_templates
-    echo ""
-    echo "Examples:"
-    echo "  $0 web3 my-defi-project ethereum solana"
-    echo "  $0 nextjs my-webapp typescript tailwind jest"
-    echo "  $0 rust my-cli-tool"
+    local template_type="$1"
+
+    if [[ -n "$template_type" ]]; then
+        if ! validate_template "$template_type"; then
+            return $?
+        fi
+
+        local description
+        description=$(get_template_description "$template_type")
+        local options
+        options=$(get_template_options "$template_type")
+
+        echo "Template: $template_type"
+        echo "Description: $description"
+        echo "Usage: $0 generate $template_type <project-name> [options]"
+        if [[ -n "$options" ]]; then
+            echo "Options: $options"
+        fi
+        echo
+        echo "Example: $0 generate $template_type my-project"
+    else
+        echo "Template generator for DROO's dotfiles"
+        echo "Usage: $0 <command> [options]"
+        echo
+        echo "Commands:"
+        echo "  list                    List all available templates"
+        echo "  generate <type> <name>  Generate a project template"
+        echo "  help <type>             Show help for specific template"
+        echo
+        echo "Examples:"
+        echo "  $0 list"
+        echo "  $0 generate web3 my-defi-project"
+        echo "  $0 help nextjs"
+    fi
+}
+
+# Function to parse template options
+parse_template_options() {
+    local options
+    options="$1"
+    local parsed_options
+    parsed_options=()
+
+    if [[ -n "$options" ]]; then
+        IFS=' ' read -ra option_array <<< "$options"
+        for option in "${option_array[@]}"; do
+            case "$option" in
+                --web3-type)
+                    parsed_options+=("$option")
+                    ;;
+                --with-*)
+                    parsed_options+=("$option")
+                    ;;
+                *)
+                    log_warning "Unknown option: $option"
+                    ;;
+            esac
+        done
+    fi
+
+    echo "${parsed_options[@]}"
 }
 
 # Main function
 main() {
-    local template_type="$1"
-    local project_name="$2"
-    shift 2
-    local features=("$@")
-    
-    # Show help if no arguments
-    if [[ -z "$template_type" ]]; then
-        show_template_help
-        exit 0
-    fi
-    
-    # Validate arguments
-    if [[ -z "$project_name" ]]; then
-        print_error "Project name is required"
-        show_template_help
-        exit 1
-    fi
-    
-    # Generate template
-    if generate_template "$template_type" "$project_name" "${features[@]}"; then
-        print_success "$project_name"
-    else
-        print_error "Failed to generate template"
-        exit 1
-    fi
+    case "${1:-}" in
+        "list")
+            list_templates
+            ;;
+        "generate")
+            if [[ $# -lt 3 ]]; then
+                log_error "Usage: $0 generate <type> <name> [options]"
+                exit $EXIT_INVALID_ARGS
+            fi
+            local template_type="$2"
+            local project_name="$3"
+            local options="${4:-}"
+            generate_template "$template_type" "$project_name" "$options"
+            ;;
+        "help")
+            show_template_help "${2:-}"
+            ;;
+        "validate")
+            if [[ $# -lt 2 ]]; then
+                log_error "Usage: $0 validate <type>"
+                exit $EXIT_INVALID_ARGS
+            fi
+            validate_template "$2"
+            ;;
+        *)
+            show_template_help
+            exit $EXIT_INVALID_ARGS
+            ;;
+    esac
 }
 
-# Run main function if script is executed directly
+# Script entry point
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     main "$@"
-fi 
+fi

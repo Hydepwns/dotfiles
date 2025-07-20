@@ -1,7 +1,10 @@
+asdf 0.13.1
 direnv 2.32.3
-node 18.19.0
-python 3.10.13
+devenv 0.10.0
+nix 2.18.0
+node 23.4.0
+python 3.13.0
 rust 1.88.0
 elixir 1.18.3-otp-27
-erlang 26.2.4
+erlang 28.3.1
 lua 5.4.8

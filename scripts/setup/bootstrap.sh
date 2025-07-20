@@ -17,7 +17,7 @@ else
     YELLOW='\033[1;33m'
     BLUE='\033[0;34m'
     NC='\033[0m'
-    
+
     print_status() {
         local status=$1
         local message=$2
@@ -53,7 +53,7 @@ install_chezmoi() {
             if ! command -v brew &> /dev/null; then
                 print_status "INFO" "Installing Homebrew..."
                 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-                
+
                 # Add Homebrew to PATH for Apple Silicon
                 if [[ "$ARCH" == "arm64" ]]; then
                     eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -76,7 +76,7 @@ install_chezmoi() {
 # Install basic dependencies
 install_dependencies() {
     print_status "INFO" "Installing basic dependencies..."
-    
+
     case "$OS" in
         "Darwin")
             # Install Xcode Command Line Tools if not present
@@ -84,7 +84,7 @@ install_dependencies() {
                 print_status "INFO" "Installing Xcode Command Line Tools..."
                 xcode-select --install
             fi
-            
+
             # Install basic tools
             brew install git zsh curl
             ;;
@@ -108,7 +108,7 @@ install_dependencies() {
 # Initialize dotfiles
 initialize_dotfiles() {
     print_status "INFO" "Initializing dotfiles..."
-    
+
     # Check if dotfiles are already initialized
     if [[ -d "$HOME/.local/share/chezmoi" ]]; then
         print_status "WARN" "Dotfiles already initialized. Updating..."
@@ -121,13 +121,13 @@ initialize_dotfiles() {
 # Set up shell
 setup_shell() {
     print_status "INFO" "Setting up shell..."
-    
+
     # Check if zsh is available
     if ! command -v zsh &> /dev/null; then
         print_status "ERROR" "Zsh not found. Please install zsh first."
         return 1
     fi
-    
+
     # Set zsh as default shell if not already
     if [[ "$SHELL" != *"zsh"* ]]; then
         print_status "INFO" "Setting zsh as default shell..."
@@ -141,13 +141,13 @@ setup_shell() {
 # Post-installation setup
 post_install() {
     print_status "INFO" "Running post-installation setup..."
-    
+
     # Source the new zshrc to get all functions (only if running in zsh)
     if [[ -n "$ZSH_VERSION" ]] && [[ -f "$HOME/.zshrc" ]]; then
         # shellcheck disable=SC1091
         source "$HOME/.zshrc"
     fi
-    
+
     # Run health check
     if [[ -f "$HOME/.local/share/chezmoi/scripts/utils/health-check.sh" ]]; then
         print_status "INFO" "Running health check..."
@@ -162,7 +162,7 @@ main() {
     initialize_dotfiles
     setup_shell
     post_install
-    
+
     echo ""
     echo "✅ Bootstrap complete!"
     echo "========================================"

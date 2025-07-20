@@ -1,19 +1,25 @@
-#!/opt/homebrew/bin/bash
+#!/bin/bash
 # Web3 template generator for DROO's dotfiles
+
+# Source helpers for consistent logging
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -f "$SCRIPT_DIR/../helpers.sh" ]]; then
+    source "$SCRIPT_DIR/../helpers.sh"
+fi
 
 # Function to generate web3 project
 generate_web3_project() {
     local name="$1"
     local features="$2"
-    
+
     echo "Creating web3 project: $name"
-    
+
     # Initialize git
     git init
-    
+
     # Create basic structure
     mkdir -p src contracts scripts test docs
-    
+
     # Create README
     cat > README.md << EOF
 # $name
@@ -60,7 +66,7 @@ npm run deploy
 
 MIT
 EOF
-    
+
     # Create package.json
     cat > package.json << EOF
 {
@@ -87,19 +93,19 @@ EOF
   }
 }
 EOF
-    
+
     # Add Ethereum support if requested
     if [[ "$features" == *"ethereum"* ]] || [[ "$features" == *"foundry"* ]]; then
         echo "Adding Ethereum/Foundry support..."
         generate_ethereum_setup "$name"
     fi
-    
+
     # Add Solana support if requested
     if [[ "$features" == *"solana"* ]] || [[ "$features" == *"anchor"* ]]; then
         echo "Adding Solana/Anchor support..."
         generate_solana_setup "$name"
     fi
-    
+
     # Create .gitignore
     generate_web3_gitignore
 }
@@ -107,10 +113,10 @@ EOF
 # Function to generate Ethereum setup
 generate_ethereum_setup() {
     local name="$1"
-    
+
     # Initialize Foundry
     forge init --no-commit
-    
+
     # Create foundry.toml
     cat > foundry.toml << EOF
 [profile.default]
@@ -129,7 +135,7 @@ runs = 1000
 depth = 15
 fail_on_revert = false
 EOF
-    
+
     # Create sample contract
     cat > src/Counter.sol << EOF
 // SPDX-License-Identifier: MIT
@@ -137,14 +143,14 @@ pragma solidity ^0.8.19;
 
 contract Counter {
     uint256 public count;
-    
+
     event CountIncremented(uint256 newCount);
-    
+
     function increment() public {
         count++;
         emit CountIncremented(count);
     }
-    
+
     function decrement() public {
         require(count > 0, "Counter: cannot decrement below zero");
         count--;
@@ -152,7 +158,7 @@ contract Counter {
     }
 }
 EOF
-    
+
     # Create test
     cat > test/Counter.t.sol << EOF
 // SPDX-License-Identifier: MIT
@@ -163,16 +169,16 @@ import "../src/Counter.sol";
 
 contract CounterTest is Test {
     Counter public counter;
-    
+
     function setUp() public {
         counter = new Counter();
     }
-    
+
     function testIncrement() public {
         counter.increment();
         assertEq(counter.count(), 1);
     }
-    
+
     function testDecrement() public {
         counter.increment();
         counter.increment();
@@ -186,7 +192,7 @@ EOF
 # Function to generate Solana setup
 generate_solana_setup() {
     local name="$1"
-    
+
     # Create Anchor.toml
     cat > Anchor.toml << EOF
 [features]
@@ -206,7 +212,7 @@ wallet = "~/.config/solana/id.json"
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
 EOF
-    
+
     # Create Cargo.toml
     cat > Cargo.toml << EOF
 [package]
@@ -229,7 +235,7 @@ default = []
 [dependencies]
 anchor-lang = "0.28.0"
 EOF
-    
+
             # Create program
         mkdir -p "programs/$name/src"
         cat > "programs/$name/src/lib.rs" << EOF
@@ -312,4 +318,4 @@ jspm_packages/
 # dotenv environment variables file
 .env
 EOF
-} 
+}

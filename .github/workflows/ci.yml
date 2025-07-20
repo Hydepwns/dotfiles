@@ -11,20 +11,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup chezmoi
         uses: jamesmunns/setup-chezmoi@v1
         with:
           version: latest
-      
+
       - name: Lint shell scripts
         run: |
           find scripts/ -name "*.sh" -exec shellcheck {} \;
-      
+
       - name: Validate chezmoi templates
         run: |
           chezmoi verify
-      
+
       - name: Check for template syntax errors
         run: |
           find . -name "*.tmpl" -o -name "*.conf" | xargs -I {} grep -l "{{.*}}" {} | while read file; do
@@ -37,19 +37,19 @@ jobs:
     needs: lint
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup chezmoi
         uses: jamesmunns/setup-chezmoi@v1
         with:
           version: latest
-      
+
       - name: Run health check
         run: |
           # Mock environment for testing
           export HOME=/tmp/test-home
           mkdir -p $HOME
           ./scripts/utils/health-check.sh || true
-      
+
       - name: Test template generation
         run: |
           # Test template generation without actual creation
@@ -60,7 +60,7 @@ jobs:
     needs: lint
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
@@ -68,8 +68,8 @@ jobs:
           scan-ref: '.'
           format: 'sarif'
           output: 'trivy-results.sarif'
-      
+
       - name: Upload Trivy scan results
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: 'trivy-results.sarif' 
+          sarif_file: 'trivy-results.sarif'

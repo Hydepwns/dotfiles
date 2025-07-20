@@ -22,7 +22,7 @@ TEST_DIR="$HOME/.zsh-test"
 test_function() {
     local func_name="$1"
     local description="$2"
-    
+
     if type "$func_name" &>/dev/null; then
         print_status "OK" "✓ $description ($func_name)"
         return 0
@@ -36,7 +36,7 @@ test_function() {
 test_alias() {
     local alias_name="$1"
     local description="$2"
-    
+
     if alias "$alias_name" &>/dev/null; then
         print_status "OK" "✓ $description ($alias_name)"
         return 0
@@ -50,7 +50,7 @@ test_alias() {
 test_variable() {
     local var_name="$1"
     local description="$2"
-    
+
     if [[ -n "${!var_name}" ]]; then
         print_status "OK" "✓ $description ($var_name)"
         return 0
@@ -141,4 +141,4 @@ print_section "Test Summary"
 
 print_status "INFO" "Modular system test completed!"
 print_status "INFO" "All core components are working correctly."
-print_status "INFO" "The modular system is ready for production use." 
+print_status "INFO" "The modular system is ready for production use."

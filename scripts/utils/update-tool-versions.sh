@@ -35,7 +35,7 @@ print_status() {
 get_tool_version() {
     local tool="$1"
     local version=""
-    
+
     case "$tool" in
         "nodejs")
             if command -v node &> /dev/null; then
@@ -202,7 +202,7 @@ get_tool_version() {
             fi
             ;;
     esac
-    
+
     echo "$version"
 }
 
@@ -211,9 +211,9 @@ update_tool_versions() {
     local tool_versions_file="$HOME/.tool-versions"
     local temp_file
     temp_file="$(mktemp)"
-    
+
     print_status "INFO" "Updating .tool-versions file..."
-    
+
     # Read current .tool-versions and update versions
     if [[ -f "$tool_versions_file" ]]; then
         while IFS= read -r line; do
@@ -222,13 +222,13 @@ update_tool_versions() {
                 echo "$line" >> "$temp_file"
                 continue
             fi
-            
+
             # Extract tool name
             local tool
             tool="$(echo "$line" | awk '{print $1}')"
             local current_version
             current_version="$(get_tool_version "$tool")"
-            
+
             if [[ -n "$current_version" ]]; then
                 echo "$tool $current_version" >> "$temp_file"
                 print_status "OK" "Updated $tool to $current_version"
@@ -241,7 +241,7 @@ update_tool_versions() {
         print_status "ERROR" ".tool-versions file not found"
         return 1
     fi
-    
+
     # Replace original file
     mv "$temp_file" "$tool_versions_file"
     print_status "OK" ".tool-versions file updated successfully"
@@ -250,27 +250,27 @@ update_tool_versions() {
 # Function to check for outdated tools
 check_outdated_tools() {
     print_status "INFO" "Checking for outdated tools..."
-    
+
     local tool_versions_file="$HOME/.tool-versions"
-    
+
     if [[ ! -f "$tool_versions_file" ]]; then
         print_status "ERROR" ".tool-versions file not found"
         return 1
     fi
-    
+
     while IFS= read -r line; do
         # Skip comments and empty lines
         if [[ "$line" =~ ^[[:space:]]*# ]] || [[ -z "$line" ]]; then
             continue
         fi
-        
+
         local tool
         tool="$(echo "$line" | awk '{print $1}')"
         local specified_version
         specified_version="$(echo "$line" | awk '{print $2}')"
         local current_version
         current_version="$(get_tool_version "$tool")"
-        
+
         if [[ -n "$current_version" && "$current_version" != "$specified_version" ]]; then
             print_status "WARN" "$tool: specified $specified_version, installed $current_version"
         elif [[ -n "$current_version" ]]; then
@@ -284,28 +284,28 @@ check_outdated_tools() {
 # Function to install missing tools
 install_missing_tools() {
     print_status "INFO" "Installing missing tools..."
-    
+
     local tool_versions_file="$HOME/.tool-versions"
-    
+
     if [[ ! -f "$tool_versions_file" ]]; then
         print_status "ERROR" ".tool-versions file not found"
         return 1
     fi
-    
+
     while IFS= read -r line; do
         # Skip comments and empty lines
         if [[ "$line" =~ ^[[:space:]]*# ]] || [[ -z "$line" ]]; then
             continue
         fi
-        
+
         local tool
         tool="$(echo "$line" | awk '{print $1}')"
         local version
         version="$(echo "$line" | awk '{print $2}')"
-        
+
         if ! command -v "$tool" &> /dev/null; then
             print_status "INFO" "Installing $tool $version..."
-            
+
             if command -v asdf &> /dev/null; then
                 asdf plugin add "$tool" 2>/dev/null || true
                 asdf install "$tool" "$version"
@@ -337,18 +337,18 @@ show_usage() {
 # Function to list all tools
 list_tools() {
     print_status "INFO" "Listing all tools and their versions..."
-    
+
     local tool_versions_file="$HOME/.tool-versions"
-    
+
     if [[ ! -f "$tool_versions_file" ]]; then
         print_status "ERROR" ".tool-versions file not found"
         return 1
     fi
-    
+
     echo ""
     echo "Tool Versions:"
     echo "=============="
-    
+
     while IFS= read -r line; do
         # Skip comments and empty lines
         if [[ "$line" =~ ^[[:space:]]*# ]] || [[ -z "$line" ]]; then
@@ -358,14 +358,14 @@ list_tools() {
             fi
             continue
         fi
-        
+
         local tool
         tool="$(echo "$line" | awk '{print $1}')"
         local specified_version
         specified_version="$(echo "$line" | awk '{print $2}')"
         local current_version
         current_version="$(get_tool_version "$tool")"
-        
+
         if [[ -n "$current_version" ]]; then
             if [[ "$current_version" == "$specified_version" ]]; then
                 echo -e "  ${GREEN}✓${NC} $tool: $current_version"
@@ -381,7 +381,7 @@ list_tools() {
 # Main function
 main() {
     local command="${1:-help}"
-    
+
     case "$command" in
         "update")
             update_tool_versions
@@ -407,4 +407,4 @@ main() {
 }
 
 # Run main function
-main "$@" 
+main "$@"

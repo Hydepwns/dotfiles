@@ -72,4 +72,4 @@ else
     done
 fi
 
-print_status "INFO" "Conflict check complete!" 
+print_status "INFO" "Conflict check complete!"

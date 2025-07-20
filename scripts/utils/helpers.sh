@@ -3,22 +3,23 @@
 # Helper utilities for dotfiles management
 # This script provides common functions used across dotfiles
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-PURPLE='\033[0;35m'
-CYAN='\033[0;36m'
-NC='\033[0m' # No Color
+# Source constants if available
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -f "$SCRIPT_DIR/constants.sh" ]]; then
+    source "$SCRIPT_DIR/constants.sh"
+fi
 
 # Logging functions
 log_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
+    if [[ "${QUIET:-false}" != "true" ]]; then
+        echo -e "${BLUE}[INFO]${NC} $1"
+    fi
 }
 
 log_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
+    if [[ "${QUIET:-false}" != "true" ]]; then
+        echo -e "${GREEN}[SUCCESS]${NC} $1"
+    fi
 }
 
 log_warning() {
@@ -38,6 +39,48 @@ log_debug() {
 # Check if command exists
 command_exists() {
     command -v "$1" >/dev/null 2>&1
+}
+
+# Handle errors with proper exit codes
+handle_error() {
+    local exit_code=$?
+    local line_number=$1
+    local script_name=${BASH_SOURCE[1]}
+    log_error "Error occurred in $script_name at line $line_number (exit code: $exit_code)"
+    exit $exit_code
+}
+
+# Validate required arguments
+validate_required_args() {
+    local args=("$@")
+    for arg in "${args[@]}"; do
+        if [[ -z "$arg" ]]; then
+            log_error "Required argument is missing or empty"
+            return $EXIT_INVALID_ARGS
+        fi
+    done
+    return $EXIT_SUCCESS
+}
+
+# Validate path
+validate_path() {
+    local path="$1"
+    local type="${2:-file}"
+
+    case "$type" in
+        "file")
+            [[ -f "$path" && -r "$path" ]]
+            ;;
+        "dir")
+            [[ -d "$path" && -r "$path" ]]
+            ;;
+        "executable")
+            [[ -f "$path" && -x "$path" ]]
+            ;;
+        *)
+            return 1
+            ;;
+    esac
 }
 
 # Check if file exists and is readable
@@ -75,7 +118,7 @@ backup_file() {
 create_symlink() {
     local source="$1"
     local target="$2"
-    
+
     if [[ -L "$target" ]]; then
         log_warning "Symlink already exists at $target"
         return 1
@@ -84,7 +127,7 @@ create_symlink() {
         backup_file "$target"
         rm "$target"
     fi
-    
+
     log_info "Creating symlink: $source -> $target"
     ln -s "$source" "$target"
     return $?
@@ -107,14 +150,14 @@ require_root() {
 confirm() {
     local message="$1"
     local default="${2:-n}"
-    
+
     if [[ "$default" == "y" ]]; then
         read -p "$message [Y/n]: " -n 1 -r
     else
         read -p "$message [y/N]: " -n 1 -r
     fi
     echo
-    
+
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         return 0
     elif [[ $REPLY =~ ^[Nn]$ ]]; then
@@ -157,14 +200,6 @@ has_uncommitted_changes() {
     [[ -n "$(get_git_status)" ]]
 }
 
-# Print section header
-print_section() {
-    local title="$1"
-    echo
-    echo -e "${CYAN}=== $title ===${NC}"
-    echo
-}
-
 # Print subsection header
 print_subsection() {
     local title="$1"
@@ -189,13 +224,13 @@ show_progress() {
     local percentage=$((current * 100 / total))
     local filled=$((width * current / total))
     local empty=$((width - filled))
-    
+
     printf "\r["
     printf "%${filled}s" | tr ' ' '#'
     printf "%${empty}s" | tr ' ' '-'
     printf "] %d%%" "$percentage"
-    
+
     if [[ "$current" -eq "$total" ]]; then
         echo
     fi
-} 
+}

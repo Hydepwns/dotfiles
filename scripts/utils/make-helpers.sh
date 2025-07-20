@@ -33,7 +33,7 @@ print_make_help() {
 run_script() {
     local script="$1"
     local args="$2"
-    
+
     if [[ -f "$script" ]]; then
         chmod +x "$script"
         ./"$script" "$args"
@@ -55,9 +55,9 @@ create_backup() {
     local timestamp
     timestamp=$(date +%Y%m%d-%H%M%S)
     local backup_dir="backups"
-    
+
     mkdir -p "$backup_dir"
-    
+
     case "$backup_type" in
         "data")
             chezmoi data > "$backup_dir/chezmoi-data-$timestamp.json"
@@ -87,14 +87,14 @@ clean_old_backups() {
 confirm_action() {
     local message="$1"
     local default="${2:-n}"
-    
+
     if [[ "$default" == "y" ]]; then
         read -p "$message [Y/n]: " -n 1 -r
     else
         read -p "$message [y/N]: " -n 1 -r
     fi
     echo
-    
+
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         return 0
     elif [[ -z $REPLY ]]; then
@@ -108,10 +108,10 @@ confirm_action() {
 install_optional_tool() {
     local tool="$1"
     local package="$2"
-    
+
     read -p "Install $tool? (y/n): " -n 1 -r
     echo
-    
+
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         if command -v brew &> /dev/null; then
             brew install "$package"
@@ -148,4 +148,4 @@ show_tool_versions_help() {
     echo "  list     - List all tools and their versions"
     echo ""
     echo "Example: make tool-versions COMMAND=update"
-} 
+}

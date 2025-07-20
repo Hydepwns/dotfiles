@@ -61,18 +61,18 @@ show_usage() {
 create_web3_project() {
     local name="$1"
     local web3_type="${2:-ethereum}"
-    
+
     print_status "INFO" "Creating web3 project: $name ($web3_type)"
-    
+
     mkdir -p "$name"
     cd "$name"
-    
+
     # Initialize git
     git init
-    
+
     # Create basic structure
     mkdir -p src contracts scripts test docs
-    
+
     # Create README
     cat > README.md << EOF
 # $name
@@ -119,7 +119,7 @@ npm run deploy
 
 MIT
 EOF
-    
+
     # Create package.json
     cat > package.json << EOF
 {
@@ -146,14 +146,14 @@ EOF
   }
 }
 EOF
-    
+
     # Ethereum-specific setup
     if [[ "$web3_type" == "ethereum" || "$web3_type" == "both" ]]; then
         print_status "INFO" "Setting up Ethereum development environment..."
-        
+
         # Initialize Foundry
         forge init --no-commit
-        
+
         # Create foundry.toml
         cat > foundry.toml << EOF
 [profile.default]
@@ -172,7 +172,7 @@ runs = 1000
 depth = 15
 fail_on_revert = false
 EOF
-        
+
         # Create sample contract
         cat > src/Counter.sol << EOF
 // SPDX-License-Identifier: MIT
@@ -180,14 +180,14 @@ pragma solidity ^0.8.19;
 
 contract Counter {
     uint256 public count;
-    
+
     event CountIncremented(uint256 newCount);
-    
+
     function increment() public {
         count++;
         emit CountIncremented(count);
     }
-    
+
     function decrement() public {
         require(count > 0, "Counter: cannot decrement below zero");
         count--;
@@ -195,7 +195,7 @@ contract Counter {
     }
 }
 EOF
-        
+
         # Create test
         cat > test/Counter.t.sol << EOF
 // SPDX-License-Identifier: MIT
@@ -206,16 +206,16 @@ import "../src/Counter.sol";
 
 contract CounterTest is Test {
     Counter public counter;
-    
+
     function setUp() public {
         counter = new Counter();
     }
-    
+
     function testIncrement() public {
         counter.increment();
         assertEq(counter.count(), 1);
     }
-    
+
     function testDecrement() public {
         counter.increment();
         counter.increment();
@@ -225,11 +225,11 @@ contract CounterTest is Test {
 }
 EOF
     fi
-    
+
     # Solana-specific setup
     if [[ "$web3_type" == "solana" || "$web3_type" == "both" ]]; then
         print_status "INFO" "Setting up Solana development environment..."
-        
+
         # Create Anchor.toml
         cat > Anchor.toml << EOF
 [features]
@@ -249,7 +249,7 @@ wallet = "~/.config/solana/id.json"
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
 EOF
-        
+
         # Create Cargo.toml
         cat > Cargo.toml << EOF
 [package]
@@ -272,7 +272,7 @@ default = []
 [dependencies]
 anchor-lang = "0.28.0"
 EOF
-        
+
         # Create program
         mkdir -p programs/"$name"/src
         cat > programs/"$name"/src/lib.rs << EOF
@@ -293,7 +293,7 @@ pub mod $name {
 pub struct Initialize {}
 EOF
     fi
-    
+
     # Create .gitignore
     cat > .gitignore << EOF
 # Dependencies
@@ -354,7 +354,7 @@ jspm_packages/
 # dotenv environment variables file
 .env
 EOF
-    
+
     print_status "OK" "Web3 project '$name' created successfully!"
 }
 
@@ -363,22 +363,22 @@ create_nextjs_project() {
     local name="$1"
     local with_tests="$2"
     local with_ci="$3"
-    
+
     print_status "INFO" "Creating Next.js project: $name"
-    
+
     # Use create-next-app
     npx create-next-app@latest "$name" --typescript --tailwind --eslint --app --src-dir --import-alias "@/*" --yes
-    
+
     cd "$name"
-    
+
     # Add additional dependencies
     npm install @types/node @types/react @types/react-dom
-    
+
     if [[ "$with_tests" == "true" ]]; then
         print_status "INFO" "Adding test setup..."
         npm install --save-dev jest @testing-library/react @testing-library/jest-dom jest-environment-jsdom
         npm install --save-dev @types/jest
-        
+
         # Create jest.config.js
         cat > jest.config.js << EOF
 const nextJest = require('next/jest')
@@ -394,21 +394,21 @@ const customJestConfig = {
 
 module.exports = createJestConfig(customJestConfig)
 EOF
-        
+
         # Create jest.setup.js
         cat > jest.setup.js << EOF
 import '@testing-library/jest-dom'
 EOF
-        
+
         # Update package.json scripts
         npm pkg set scripts.test="jest"
         npm pkg set scripts.test:watch="jest --watch"
     fi
-    
+
     if [[ "$with_ci" == "true" ]]; then
         print_status "INFO" "Adding CI/CD setup..."
         mkdir -p .github/workflows
-        
+
         cat > .github/workflows/ci.yml << EOF
 name: CI
 
@@ -424,24 +424,24 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '18'
         cache: 'npm'
-    
+
     - name: Install dependencies
       run: npm ci
-    
+
     - name: Run tests
       run: npm test
-    
+
     - name: Build
       run: npm run build
 EOF
     fi
-    
+
     print_status "OK" "Next.js project '$name' created successfully!"
 }
 
@@ -449,12 +449,12 @@ EOF
 create_rust_project() {
     local name="$1"
     local with_docs="$2"
-    
+
     print_status "INFO" "Creating Rust project: $name"
-    
+
     cargo new "$name"
     cd "$name"
-    
+
     # Update Cargo.toml with common dependencies
     cat > Cargo.toml << EOF
 [package]
@@ -485,13 +485,13 @@ lto = true
 codegen-units = 1
 panic = "abort"
 EOF
-    
+
     if [[ "$with_docs" == "true" ]]; then
         print_status "INFO" "Adding documentation setup..."
-        
+
         # Create docs directory
         mkdir -p docs
-        
+
         cat > docs/README.md << EOF
 # $name Documentation
 
@@ -509,7 +509,7 @@ cargo doc --open
 
 The API documentation is generated from the source code comments.
 EOF
-        
+
         # Update Cargo.toml to include documentation
         {
             echo ""
@@ -517,21 +517,21 @@ EOF
             echo "rustdoc-args = [\"--cfg\", \"docsrs\"]"
         } >> Cargo.toml
     fi
-    
+
     print_status "OK" "Rust project '$name' created successfully!"
 }
 
 # Function to create Elixir project
 create_elixir_project() {
     local name="$1"
-    
+
     print_status "INFO" "Creating Elixir project: $name"
-    
+
     # Use mix to create new project
     mix phx.new "$name" --no-ecto --no-mailer --no-dashboard --no-install
-    
+
     cd "$name"
-    
+
     # Update mix.exs with additional dependencies
     cat > mix.exs << EOF
 defmodule ${name^}.MixProject do
@@ -584,7 +584,7 @@ defmodule ${name^}.MixProject do
   end
 end
 EOF
-    
+
     print_status "OK" "Elixir project '$name' created successfully!"
 }
 
@@ -596,7 +596,7 @@ main() {
     local with_tests="false"
     local with_docs="false"
     local with_ci="false"
-    
+
     # Parse additional arguments
     shift 2
     while [[ $# -gt 0 ]]; do
@@ -624,19 +624,19 @@ main() {
                 ;;
         esac
     done
-    
+
     # Validate arguments
     if [[ -z "$template_type" || -z "$project_name" ]]; then
         show_usage
         exit 1
     fi
-    
+
     # Check if project directory already exists
     if [[ -d "$project_name" ]]; then
         print_status "ERROR" "Project directory '$project_name' already exists"
         exit 1
     fi
-    
+
     # Create project based on template type
     case "$template_type" in
         "web3")
@@ -657,7 +657,7 @@ main() {
             exit 1
             ;;
     esac
-    
+
     print_status "OK" "Project '$project_name' created successfully!"
     echo ""
     echo "Next steps:"
@@ -669,4 +669,4 @@ main() {
 }
 
 # Run main function
-main "$@" 
+main "$@"

@@ -35,7 +35,7 @@ print_status() {
 measure_time() {
     local command="$1"
     local description="$2"
-    
+
     echo -n "Testing $description... "
     local start_time
     start_time=$(date +%s.%N)
@@ -156,16 +156,16 @@ echo -e "\n${BLUE}Performance Recommendations:${NC}"
 # Check for slow loading tools
 if [[ -f "$HOME/.zshrc" ]]; then
     echo "Analyzing .zshrc for potential optimizations..."
-    
+
     # Check for expensive operations
     if grep -q "nvm use" "$HOME/.zshrc"; then
         print_status "WARN" "Consider lazy-loading NVM to improve startup time"
     fi
-    
+
     if grep -q "rbenv init" "$HOME/.zshrc"; then
         print_status "WARN" "Consider lazy-loading rbenv to improve startup time"
     fi
-    
+
     if grep -q "asdf" "$HOME/.zshrc"; then
         print_status "WARN" "Consider lazy-loading asdf to improve startup time"
     fi
@@ -183,4 +183,4 @@ for tool in "${tools[@]}"; do
 done
 
 echo -e "\n${BLUE}Performance test complete!${NC}"
-echo "==========================================" 
+echo "=========================================="

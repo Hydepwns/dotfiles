@@ -304,6 +304,9 @@ result-*
 .chezmoi.toml.bak
 .chezmoi.toml.old
 
+# pre-commit
+.pre-commit-config.yaml.bak
+
 # Local configuration overrides
 .local/
 local/
@@ -328,4 +331,4 @@ cache/
 
 # Temporary files
 *.tmp
-*.temp 
+*.temp
