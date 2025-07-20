@@ -1,0 +1,18 @@
+HashKnownHosts no
+
+# Platform-specific settings
+if [[ "$OSTYPE" == "darwin"* ]]; then
+Host *
+  AddKeysToAgent yes
+  UseKeychain yes
+fi
+
+Host github.com
+  User git
+
+# Add your custom hosts here
+# Example:
+# Host myserver
+#   HostName myserver.example.com
+#   User username
+#   ForwardAgent yes 
