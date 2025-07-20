@@ -95,7 +95,6 @@ validate_template() {
 }
 
 
-
 # Function to generate template
 generate_template() {
     local template_type="$1"

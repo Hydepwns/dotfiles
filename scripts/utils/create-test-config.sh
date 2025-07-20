@@ -35,6 +35,7 @@ export LANG="en_US.UTF-8"
 
 # Source modular configuration
 if [[ -f "$OUTPUT_DIR/modules.zsh" ]]; then
+    # shellcheck source=/dev/null
     source "$OUTPUT_DIR/modules.zsh"
 fi
 EOF
@@ -114,27 +115,29 @@ cat > "$OUTPUT_DIR/modules.zsh" << 'EOF'
 # Get the directory where this script is located
 ZSH_MODULES_DIR="$OUTPUT_DIR"
 
-# Source modular configuration files
+# shellcheck disable=SC1090
 if [[ -d "$ZSH_MODULES_DIR" ]]; then
-    # Source aliases
     if [[ -d "$ZSH_MODULES_DIR/aliases" ]]; then
         for alias_file in "$ZSH_MODULES_DIR"/aliases/*.zsh; do
+            # shellcheck disable=SC2154
             if [[ -f "$alias_file" ]]; then
+                # shellcheck source=/dev/null
                 source "$alias_file"
             fi
         done
     fi
 
-    # Source functions
+    # shellcheck disable=SC1090
     if [[ -d "$ZSH_MODULES_DIR/functions" ]]; then
         for func_file in "$ZSH_MODULES_DIR"/functions/*.zsh; do
             if [[ -f "$func_file" ]]; then
+                # shellcheck source=/dev/null
                 source "$func_file"
             fi
         done
     fi
 
-    # Source other modular files
+    # shellcheck disable=SC1090
     for module_file in "$ZSH_MODULES_DIR"/*.zsh; do
         if [[ -f "$module_file" ]] && [[ "$(basename "$module_file")" != "modules.zsh" ]]; then
             source "$module_file"
@@ -143,10 +146,15 @@ if [[ -d "$ZSH_MODULES_DIR" ]]; then
 fi
 EOF
 
+# Replace the placeholder with the actual path
+sed -i '' "s|\$OUTPUT_DIR|$OUTPUT_DIR|g" "$OUTPUT_DIR/modules.zsh"
+
 # Copy aliases and functions
 print_status "INFO" "Copying aliases and functions..."
-cp -r home/dot_zsh/aliases "$OUTPUT_DIR/aliases"
-cp -r home/dot_zsh/functions "$OUTPUT_DIR/functions"
+DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+cp -r "$DOTFILES_ROOT/home/dot_zsh/aliases" "$OUTPUT_DIR/aliases"
+cp -r "$DOTFILES_ROOT/home/dot_zsh/functions" "$OUTPUT_DIR/functions"
+cp -r "$DOTFILES_ROOT/home/dot_zsh/core" "$OUTPUT_DIR/core"
 
 print_status "OK" "Test configuration created successfully in $OUTPUT_DIR"
 print_status "INFO" "You can test the modular system by sourcing $OUTPUT_DIR/zshrc"

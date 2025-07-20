@@ -126,8 +126,8 @@ get_tool_version() {
                 version=$(direnv --version | awk '{print $1}')
             elif command -v ~/.asdf/shims/direnv &> /dev/null; then
                 version=$(~/.asdf/shims/direnv --version | awk '{print $1}')
-            elif command -v /Users/droo/.asdf/shims/direnv &> /dev/null; then
-                version=$(/Users/droo/.asdf/shims/direnv --version | awk '{print $1}')
+            elif command -v "$HOME/.asdf/shims/direnv" &> /dev/null; then
+                version=$("$HOME/.asdf/shims/direnv" --version | awk '{print $1}')
             fi
             ;;
         "devenv")
@@ -157,8 +157,8 @@ get_tool_version() {
                 version=$(anchor --version | awk '{print $2}')
             elif command -v ~/.avm/bin/anchor &> /dev/null; then
                 version=$(~/.avm/bin/anchor --version | awk '{print $2}')
-            elif command -v /Users/droo/.avm/bin/anchor &> /dev/null; then
-                version=$(/Users/droo/.avm/bin/anchor --version | awk '{print $2}')
+            elif command -v "$HOME/.avm/bin/anchor" &> /dev/null; then
+                version=$("$HOME/.avm/bin/anchor" --version | awk '{print $2}')
             fi
             ;;
         "postgresql")

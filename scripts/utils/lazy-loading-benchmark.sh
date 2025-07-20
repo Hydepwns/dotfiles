@@ -35,6 +35,7 @@ measure_tool_load() {
         "nvm")
             if [[ "$load_type" == "eager" ]]; then
                 export NVM_DIR="$HOME/.nvm"
+                # shellcheck source=/dev/null
                 . "$NVM_DIR/nvm.sh" >/dev/null 2>&1
             else
                 # Simulate lazy loading - just check if available
@@ -91,7 +92,10 @@ measure_tool_load() {
             ;;
         "rustup")
             if [[ "$load_type" == "eager" ]]; then
-                . "$HOME/.cargo/env" >/dev/null 2>&1
+                if [[ -s "$HOME/.cargo/env" ]]; then
+                    # shellcheck source=/dev/null
+                    . "$HOME/.cargo/env" >/dev/null 2>&1
+                fi
             else
                 command -v rustup >/dev/null 2>&1
             fi
