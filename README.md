@@ -39,6 +39,16 @@ chezmoi init --apply https://github.com/hydepwns/dotfiles.git
 
 ## ⚙️ Configuration
 
+### Configuration Files
+
+The dotfiles use a structured configuration approach:
+
+- **`.chezmoi.toml`** (repository root): Template data for chezmoi processing
+- **`~/.config/chezmoi/chezmoi.toml`**: Global chezmoi configuration (not template data)
+- **`home/dot_zsh/core/`**: Modular shell configuration modules
+
+### Setup Process
+
 The setup prompts for your preferences:
 
 - Email and full name
@@ -55,6 +65,19 @@ export GITHUB_TOKEN="your_token_here"
 chezmoi apply
 ```
 
+### Performance Monitoring
+
+```bash
+# Measure current performance
+make performance-monitor ACTION=measure
+
+# Analyze performance data
+make performance-monitor ACTION=analyze
+
+# View performance history
+make performance-monitor ACTION=history
+```
+
 ## 🎨 Editor Configurations
 
 ### Core Editors
@@ -67,16 +90,24 @@ chezmoi apply
 
 ### Modular Shell Configuration
 
-![Zsh](https://img.shields.io/badge/Zsh-Modular-000000?style=flat&logo=gnu-bash&logoColor=white) ![Cross-Platform](https://img.shields.io/badge/Cross--Platform-Compatible-blue)
+![Zsh](https://img.shields.io/badge/Zsh-Modular-000000?style=flat&logo=gnu-bash&logoColor=white) ![Cross-Platform](https://img.shields.io/badge/Cross--Platform-Compatible-blue) ![Performance](https://img.shields.io/badge/Performance-Optimized-green)
 
-**Core modules**: paths, platforms, tools, config
-**Principles**: DRY, centralized PATH management, cross-platform compatibility
+**Core modules**: paths, platforms, tools, config, lazy-loading
+**Principles**: DRY, centralized PATH management, cross-platform compatibility, performance-first
 
 ### Centralized PATH Management
 
 All tool paths managed through `home/dot_zsh/core/paths.zsh`:
 
 ![Version Managers](https://img.shields.io/badge/Version_Managers-rbenv,nvm,asdf,erlang,elixir,lua-orange) ![Dev Tools](https://img.shields.io/badge/Dev_Tools-LLVM,PostgreSQL,Python-blue) ![Web3](https://img.shields.io/badge/Web3-Foundry,Huff,Solana-purple) ![Package Managers](https://img.shields.io/badge/Package_Managers-Homebrew,pnpm,pipx-green) ![Nix](https://img.shields.io/badge/Nix-Paths-red)
+
+
+![Lazy Loading](https://img.shields.io/badge/Lazy_Loading-Enabled-green) ![Monitoring](https://img.shields.io/badge/Monitoring-Active-blue)
+
+- **Lazy Loading**: Version managers (NVM, rbenv, asdf, direnv) load only when used
+- **Performance Monitoring**: Real-time tracking of shell startup and tool loading times
+- **48% Faster Startup**: Shell startup time reduced from 2.69s to 1.40s
+- **Smart Caching**: Tools remain available once loaded in session
 
 ## 🛠️ Usage
 
@@ -138,7 +169,7 @@ Run `make help` to see all available commands:
 **Health**: `doctor`, `bootstrap`
 **Sync**: `sync`, `sync-from-remote`
 **Optional**: `install-optional`
-**Testing**: `performance-test`, `generate-template`, `tool-versions`, `setup-ci`
+**Testing**: `performance-test`, `performance-monitor`, `generate-template`, `tool-versions`, `setup-ci`
 
 ## 🚨 Troubleshooting
 
@@ -149,6 +180,9 @@ Run `make help` to see all available commands:
 - **Shell issues**: Check modular configuration in `home/dot_zsh/core/`
 - **PATH problems**: All PATH management is centralized in `home/dot_zsh/core/paths.zsh`
 - **Cursor setup**: Use `./scripts/setup/setup-cursor-simple.sh` for reliable configuration
+- **Configuration conflicts**: Ensure only one `.chezmoi.toml` exists in repository root
+- **Performance issues**: Use `make performance-monitor` to identify slow-loading tools
+- **Lazy loading problems**: Check `home/dot_zsh/core/lazy-loading.zsh` for tool aliases
 
 ## 📄 License
 

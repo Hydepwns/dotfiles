@@ -1,7 +1,14 @@
 [data]
 # User information
-email = "droo@axol.io"
-name = "hydepwns"
+email = "drew@axol.io"
+name = "Hydepwns"
+
+# Oh My Zsh configuration
+oh_my_zsh_theme = "robbyrussell"
+oh_my_zsh_plugins = "git"
+
+# Personal flag for SSH templates
+personal = true
 
 # Tool configurations
 rbenv = false
@@ -23,8 +30,6 @@ huff = false
 solana = false
 orbstack = false
 work = false
-personal = false
-cursor = true
 
 # Platform-specific
 brewPrefix = "/opt/homebrew"
