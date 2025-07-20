@@ -5,8 +5,18 @@ Cross-platform dotfiles managed with [chezmoi](https://www.chezmoi.io/) - featur
 [![CI](https://github.com/hydepwns/dotfiles/workflows/CI/badge.svg)](https://github.com/hydepwns/dotfiles/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![chezmoi](https://img.shields.io/badge/chezmoi-managed-blue.svg)](https://www.chezmoi.io/)
+![Lazy Loading](https://img.shields.io/badge/Lazy_Loading-Enabled-green) ![Monitoring](https://img.shields.io/badge/Monitoring-Active-blue)
 
 ## 🚀 Quick Start
+
+### Option 1: One-Command Setup (Recommended)
+
+```bash
+# Run the quick setup script
+curl -fsSL https://raw.githubusercontent.com/hydepwns/dotfiles/main/scripts/setup/quick-setup.sh | bash
+```
+
+### Option 2: Manual Setup
 
 ```bash
 # Install chezmoi
@@ -18,7 +28,32 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply $USER  # Linux
 chezmoi init --apply https://github.com/hydepwns/dotfiles.git
 ```
 
+### Option 3: Comprehensive Bootstrap
+
+```bash
+# For full system setup with dependencies
+curl -fsSL https://raw.githubusercontent.com/hydepwns/dotfiles/main/scripts/setup/bootstrap.sh | bash
+```
+
+## 📋 Setup Scripts Guide
+
+Choose the right setup script for your needs:
+
+| Script | Purpose | Best For |
+|--------|---------|----------|
+| **`scripts/setup/quick-setup.sh`** | One-command setup | New machines, quick start |
+| **`scripts/setup/bootstrap.sh`** | Complete bootstrap | Full system setup with dependencies |
+| **`scripts/setup/setup-cursor.sh`** | Cursor IDE configuration | After initial setup, configure Cursor |
+| **`scripts/setup/setup-cursor-simple.sh`** | Basic Cursor setup | Simple Cursor configuration |
+| **`scripts/setup/setup-ci.sh`** | CI/CD tools setup | Development workflow setup |
+| **`scripts/setup/setup-github-token.sh`** | GitHub authentication | Set up GitHub access |
+
 ## ✨ Features
+
+> **Lazy Loading**: Version managers (NVM, rbenv, asdf, direnv) load only when used
+> **Performance Monitoring**: Real-time tracking of shell startup and tool loading times
+> **Smart Caching**: Tools remain available once loaded in session (~48% faster startup time)
+> **Modular Configuration**: Modular shell configuration modules in `home/dot_zsh/core/`
 
 ### 🛠️ Core Tools & Languages
 
@@ -39,21 +74,13 @@ chezmoi init --apply https://github.com/hydepwns/dotfiles.git
 
 ## ⚙️ Configuration
 
-### Configuration Files
-
-The dotfiles use a structured configuration approach:
-
-- **`.chezmoi.toml`** (repository root): Template data for chezmoi processing
-- **`~/.config/chezmoi/chezmoi.toml`**: Global chezmoi configuration (not template data)
-- **`home/dot_zsh/core/`**: Modular shell configuration modules
-
-### Setup Process
+### Initial Setup Process
 
 The setup prompts for your preferences:
 
-- Email and full name
-- Work vs personal machine
+- Email and username
 - Which tools you use (Nix, Oh My Zsh, asdf, etc.)
+- Work vs personal machine: personal machine will have SSH keys and GitHub token
 
 ### SSH Setup (Optional)
 
@@ -100,14 +127,6 @@ make performance-monitor ACTION=history
 All tool paths managed through `home/dot_zsh/core/paths.zsh`:
 
 ![Version Managers](https://img.shields.io/badge/Version_Managers-rbenv,nvm,asdf,erlang,elixir,lua-orange) ![Dev Tools](https://img.shields.io/badge/Dev_Tools-LLVM,PostgreSQL,Python-blue) ![Web3](https://img.shields.io/badge/Web3-Foundry,Huff,Solana-purple) ![Package Managers](https://img.shields.io/badge/Package_Managers-Homebrew,pnpm,pipx-green) ![Nix](https://img.shields.io/badge/Nix-Paths-red)
-
-
-![Lazy Loading](https://img.shields.io/badge/Lazy_Loading-Enabled-green) ![Monitoring](https://img.shields.io/badge/Monitoring-Active-blue)
-
-- **Lazy Loading**: Version managers (NVM, rbenv, asdf, direnv) load only when used
-- **Performance Monitoring**: Real-time tracking of shell startup and tool loading times
-- **48% Faster Startup**: Shell startup time reduced from 2.69s to 1.40s
-- **Smart Caching**: Tools remain available once loaded in session
 
 ## 🛠️ Usage
 
