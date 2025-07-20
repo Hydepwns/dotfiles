@@ -5,32 +5,31 @@
 
 set -e
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
-
-# Function to print colored output
-print_status() {
-    local status=$1
-    local message=$2
-    case $status in
-        "OK")
-            echo -e "${GREEN}✓${NC} $message"
-            ;;
-        "WARN")
-            echo -e "${YELLOW}⚠${NC} $message"
-            ;;
-        "ERROR")
-            echo -e "${RED}✗${NC} $message"
-            ;;
-        "INFO")
-            echo -e "${BLUE}ℹ${NC} $message"
-            ;;
-    esac
-}
+# Source shared utilities
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -f "$SCRIPT_DIR/colors.sh" ]]; then
+    # shellcheck disable=SC1091
+    source "$SCRIPT_DIR/colors.sh"
+else
+    echo "Warning: colors.sh not found, using fallback colors"
+    # Fallback color definitions
+    RED='\033[0;31m'
+    GREEN='\033[0;32m'
+    YELLOW='\033[1;33m'
+    BLUE='\033[0;34m'
+    NC='\033[0m'
+    
+    print_status() {
+        local status=$1
+        local message=$2
+        case $status in
+            "OK") echo -e "${GREEN}✓${NC} $message" ;;
+            "WARN") echo -e "${YELLOW}⚠${NC} $message" ;;
+            "ERROR") echo -e "${RED}✗${NC} $message" ;;
+            "INFO") echo -e "${BLUE}ℹ${NC} $message" ;;
+        esac
+    }
+fi
 
 echo "🔍 Running dotfiles health check..."
 echo "=================================="
@@ -179,6 +178,23 @@ if chezmoi status &> /dev/null; then
 else
     print_status "WARN" "Dotfiles may not be properly applied"
 fi
+
+# Add these checks
+check_ssh_keys() {
+    if [[ -f ~/.ssh/id_rsa ]]; then
+        print_status "OK" "SSH private key exists"
+    else
+        print_status "WARN" "SSH private key not found"
+    fi
+}
+
+check_github_token() {
+    if [[ -n "$GITHUB_TOKEN" ]]; then
+        print_status "OK" "GitHub token is set"
+    else
+        print_status "WARN" "GitHub token not found"
+    fi
+}
 
 echo -e "\n${BLUE}Health check complete!${NC}"
 echo "==================================" 

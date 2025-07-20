@@ -135,7 +135,7 @@ get_script_dir() {
 get_dotfiles_root() {
     local script_dir
     script_dir=$(get_script_dir)
-    echo "$(dirname "$(dirname "$(dirname "$script_dir")")")"
+    dirname "$(dirname "$(dirname "$script_dir")")"
 }
 
 # Check if we're in a git repository
