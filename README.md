@@ -40,6 +40,12 @@ curl -fsSL https://raw.githubusercontent.com/hydepwns/dotfiles/main/scripts/setu
 - **🧩 Modular Configuration**: Organized shell modules in `home/dot_zsh/core/`
 - **🎯 Project Templates**: Web3, Next.js, Rust CLI generators
 
+### Performance Metrics
+- **Shell Startup**: Reduced from 2.69s to 1.40s (~48% improvement)
+- **Tool Loading**: Lazy-loaded version managers (NVM, rbenv, asdf, direnv)
+- **Memory Usage**: Optimized PATH management and module loading
+- **Development Speed**: Pre-configured templates and automation
+
 ## 🛠️ Development Stack
 
 | Category | Tools |
@@ -56,7 +62,12 @@ curl -fsSL https://raw.githubusercontent.com/hydepwns/dotfiles/main/scripts/setu
 |----------|-------------|------------|
 | **Web3 Development** | Full-stack blockchain | Ethereum/Foundry, Solana/Anchor |
 | **Next.js App** | Modern React apps | TypeScript, Tailwind, Testing |
+| **React App** | React with Vite | TypeScript, Vite, Testing |
 | **Rust CLI** | Command-line tools | Rust, Common deps, Web frameworks |
+| **Elixir Phoenix** | Web applications | Elixir, Phoenix, LiveView |
+| **Node.js API** | Backend services | Node.js, TypeScript, Express |
+| **Python App** | Python applications | Python, Virtual env, Testing |
+| **Go Service** | Go applications | Go modules, Testing, CLI |
 
 ## 🛠️ Usage
 
@@ -73,6 +84,10 @@ make sync             # Sync local changes
 make generate-template web3 my-defi-project ethereum solana
 make generate-template nextjs my-webapp typescript tailwind jest
 make generate-template rust my-cli-tool
+make generate-template elixir my-phoenix-app
+make generate-template react my-react-app --with-tests
+make generate-template python my-python-app --with-docs
+make generate-template go my-go-service --with-ci
 ```
 
 ### Optional Setup
@@ -114,6 +129,47 @@ chezmoi apply
 | **Sync** | `sync`, `sync-from-remote` |
 | **Optional** | `install-optional`, `performance-monitor` |
 
+## 🚀 Advanced Usage
+
+### Customization
+```bash
+# Edit configuration
+chezmoi edit ~/.zshrc
+
+# Apply specific templates
+chezmoi apply --source-path ~/.local/share/chezmoi
+
+# Check configuration
+chezmoi verify
+```
+
+### Development Workflow
+```bash
+# Performance testing
+make performance-test
+
+# Health monitoring
+make doctor
+
+# Backup before changes
+make backup
+
+# Sync changes
+make sync
+```
+
+### Template Options
+```bash
+# Generate with specific options
+make generate-template web3 my-project --web3-type both --with-tests --with-ci
+
+# List available templates
+make generate-template
+
+# Update tool versions
+make tool-versions COMMAND=update
+```
+
 ## 🚨 Quick Troubleshooting
 
 | Issue | Quick Fix |
@@ -130,6 +186,42 @@ chezmoi apply
 - **Templates**: Use `make generate-template` for project help
 - **Performance**: Use `make performance-monitor` for diagnostics
 - **Issues**: Check the troubleshooting table above
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how to get started:
+
+### Quick Start for Contributors
+```bash
+# Fork and clone the repository
+git clone https://github.com/your-username/dotfiles.git
+cd dotfiles
+
+# Setup development environment
+make bootstrap
+
+# Make your changes
+chezmoi edit ~/.zshrc
+
+# Test your changes
+make doctor
+make performance-test
+
+# Commit and push
+make sync
+```
+
+### Contribution Guidelines
+- **Test changes**: Run `make doctor` and `make performance-test`
+- **Follow conventions**: Use existing patterns and structure
+- **Document updates**: Update README for new features
+- **Performance**: Ensure changes don't impact startup time
+
+### Areas for Contribution
+- **New templates**: Add project templates for other frameworks
+- **Performance**: Optimize shell startup and tool loading
+- **Documentation**: Improve guides and examples
+- **Testing**: Add more comprehensive test coverage
 
 ## 📄 License
 
