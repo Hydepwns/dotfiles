@@ -1,0 +1,102 @@
+{
+  "Class": {
+    "prefix": "class",
+    "body": [
+      "class ${1:ClassName}:",
+      "    \"\"\"${2:Class description}\"\"\"",
+      "    ",
+      "    def __init__(self, ${3:params}):",
+      "        \"\"\"Initialize ${1:ClassName}.\"\"\"",
+      "        $0",
+      "    ",
+      "    def __str__(self):",
+      "        return f\"${1:ClassName}(${4:})\"",
+      "    ",
+      "    def __repr__(self):",
+      "        return self.__str__()"
+    ],
+    "description": "Create a Python class with __init__, __str__, and __repr__"
+  },
+  "Function": {
+    "prefix": "def",
+    "body": [
+      "def ${1:function_name}(${2:params}):",
+      "    \"\"\"${3:Function description}\"\"\"",
+      "    $0",
+      "    return ${4:None}"
+    ],
+    "description": "Create a Python function with docstring"
+  },
+  "Async Function": {
+    "prefix": "async",
+    "body": [
+      "async def ${1:function_name}(${2:params}):",
+      "    \"\"\"${3:Async function description}\"\"\"",
+      "    try:",
+      "        $0",
+      "    except Exception as e:",
+      "        print(f\"Error: {e}\")",
+      "        raise",
+      "    return ${4:None}"
+    ],
+    "description": "Create an async Python function with error handling"
+  },
+  "Main": {
+    "prefix": "main",
+    "body": [
+      "if __name__ == \"__main__\":",
+      "    $0"
+    ],
+    "description": "Python main guard"
+  },
+  "Print Debug": {
+    "prefix": "pdb",
+    "body": [
+      "print(f\"${1:DEBUG}: {${2:variable}}\")"
+    ],
+    "description": "Print debug statement with f-string"
+  },
+  "Try Except": {
+    "prefix": "try",
+    "body": [
+      "try:",
+      "    $1",
+      "except ${2:Exception} as e:",
+      "    print(f\"Error: {e}\")",
+      "    $0"
+    ],
+    "description": "Try-except block with error handling"
+  },
+  "Pytest Test": {
+    "prefix": "test",
+    "body": [
+      "def test_${1:test_name}():",
+      "    \"\"\"Test ${2:description}\"\"\"",
+      "    $0",
+      "    assert ${3:True}"
+    ],
+    "description": "Create a pytest test function"
+  },
+  "Dataclass": {
+    "prefix": "dataclass",
+    "body": [
+      "from dataclasses import dataclass",
+      "",
+      "@dataclass",
+      "class ${1:ClassName}:",
+      "    \"\"\"${2:Dataclass description}\"\"\"",
+      "    ${3:field}: ${4:str}",
+      "    $0"
+    ],
+    "description": "Create a Python dataclass"
+  },
+  "Type Hint": {
+    "prefix": "type",
+    "body": [
+      "from typing import ${1:List, Dict, Optional}",
+      "",
+      "$0"
+    ],
+    "description": "Import common typing hints"
+  }
+}

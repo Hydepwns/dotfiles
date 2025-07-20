@@ -1,0 +1,128 @@
+{
+  "Function": {
+    "prefix": "func",
+    "body": [
+      "${1:function_name}() {",
+      "    local ${2:var}=\"${3:value}\"",
+      "    $0",
+      "}"
+    ],
+    "description": "Create a shell function"
+  },
+  "If Statement": {
+    "prefix": "if",
+    "body": [
+      "if [[ ${1:condition} ]]; then",
+      "    $0",
+      "fi"
+    ],
+    "description": "Create an if statement"
+  },
+  "For Loop": {
+    "prefix": "for",
+    "body": [
+      "for ${1:item} in ${2:list}; do",
+      "    $0",
+      "done"
+    ],
+    "description": "Create a for loop"
+  },
+  "While Loop": {
+    "prefix": "while",
+    "body": [
+      "while [[ ${1:condition} ]]; do",
+      "    $0",
+      "done"
+    ],
+    "description": "Create a while loop"
+  },
+  "Case Statement": {
+    "prefix": "case",
+    "body": [
+      "case ${1:variable} in",
+      "    ${2:pattern})",
+      "        $0",
+      "        ;;",
+      "    *)",
+      "        echo \"Unknown option\"",
+      "        ;;",
+      "esac"
+    ],
+    "description": "Create a case statement"
+  },
+  "Error Handling": {
+    "prefix": "error",
+    "body": [
+      "set -euo pipefail",
+      "",
+      "trap 'echo \"Error on line $LINENO\"' ERR",
+      "",
+      "$0"
+    ],
+    "description": "Add error handling to script"
+  },
+  "Log Function": {
+    "prefix": "log",
+    "body": [
+      "log() {",
+      "    echo \"[$(date +'%Y-%m-%d %H:%M:%S')] $1\"",
+      "}",
+      "",
+      "$0"
+    ],
+    "description": "Create a logging function"
+  },
+  "Check Command": {
+    "prefix": "check",
+    "body": [
+      "if ! command -v ${1:command} &> /dev/null; then",
+      "    echo \"${1:command} is not installed\"",
+      "    exit 1",
+      "fi"
+    ],
+    "description": "Check if command exists"
+  },
+  "Create Directory": {
+    "prefix": "mkdir",
+    "body": [
+      "mkdir -p \"${1:directory}\""
+    ],
+    "description": "Create directory with parents"
+  },
+  "Backup File": {
+    "prefix": "backup",
+    "body": [
+      "cp \"${1:file}\" \"${1:file}.backup.$(date +%Y%m%d_%H%M%S)\""
+    ],
+    "description": "Create a timestamped backup"
+  },
+  "Script Header": {
+    "prefix": "header",
+    "body": [
+      "#!/bin/bash",
+      "#",
+      "# ${1:Script Name}",
+      "# ${2:Description}",
+      "#",
+      "# Author: ${3:Your Name}",
+      "# Date: $(date +%Y-%m-%d)",
+      "#",
+      "",
+      "set -euo pipefail",
+      "",
+      "$0"
+    ],
+    "description": "Create a script header with error handling"
+  },
+  "Array": {
+    "prefix": "array",
+    "body": [
+      "${1:array_name}=(${2:\"item1\" \"item2\" \"item3\"})",
+      "",
+      "for item in \"\${${1:array_name}[@]}\"; do",
+      "    echo \"\$item\"",
+      "done"
+    ],
+    "description": "Create and iterate over an array"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "React Functional Component": {
+    "prefix": "rfc",
+    "body": [
+      "import React from 'react';",
+      "",
+      "interface ${1:ComponentName}Props {",
+      "  $2",
+      "}",
+      "",
+      "export const ${1:ComponentName}: React.FC<${1:ComponentName}Props> = ({ $3 }) => {",
+      "  return (",
+      "    <div>",
+      "      $0",
+      "    </div>",
+      "  );",
+      "};",
+      "",
+      "export default ${1:ComponentName};"
+    ],
+    "description": "Create a React functional component with TypeScript"
+  },
+  "Async Function": {
+    "prefix": "async",
+    "body": [
+      "const ${1:functionName} = async (${2:params}) => {",
+      "  try {",
+      "    $0",
+      "  } catch (error) {",
+      "    console.error('Error:', error);",
+      "    throw error;",
+      "  }",
+      "};"
+    ],
+    "description": "Create an async function with error handling"
+  },
+  "Console Log": {
+    "prefix": "clg",
+    "body": [
+      "console.log('${1:label}:', ${2:value});"
+    ],
+    "description": "Console log with label"
+  },
+  "Console Error": {
+    "prefix": "cle",
+    "body": [
+      "console.error('${1:Error}:', ${2:error});"
+    ],
+    "description": "Console error with label"
+  },
+  "Jest Test": {
+    "prefix": "test",
+    "body": [
+      "describe('${1:Test Suite}', () => {",
+      "  it('${2:should do something}', () => {",
+      "    $0",
+      "  });",
+      "});"
+    ],
+    "description": "Create a Jest test"
+  },
+  "Arrow Function": {
+    "prefix": "arrow",
+    "body": [
+      "const ${1:functionName} = (${2:params}) => {",
+      "  $0",
+      "};"
+    ],
+    "description": "Create an arrow function"
+  },
+  "Use State": {
+    "prefix": "useState",
+    "body": [
+      "const [${1:state}, set${1/(.*)/${1:/capitalize}/}] = useState<${2:string}>(${3:''});"
+    ],
+    "description": "React useState hook"
+  },
+  "Use Effect": {
+    "prefix": "useEffect",
+    "body": [
+      "useEffect(() => {",
+      "  $0",
+      "}, [${1:dependencies}]);"
+    ],
+    "description": "React useEffect hook"
+  }
+}

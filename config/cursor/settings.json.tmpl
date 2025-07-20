@@ -1,0 +1,186 @@
+{
+  // Language-specific formatters
+  "[ansible]": {
+    "editor.autoIndent": "advanced",
+    "editor.detectIndentation": true,
+    "editor.insertSpaces": true,
+    "editor.quickSuggestions": {
+      "comments": true,
+      "other": true,
+      "strings": true
+    },
+    "editor.tabSize": 2
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "SimonSiefke.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[mdx]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "[solidity]": {
+    "editor.defaultFormatter": "JuanBlanco.solidity"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[astro]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[erlang]": {
+    "editor.defaultFormatter": "pgourlain.erlang"
+  },
+
+  // Application settings
+  "application.shellEnvironmentResolutionTimeout": 30,
+  "cursor.composer.shouldAllowCustomModes": true,
+  "cursor.composer.collapsePaneInputBoxPills": true,
+  "cursor.terminal.usePreviewBox": true,
+  "cursor.cpp.disabledLanguages": [],
+  "cursor.cpp.enablePartialAccepts": true,
+
+  // Editor settings
+  "editor.accessibilitySupport": "off",
+  "editor.fontFamily": "'Monaspace Argon', monospace",
+  "editor.fontLigatures": "'calt', 'liga', 'dlig', 'ss01', 'ss02', 'ss03', 'ss04', 'ss05', 'ss06', 'ss07', 'ss08'",
+  "editor.inlineSuggest.enabled": true,
+  "editor.inlineSuggest.showToolbar": "onHover",
+  "editor.largeFileOptimizations": false,
+  "editor.renderWhitespace": "all",
+  "editor.suggestSelection": "first",
+  "editor.tabSize": 2,
+
+  // File associations
+  "files.associations": {
+    "*.md": "markdown",
+    "*.yml": "yaml"
+  },
+  "files.autoSave": "onFocusChange",
+
+  // Git settings
+  "git.confirmSync": false,
+  "git.enableCommitSigning": true,
+  "git.openRepositoryInParentFolders": "always",
+  {{- if eq .chezmoi.os "darwin" }}
+  "git.path": "/Applications/Xcode.app/Contents/Developer/usr/libexec/git-core",
+  {{- end }}
+  "git.replaceTagsWhenPull": true,
+
+  // Language-specific settings
+  "go.toolsManagement.autoUpdate": true,
+  "makefile.configureOnOpen": true,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+
+  // Solidity settings
+  "solidity.compileUsingRemoteVersion": "v0.8.17",
+  "solidity.formatter": "forge",
+  "solidity.packageDefaultDependenciesContractsDirectory": "src",
+  "solidity.packageDefaultDependenciesDirectory": "lib",
+
+  // Security settings
+  "security.promptForLocalFileProtocolHandling": false,
+  "security.workspace.trust.banner": "never",
+  "security.workspace.trust.untrustedFiles": "open",
+
+  // Terminal settings
+  {{- if eq .chezmoi.os "darwin" }}
+  "terminal.external.osxExec": "iTerm.app",
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.profiles.osx": {
+    "zsh": {
+      "args": [],
+      "path": "/bin/zsh"
+    }
+  },
+  {{- end }}
+  "terminal.integrated.cursorBlinking": true,
+  "terminal.integrated.enableImages": true,
+  "terminal.integrated.env.osx": {
+    "Q_NEW_SESSION": "1"
+  },
+  "terminal.integrated.fontLigatures": true,
+  "terminal.integrated.hideOnStartup": "whenEmpty",
+  "terminal.integrated.localEchoStyle": "dim",
+  "terminal.integrated.shellIntegration.enabled": true,
+
+  // Workbench settings
+  "workbench.colorTheme": "SynthWave '84",
+  "workbench.editor.autoLockGroups": {
+    "default": true,
+    "terminalEditor": false
+  },
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.sideBar.location": "right",
+  "workbench.tips.enabled": false,
+
+  // Window settings
+  "window.confirmSaveUntitledWorkspace": false,
+  "window.zoomLevel": 1,
+
+  // Theme settings
+  "synthwave84.brightness": 0.75,
+
+  // Explorer settings
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+
+  // Update settings
+  "update.releaseTrack": "prerelease",
+
+  // Pre-commit settings
+  "pre-commit-helper.runOnSave": "all hooks",
+
+  // Telemetry
+  "redhat.telemetry.enabled": true,
+
+  // Kubernetes settings
+  {{- if eq .chezmoi.os "darwin" }}
+  "vs-kubernetes": {
+    "vscode-kubernetes.minikube-path-mac": "{{ .chezmoi.homeDir }}/.vs-kubernetes/tools/minikube/darwin-arm64/minikube"
+  },
+  {{- end }}
+
+  // Kilo Code settings
+  "kilo-code.allowedCommands": [
+    "npm test",
+    "npm install",
+    "tsc",
+    "git log",
+    "git diff",
+    "git show"
+  ],
+
+  // Diff editor settings
+  "diffEditor.maxComputationTime": 0,
+
+  // Todo highlight settings
+  "todohighlight.defaultStyle": {},
+
+  // Elixir settings (if project exists)
+  {{- if .chezmoi.sourceDir }}
+  "elixir.projectPath": "/axol_events",
+  {{- end }}
+}
