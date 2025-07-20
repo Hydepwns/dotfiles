@@ -64,6 +64,24 @@ lazy_load_rbenv() {
     rbenv "$@"
 }
 
+# Enhanced lazy loading for Ruby commands
+lazy_load_ruby() {
+    local start_time=$(date +%s.%N)
+    local cmd="$1"
+    shift
+
+    # Only load if not already loaded
+    if ! command -v rbenv &> /dev/null; then
+        export PATH="{{ .chezmoi.homeDir }}/.rbenv/shims:$PATH"
+        eval "$(rbenv init -)"
+    fi
+
+    track_loading "rbenv" "$start_time"
+
+    # Execute the original command
+    "$cmd" "$@"
+}
+
 # Lazy loading function for asdf
 lazy_load_asdf() {
     local start_time=$(date +%s.%N)
@@ -123,10 +141,10 @@ alias nvm='lazy_load_nvm'
 
 {{- if .rbenv -}}
 alias rbenv='lazy_load_rbenv'
-alias ruby='lazy_load_rbenv ruby'
-alias gem='lazy_load_rbenv gem'
-alias bundle='lazy_load_rbenv bundle'
-alias rake='lazy_load_rbenv rake'
+alias ruby='lazy_load_ruby ruby'
+alias gem='lazy_load_ruby gem'
+alias bundle='lazy_load_ruby bundle'
+alias rake='lazy_load_ruby rake'
 {{- end -}}
 
 {{- if .asdf -}}
@@ -158,9 +176,9 @@ report_performance() {
     echo "⏱️  Total shell startup time: ${total_duration}s"
 }
 
-# Add performance reporting to precmd
+# Add performance reporting to precmd (only once)
 autoload -U add-zsh-hook
 add-zsh-hook precmd report_performance
 
-# Clear performance data after first report
-add-zsh-hook precmd 'unset LAZY_LOAD_TIMES; unset PERF_START_TIME'
+# Clear performance data after first report and disable future reports
+add-zsh-hook precmd 'unset LAZY_LOAD_TIMES; unset PERF_START_TIME; add-zsh-hook -d precmd report_performance'
