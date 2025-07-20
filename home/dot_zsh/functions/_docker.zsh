@@ -1,12 +1,12 @@
 # Docker-related functions
 
-# Docker compose up detached
-dcup() {
+# Docker compose up detached (renamed to avoid conflict with alias)
+dcu_detached() {
     docker-compose up -d
 }
 
 # Docker compose down
-dcdown() {
+dcd() {
     docker-compose down
 }
 
@@ -31,7 +31,7 @@ dcr() {
 }
 
 # Docker compose build
-dcbuild() {
+dcb() {
     local service="$1"
     if [[ -z "$service" ]]; then
         docker-compose build
@@ -52,10 +52,10 @@ dce() {
 }
 
 # Docker compose exec bash
-dcexec() {
+dcb() {
     local service="$1"
     if [[ -z "$service" ]]; then
-        echo "Usage: dcexec <service>"
+        echo "Usage: dcb <service>"
         return 1
     fi
     docker-compose exec "$service" bash
@@ -72,7 +72,7 @@ dcs() {
 }
 
 # Docker ps with format
-dpsf() {
+dps() {
     docker ps --format "table {{.ID}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}\t{{.Names}}"
 }
 

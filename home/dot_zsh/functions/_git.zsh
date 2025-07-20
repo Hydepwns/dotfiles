@@ -1,77 +1,77 @@
 # Git-related functions
 
-# Quick git status
-gitst() {
+# Quick git status (renamed to avoid conflict with alias)
+gst_short() {
     git status --short
 }
 
 # Quick git add all and commit
-gitac() {
+gac() {
     local message="$1"
     if [[ -z "$message" ]]; then
-        echo "Usage: gitac <commit_message>"
+        echo "Usage: gac <commit_message>"
         return 1
     fi
     git add -A && git commit -m "$message"
 }
 
 # Quick git add all, commit and push
-gitacp() {
+gacp() {
     local message="$1"
     if [[ -z "$message" ]]; then
-        echo "Usage: gitacp <commit_message>"
+        echo "Usage: gacp <commit_message>"
         return 1
     fi
     git add -A && git commit -m "$message" && git push
 }
 
 # Git log with graph
-gitlog() {
+glg() {
     git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 }
 
 # Git log oneline
-gitlo() {
+glo() {
     git log --oneline --graph --decorate
 }
 
 # Git diff staged
-gitds() {
+gds() {
     git diff --staged
 }
 
 # Git diff cached (alias for staged)
-gitdc() {
+gdc() {
     git diff --cached
 }
 
 # Git checkout branch
-gitcb() {
+gcb() {
     local branch="$1"
     if [[ -z "$branch" ]]; then
-        echo "Usage: gitcb <branch_name>"
+        echo "Usage: gcb <branch_name>"
         return 1
     fi
     git checkout -b "$branch"
 }
 
 # Git checkout existing branch
-gitco() {
+gco() {
     local branch="$1"
     if [[ -z "$branch" ]]; then
-        echo "Usage: gitco <branch_name>"
+        echo "Usage: gco <branch_name>"
         return 1
     fi
     git checkout "$branch"
 }
 
 # Git pull with rebase
-gitpr() {
+gpr() {
     git pull --rebase
 }
 
 # Git push with upstream
-gitpu() {
+gpu() {
     local branch="$1"
     if [[ -z "$branch" ]]; then
         branch=$(git branch --show-current)
@@ -80,17 +80,17 @@ gitpu() {
 }
 
 # Git reset to HEAD
-gitrh() {
+grh() {
     git reset --hard HEAD
 }
 
 # Git reset soft to HEAD~1
-gitrs() {
+grs() {
     git reset --soft HEAD~1
 }
 
 # Git stash with message
-gitsm() {
+gsm() {
     local message="$1"
     if [[ -z "$message" ]]; then
         git stash
@@ -100,32 +100,32 @@ gitsm() {
 }
 
 # Git stash pop
-gitsp() {
+gsp() {
     git stash pop
 }
 
 # Git stash list
-gitsl() {
+gsl() {
     git stash list
 }
 
 # Git remote URL
-gitru() {
+gru() {
     git remote get-url origin
 }
 
 # Git branch with remote info
-gitbr() {
+gbr() {
     git branch -vv
 }
 
 # Git clean untracked files
-gitclean() {
+gclean() {
     git clean -fd
 }
 
 # Git fetch all
-gitfa() {
+gfa() {
     git fetch --all
 }
 

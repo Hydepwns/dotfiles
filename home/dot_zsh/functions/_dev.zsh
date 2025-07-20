@@ -79,10 +79,10 @@ fd() {
 }
 
 # Find files containing text
-findgrep() {
+fgrep() {
     local text="$1"
     if [[ -z "$text" ]]; then
-        echo "Usage: findgrep <text>"
+        echo "Usage: fgrep <text>"
         return 1
     fi
     find . -type f -exec grep -l "$text" {} \;
@@ -148,8 +148,15 @@ newproject() {
     git commit -m "Initial commit"
 }
 
-# Quick directory navigation (using aliases instead of functions)
-# Note: .., ..., ...., and ...... aliases are defined in aliases/dev.zsh
+# Quick directory navigation (renamed to avoid conflict with alias)
+cd_up() {
+    local levels="${1:-1}"
+    local path=""
+    for ((i=1; i<=levels; i++)); do
+        path="../$path"
+    done
+    cd "$path"
+}
 
 # Go to git root
 gr() {
@@ -255,7 +262,7 @@ serve() {
 }
 
 # Quick directory listing with details
-listlong() {
+ll() {
     ls -la "$@"
 }
 
@@ -265,11 +272,11 @@ lh() {
 }
 
 # Quick directory listing sorted by time
-listtime() {
+lt() {
     ls -lat "$@"
 }
 
 # Quick directory listing sorted by size
-listsize() {
+ls() {
     ls -laS "$@"
 } 

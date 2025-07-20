@@ -1,40 +1,43 @@
 # shellcheck disable=all
 # DEPRECATED: This file is deprecated in favor of the new modular structure
 # Use home/dot_zsh/core/paths.zsh instead
-# This file contains chezmoi template syntax which will be processed by chezmoi
 
 # Load the new modular PATH management
-source "{{ .chezmoi.homeDir }}/.zsh/core/paths.zsh"
+if [ -f "$HOME/.zsh/core/paths.zsh" ]; then
+    source "$HOME/.zsh/core/paths.zsh"
+fi
 
 # Additional tool configurations
-{{- if .llvm -}}
 # LLVM configuration
-export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-{{- end -}}
+if [ -d "/opt/homebrew/opt/llvm/bin" ]; then
+    export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+fi
 
-{{- if .postgres -}}
 # PostgreSQL configuration
-export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
-export PATH="/Applications/Postgres.app/Contents/Versions/15/bin:$PATH"
-{{- end -}}
+if [ -d "/opt/homebrew/opt/postgresql@15/bin" ]; then
+    export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
+fi
+if [ -d "/Applications/Postgres.app/Contents/Versions/15/bin" ]; then
+    export PATH="/Applications/Postgres.app/Contents/Versions/15/bin:$PATH"
+fi
 
-{{- if .foundry -}}
 # Foundry configuration
-export PATH="$PATH:{{ .chezmoi.homeDir }}/.foundry/bin"
-{{- end -}}
+if [ -d "$HOME/.foundry/bin" ]; then
+    export PATH="$PATH:$HOME/.foundry/bin"
+fi
 
-{{- if .huff -}}
 # Huff configuration
-export PATH="$PATH:{{ .chezmoi.homeDir }}/.huff/bin"
-{{- end -}}
+if [ -d "$HOME/.huff/bin" ]; then
+    export PATH="$PATH:$HOME/.huff/bin"
+fi
 
-{{- if .solana -}}
 # Solana configuration
-export PATH="{{ .chezmoi.homeDir }}/.local/share/solana/install/active_release/bin:$PATH"
-{{- end -}}
+if [ -d "$HOME/.local/share/solana/install/active_release/bin" ]; then
+    export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+fi
 
 # Ruby/rbenv configuration
-{{- if .rbenv -}}
-export PATH="{{ .chezmoi.homeDir }}/.rbenv/shims:$PATH"
-eval "$(rbenv init -)"
-{{- end -}} 
+if command -v rbenv &> /dev/null; then
+    export PATH="$HOME/.rbenv/shims:$PATH"
+    eval "$(rbenv init -)"
+fi 
