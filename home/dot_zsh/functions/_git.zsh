@@ -3,8 +3,8 @@
 
 
 
-# Quick git status
-git_status_short() {
+# Quick git status short
+gst_short() {
     git status --short
 }
 

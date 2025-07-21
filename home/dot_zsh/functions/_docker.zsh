@@ -2,7 +2,7 @@
 # Docker-related functions
 
 # Docker compose up detached
-docker_up() {
+dcu_detached() {
     docker-compose up -d
 }
 
