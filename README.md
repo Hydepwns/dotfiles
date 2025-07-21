@@ -171,9 +171,6 @@ A: Edit files directly with `chezmoi edit ~/.zshrc` or modify templates in the s
 **Q: Can I use this on Windows?**
 A: Currently optimized for macOS (use brew to install chezmoi) and Linux. Windows support is experimental (because I refuse to use it). Use devenv for windows.
 
-**Q: How do I update my dotfiles?**
-A: See [Usage](#-usage) section.
-
 ---
 
 [chezmoi-badge]: https://img.shields.io/badge/chezmoi-dotfiles-blue?logo=github&labelColor=22272e&style=flat-square
