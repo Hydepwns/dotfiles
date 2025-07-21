@@ -2,17 +2,17 @@
 # Docker-related functions
 
 # Docker compose up detached
-dcu() {
+docker_up() {
     docker-compose up -d
 }
 
 # Docker compose down
-dcd() {
+docker_compose_down() {
     docker-compose down
 }
 
 # Docker compose logs
-dcl() {
+docker_compose_logs() {
     local service="$1"
     if [[ -z "$service" ]]; then
         docker-compose logs -f

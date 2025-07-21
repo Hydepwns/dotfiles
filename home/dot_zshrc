@@ -230,3 +230,8 @@ export GITHUB_TOKEN=your_personal_access_token
 {{- if not .work -}}
 export GITHUB_TOKEN=your_personal_access_token
 {{- end -}}
+
+
+
+# Source modular configuration
+source "{{ .chezmoi.homeDir }}/.zsh/modules.zsh"

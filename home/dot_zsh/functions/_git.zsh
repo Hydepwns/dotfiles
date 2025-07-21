@@ -1,16 +1,18 @@
 #!/bin/zsh
 # Git-related functions
 
+
+
 # Quick git status
-gst() {
+git_status_short() {
     git status --short
 }
 
 # Quick git add all and commit
-gac() {
+git_add_commit() {
     local message="$1"
     if [[ -z "$message" ]]; then
-        echo "Usage: gac <commit_message>"
+        echo "Usage: git_add_commit <commit_message>"
         return 1
     fi
     git add -A && git commit -m "$message"

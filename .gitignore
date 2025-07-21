@@ -95,6 +95,10 @@ jspm_packages/
 tmp/
 temp/
 
+# Crash dumps
+erl_crash.dump
+*.crash
+
 # Python
 __pycache__/
 *.py[cod]

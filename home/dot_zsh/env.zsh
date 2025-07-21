@@ -3,6 +3,8 @@
 
 # Automatically use the correct Node.js version with asdf
 if command -v asdf &> /dev/null; then
+
+
     cd() {
         builtin cd "$@"
         if [ -f ".tool-versions" ]; then

@@ -1,6 +1,8 @@
 #!/bin/zsh
 # Development workflow functions
 
+
+
 # Start a development session
 dev_session() {
     local project="$1"
@@ -22,7 +24,7 @@ dev_session() {
 }
 
 # direnv helpers
-function direnv_setup() {
+direnv_setup() {
     local project_type="${1:-default}"
 
     case "$project_type" in
@@ -75,7 +77,7 @@ EOF
 }
 
 # devenv helpers
-function devenv_setup() {
+devenv_setup() {
     local project_type="${1:-default}"
 
     case "$project_type" in
@@ -165,7 +167,7 @@ EOF
 }
 
 # Combined environment setup
-function setup_dev_env() {
+setup_dev_env() {
     local project_type="$1"
     local use_direnv="${2:-true}"
     local use_devenv="${3:-false}"
@@ -184,7 +186,7 @@ function setup_dev_env() {
 }
 
 # Environment status checker
-function check_env_status() {
+check_env_status() {
     echo "🔍 Checking environment status..."
 
     # Check direnv
@@ -299,10 +301,10 @@ fd() {
 }
 
 # Find files containing text
-fgrep() {
+find_grep() {
     local text="$1"
     if [[ -z "$text" ]]; then
-        echo "Usage: fgrep <text>"
+        echo "Usage: find_grep <text>"
         return 1
     fi
     find . -type f -exec grep -l "$text" {} \;
@@ -369,7 +371,7 @@ newproject() {
 }
 
 # Quick directory navigation
-..() {
+go_up() {
     local levels="${1:-1}"
     local path=""
     for ((i=1; i<=levels; i++)); do
@@ -379,12 +381,12 @@ newproject() {
 }
 
 # Go to git root
-gr() {
+git_root() {
     cd "$(git rev-parse --show-toplevel)" || exit
 }
 
 # Quick edit
-e() {
+quick_edit() {
     local file="$1"
     if [[ -z "$file" ]]; then
         ${EDITOR:-vim}
@@ -394,10 +396,10 @@ e() {
 }
 
 # Quick view
-v() {
+quick_view() {
     local file="$1"
     if [[ -z "$file" ]]; then
-        echo "Usage: v <file>"
+        echo "Usage: quick_view <file>"
         return 1
     fi
     ${PAGER:-less} "$file"
@@ -459,9 +461,9 @@ killname() {
 # Show listening ports
 ports() {
     if command -v lsof &> /dev/null; then
-        lsof -i -P -n | grep LISTEN
+        lsof -i -P -n | command grep LISTEN
     elif command -v netstat &> /dev/null; then
-        netstat -tulpn | grep LISTEN
+        netstat -tulpn | command grep LISTEN
     else
         echo "Neither lsof nor netstat found"
         return 1
@@ -482,7 +484,7 @@ serve() {
 }
 
 # Quick directory listing with details
-ll() {
+list_long() {
     ls -la "$@"
 }
 
@@ -497,6 +499,6 @@ lt() {
 }
 
 # Quick directory listing sorted by size
-ls() {
+list_size() {
     command ls -laS "$@"
 }
