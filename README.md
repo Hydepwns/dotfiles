@@ -26,9 +26,14 @@ Cross-platform dotfiles managed with [chezmoi] - featuring modular tool loading,
 # One-liner install (30 seconds)
 curl -fsSL https://raw.githubusercontent.com/hydepwns/dotfiles/main/scripts/setup/quick-setup.sh | bash
 
-# Alternative with chezmoi
+# NixOS-specific install (Installs chezmoi via `nix-env -iA nixpkgs.chezmoi`)
+curl -fsSL https://raw.githubusercontent.com/hydepwns/dotfiles/main/scripts/setup/nixos-setup.sh | bash
+
+# MacOS/Darwin with brew
 brew install chezmoi && chezmoi init --apply https://github.com/hydepwns/dotfiles.git
 ```
+
+> **NixOS**: Doesn't allow dynamically linked executables from generic Linux, [docs/nixos-installation.md](docs/nixos-installation.md) has even more install options.
 
 ## 🛠️ Usage
 
@@ -47,14 +52,14 @@ The setup process will prompt for:
 
 | Setting | Purpose | Example |
 |---------|---------|---------|
-| **📧 Email** | Git configuration | `user@example.com` |
-| **👤 Username** | Git configuration | `Your Name` |
+| **📧 Email** | Git config | `user@example.com` |
+| **👤 Username** | Git config | `Your Name` |
 | **🛠️ Tool Preferences** | Nix, Oh My Zsh, asdf | `y/n` for each tool |
 | **💻 Machine Type** | Personal (SSH keys) or Work | `personal` or `work` |
 
 ## 🤔 Optionals
 
-### 🔑 SSH & GitHub Setup (Optional)
+### 🔑 SSH & GitHub Setup
 
 ```bash
 # Set GitHub token for SSH key fetching
@@ -65,11 +70,7 @@ chezmoi apply
 
 # Or use the setup script
 ./scripts/setup/setup-github-token.sh
-```
 
-## 🔧 Optionals
-
-```bash
 # Install additional tools
 make install-optional
 
@@ -123,7 +124,7 @@ See [docs/templates.md](docs/templates.md) for detailed template information and
 | ![rust-template-badge][] | CLI tools & services | Cargo, Clippy, Testing, Documentation, Actix-web |
 | ![elixir-template-badge][] | Phoenix web apps | Mix, ExUnit, Credo, Dialyzer, Ecto, Phoenix, Tailwind, LiveView |
 | ![node-template-badge][] | Node.js APIs | Express, Jest, ESLint, TypeScript |
-| ![python-template-badge][] | Python applications | Poetry, Pytest, Black, MyPy, FastAPI |
+| ![python-template-badge][] | Python applications | Ansible, Poetry, Pytest, Black, MyPy, FastAPI |
 | ![go-template-badge][] | Go services | Modules, Testing, Linting, Protobuf |
 
 ### 🎨 Templates Usage
@@ -147,6 +148,32 @@ Shell startup is up to **95% faster** with [lazy loading](https://github.com/Hyd
 | **Lazy Loading** | 0.9s saved per shell | 95% faster startup |
 | **Modular Architecture** | On-demand loading | Reduced memory usage |
 | **Template System** | 8 project types | Faster project setup |
+| **Real-time Monitoring** | Live performance tracking | Continuous optimization |
+| **Enhanced Analytics** | Detailed metrics & reports | Data-driven improvements |
+
+### Performance & Lazy Loading
+
+| Command                  | Description                 |
+|--------------------------|-----------------------------|
+| `make perf`              | Run performance test        |
+| `make perf-report`       | Generate performance report |
+| `make perf-history`      | Show performance history    |
+| `make perf-realtime`     | Start real-time monitoring  |
+| `make perf-stop`         | Stop real-time monitoring   |
+| `make lazy-load-config`  | Generate lazy loading config|
+| `make lazy-load-stats`   | Show lazy loading stats     |
+| `make lazy-load-clean`   | Clean lazy loading data     |
+
+#### Optimization Summary
+
+| Optimization      | Mechanism         | Affects                | Command/Config         |
+|-------------------|------------------|------------------------|------------------------|
+| Lazy Loading      | Aliases/functions| Tool load time, startup| `make lazy-load-config`|
+| Modular Sourcing  | Conditional load | Shell startup, memory  | `.zshrc`, `.zshenv`    |
+| Real-time Monitor | Background script| Live resource usage    | `make perf-realtime`   |
+| PATH Pruning      | Deduplication    | Command lookup speed   | `core/paths.zsh`       |
+| Performance Test  | Benchmark script | Startup, tool load     | `make perf`            |
+| Analytics/Reports | Data aggregation | Optimization feedback  | `make perf-report`     |
 
 ## ❓ FAQ
 

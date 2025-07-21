@@ -39,6 +39,11 @@ ARCH="$(uname -m)"
 
 print_status "INFO" "Detected OS: $OS ($ARCH)"
 
+# Detect NixOS
+is_nixos() {
+    [[ -f /etc/os-release ]] && grep -q "ID=nixos" /etc/os-release
+}
+
 # Install chezmoi based on OS
 install_chezmoi() {
     if command -v chezmoi &> /dev/null; then
@@ -64,7 +69,12 @@ install_chezmoi() {
             brew install chezmoi
             ;;
         "Linux")
-            sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply "$USER"
+            if is_nixos; then
+                print_status "INFO" "Detected NixOS - installing chezmoi via nix-env..."
+                nix-env -iA nixpkgs.chezmoi
+            else
+                sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply "$USER"
+            fi
             ;;
         *)
             print_status "ERROR" "Unsupported OS: $OS"
@@ -89,17 +99,22 @@ install_dependencies() {
             brew install git zsh curl
             ;;
         "Linux")
-            # Detect package manager
-            if command -v apt &> /dev/null; then
-                sudo apt update
-                sudo apt install -y git zsh curl
-            elif command -v yum &> /dev/null; then
-                sudo yum update -y
-                sudo yum install -y git zsh curl
-            elif command -v pacman &> /dev/null; then
-                sudo pacman -Syu --noconfirm git zsh curl
+            if is_nixos; then
+                print_status "INFO" "Detected NixOS - installing dependencies via nix-env..."
+                nix-env -iA nixpkgs.git nixpkgs.zsh nixpkgs.curl
             else
-                print_status "WARN" "Unknown package manager, please install git, zsh, and curl manually"
+                # Detect package manager
+                if command -v apt &> /dev/null; then
+                    sudo apt update
+                    sudo apt install -y git zsh curl
+                elif command -v yum &> /dev/null; then
+                    sudo yum update -y
+                    sudo yum install -y git zsh curl
+                elif command -v pacman &> /dev/null; then
+                    sudo pacman -Syu --noconfirm git zsh curl
+                else
+                    print_status "WARN" "Unknown package manager, please install git, zsh, and curl manually"
+                fi
             fi
             ;;
     esac

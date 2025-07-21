@@ -60,12 +60,29 @@ install-optional: ## Install optional tools interactively
 performance-test: ## Run performance tests
 	@$(SCRIPTS_DIR)/utils/performance-test.sh
 
-performance-monitor: ## Run performance monitoring
-	@if [ -n "$(ACTION)" ]; then \
-		$(SCRIPTS_DIR)/utils/performance-monitor.sh "$(ACTION)"; \
-	else \
-		$(SCRIPTS_DIR)/utils/performance-monitor.sh measure; \
-	fi
+perf: ## Run performance test
+	@$(SCRIPTS_DIR)/utils/performance-monitor.sh measure
+
+perf-report: ## Generate performance report
+	@$(SCRIPTS_DIR)/utils/performance-monitor.sh report
+
+perf-history: ## Show performance history
+	@$(SCRIPTS_DIR)/utils/performance-monitor.sh history
+
+perf-realtime: ## Start real-time performance monitoring
+	@$(SCRIPTS_DIR)/utils/performance-monitor.sh start-monitoring
+
+perf-stop: ## Stop real-time performance monitoring
+	@$(SCRIPTS_DIR)/utils/performance-monitor.sh stop-monitoring
+
+lazy-load-config: ## Generate lazy loading config
+	@$(SCRIPTS_DIR)/utils/lazy-load-tools.sh generate
+
+lazy-load-stats: ## Show lazy loading stats
+	@$(SCRIPTS_DIR)/utils/lazy-load-tools.sh stats
+
+lazy-load-clean: ## Clean lazy loading data
+	@$(SCRIPTS_DIR)/utils/lazy-load-tools.sh clean
 
 # CI/CD setup
 setup-ci: ## Setup CI/CD tools and pre-commit hooks
