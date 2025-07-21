@@ -459,7 +459,7 @@ killname() {
 }
 
 # Show listening ports
-ports() {
+ports_listen() {
     if command -v lsof &> /dev/null; then
         lsof -i -P -n | command grep LISTEN
     elif command -v netstat &> /dev/null; then

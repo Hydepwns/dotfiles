@@ -8,18 +8,6 @@
 
 Cross-platform dotfiles managed with [chezmoi] - featuring modular tool loading, project templates, and development automation.
 
-## 📋 Table of Contents
-
-- [Quick Start](#-quick-start)
-- [Usage](#-usage)
-- [Config](#-config)
-- [Optionals](#-optionals)
-- [Templates](#-templates)
-- [Performance](#-performance)
-- [Core Tools](#-core-tools)
-- [Neovim Plugins](#-neovim-plugins)
-- [FAQ](#-faq)
-
 ## 🚀 Quick Start
 
 ```bash

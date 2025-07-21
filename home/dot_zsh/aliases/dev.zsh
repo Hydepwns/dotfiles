@@ -12,11 +12,7 @@ alias proj="cd ~/Documents/CODE/$(ls ~/Documents/CODE | fzf)"
 
 # Docker shortcuts
 alias dc="docker-compose"
-alias dps="docker ps"
 alias dex="docker exec -it"
-alias dcu="docker-compose up"
-alias dcd="docker-compose down"
-alias dcb="docker-compose build"
 
 # Development servers
 alias dev-server="npm run dev"
@@ -75,7 +71,6 @@ alias dvc="devenv clean"
 alias env-status="echo '=== direnv status ===' && direnv status && echo '=== devenv status ===' && devenv status 2>/dev/null || echo 'devenv not available'"
 
 # System utilities
-alias ports="lsof -i -P -n | grep LISTEN"
 alias kill-port="kill -9 \$(lsof -ti:"
 alias flush-dns="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
 
