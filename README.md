@@ -23,66 +23,111 @@ Cross-platform dotfiles managed with [chezmoi](https://www.chezmoi.io/) - featur
 
 ## 🔗 Neovim Plugins
 
-### 🎨 UI & Theme
+<details>
+<summary><strong>📋 Plugin Summary (Click to expand)</strong></summary>
+
+| Category | Plugin Count | Key Plugins |
+|----------|-------------|-------------|
+| **🎨 UI & Theme** | 3 | twilight.nvim, mini.hipatterns, synthwave84.nvim |
+| **💬 Comments & Completion** | 5 | nvim-cmp, LuaSnip, Comment.nvim, todo-comments.nvim |
+| **📁 File Management & Git** | 4 | mini.files, nvim-tree.lua, gitsigns.nvim, mini.diff |
+| **🛠️ LSP & Diagnostics** | 3 | nvim-lspconfig, mason.nvim, trouble.nvim |
+| **📝 Editing & Movement** | 5 | mini.pairs, mini.surround, mini.ai, mini.move, mini.operators |
+| **📊 Status & Testing** | 5 | mini.statusline, lualine.nvim, mini.tabline, neotest |
+| **🔍 Fuzzy Finder & Keybindings** | 4 | telescope.nvim, mini.visits, which-key.nvim, flash.nvim |
+| **📚 Note-taking & Utilities** | 6 | orgmode, neorg, mini.nvim, noice.nvim, nvim-notify, dressing.nvim |
+| **🎨 Fonts** | 1 | mona.nvim |
+| **📊 Total** | **36 plugins** | Optimized for performance & productivity |
+
+</details>
+
+<details>
+<summary><strong>🎨 UI & Theme</strong></summary>
 
 | Plugin | Description |
 |--------|-------------|
 | [![twilight.nvim](https://img.shields.io/badge/twilight.nvim-🌙-8B5CF6?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/folke/twilight.nvim) [![mini.hipatterns](https://img.shields.io/badge/mini.hipatterns-🎨-3B82F6?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/echasnovski/mini.hipatterns) [![synthwave84.nvim](https://img.shields.io/badge/synthwave84.nvim-🌆-FF6B35?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/rigellute/synthwave84.nvim) | Focus mode, pattern highlighting, retro theme |
 
-### 💬 Comments & Completion
+</details>
+
+<details>
+<summary><strong>💬 Comments & Completion</strong></summary>
 
 | Category | Plugins |
 |----------|---------|
 | **Comments** | [![Comment.nvim](https://img.shields.io/badge/Comment.nvim-💬-3B82F6?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/numToStr/Comment.nvim) [![todo-comments.nvim](https://img.shields.io/badge/todo--comments.nvim-✅-10B981?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/folke/todo-comments.nvim) [![ts-context-commentstring](https://img.shields.io/badge/ts--context--commentstring-💬-3B82F6?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/joosepalviste/nvim-ts-context-commentstring) |
 | **Completion** | [![nvim-cmp](https://img.shields.io/badge/nvim--cmp-⚡-F59E0B?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/hrsh7th/nvim-cmp) [![LuaSnip](https://img.shields.io/badge/LuaSnip-📝-10B981?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/L3MON4D3/LuaSnip) [![friendly-snippets](https://img.shields.io/badge/friendly--snippets-🧩-8B5CF6?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/rafamadriz/friendly-snippets) |
 
-### 📁 File Management & Git
+</details>
+
+<details>
+<summary><strong>📁 File Management & Git</strong></summary>
 
 | Category | Plugins |
 |----------|---------|
 | **File Explorer** | [![mini.files](https://img.shields.io/badge/mini.files-📂-3B82F6?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/echasnovski/mini.files) [![nvim-tree.lua](https://img.shields.io/badge/nvim--tree.lua-🌳-10B981?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/nvim-tree/nvim-tree.lua) |
 | **Git Integration** | [![gitsigns.nvim](https://img.shields.io/badge/gitsigns.nvim-🐙-FF6B35?style=for-the-badge&logo=git&logoColor=white)](https://github.com/lewis6991/gitsigns.nvim) [![mini.diff](https://img.shields.io/badge/mini.diff-📊-3B82F6?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/echasnovski/mini.diff) |
 
-### 🛠️ LSP & Diagnostics
+</details>
+
+<details>
+<summary><strong>🛠️ LSP & Diagnostics</strong></summary>
 
 | Category | Plugins |
 |----------|---------|
 | **LSP** | [![nvim-lspconfig](https://img.shields.io/badge/nvim--lspconfig-🔧-3B82F6?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/neovim/nvim-lspconfig) [![mason.nvim](https://img.shields.io/badge/mason.nvim-🛠️-FF6B35?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/williamboman/mason.nvim) |
 | **Diagnostics** | [![trouble.nvim](https://img.shields.io/badge/trouble.nvim-⚠️-F59E0B?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/folke/trouble.nvim) |
 
-### 📝 Editing & Movement
+</details>
+
+<details>
+<summary><strong>📝 Editing & Movement</strong></summary>
 
 | Category | Plugins |
 |----------|---------|
 | **Editing** | [![mini.pairs](https://img.shields.io/badge/mini.pairs-🔗-3B82F6?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/echasnovski/mini.pairs) [![mini.surround](https://img.shields.io/badge/mini.surround-🔄-10B981?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/echasnovski/mini.surround) [![mini.ai](https://img.shields.io/badge/mini.ai-🤖-8B5CF6?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/echasnovski/mini.ai) |
 | **Movement** | [![mini.move](https://img.shields.io/badge/mini.move-➡️-3B82F6?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/echasnovski/mini.move) [![mini.operators](https://img.shields.io/badge/mini.operators-⚙️-6B7280?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/echasnovski/mini.operators) |
 
-### 📊 Status & Testing
+</details>
+
+<details>
+<summary><strong>📊 Status & Testing</strong></summary>
 
 | Category | Plugins |
 |----------|---------|
 | **Status/Tabs** | [![mini.statusline](https://img.shields.io/badge/mini.statusline-📊-3B82F6?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/echasnovski/mini.statusline) [![lualine.nvim](https://img.shields.io/badge/lualine.nvim-📊-10B981?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/nvim-lualine/lualine.nvim) [![mini.tabline](https://img.shields.io/badge/mini.tabline-📊-3B82F6?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/echasnovski/mini.tabline) |
 | **Testing** | [![neotest](https://img.shields.io/badge/neotest-🧪-10B981?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/nvim-neotest/neotest) [![neotest-*](https://img.shields.io/badge/neotest--*-🧪-10B981?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/nvim-neotest/neotest) |
 
-### 🔍 Fuzzy Finder & Keybindings
+</details>
+
+<details>
+<summary><strong>🔍 Fuzzy Finder & Keybindings</strong></summary>
 
 | Category | Plugins |
 |----------|---------|
 | **Fuzzy Finder** | [![telescope.nvim](https://img.shields.io/badge/telescope.nvim-🔭-3B82F6?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/nvim-telescope/telescope.nvim) [![mini.visits](https://img.shields.io/badge/mini.visits-📍-10B981?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/echasnovski/mini.visits) [![mini.extra](https://img.shields.io/badge/mini.extra-🔍-FF6B35?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/echasnovski/mini.extra) |
 | **Keybindings** | [![which-key.nvim](https://img.shields.io/badge/which--key.nvim-⌨️-8B5CF6?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/folke/which-key.nvim) [![flash.nvim](https://img.shields.io/badge/flash.nvim-⚡-F59E0B?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/folke/flash.nvim) |
 
-### 📚 Note-taking & Utilities
+</details>
+
+<details>
+<summary><strong>📚 Note-taking & Utilities</strong></summary>
 
 | Category | Plugins |
 |----------|---------|
 | **Note-taking** | [![orgmode](https://img.shields.io/badge/orgmode-📖-10B981?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/nvim-orgmode/orgmode) [![neorg](https://img.shields.io/badge/neorg-📚-3B82F6?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/nvim-neorg/neorg) |
 | **Utilities** | [![mini.nvim](https://img.shields.io/badge/mini.nvim-🧩-8B5CF6?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/echasnovski/mini.nvim) [![noice.nvim](https://img.shields.io/badge/noice.nvim-🔊-FF6B35?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/folke/noice.nvim) [![nvim-notify](https://img.shields.io/badge/nvim--notify-🔔-F59E0B?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/rcarriga/nvim-notify) [![dressing.nvim](https://img.shields.io/badge/dressing.nvim-🎛️-3B82F6?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/stevearc/dressing.nvim) |
 
-### 🎨 Fonts
+</details>
+
+<details>
+<summary><strong>🎨 Fonts</strong></summary>
 
 | Plugin | Description |
 |--------|-------------|
 | [![mona.nvim](https://img.shields.io/badge/mona.nvim-🎨-8B5CF6?style=for-the-badge&logo=neovim&logoColor=white)](https://github.com/monaqa/mona.nvim) | Custom font support |
+
+</details>
 
 ---
 
