@@ -16,7 +16,7 @@ if ! command -v chezmoi &> /dev/null; then
         brew install chezmoi
     elif is_nixos; then
         echo "Detected NixOS - installing chezmoi via nix-env..."
-        nix-env -iA nixpkgs.chezmoi
+        nix-env -iA nixos.chezmoi 2>/dev/null || nix-env -iA nixpkgs.chezmoi 2>/dev/null || nix-env -i chezmoi 2>/dev/null || echo "Failed to install chezmoi via nix-env"
     else
         sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply "$USER"
     fi

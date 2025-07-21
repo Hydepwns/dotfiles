@@ -71,7 +71,7 @@ install_chezmoi() {
         "Linux")
             if is_nixos; then
                 print_status "INFO" "Detected NixOS - installing chezmoi via nix-env..."
-                nix-env -iA nixpkgs.chezmoi
+                nix-env -iA nixos.chezmoi 2>/dev/null || nix-env -iA nixpkgs.chezmoi 2>/dev/null || nix-env -i chezmoi 2>/dev/null || print_status "ERROR" "Failed to install chezmoi via nix-env"
             else
                 sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply "$USER"
             fi

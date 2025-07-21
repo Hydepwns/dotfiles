@@ -33,9 +33,49 @@ print_status "OK" "NixOS detected"
 
 # Install chezmoi via nix-env if not present
 if ! command -v chezmoi &> /dev/null; then
-    print_status "INFO" "Installing chezmoi via nix-env..."
-    nix-env -iA nixpkgs.chezmoi
-    print_status "OK" "chezmoi installed successfully"
+    print_status "INFO" "Installing chezmoi..."
+    
+    # Try different installation methods
+    install_success=false
+    
+    # Method 1: Try nixos.chezmoi (classic channels)
+    if nix-env -iA nixos.chezmoi 2>/dev/null; then
+        print_status "OK" "chezmoi installed via nix-env (nixos.chezmoi)"
+        install_success=true
+    # Method 2: Try nixpkgs.chezmoi (if nixpkgs channel is available)
+    elif nix-env -iA nixpkgs.chezmoi 2>/dev/null; then
+        print_status "OK" "chezmoi installed via nix-env (nixpkgs.chezmoi)"
+        install_success=true
+    # Method 3: Try flakes (if enabled)
+    elif command -v nix &> /dev/null && nix profile install nixpkgs#chezmoi 2>/dev/null; then
+        print_status "OK" "chezmoi installed via nix flakes"
+        install_success=true
+    # Method 4: Try direct nix-env install
+    elif nix-env -i chezmoi 2>/dev/null; then
+        print_status "OK" "chezmoi installed via direct nix-env"
+        install_success=true
+    else
+        print_status "ERROR" "Failed to install chezmoi via nix-env or flakes"
+        print_status "INFO" "Trying alternative installation methods..."
+        
+        # Method 5: Try curl installation as fallback
+        if sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply "$USER" 2>/dev/null; then
+            print_status "OK" "chezmoi installed via official installer"
+            install_success=true
+        else
+            print_status "ERROR" "All installation methods failed"
+            print_status "INFO" "Please install chezmoi manually:"
+            echo "  - Add nixpkgs channel: nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs"
+            echo "  - Update channels: nix-channel --update"
+            echo "  - Install: nix-env -iA nixpkgs.chezmoi"
+            echo "  - Or use flakes: nix profile install nixpkgs#chezmoi"
+            exit 1
+        fi
+    fi
+    
+    if [[ "$install_success" == "true" ]]; then
+        print_status "OK" "chezmoi installed successfully"
+    fi
 else
     print_status "OK" "chezmoi already installed ($(chezmoi --version))"
 fi
