@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Health check script for dotfiles
 # This script verifies that all components are properly installed and configured

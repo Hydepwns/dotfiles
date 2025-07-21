@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Constants and exit codes for DROO's dotfiles
 # This file provides consistent exit codes and error messages across all scripts
 

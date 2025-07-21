@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Performance monitoring script for DROO's dotfiles
 # This script tracks and reports on shell performance metrics

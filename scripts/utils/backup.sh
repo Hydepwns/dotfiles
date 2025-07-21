@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Backup utility for DROO's dotfiles
 
 # Source common utilities

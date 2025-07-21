@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Install optional tools utility for DROO's dotfiles
 
 # Source common utilities

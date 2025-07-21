@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Helper utilities for dotfiles management
 # This script provides common functions used across dotfiles

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Enhanced Lazy Loading System for DROO's dotfiles
 # This script provides comprehensive lazy loading for development tools
