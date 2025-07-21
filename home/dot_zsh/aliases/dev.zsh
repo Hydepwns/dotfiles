@@ -4,12 +4,6 @@ alias dev="cd ~/Documents/CODE"
 alias work="cd ~/Documents/CODE/work"
 alias personal="cd ~/Documents/CODE/personal"
 
-# Quick project navigation
-alias proj="cd ~/Documents/CODE/$(ls ~/Documents/CODE | fzf)"
-
-# Git workflow (moved to git.zsh)
-# Use git aliases from home/dot_zsh/aliases/git.zsh
-
 # Docker shortcuts
 alias dc="docker-compose"
 alias dex="docker exec -it"
@@ -84,10 +78,10 @@ alias ....="cd ../../.."
 alias ......="cd ../../../.."
 
 # Editor shortcuts
-alias v="vim"
+alias v="nvim"
 alias nv="nvim"
 alias z="zed"
-alias c="code"
+alias c="cursor"
 
 # Network utilities
 alias myip="curl -s https://ipinfo.io/ip"
