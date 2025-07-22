@@ -177,10 +177,7 @@ export PATH="$PATH:{{ .chezmoi.homeDir }}/.huff/bin"
 export EDITOR="vim"
 export LANG="en_US.UTF-8"
 
-# Disable mail notifications
-unset MAILCHECK
-unset MAIL
-unset MAILPATH
+# Mail notifications disabled
 
 # macOS-specific aliases
 {{- if eq .chezmoi.os "darwin" -}}
