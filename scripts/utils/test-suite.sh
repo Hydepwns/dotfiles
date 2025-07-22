@@ -17,33 +17,13 @@ TOTAL_TESTS=0
 PASSED_TESTS=0
 FAILED_TESTS=0
 
-# Function to run a test
+# Function to run a test with output
 run_test() {
     local category="$1"
     local test_name="$2"
     local test_command="$3"
-
     ((TOTAL_TESTS++))
     echo -n "[$category] $test_name... "
-
-    if eval "$test_command" >/dev/null 2>&1; then
-        echo -e "${GREEN}✓ PASS${NC}"
-        ((PASSED_TESTS++))
-    else
-        echo -e "${RED}✗ FAIL${NC}"
-        ((FAILED_TESTS++))
-    fi
-}
-
-# Function to run a test with output
-run_test_verbose() {
-    local category="$1"
-    local test_name="$2"
-    local test_command="$3"
-
-    ((TOTAL_TESTS++))
-    echo -n "[$category] $test_name... "
-
     if eval "$test_command" 2>&1; then
         echo -e "${GREEN}✓ PASS${NC}"
         ((PASSED_TESTS++))
@@ -53,52 +33,9 @@ run_test_verbose() {
     fi
 }
 
-# Function to run a simple test (from simple-test.sh)
-run_simple_test() {
-    local test_name="$1"
-    local test_command="$2"
-
-    ((TOTAL_TESTS++))
-    echo -n "Testing $test_name... "
-
-    if eval "$test_command" >/dev/null 2>&1; then
-        echo -e "${GREEN}✓ PASS${NC}"
-        ((PASSED_TESTS++))
-    else
-        echo -e "${RED}✗ FAIL${NC}"
-        ((FAILED_TESTS++))
-    fi
-}
-
-# Check if simple mode is requested
-if [[ "$1" == "simple" ]]; then
-    echo -e "${BLUE}🧪 Simple Dotfiles Test${NC}"
-    echo "=============================="
-
-    # Run simple tests (from simple-test.sh)
-    run_simple_test "chezmoi installation" "which chezmoi"
-    run_simple_test "zshrc existence" "test -f ~/.zshrc"
-    run_simple_test "zshrc syntax" "zsh -n ~/.zshrc"
-
-    if grep -q "ohmyzsh = true" chezmoi.toml; then
-        run_simple_test "Oh My Zsh installation" "test -d ~/.oh-my-zsh"
-    fi
-
-    run_simple_test "modular zsh directory" "test -d ~/.zsh"
-    run_simple_test "modules.zsh existence" "test -f ~/.zsh/modules.zsh"
-    run_simple_test "modules.zsh syntax" "zsh -n ~/.zsh/modules.zsh"
-    run_simple_test "chezmoi configuration" "chezmoi verify"
-
-    echo ""
-    if [ $FAILED_TESTS -eq 0 ]; then
-        echo -e "${GREEN}🎉 All tests passed! Your dotfiles are working correctly.${NC}"
-        exit 0
-    else
-        echo -e "${RED}❌ Some tests failed.${NC}"
-        exit 1
-    fi
-fi
-
+# =============================================================================
+# TEST SUITE
+# =============================================================================
 echo -e "${BLUE}🧪 Dotfiles Test Suite${NC}"
 echo "=================================="
 

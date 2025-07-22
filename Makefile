@@ -57,14 +57,17 @@ install-optional: ## Install optional tools interactively
 	@$(SCRIPTS_DIR)/utils/install-optional.sh
 
 # Testing and development
-test: ## Run quick dotfiles tests
-	@$(SCRIPTS_DIR)/utils/test-suite.sh simple
-
-test-full: ## Run comprehensive dotfiles tests
+test: ## Run comprehensive dotfiles test suite
+	@echo "🧪 Running Dotfiles Test Suite..."
 	@$(SCRIPTS_DIR)/utils/test-suite.sh
-
-test-suite: ## Run organized test suite with categories
-	@$(SCRIPTS_DIR)/utils/test-suite.sh
+	@echo ""
+	@echo "📋 Test Categories:"
+	@echo "  • Core Infrastructure (chezmoi, git, config)"
+	@echo "  • Shell Configuration (zsh, modules)"
+	@echo "  • Tool Installation (Homebrew, Oh My Zsh, dev tools)"
+	@echo "  • Configuration Validation (chezmoi verify, git status)"
+	@echo "  • Integration Tests (zsh syntax)"
+	@echo "  • Security Tests (sensitive files, SSH config)"
 
 performance-test: ## Run performance tests
 	@$(SCRIPTS_DIR)/utils/performance-test.sh
