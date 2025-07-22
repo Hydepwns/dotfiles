@@ -17,14 +17,14 @@ TOTAL_TESTS=0
 PASSED_TESTS=0
 FAILED_TESTS=0
 
-# Function to run a test with output
+# Function to run a test
 run_test() {
     local category="$1"
     local test_name="$2"
     local test_command="$3"
     ((TOTAL_TESTS++))
     echo -n "[$category] $test_name... "
-    if eval "$test_command" 2>&1; then
+    if eval "$test_command" >/dev/null 2>&1; then
         echo -e "${GREEN}✓ PASS${NC}"
         ((PASSED_TESTS++))
     else
