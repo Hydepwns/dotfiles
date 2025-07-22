@@ -57,6 +57,9 @@ install-optional: ## Install optional tools interactively
 	@$(SCRIPTS_DIR)/utils/install-optional.sh
 
 # Testing and development
+test: ## Run dotfiles tests
+	@$(SCRIPTS_DIR)/utils/test-dotfiles.sh
+
 performance-test: ## Run performance tests
 	@$(SCRIPTS_DIR)/utils/performance-test.sh
 
