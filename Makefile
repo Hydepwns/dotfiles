@@ -58,7 +58,16 @@ install-optional: ## Install optional tools interactively
 
 # Testing and development
 test: ## Run dotfiles tests
+	@$(SCRIPTS_DIR)/utils/simple-test.sh
+
+test-full: ## Run comprehensive dotfiles tests
 	@$(SCRIPTS_DIR)/utils/test-dotfiles.sh
+
+debug-zsh: ## Debug zsh configuration issues
+	@$(SCRIPTS_DIR)/utils/debug-zsh.sh
+
+fix-zsh: ## Fix zsh configuration issues
+	@$(SCRIPTS_DIR)/utils/fix-zsh-issue.sh
 
 performance-test: ## Run performance tests
 	@$(SCRIPTS_DIR)/utils/performance-test.sh
