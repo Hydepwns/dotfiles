@@ -1,8 +1,8 @@
 #!/bin/zsh
 # Development workflow aliases
 alias dev="cd ~/Documents/CODE"
-alias work="cd ~/Documents/CODE/work"
-alias personal="cd ~/Documents/CODE/personal"
+alias work="cd ~/Documents/AXOL"
+alias personal="cd ~/Documents/DROO"
 
 # Docker shortcuts
 alias dc="docker-compose"
