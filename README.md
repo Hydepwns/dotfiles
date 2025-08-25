@@ -35,10 +35,11 @@ bash scripts/setup/nixos-quick-fix.sh
 |----------|---------|-------------|
 | **Core** | `make install` | Install dotfiles |
 | **Sync** | `make update` | Update from remote |
-| **Health** | `make doctor` | System health check |
+| **Health** | `utils/health-check.sh` | System health check (working) |
+| **Health** | `make doctor` | Advanced health check (may segfault) |
 | **Sync** | `make sync` | Sync local changes |
-| **Verify** | `bash scripts/utils/verify-setup.sh` | Verify setup is complete |
-| **Test** | `make test` | Run comprehensive test suite |
+| **Verify** | `utils/test-functionality.sh` | Verify complete setup |
+| **Test** | `make test` | Run test suite (may segfault) |
 
 ## Configuration
 

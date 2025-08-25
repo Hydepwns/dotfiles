@@ -72,7 +72,12 @@ jobs:
           # Mock environment for testing
           export HOME=/tmp/test-home
           mkdir -p $HOME
-          ./scripts/utils/health-check.sh || true
+          # Try new location first, then legacy
+          if [ -f ./utils/health-check.sh ]; then
+            ./utils/health-check.sh || true
+          elif [ -f ./scripts/utils/health-check.sh ]; then
+            ./scripts/utils/health-check.sh || true
+          fi
 
       - name: Test template generation
         run: |
