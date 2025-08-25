@@ -1,22 +1,44 @@
 #!/usr/bin/env bash
 
-# Standard script initialization
+# Use simple script initialization (no segfaults!)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPT_INIT_PATH="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1)"
-source "$SCRIPT_DIR/${SCRIPT_INIT_PATH#./}"
-
-# Source constants
-
+source "$SCRIPT_DIR/simple-init.sh"
 
 # Test script for lazy loading functionality
 
+# Simple utilities (no dependencies)
+log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
+log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
+log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
+log_warning() { echo -e "${YELLOW:-}[WARNING]${NC:-} $1"; }
 
-# Source shared utilities
-if [[ -f "$SCRIPT_DIR/colors.sh" ]]; then
-    # shellcheck disable=SC1091
-else
-    echo "Warning: colors.sh not found"
-fi
+# Exit codes
+EXIT_SUCCESS=0
+EXIT_INVALID_ARGS=1
+EXIT_FAILURE=1
+
+# Simple utility functions
+file_exists() { test -f "$1"; }
+dir_exists() { test -d "$1"; }
+command_exists() { command -v "$1" >/dev/null 2>&1; }
+
+# Status printing functions for compatibility
+print_status() {
+    local level="$1"
+    local message="$2"
+    
+    case "$level" in
+        "OK") log_success "$message" ;;
+        "INFO") log_info "$message" ;;
+        "ERROR") log_error "$message" ;;
+        "WARN") log_warning "$message" ;;
+        *) log_info "$message" ;;
+    esac
+}
+
+print_section() {
+    log_info "=== $1 ==="
+}
 
 print_status "INFO" "Testing lazy loading functionality..."
 

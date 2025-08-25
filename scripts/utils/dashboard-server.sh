@@ -1,20 +1,26 @@
 #!/usr/bin/env bash
 
-# Standard script initialization
+# Use simple script initialization (no segfaults!)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPT_INIT_PATH="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1)"
-source "$SCRIPT_DIR/${SCRIPT_INIT_PATH#./}"
-
+source "$SCRIPT_DIR/simple-init.sh"
 
 # Dashboard Server Manager - Start/stop/manage the web dashboard
 # Integrates with the existing dotfiles framework
 
-# Source shared utilities
-DOTFILES_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
-UTILS_DIR="$SCRIPT_DIR"
+# Simple utilities (no dependencies)
+log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
+log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
+log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
+log_warning() { echo -e "${YELLOW:-}[WARNING]${NC:-} $1"; }
 
+# Exit codes
+EXIT_SUCCESS=0
+EXIT_FAILURE=1
 
-setup_error_handling
+# Simple utility functions
+file_exists() { test -f "$1"; }
+dir_exists() { test -d "$1"; }
+ensure_dir() { mkdir -p "$1"; }
 
 # Configuration
 DASHBOARD_DIR="$DOTFILES_ROOT/dashboard"
@@ -324,3 +330,4 @@ main() {
 # Execute main function if script is run directly
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     main "$@"
+fi

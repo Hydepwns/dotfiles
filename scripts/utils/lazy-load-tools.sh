@@ -1,17 +1,28 @@
 #!/usr/bin/env bash
 
-# Standard script initialization
+# Use simple script initialization (no segfaults!)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPT_INIT_PATH="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1)"
-source "$SCRIPT_DIR/${SCRIPT_INIT_PATH#./}"
-
+source "$SCRIPT_DIR/simple-init.sh"
 
 # Enhanced Lazy Loading System for DROO's dotfiles
 # This script provides comprehensive lazy loading for development tools
 
+# Simple utilities (no dependencies)
+log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
+log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
+log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
+log_warning() { echo -e "${YELLOW:-}[WARNING]${NC:-} $1"; }
+log_debug() { [[ "${DEBUG:-false}" == "true" ]] && echo -e "${BLUE:-}[DEBUG]${NC:-} $1"; }
 
-# Source shared utilities
-source "$SCRIPT_DIR/helpers.sh"
+# Exit codes
+EXIT_SUCCESS=0
+EXIT_FAILURE=1
+
+# Simple utility functions
+file_exists() { test -f "$1"; }
+dir_exists() { test -d "$1"; }
+ensure_dir() { mkdir -p "$1"; }
+command_exists() { command -v "$1" >/dev/null 2>&1; }
 
 # Performance tracking
 LAZY_LOAD_DATA_FILE="$HOME/.cache/dotfiles-lazy-load.json"

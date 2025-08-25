@@ -1,26 +1,25 @@
 #!/usr/bin/env bash
-# Source constants
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-UTILS_DIR="$(dirname "$SCRIPT_DIR")/utils"
-[ -f "$UTILS_DIR/constants.sh" ] && source "$UTILS_DIR/constants.sh"
 
+# Use simple script initialization (no segfaults!)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/simple-init.sh"
 
 # Comprehensive test suite for dotfiles
 # This script organizes tests into categories and provides clear reporting
 
 # Don't exit on error, we want to run all tests
+set +e
 
-# Source shared utilities
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/colors.sh" 2>/dev/null || {
-    # Fallback if colors.sh not found
-    RED='\033[0;31m'
-    GREEN='\033[0;32m'
-    YELLOW='\033[1;33m'
-    BLUE='\033[0;34m'
-    CYAN='\033[0;36m'
-    NC='\033[0m'
-}
+# Simple utilities (no dependencies)
+log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
+log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
+log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
+log_warning() { echo -e "${YELLOW:-}[WARNING]${NC:-} $1"; }
+
+# Simple utility functions
+file_exists() { test -f "$1"; }
+dir_exists() { test -d "$1"; }
+command_exists() { command -v "$1" >/dev/null 2>&1; }
 source "$SCRIPT_DIR/platform.sh" 2>/dev/null || {
     # Fallback platform detection
     OS="$(uname -s)"
@@ -50,10 +49,10 @@ run_test() {
     ((TOTAL_TESTS++))
     echo -n "[$category] $test_name... "
     if eval "$test_command" >/dev/null 2>&1; then
-        echo -e "${GREEN}PASS${NC}"
+        echo -e "${GREEN:-}PASS${NC:-}"
         ((PASSED_TESTS++))
     else
-        echo -e "${RED}FAIL${NC}"
+        echo -e "${RED:-}FAIL${NC:-}"
         ((FAILED_TESTS++))
     fi
 }
@@ -65,18 +64,18 @@ skip_test() {
     local reason="$3"
     ((TOTAL_TESTS++))
     ((SKIPPED_TESTS++))
-    echo -e "[$category] $test_name... ${CYAN}SKIP${NC} ($reason)"
+    echo -e "[$category] $test_name... ${CYAN:-}SKIP${NC:-} ($reason)"
 }
 
 # Pre-flight check
 preflight_check() {
-    echo -e "${BLUE}Pre-flight Check${NC}"
+    echo -e "${BLUE:-}Pre-flight Check${NC:-}"
     echo "=================================="
     
     # Check if chezmoi has been applied
     if [ ! -d "$HOME/.zsh" ] && [ -d home/dot_zsh ]; then
-        echo -e "${YELLOW}Warning: Dotfiles not applied yet!${NC}"
-        echo -e "Run: ${GREEN}chezmoi apply${NC} to apply your dotfiles"
+        echo -e "${YELLOW:-}Warning: Dotfiles not applied yet!${NC:-}"
+        echo -e "Run: ${GREEN:-}chezmoi apply${NC:-} to apply your dotfiles"
         echo ""
     fi
     
@@ -87,14 +86,14 @@ preflight_check() {
     elif $IS_MACOS; then
         platform_name="macOS"
     fi
-    echo -e "Platform: ${CYAN}$platform_name${NC}"
+    echo -e "Platform: ${CYAN:-}$platform_name${NC:-}"
     echo ""
 }
 
 # =============================================================================
 # TEST SUITE
 # =============================================================================
-echo -e "${BLUE}Dotfiles Test Suite${NC}"
+echo -e "${BLUE:-}Dotfiles Test Suite${NC:-}"
 echo "=================================="
 
 # Run pre-flight check
@@ -103,7 +102,7 @@ preflight_check
 # =============================================================================
 # CORE INFRASTRUCTURE TESTS
 # =============================================================================
-echo -e "\n${YELLOW}Core Infrastructure Tests${NC}"
+echo -e "\n${YELLOW:-}Core Infrastructure Tests${NC:-}"
 
 run_test "Core" "chezmoi installation" "command -v chezmoi"
 run_test "Core" "git repository" "test -d .git"
@@ -113,7 +112,7 @@ run_test "Core" "Makefile exists" "test -f Makefile"
 # =============================================================================
 # SHELL CONFIGURATION TESTS
 # =============================================================================
-echo -e "\n${YELLOW}Shell Configuration Tests${NC}"
+echo -e "\n${YELLOW:-}Shell Configuration Tests${NC:-}"
 
 run_test "Shell" "zshrc existence" "test -f \"$HOME/.zshrc\""
 run_test "Shell" "zshrc syntax" "zsh -n \"$HOME/.zshrc\""
@@ -124,7 +123,7 @@ run_test "Shell" "modules.zsh syntax" "zsh -n \"$HOME/.zsh/modules.zsh\""
 # =============================================================================
 # TOOL INSTALLATION TESTS
 # =============================================================================
-echo -e "\n${YELLOW}Tool Installation Tests${NC}"
+echo -e "\n${YELLOW:-}Tool Installation Tests${NC:-}"
 
 # Check Oh My Zsh if enabled
 if grep -q "ohmyzsh = true" chezmoi.toml 2>/dev/null; then
@@ -163,7 +162,7 @@ fi
 # =============================================================================
 # CONFIGURATION VALIDATION TESTS
 # =============================================================================
-echo -e "\n${YELLOW}Configuration Validation Tests${NC}"
+echo -e "\n${YELLOW:-}Configuration Validation Tests${NC:-}"
 
 run_test "Config" "chezmoi verify" "chezmoi verify"
 run_test "Config" "no uncommitted changes" "git diff --quiet"
@@ -172,44 +171,44 @@ run_test "Config" "managed files exist" "chezmoi managed | head -5 | xargs -I {}
 # =============================================================================
 # INTEGRATION TESTS
 # =============================================================================
-echo -e "\n${YELLOW}Integration Tests${NC}"
+echo -e "\n${YELLOW:-}Integration Tests${NC:-}"
 
 run_test "Integration" "zsh configuration syntax" "zsh -n \"$HOME/.zshrc\""
 
 # =============================================================================
 # SECURITY TESTS
 # =============================================================================
-echo -e "\n${YELLOW}Security Tests${NC}"
+echo -e "\n${YELLOW:-}Security Tests${NC:-}"
 
 run_test "Security" "no sensitive files in repo" "! git ls-files | grep -E '\.(key|pem|p12|pfx)$'"
-run_test "Security" "SSH config exists" "test -f \"$HOME/.ssh/config""
+run_test "Security" "SSH config exists" "test -f \"$HOME/.ssh/config\""
 
 # =============================================================================
 # TEST SUMMARY
 # =============================================================================
-echo -e "\n${BLUE}Test Summary${NC}"
+echo -e "\n${BLUE:-}Test Summary${NC:-}"
 echo "=================================="
-echo -e "${GREEN}Passed: $PASSED_TESTS${NC}"
-echo -e "${RED}Failed: $FAILED_TESTS${NC}"
-echo -e "${CYAN}Skipped: $SKIPPED_TESTS${NC}"
-echo -e "${BLUE}Total: $TOTAL_TESTS${NC}"
+echo -e "${GREEN:-}Passed: $PASSED_TESTS${NC:-}"
+echo -e "${RED:-}Failed: $FAILED_TESTS${NC:-}"
+echo -e "${CYAN:-}Skipped: $SKIPPED_TESTS${NC:-}"
+echo -e "${BLUE:-}Total: $TOTAL_TESTS${NC:-}"
 
 # Calculate success rate (excluding skipped tests)
 if [ $((TOTAL_TESTS - SKIPPED_TESTS)) -gt 0 ]; then
     SUCCESS_RATE=$((PASSED_TESTS * 100 / (TOTAL_TESTS - SKIPPED_TESTS)))
-    echo -e "${BLUE}Success Rate: ${SUCCESS_RATE}% (excluding skipped)${NC}"
+    echo -e "${BLUE:-}Success Rate: ${SUCCESS_RATE}% (excluding skipped)${NC:-}"
 fi
 
 if [ $FAILED_TESTS -eq 0 ]; then
-    echo -e "\n${GREEN}All tests passed! Your dotfiles are working correctly.${NC}"
+    echo -e "\n${GREEN:-}All tests passed! Your dotfiles are working correctly.${NC:-}"
     if [ $SKIPPED_TESTS -gt 0 ]; then
-        echo -e "${CYAN}Note: $SKIPPED_TESTS tests were skipped (platform-specific or not configured)${NC}"
+        echo -e "${CYAN:-}Note: $SKIPPED_TESTS tests were skipped (platform-specific or not configured)${NC:-}"
     fi
     exit $EXIT_SUCCESS
 else
-    echo -e "\n${RED}Some tests failed. Please check the output above.${NC}"
+    echo -e "\n${RED:-}Some tests failed. Please check the output above.${NC:-}"
     if [ ! -d "$HOME/.zsh" ] && [ -d home/dot_zsh ]; then
-        echo -e "\n${YELLOW}Tip: Run 'chezmoi apply' to apply your dotfiles first${NC}"
+        echo -e "\n${YELLOW:-}Tip: Run 'chezmoi apply' to apply your dotfiles first${NC:-}"
     fi
     exit $EXIT_FAILURE
 fi

@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-# Standard script initialization
+# Use simple script initialization (no segfaults!)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPT_INIT_PATH="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1)"
-source "$SCRIPT_DIR/${SCRIPT_INIT_PATH#./}"
+source "$SCRIPT_DIR/simple-init.sh"
 
 
 # Lazy Loading Performance Benchmark Script
@@ -11,8 +10,21 @@ source "$SCRIPT_DIR/${SCRIPT_INIT_PATH#./}"
 # and generates visualizations and reports
 
 
-# Source shared utilities
-source "$SCRIPT_DIR/helpers.sh"
+# Simple utilities (no dependencies)
+log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
+log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
+log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
+log_warning() { echo -e "${YELLOW:-}[WARNING]${NC:-} $1"; }
+
+# Exit codes
+EXIT_SUCCESS=0
+EXIT_INVALID_ARGS=1
+EXIT_FAILURE=1
+
+# Simple utility functions
+file_exists() { test -f "$1"; }
+dir_exists() { test -d "$1"; }
+command_exists() { command -v "$1" >/dev/null 2>&1; }
 
 # Configuration
 BENCHMARK_DATA_DIR="$HOME/.cache/dotfiles-benchmark"
@@ -49,23 +61,23 @@ measure_tool_load() {
                 export PATH="$HOME/.rbenv/shims:$PATH"
                 eval "$(rbenv init -)" >/dev/null 2>&1
             else
-                has_command rbenv &>/dev/null 2>&1
+                command_exists rbenv
             fi
             ;;
         "asdf")
             if [[ "$load_type" == "eager" ]]; then
                 . /opt/homebrew/opt/asdf/libexec/asdf.sh >/dev/null 2>&1
             else
-                has_command asdf &>/dev/null 2>&1
+                command_exists asdf
             fi
             ;;
         "direnv")
             if [[ "$load_type" == "eager" ]]; then
-                if has_command direnv &> /dev/null; then
+                if command_exists direnv; then
                     eval "$(direnv hook zsh)" >/dev/null 2>&1
                 fi
             else
-                has_command direnv &>/dev/null 2>&1
+                command_exists direnv
             fi
             ;;
         "pyenv")
@@ -73,7 +85,7 @@ measure_tool_load() {
                 export PATH="$HOME/.pyenv/shims:$PATH"
                 eval "$(pyenv init -)" >/dev/null 2>&1
             else
-                has_command pyenv &>/dev/null 2>&1
+                command_exists pyenv
             fi
             ;;
         "nodenv")
@@ -81,7 +93,7 @@ measure_tool_load() {
                 export PATH="$HOME/.nodenv/shims:$PATH"
                 eval "$(nodenv init -)" >/dev/null 2>&1
             else
-                has_command nodenv &>/dev/null 2>&1
+                command_exists nodenv
             fi
             ;;
         "goenv")
@@ -89,7 +101,7 @@ measure_tool_load() {
                 export PATH="$HOME/.goenv/shims:$PATH"
                 eval "$(goenv init -)" >/dev/null 2>&1
             else
-                has_command goenv &>/dev/null 2>&1
+                command_exists goenv
             fi
             ;;
         "rustup")
@@ -99,7 +111,7 @@ measure_tool_load() {
                     . "$HOME/.cargo/env" >/dev/null 2>&1
                 fi
             else
-                has_command rustup &>/dev/null 2>&1
+                command_exists rustup
             fi
             ;;
     esac
@@ -452,7 +464,7 @@ generate_plots() {
     generate_visualization_script "$data_file"
 
     # Check if Python and matplotlib are available
-    if ! has_command python3 &> /dev/null; then
+    if ! command_exists python3; then
         log_warning "Python3 not found. Install Python3 to generate plots."
         return 1
     fi
@@ -480,10 +492,10 @@ generate_plots() {
             local improvement
             improvement=$(echo "$summary" | jq -r '.total_improvement_percent' 2>/dev/null || echo "0")
 
-            print_section "Benchmark Results"
-            print_status "INFO" "Total Eager Loading: ${total_eager}s"
-            print_status "INFO" "Total Lazy Loading: ${total_lazy}s"
-            print_status "SUCCESS" "Overall Improvement: ${improvement}%"
+            log_info "=== Benchmark Results ==="
+            log_info "Total Eager Loading: ${total_eager}s"
+            log_info "Total Lazy Loading: ${total_lazy}s"
+            log_success "Overall Improvement: ${improvement}%"
         fi
     else
         log_warning "Failed to generate plots"
