@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
-# Standard script initialization
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPT_INIT_PATH="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1)"
-source "$SCRIPT_DIR/${SCRIPT_INIT_PATH#./}"
+# Helpers.sh - Independent utility functions
+# NOTE: This file MUST NOT source script-init.sh to avoid circular dependency
+
+# Basic path detection
+SCRIPT_DIR="${SCRIPT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
+DOTFILES_ROOT="${DOTFILES_ROOT:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
 
 
 # Helper utilities for dotfiles management
@@ -248,7 +250,7 @@ read_config_value() {
     
     if file_exists "$config_file"; then
         local value
-        value=$(grep -E "^${key}\s*=" "$config_file" 2>/dev/null | cut -d'=' -f2 | tr -d ' "'"'"' | head -1)
+        value=$(grep -E "^${key}\s*=" "$config_file" 2>/dev/null | cut -d'=' -f2 | tr -d ' "'"'" | head -1)
         echo "${value:-$default_value}"
     else
         echo "$default_value"

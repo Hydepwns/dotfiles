@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
-# Standard script initialization
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPT_INIT_PATH="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1)"
-source "$SCRIPT_DIR/${SCRIPT_INIT_PATH#./}"
+# Error-handling.sh - Independent error handling utilities
+# NOTE: This file MUST NOT source script-init.sh to avoid circular dependency
 
 
 # Advanced error handling framework with retry mechanisms and circuit breakers
@@ -25,6 +23,11 @@ declare -A LAST_ERROR_TIME
 
 # Colors for error output
 if [[ -t 2 ]]; then
+    ERROR_RED='\033[0;31m'
+    ERROR_YELLOW='\033[1;33m'  
+    ERROR_GREEN='\033[0;32m'
+    ERROR_BLUE='\033[0;34m'
+    ERROR_RESET='\033[0m'
 else
     ERROR_RED='' ERROR_YELLOW='' ERROR_GREEN='' ERROR_BLUE='' ERROR_RESET=''
 fi
@@ -517,3 +520,10 @@ print_error_statistics() {
 export -f log_error_with_context retry_with_backoff circuit_breaker
 export -f with_timeout graceful_degradation network_operation
 export -f safe_file_operation monitor_process error_recovery
+
+
+# Setup error handling (main function called by script-init.sh)
+setup_error_handling() {
+    set -euo pipefail
+    trap 'log_error_with_context "Script failed at line $LINENO" $?' ERR
+}

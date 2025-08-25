@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
-# Standard script initialization
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPT_INIT_PATH="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1)"
-source "$SCRIPT_DIR/${SCRIPT_INIT_PATH#./}"
+# Colors.sh - Independent color utilities
+# NOTE: This file MUST NOT source script-init.sh to avoid circular dependency
 
 
 # Shared color utilities for dotfiles scripts
@@ -11,6 +9,7 @@ source "$SCRIPT_DIR/${SCRIPT_INIT_PATH#./}"
 
 # Source constants if available
 if [[ -f "$SCRIPT_DIR/constants.sh" ]]; then
+    source "$SCRIPT_DIR/constants.sh"
 fi
 
 # Color definitions (single source of truth)

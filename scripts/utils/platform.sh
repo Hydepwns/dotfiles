@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
-# Standard script initialization
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPT_INIT_PATH="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1)"
-source "$SCRIPT_DIR/${SCRIPT_INIT_PATH#./}"
+# Platform.sh - Independent platform detection utilities
+# NOTE: This file MUST NOT source script-init.sh to avoid circular dependency
 
 
 # Platform detection utility for dotfiles with smart caching
