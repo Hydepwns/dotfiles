@@ -38,7 +38,7 @@ bash scripts/setup/nixos-quick-fix.sh
 | **Health** | `utils/health-check.sh` | System health check (working) |
 | **Health** | `make doctor` | Advanced health check (may segfault) |
 | **Sync** | `make sync` | Sync local changes |
-| **Verify** | `utils/test-functionality.sh` | Verify complete setup |
+| **Verify** | `utils/test-functionality.sh` | Verify complete setup (28 tests) |
 | **Test** | `make test` | Run test suite (may segfault) |
 
 ## Configuration

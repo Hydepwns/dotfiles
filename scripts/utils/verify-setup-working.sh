@@ -1,0 +1,1 @@
+../utils/test-functionality.sh
