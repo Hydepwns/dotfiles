@@ -2,8 +2,8 @@
 
 # Standard script initialization
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-UTILS_DIR="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1 | xargs dirname)"
-source "$UTILS_DIR/script-init.sh"
+SCRIPT_INIT_PATH="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1)"
+source "$SCRIPT_DIR/${SCRIPT_INIT_PATH#./}"
 
 
 # Common utilities loader for dotfiles scripts
@@ -33,7 +33,7 @@ read_chezmoi_config() {
     local config_file="${2:-chezmoi.toml}"
     
     if [ -f "$config_file" ]; then
-        grep -E "^${key}\s*=" "$config_file" 2>/dev/null | cut -d'=' -f2 | tr -d ' "'\''
+        grep -E "^${key}\s*=" "$config_file" 2>/dev/null | cut -d'=' -f2 | tr -d ' "'"'"
     fi
 }
 

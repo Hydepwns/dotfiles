@@ -2,8 +2,8 @@
 
 # Standard script initialization
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-UTILS_DIR="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1 | xargs dirname)"
-source "$UTILS_DIR/script-init.sh"
+SCRIPT_INIT_PATH="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1)"
+source "$SCRIPT_DIR/${SCRIPT_INIT_PATH#./}"
 
 
 # Helper utilities for dotfiles management
@@ -11,6 +11,7 @@ source "$UTILS_DIR/script-init.sh"
 
 # Source constants if available
 if [[ -f "$SCRIPT_DIR/constants.sh" ]]; then
+    source "$SCRIPT_DIR/constants.sh"
 fi
 
 # Logging functions
@@ -247,7 +248,7 @@ read_config_value() {
     
     if file_exists "$config_file"; then
         local value
-        value=$(grep -E "^${key}\s*=" "$config_file" 2>/dev/null | cut -d'=' -f2 | tr -d ' "'\'' | head -1)
+        value=$(grep -E "^${key}\s*=" "$config_file" 2>/dev/null | cut -d'=' -f2 | tr -d ' "'"'"' | head -1)
         echo "${value:-$default_value}"
     else
         echo "$default_value"
