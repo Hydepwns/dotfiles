@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+echo "=== Available Project Templates ==="
+echo ""
+echo "Template     | Description"
+echo "-------------|------------------------------------------"
+echo "web3         | Ethereum/Solana smart contract project"
+echo "nextjs       | Next.js with TypeScript and Tailwind"
+echo "react        | React with TypeScript and Vite"
+echo "rust         | Rust project with common dependencies"
+echo "elixir       | Elixir Phoenix project"
+echo "node         | Node.js project with TypeScript"
+echo "python       | Python project with virtual environment"
+echo "go           | Go project with modules"
+echo ""
+echo "Usage: make generate-template TEMPLATE=<type> NAME=<project-name>"
+echo "Example: make generate-template TEMPLATE=nextjs NAME=my-app"
