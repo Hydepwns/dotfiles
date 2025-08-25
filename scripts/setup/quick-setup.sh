@@ -2,7 +2,11 @@
 # One-command setup for new machines
 set -e
 
-echo " Quick setup for DROO's dotfiles..."
+# Simple utility functions
+file_exists() { test -f "$1"; }
+command_exists() { command -v "$1" >/dev/null 2>&1; }
+
+echo "⚡ Quick setup for DROO's dotfiles..."
 
 # Detect NixOS
 is_nixos() {

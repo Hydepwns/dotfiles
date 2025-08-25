@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
 
-# Standard script initialization
+# Use simple script initialization (no segfaults!)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPT_INIT_PATH="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1)"
-source "$SCRIPT_DIR/${SCRIPT_INIT_PATH#./}"
-
+source "$SCRIPT_DIR/../utils/simple-init.sh"
 
 # Quick fix script for common NixOS dotfiles issues
 # This script addresses common problems when setting up dotfiles on NixOS
 
-# Source shared utilities
+# Simple utilities (no dependencies)
+log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
+log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
+log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
 
-echo -e "${BLUE}NixOS Dotfiles Quick Fix${NC}"
+echo -e "${BLUE:-}NixOS Dotfiles Quick Fix${NC:-}"
 echo "=================================="
 echo ""
 

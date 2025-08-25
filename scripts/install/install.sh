@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-# Standard script initialization
+# Use simple script initialization (no segfaults!)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPT_INIT_PATH="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1)"
-source "$SCRIPT_DIR/${SCRIPT_INIT_PATH#./}"
+source "$SCRIPT_DIR/../utils/simple-init.sh"
 
-# Source constants
-
+# Exit codes
+EXIT_SUCCESS=0
+EXIT_FAILURE=1
 
 
 if [ ! "$(command -v chezmoi)" ]; then

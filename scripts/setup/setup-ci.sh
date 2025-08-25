@@ -1,18 +1,23 @@
 #!/usr/bin/env bash
 
-# Standard script initialization
+# Use simple script initialization (no segfaults!)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPT_INIT_PATH="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1)"
-source "$SCRIPT_DIR/${SCRIPT_INIT_PATH#./}"
-
+source "$SCRIPT_DIR/../utils/simple-init.sh"
 
 # Setup script for CI/CD tools and pre-commit hooks
 # This script installs and configures development tools for the dotfiles repository
 
+# Simple utilities (no dependencies)
+log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
+log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
+log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
 
-# Source shared utilities
-# shellcheck source=../utils/helpers.sh
-source "$SCRIPT_DIR/../utils/helpers.sh"
+# Status printing functions
+print_section() { echo -e "\n${BLUE:-}=== $1 ===${NC:-}"; }
+
+# Exit codes
+EXIT_SUCCESS=0
+EXIT_FAILURE=1
 
 log_info "Setting up CI/CD tools and pre-commit hooks..."
 print_section "CI/CD Setup"

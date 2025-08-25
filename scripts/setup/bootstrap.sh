@@ -1,35 +1,27 @@
 #!/usr/bin/env bash
 
-# Standard script initialization
+# Use simple script initialization (no segfaults!)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPT_INIT_PATH="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1)"
-source "$SCRIPT_DIR/${SCRIPT_INIT_PATH#./}"
-
-# Source constants
+source "$SCRIPT_DIR/../utils/simple-init.sh"
 
 # Bootstrap script for DROO's dotfiles
 # This script can be run on any fresh system to set up the dotfiles
 
+# Simple utilities (no dependencies)
+file_exists() { test -f "$1"; }
+command_exists() { command -v "$1" >/dev/null 2>&1; }
 
-# Source shared utilities
-if file_exists "$SCRIPT_DIR/../utils/colors.sh"; then
-    # shellcheck disable=SC1091
-    source "$SCRIPT_DIR/../utils/colors.sh"
-else
-    echo "Warning: colors.sh not found, using fallback colors"
-    # Fallback color definitions
-
-    print_status() {
-        local status=$1
-        local message=$2
-        case $status in
-            "OK") echo -e "${GREEN}[OK]${NC} $message" ;;
-            "WARN") echo -e "${YELLOW}[WARN]${NC} $message" ;;
-            "ERROR") echo -e "${RED}[ERROR]${NC} $message" ;;
-            "INFO") echo -e "${BLUE}[INFO]${NC} $message" ;;
-        esac
-    }
-fi
+# Status printing function
+print_status() {
+    local status=$1
+    local message=$2
+    case $status in
+        "OK") echo -e "${GREEN:-}[OK]${NC:-} $message" ;;
+        "WARN") echo -e "${YELLOW:-}[WARN]${NC:-} $message" ;;
+        "ERROR") echo -e "${RED:-}[ERROR]${NC:-} $message" ;;
+        "INFO") echo -e "${BLUE:-}[INFO]${NC:-} $message" ;;
+    esac
+}
 
 echo " Bootstrap script for DROO's dotfiles"
 echo "========================================"
