@@ -2,8 +2,8 @@
 
 # Standard script initialization
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-UTILS_DIR="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1 | xargs dirname)"
-source "$UTILS_DIR/script-init.sh"
+SCRIPT_INIT_PATH="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1)"
+source "$SCRIPT_DIR/${SCRIPT_INIT_PATH#./}"
 
 # Install optional tools utility for DROO's dotfiles
 # TODO: Consider using validate_args() from helpers.sh for argument validation

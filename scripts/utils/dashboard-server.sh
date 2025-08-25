@@ -2,8 +2,8 @@
 
 # Standard script initialization
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-UTILS_DIR="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1 | xargs dirname)"
-source "$UTILS_DIR/script-init.sh"
+SCRIPT_INIT_PATH="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1)"
+source "$SCRIPT_DIR/${SCRIPT_INIT_PATH#./}"
 
 
 # Dashboard Server Manager - Start/stop/manage the web dashboard

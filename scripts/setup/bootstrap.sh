@@ -2,8 +2,8 @@
 
 # Standard script initialization
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-UTILS_DIR="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1 | xargs dirname)"
-source "$UTILS_DIR/script-init.sh"
+SCRIPT_INIT_PATH="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1)"
+source "$SCRIPT_DIR/${SCRIPT_INIT_PATH#./}"
 
 # Source constants
 
@@ -14,6 +14,7 @@ source "$UTILS_DIR/script-init.sh"
 # Source shared utilities
 if file_exists "$SCRIPT_DIR/../utils/colors.sh"; then
     # shellcheck disable=SC1091
+    source "$SCRIPT_DIR/../utils/colors.sh"
 else
     echo "Warning: colors.sh not found, using fallback colors"
     # Fallback color definitions
@@ -163,9 +164,12 @@ post_install() {
         source "$HOME/.zshrc"
     fi
 
-    # Run health check
-    if file_exists "$HOME/.local/share/chezmoi/scripts/utils/health-check.sh"; then
+    # Run health check (try new location first, then legacy)
+    if file_exists "$HOME/.local/share/chezmoi/utils/health-check.sh"; then
         print_status "INFO" "Running health check..."
+        "$HOME/.local/share/chezmoi/utils/health-check.sh"
+    elif file_exists "$HOME/.local/share/chezmoi/scripts/utils/health-check.sh"; then
+        print_status "INFO" "Running health check (legacy path)..."
         "$HOME/.local/share/chezmoi/scripts/utils/health-check.sh"
     fi
 }
