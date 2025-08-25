@@ -1,40 +1,56 @@
 #!/usr/bin/env bash
 
-# Standard script initialization
+# Use simple script initialization (no segfaults!)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPT_INIT_PATH="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1)"
-source "$SCRIPT_DIR/${SCRIPT_INIT_PATH#./}"
-
-# Source constants
-
+source "$SCRIPT_DIR/simple-init.sh"
 
 # Setup verification script for dotfiles
 # This script checks if the dotfiles are properly set up and provides guidance
 
-# Source shared utilities
-    # Fallback if colors.sh not found
+# Simple utilities (no dependencies)
+log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
+log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
+log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
+
+# Exit codes
+EXIT_SUCCESS=0
+EXIT_INVALID_ARGS=1
+EXIT_FAILURE=1
+
+# Simple utility functions
+command_exists() { command -v "$1" >/dev/null 2>&1; }
+file_exists() { test -f "$1"; }
+dir_exists() { test -d "$1"; }
+
+# Simple config reading
+is_config_enabled() {
+    local key="$1"
+    local config_file="$2"
+    if file_exists "$config_file"; then
+        grep -q "$key.*true" "$config_file" 2>/dev/null
+    else
+        return 1
+    fi
 }
-source "$SCRIPT_DIR/platform.sh" 2>/dev/null || {
-    # Fallback platform detection
-    OS="$(uname -s)"
-    IS_MACOS=false
-    IS_LINUX=false
-    IS_NIXOS=false
-    case "$OS" in
-        Darwin)
-            IS_MACOS=true
-            PLATFORM="macOS"
-            ;;
-        Linux)
-            IS_LINUX=true
-            PLATFORM="Linux"
-            [ -f /etc/os-release ] && grep -q "NixOS" /etc/os-release && IS_NIXOS=true && PLATFORM="NixOS"
-            ;;
-        *)
-            PLATFORM="Unknown"
-            ;;
-    esac
-}
+# Simple platform detection (no dependencies)
+OS="$(uname -s)"
+IS_MACOS=false
+IS_LINUX=false
+IS_NIXOS=false
+case "$OS" in
+    Darwin)
+        IS_MACOS=true
+        PLATFORM="macOS"
+        ;;
+    Linux)
+        IS_LINUX=true
+        PLATFORM="Linux"
+        [ -f /etc/os-release ] && grep -q "NixOS" /etc/os-release && IS_NIXOS=true && PLATFORM="NixOS"
+        ;;
+    *)
+        PLATFORM="Unknown"
+        ;;
+esac
 
 # Status tracking
 ISSUES_FOUND=0
@@ -51,9 +67,9 @@ else
     PLATFORM="${OS:-Unknown}"
 fi
 
-echo -e "${BLUE} Dotfiles Setup Verification${NC}"
+echo -e "${BLUE:-}⚡ Dotfiles Setup Verification${NC:-}"
 echo "=================================="
-echo -e "Platform: ${CYAN}$PLATFORM${NC}"
+echo -e "Platform: ${BLUE:-}$PLATFORM${NC:-}"
 echo ""
 
 # Function to check a condition and report
@@ -64,12 +80,12 @@ check() {
     
     echo -n "Checking $description... "
     if eval "$command" >/dev/null 2>&1; then
-        echo -e "${GREEN}OK${NC}"
+        echo -e "${GREEN:-}OK${NC:-}"
         return 0
     else
-        echo -e "${RED}FAIL${NC}"
+        echo -e "${RED:-}FAIL${NC:-}"
         if [ -n "$fix_hint" ]; then
-            echo -e "  ${YELLOW}Fix: $fix_hint${NC}"
+            echo -e "  ${YELLOW:-}Fix: $fix_hint${NC:-}"
         fi
         ((ISSUES_FOUND++))
         return 1
@@ -84,19 +100,19 @@ warn_check() {
     
     echo -n "Checking $description... "
     if eval "$command" >/dev/null 2>&1; then
-        echo -e "${GREEN}OK${NC}"
+        echo -e "${GREEN:-}OK${NC:-}"
         return 0
     else
-        echo -e "${YELLOW}${NC}"
+        echo -e "${YELLOW:-}${NC:-}"
         if [ -n "$note" ]; then
-            echo -e "  ${CYAN}Note: $note${NC}"
+            echo -e "  ${CYAN:-}Note: $note${NC:-}"
         fi
         ((WARNINGS++))
         return 1
     fi
 }
 
-echo -e "${YELLOW} Core Requirements${NC}"
+echo -e "${YELLOW:-} Core Requirements${NC:-}"
 echo "-------------------"
 check "chezmoi installed" \
     "command -v chezmoi" \
@@ -111,7 +127,7 @@ check "zsh installed" \
     "Install zsh via your package manager"
 
 echo ""
-echo -e "${YELLOW} Repository Status${NC}"
+echo -e "${YELLOW:-} Repository Status${NC:-}"
 echo "-------------------"
 check "in dotfiles directory" \
     "test -f chezmoi.toml" \
@@ -122,7 +138,7 @@ check "git repository initialized" \
     "Run: git init"
 
 echo ""
-echo -e "${YELLOW} Chezmoi Configuration${NC}"
+echo -e "${YELLOW:-} Chezmoi Configuration${NC:-}"
 echo "------------------------"
 check "chezmoi.toml exists" \
     "test -f chezmoi.toml" \
@@ -145,7 +161,7 @@ else
 fi
 
 echo ""
-echo -e "${YELLOW} Home Directory Files${NC}"
+echo -e "${YELLOW:-} Home Directory Files${NC:-}"
 echo "----------------------"
 
 if $DOTFILES_APPLIED; then
@@ -155,15 +171,15 @@ if $DOTFILES_APPLIED; then
     # Check for valid .zshrc content
     if [ -f ~/.zshrc ]; then
         if [ $(wc -l < ~/.zshrc) -lt 5 ]; then
-            echo -e "  ${YELLOW} .zshrc seems incomplete (less than 5 lines)${NC}"
-            echo -e "  ${CYAN}Run: chezmoi apply to update${NC}"
+            echo -e "  ${YELLOW:-} .zshrc seems incomplete (less than 5 lines)${NC:-}"
+            echo -e "  ${CYAN:-}Run: chezmoi apply to update${NC:-}"
             ((WARNINGS++))
         fi
     fi
 fi
 
 echo ""
-echo -e "${YELLOW} Platform-Specific Tools${NC}"
+echo -e "${YELLOW:-} Platform-Specific Tools${NC:-}"
 echo "-------------------------"
 
 if $IS_MACOS; then
@@ -183,7 +199,7 @@ fi
 # Check for Oh My Zsh if configured
 if is_config_enabled "ohmyzsh" "chezmoi.toml"; then
     echo ""
-    echo -e "${YELLOW} Optional Components${NC}"
+    echo -e "${YELLOW:-} Optional Components${NC:-}"
     echo "---------------------"
     warn_check "Oh My Zsh installed" \
         "test -d ~/.oh-my-zsh" \
@@ -193,7 +209,7 @@ fi
 # Check for Home Manager conflicts (NixOS)
 if $IS_NIXOS; then
     echo ""
-    echo -e "${YELLOW} NixOS Specific Checks${NC}"
+    echo -e "${YELLOW:-} NixOS Specific Checks${NC:-}"
     echo "-----------------------"
     
     if [ -L ~/.profile ]; then
@@ -201,12 +217,12 @@ if $IS_NIXOS; then
         if readlink ~/.profile | grep -q "home-manager-files"; then
             # Check if the target exists
             if [ ! -e ~/.profile ]; then
-                echo -e "Checking .profile symlink... ${RED}[FAIL]${NC}"
-                echo -e "  ${YELLOW}Broken Home Manager symlink detected${NC}"
-                echo -e "  ${YELLOW}Fix: rm ~/.profile && chezmoi apply${NC}"
+                echo -e "Checking .profile symlink... ${RED:-}[FAIL]${NC:-}"
+                echo -e "  ${YELLOW:-}Broken Home Manager symlink detected${NC:-}"
+                echo -e "  ${YELLOW:-}Fix: rm ~/.profile && chezmoi apply${NC:-}"
                 ((ISSUES_FOUND++))
             else
-                echo -e "Checking .profile symlink... ${GREEN}[OK]${NC}"
+                echo -e "Checking .profile symlink... ${GREEN:-}[OK]${NC:-}"
             fi
         fi
     fi
@@ -214,29 +230,29 @@ fi
 
 echo ""
 echo "=================================="
-echo -e "${BLUE} Verification Summary${NC}"
+echo -e "${BLUE:-} Verification Summary${NC:-}"
 echo "=================================="
 
 if [ $ISSUES_FOUND -eq 0 ] && [ $WARNINGS -eq 0 ]; then
-    echo -e "${GREEN} All checks passed!${NC}"
+    echo -e "${GREEN:-} All checks passed!${NC:-}"
     echo "Your dotfiles setup is complete and working correctly."
 elif [ $ISSUES_FOUND -eq 0 ]; then
-    echo -e "${GREEN} Core setup complete${NC}"
-    echo -e "${YELLOW} $WARNINGS warning(s) found${NC}"
+    echo -e "${GREEN:-} Core setup complete${NC:-}"
+    echo -e "${YELLOW:-} $WARNINGS warning(s) found${NC:-}"
     echo "Your dotfiles are functional but some optional components may be missing."
 else
-    echo -e "${RED} $ISSUES_FOUND issue(s) found${NC}"
+    echo -e "${RED:-} $ISSUES_FOUND issue(s) found${NC:-}"
     if [ $WARNINGS -gt 0 ]; then
-        echo -e "${YELLOW} $WARNINGS warning(s) found${NC}"
+        echo -e "${YELLOW:-} $WARNINGS warning(s) found${NC:-}"
     fi
     echo ""
     echo "Please address the issues above to complete your setup."
     
     if ! $DOTFILES_APPLIED; then
         echo ""
-        echo -e "${BLUE}Quick fix for most issues:${NC}"
-        echo -e "  1. ${GREEN}chezmoi apply${NC} - Apply your dotfiles"
-        echo -e "  2. ${GREEN}bash scripts/utils/verify-setup.sh${NC} - Run this script again"
+        echo -e "${BLUE:-}Quick fix for most issues:${NC:-}"
+        echo -e "  1. ${GREEN:-}chezmoi apply${NC:-} - Apply your dotfiles"
+        echo -e "  2. ${GREEN:-}bash scripts/utils/verify-setup.sh${NC:-} - Run this script again"
     fi
 fi
 
@@ -245,3 +261,4 @@ if [ $ISSUES_FOUND -gt 0 ]; then
     exit $EXIT_FAILURE
 else
     exit $EXIT_SUCCESS
+fi
