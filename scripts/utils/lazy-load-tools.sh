@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 
+# Standard script initialization
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+UTILS_DIR="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1 | xargs dirname)"
+source "$UTILS_DIR/script-init.sh"
+
+
 # Enhanced Lazy Loading System for DROO's dotfiles
 # This script provides comprehensive lazy loading for development tools
 
-set -e
 
 # Source shared utilities
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/constants.sh"
 source "$SCRIPT_DIR/helpers.sh"
-source "$SCRIPT_DIR/colors.sh"
 
 # Performance tracking
 LAZY_LOAD_DATA_FILE="$HOME/.cache/dotfiles-lazy-load.json"
@@ -45,7 +47,7 @@ track_lazy_load() {
 
     # Log if loading takes more than 0.1 seconds
     if (( $(echo "$duration > 0.1" | bc -l 2>/dev/null || echo "0") )); then
-        log_info "⏱️  Loaded $tool_name in ${duration}s"
+        log_info "  Loaded $tool_name in ${duration}s"
     fi
 }
 
@@ -390,7 +392,7 @@ track_lazy_load() {
     
     # Log if loading takes more than 0.1 seconds
     if (( $(echo "$duration > 0.1" | bc -l 2>/dev/null || echo "0") )); then
-        echo "⏱️  Loaded $tool_name in ${duration}s"
+        echo "  Loaded $tool_name in ${duration}s"
     fi
 }
 
@@ -645,7 +647,7 @@ EOF
 # Performance reporting
 report_lazy_loading_performance() {
     if [[ -f "$LAZY_LOAD_STATS_FILE" ]]; then
-        echo "🚀 Lazy Loading Performance Report:"
+        echo " Lazy Loading Performance Report:"
         echo "=================================="
         
         local stats
@@ -711,10 +713,9 @@ main() {
             echo ""
             echo "This script provides enhanced lazy loading for development tools"
             echo "with performance tracking and analytics."
-            exit 1
+            exit $EXIT_FAILURE
             ;;
     esac
 }
 
 # Run main function
-main "$@" 

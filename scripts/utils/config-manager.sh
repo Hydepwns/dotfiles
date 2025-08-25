@@ -1,11 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Standard script initialization
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+UTILS_DIR="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1 | xargs dirname)"
+source "$UTILS_DIR/script-init.sh"
+
 # Centralized configuration management for DROO's dotfiles
 
 # Source common utilities
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/constants.sh"
 source "$SCRIPT_DIR/helpers.sh"
-source "$SCRIPT_DIR/colors.sh"
 
 # Configuration file locations (using functions for compatibility)
 get_config_file() {
@@ -60,11 +63,11 @@ get_config_value() {
             git config --global --get "$key" 2>/dev/null || echo ""
             ;;
         "chezmoi")
-            # Parse chezmoi config (simplified)
-            grep "^$key" "$config_file" 2>/dev/null | cut -d'=' -f2 | tr -d ' "' || echo ""
+            # Use standardized config reader
+            read_config_value "$key" "$config_file"
             ;;
         "zsh")
-            # Extract variable from zsh config
+            # Use standardized config reader for export statements
             grep "^export $key=" "$config_file" 2>/dev/null | cut -d'=' -f2 | tr -d '"' || echo ""
             ;;
         *)
@@ -113,10 +116,10 @@ list_configs() {
         config_file=$(get_config_file "$config_type")
         local status=""
 
-        if [[ -f "$config_file" ]]; then
-            status="✓"
+        if file_exists "$config_file"; then
+            status="[OK]"
         else
-            status="✗"
+            status="[FAIL]"
         fi
 
         printf "  %-15s %s %s\n" "$config_type" "$status" "$config_file"

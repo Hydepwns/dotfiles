@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
+
+# Standard script initialization
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+UTILS_DIR="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1 | xargs dirname)"
+source "$UTILS_DIR/script-init.sh"
+
 # Install optional tools utility for DROO's dotfiles
+# TODO: Consider using validate_args() from helpers.sh for argument validation
 
 # Source common utilities
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/constants.sh"
 source "$SCRIPT_DIR/helpers.sh"
-source "$SCRIPT_DIR/colors.sh"
 
 # Optional tools registry (using functions for compatibility)
 get_optional_tool_description() {
@@ -96,9 +100,9 @@ list_optional_tools() {
         local status=""
 
         if command_exists "$tool"; then
-            status="✓"
+            status="[OK]"
         else
-            status="✗"
+            status="[FAIL]"
         fi
 
         printf "  %-15s %s %s\n" "$tool" "$status" "$description"

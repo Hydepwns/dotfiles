@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
+
+# Standard script initialization
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+UTILS_DIR="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1 | xargs dirname)"
+source "$UTILS_DIR/script-init.sh"
+
 # Backup utility for DROO's dotfiles
 
 # Source common utilities
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/constants.sh"
 source "$SCRIPT_DIR/helpers.sh"
-source "$SCRIPT_DIR/colors.sh"
 
 # Function to show usage
 show_usage() {

@@ -1,18 +1,18 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Standard script initialization
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+UTILS_DIR="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1 | xargs dirname)"
+source "$UTILS_DIR/script-init.sh"
+
 
 # Setup script for CI/CD tools and pre-commit hooks
 # This script installs and configures development tools for the dotfiles repository
 
-set -e
 
 # Source shared utilities
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# shellcheck source=../utils/constants.sh
-source "$SCRIPT_DIR/../utils/constants.sh"
 # shellcheck source=../utils/helpers.sh
 source "$SCRIPT_DIR/../utils/helpers.sh"
-# shellcheck source=../utils/colors.sh
-source "$SCRIPT_DIR/../utils/colors.sh"
 
 log_info "Setting up CI/CD tools and pre-commit hooks..."
 print_section "CI/CD Setup"
@@ -126,4 +126,4 @@ echo "  1. Commit your changes: git add . && git commit -m 'feat: add CI/CD setu
 echo "  2. Push to trigger GitHub Actions: git push"
 echo "  3. Check the Actions tab in your GitHub repository"
 echo ""
-echo "Happy coding! 🚀"
+echo "Happy coding! "

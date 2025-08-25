@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 
+# Standard script initialization
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+UTILS_DIR="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1 | xargs dirname)"
+source "$UTILS_DIR/script-init.sh"
+
+
 # Performance monitoring script for DROO's dotfiles
 # This script tracks and reports on shell performance metrics
 
-set -e
 
 # Source shared utilities
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/constants.sh"
 source "$SCRIPT_DIR/helpers.sh"
-source "$SCRIPT_DIR/colors.sh"
 
 # Performance data file
 PERF_DATA_FILE="$HOME/.cache/dotfiles-performance.json"
@@ -46,7 +48,6 @@ measure_shell_startup() {
     local temp_script
     temp_script=$(mktemp)
     cat > "$temp_script" << 'EOF'
-#!/bin/zsh
 # Measure startup time
 local START_TIME
 START_TIME=$(date +%s.%N)
@@ -80,37 +81,37 @@ measure_tool_loading() {
     local results=()
 
     # Measure NVM loading
-    if [[ -d "$HOME/.nvm" ]]; then
+    if dir_exists "$HOME/.nvm"; then
         results+=("$(measure_command "nvm_load" "export NVM_DIR=\"$HOME/.nvm\"; . \"\$NVM_DIR/nvm.sh\"")")
     fi
 
     # Measure rbenv loading
-    if command -v rbenv &> /dev/null || [[ -d "$HOME/.rbenv" ]]; then
+    if command -v rbenv &> /dev/null || dir_exists "$HOME/.rbenv"; then
         results+=("$(measure_command "rbenv_load" "export PATH=\"$HOME/.rbenv/shims:\$PATH\"; eval \"\$(rbenv init -)\"")")
     fi
 
     # Measure asdf loading
-    if command -v asdf &> /dev/null || [[ -d "/opt/homebrew/opt/asdf" ]]; then
+    if command -v asdf &> /dev/null || dir_exists "/opt/homebrew/opt/asdf"; then
         results+=("$(measure_command "asdf_load" ". /opt/homebrew/opt/asdf/libexec/asdf.sh")")
     fi
 
     # Measure direnv loading
-    if command -v direnv &> /dev/null; then
+    if has_command direnv &> /dev/null; then
         results+=("$(measure_command "direnv_load" "eval \"\$(direnv hook zsh)\"")")
     fi
 
     # Measure pyenv loading
-    if command -v pyenv &> /dev/null || [[ -d "$HOME/.pyenv" ]]; then
+    if command -v pyenv &> /dev/null || dir_exists "$HOME/.pyenv"; then
         results+=("$(measure_command "pyenv_load" "export PATH=\"$HOME/.pyenv/shims:\$PATH\"; eval \"\$(pyenv init -)\"")")
     fi
 
     # Measure nodenv loading
-    if command -v nodenv &> /dev/null || [[ -d "$HOME/.nodenv" ]]; then
+    if command -v nodenv &> /dev/null || dir_exists "$HOME/.nodenv"; then
         results+=("$(measure_command "nodenv_load" "export PATH=\"$HOME/.nodenv/shims:\$PATH\"; eval \"\$(nodenv init -)\"")")
     fi
 
     # Measure goenv loading
-    if command -v goenv &> /dev/null || [[ -d "$HOME/.goenv" ]]; then
+    if command -v goenv &> /dev/null || dir_exists "$HOME/.goenv"; then
         results+=("$(measure_command "goenv_load" "export PATH=\"$HOME/.goenv/shims:\$PATH\"; eval \"\$(goenv init -)\"")")
     fi
 
@@ -172,7 +173,7 @@ measure_path_performance() {
     # Measure PATH search time
     local start_time
     start_time=$(date +%s.%N)
-    command -v git >/dev/null 2>&1
+    has_command git &>/dev/null 2>&1
     local end_time
     end_time=$(date +%s.%N)
     local path_search_time
@@ -232,7 +233,7 @@ save_performance_data() {
     echo "$data" > "$PERF_DATA_FILE"
 
     # Append to history
-    if [[ -f "$PERF_HISTORY_FILE" ]]; then
+    if file_exists "$PERF_HISTORY_FILE"; then
         local history_data
         history_data=$(cat "$PERF_HISTORY_FILE" 2>/dev/null || echo "[]")
         local new_entry
@@ -402,7 +403,7 @@ start_realtime_monitoring() {
 stop_realtime_monitoring() {
     local pid_file="$HOME/.cache/dotfiles-monitor.pid"
     
-    if [[ -f "$pid_file" ]]; then
+    if file_exists "$pid_file"; then
         local monitor_pid
         monitor_pid=$(cat "$pid_file")
         
@@ -463,7 +464,7 @@ This report contains performance metrics for the dotfiles configuration.
 
 EOF
 
-    if [[ -f "$PERF_DATA_FILE" ]]; then
+    if file_exists "$PERF_DATA_FILE"; then
         local data
         data=$(cat "$PERF_DATA_FILE")
         local shell_startup
@@ -472,11 +473,11 @@ EOF
         echo "- **Shell Startup Time**: ${shell_startup}s" >> "$report_file"
         
         if (( $(echo "$shell_startup > 1.0" | bc -l 2>/dev/null || echo "0") )); then
-            echo "- **Status**: ⚠️ Slow (>1s)" >> "$report_file"
+            echo "- **Status**:  Slow (>1s)" >> "$report_file"
         elif (( $(echo "$shell_startup > 0.5" | bc -l 2>/dev/null || echo "0") )); then
-            echo "- **Status**: ⚡ Moderate (0.5-1s)" >> "$report_file"
+            echo "- **Status**: [FAST] Moderate (0.5-1s)" >> "$report_file"
         else
-            echo "- **Status**: ✅ Fast (<0.5s)" >> "$report_file"
+            echo "- **Status**:  Fast (<0.5s)" >> "$report_file"
         fi
     else
         echo "- **Status**: No data available" >> "$report_file"
@@ -488,7 +489,7 @@ EOF
 
 EOF
 
-    if [[ -f "$PERF_DATA_FILE" ]]; then
+    if file_exists "$PERF_DATA_FILE"; then
         local data
         data=$(cat "$PERF_DATA_FILE")
         
@@ -518,7 +519,7 @@ EOF
 
 EOF
 
-    if [[ -f "$PERF_HISTORY_FILE" ]]; then
+    if file_exists "$PERF_HISTORY_FILE"; then
         local history_count
         history_count=$(cat "$PERF_HISTORY_FILE" | jq 'length' 2>/dev/null || echo "0")
         echo "- **Total Sessions**: $history_count" >> "$report_file"
@@ -567,7 +568,7 @@ main() {
             echo "  Current: $PERF_DATA_FILE"
             echo "  History: $PERF_HISTORY_FILE"
             echo "  Real-time: $REALTIME_LOG_FILE"
-            exit 1
+            exit $EXIT_FAILURE
             ;;
     esac
 }

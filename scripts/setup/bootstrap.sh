@@ -1,36 +1,36 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Standard script initialization
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+UTILS_DIR="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1 | xargs dirname)"
+source "$UTILS_DIR/script-init.sh"
+
+# Source constants
+
 # Bootstrap script for DROO's dotfiles
 # This script can be run on any fresh system to set up the dotfiles
 
-set -e
 
 # Source shared utilities
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [[ -f "$SCRIPT_DIR/../utils/colors.sh" ]]; then
+if file_exists "$SCRIPT_DIR/../utils/colors.sh"; then
     # shellcheck disable=SC1091
-    source "$SCRIPT_DIR/../utils/colors.sh"
 else
     echo "Warning: colors.sh not found, using fallback colors"
     # Fallback color definitions
-    RED='\033[0;31m'
-    GREEN='\033[0;32m'
-    YELLOW='\033[1;33m'
-    BLUE='\033[0;34m'
-    NC='\033[0m'
 
     print_status() {
         local status=$1
         local message=$2
         case $status in
-            "OK") echo -e "${GREEN}✓${NC} $message" ;;
-            "WARN") echo -e "${YELLOW}⚠${NC} $message" ;;
-            "ERROR") echo -e "${RED}✗${NC} $message" ;;
-            "INFO") echo -e "${BLUE}ℹ${NC} $message" ;;
+            "OK") echo -e "${GREEN}[OK]${NC} $message" ;;
+            "WARN") echo -e "${YELLOW}[WARN]${NC} $message" ;;
+            "ERROR") echo -e "${RED}[ERROR]${NC} $message" ;;
+            "INFO") echo -e "${BLUE}[INFO]${NC} $message" ;;
         esac
     }
 fi
 
-echo "🚀 Bootstrap script for DROO's dotfiles"
+echo " Bootstrap script for DROO's dotfiles"
 echo "========================================"
 
 # Detect OS
@@ -41,7 +41,7 @@ print_status "INFO" "Detected OS: $OS ($ARCH)"
 
 # Detect NixOS
 is_nixos() {
-    [[ -f /etc/os-release ]] && grep -q "ID=nixos" /etc/os-release
+    file_exists /etc/os-release && grep -q "ID=nixos" /etc/os-release
 }
 
 # Install chezmoi based on OS
@@ -57,7 +57,7 @@ install_chezmoi() {
         "Darwin")
             if ! command -v brew &> /dev/null; then
                 print_status "INFO" "Installing Homebrew..."
-                /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+                safe_download_execute "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh" "Homebrew installation"
 
                 # Add Homebrew to PATH for Apple Silicon
                 if [[ "$ARCH" == "arm64" ]]; then
@@ -78,7 +78,7 @@ install_chezmoi() {
             ;;
         *)
             print_status "ERROR" "Unsupported OS: $OS"
-            exit 1
+            exit $EXIT_FAILURE
             ;;
     esac
 }
@@ -125,7 +125,7 @@ initialize_dotfiles() {
     print_status "INFO" "Initializing dotfiles..."
 
     # Check if dotfiles are already initialized
-    if [[ -d "$HOME/.local/share/chezmoi" ]]; then
+    if dir_exists "$HOME/.local/share/chezmoi"; then
         print_status "WARN" "Dotfiles already initialized. Updating..."
         chezmoi update
     else
@@ -158,13 +158,13 @@ post_install() {
     print_status "INFO" "Running post-installation setup..."
 
     # Source the new zshrc to get all functions (only if running in zsh)
-    if [[ -n "$ZSH_VERSION" ]] && [[ -f "$HOME/.zshrc" ]]; then
+    if [[ -n "$ZSH_VERSION" ]] && file_exists "$HOME/.zshrc"; then
         # shellcheck disable=SC1091
         source "$HOME/.zshrc"
     fi
 
     # Run health check
-    if [[ -f "$HOME/.local/share/chezmoi/scripts/utils/health-check.sh" ]]; then
+    if file_exists "$HOME/.local/share/chezmoi/scripts/utils/health-check.sh"; then
         print_status "INFO" "Running health check..."
         "$HOME/.local/share/chezmoi/scripts/utils/health-check.sh"
     fi
@@ -179,7 +179,7 @@ main() {
     post_install
 
     echo ""
-    echo "✅ Bootstrap complete!"
+    echo " Bootstrap complete!"
     echo "========================================"
     echo "Next steps:"
     echo "1. Restart your terminal or run 'exec zsh'"

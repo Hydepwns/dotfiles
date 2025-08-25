@@ -1,12 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # One-command setup for new machines
 set -e
 
-echo "🚀 Quick setup for DROO's dotfiles..."
+echo " Quick setup for DROO's dotfiles..."
 
 # Detect NixOS
 is_nixos() {
-    [[ -f /etc/os-release ]] && grep -q "ID=nixos" /etc/os-release
+    file_exists /etc/os-release && grep -q "ID=nixos" /etc/os-release
 }
 
 # Install chezmoi if not present
@@ -25,4 +25,4 @@ fi
 # Initialize and apply dotfiles
 chezmoi init --apply https://github.com/hydepwns/dotfiles.git
 
-echo "✅ Setup complete! Restart your terminal."
+echo " Setup complete! Restart your terminal."

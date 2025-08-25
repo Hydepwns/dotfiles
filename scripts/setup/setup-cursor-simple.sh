@@ -1,31 +1,31 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Standard script initialization
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+UTILS_DIR="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1 | xargs dirname)"
+source "$UTILS_DIR/script-init.sh"
+
+# Source constants
+
 # Simplified setup script for Cursor configuration
 # This script installs Cursor settings, keybindings, snippets, and extensions
 
-set -e
 
 # Source shared utilities
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [[ -f "$SCRIPT_DIR/../utils/colors.sh" ]]; then
+if file_exists "$SCRIPT_DIR/../utils/colors.sh"; then
     # shellcheck disable=SC1091
-    source "$SCRIPT_DIR/../utils/colors.sh"
 else
     echo "Warning: colors.sh not found, using fallback colors"
     # Fallback color definitions
-    RED='\033[0;31m'
-    GREEN='\033[0;32m'
-    YELLOW='\033[1;33m'
-    BLUE='\033[0;34m'
-    NC='\033[0m'
 
     print_status() {
         local status=$1
         local message=$2
         case $status in
-            "OK") echo -e "${GREEN}✓${NC} $message" ;;
-            "WARN") echo -e "${YELLOW}⚠${NC} $message" ;;
-            "ERROR") echo -e "${RED}✗${NC} $message" ;;
-            "INFO") echo -e "${BLUE}ℹ${NC} $message" ;;
+            "OK") echo -e "${GREEN}[OK]${NC} $message" ;;
+            "WARN") echo -e "${YELLOW}${NC} $message" ;;
+            "ERROR") echo -e "${RED}[FAIL]${NC} $message" ;;
+            "INFO") echo -e "${BLUE}${NC} $message" ;;
         esac
     }
 fi
@@ -37,7 +37,7 @@ CURSOR_SNIPPETS_DIR="$CURSOR_USER_DIR/snippets"
 # Dotfiles configuration directory
 DOTFILES_CONFIG_DIR="$(chezmoi source-path)/config/cursor"
 
-echo "🎨 Setting up Cursor configuration (Simplified)"
+echo " Setting up Cursor configuration (Simplified)"
 echo "==============================================="
 
 # Check if Cursor is installed
@@ -69,7 +69,7 @@ install_cursor_settings() {
     local settings_source="$DOTFILES_CONFIG_DIR/settings.json.tmpl"
     local settings_target="$CURSOR_USER_DIR/settings.json"
 
-    if [[ -f "$settings_source" ]]; then
+    if file_exists "$settings_source"; then
         # For now, just copy the template content directly
         cat > "$settings_target" << 'EOF'
 {
@@ -518,19 +518,19 @@ backup_existing_config() {
     mkdir -p "$backup_dir"
 
     # Backup settings
-    if [[ -f "$CURSOR_USER_DIR/settings.json" ]]; then
+    if file_exists "$CURSOR_USER_DIR/settings.json"; then
         cp "$CURSOR_USER_DIR/settings.json" "$backup_dir/settings_${timestamp}.json"
         print_status "OK" "Backed up settings.json"
     fi
 
     # Backup keybindings
-    if [[ -f "$CURSOR_USER_DIR/keybindings.json" ]]; then
+    if file_exists "$CURSOR_USER_DIR/keybindings.json"; then
         cp "$CURSOR_USER_DIR/keybindings.json" "$backup_dir/keybindings_${timestamp}.json"
         print_status "OK" "Backed up keybindings.json"
     fi
 
     # Backup snippets
-    if [[ -d "$CURSOR_SNIPPETS_DIR" ]] && [[ "$(ls -A "$CURSOR_SNIPPETS_DIR")" ]]; then
+    if dir_exists "$CURSOR_SNIPPETS_DIR" && [[ "$(ls -A "$CURSOR_SNIPPETS_DIR")" ]]; then
         cp -r "$CURSOR_SNIPPETS_DIR" "$backup_dir/snippets_${timestamp}"
         print_status "OK" "Backed up snippets directory"
     fi
@@ -572,7 +572,7 @@ verify_cursor_config() {
 # Main execution
 main() {
     if ! check_cursor_installation; then
-        exit 1
+        exit $EXIT_FAILURE
     fi
 
     backup_existing_config
@@ -584,7 +584,7 @@ main() {
     verify_cursor_config
 
     echo ""
-    echo "✅ Cursor configuration setup complete!"
+    echo " Cursor configuration setup complete!"
     echo "========================================"
     echo "Next steps:"
     echo "1. Restart Cursor to apply the new configuration"

@@ -1,45 +1,57 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Standard script initialization
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+UTILS_DIR="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1 | xargs dirname)"
+source "$UTILS_DIR/script-init.sh"
+
+# Source constants
+
 
 # Setup verification script for dotfiles
 # This script checks if the dotfiles are properly set up and provides guidance
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-CYAN='\033[0;36m'
-NC='\033[0m' # No Color
+# Source shared utilities
+    # Fallback if colors.sh not found
+}
+source "$SCRIPT_DIR/platform.sh" 2>/dev/null || {
+    # Fallback platform detection
+    OS="$(uname -s)"
+    IS_MACOS=false
+    IS_LINUX=false
+    IS_NIXOS=false
+    case "$OS" in
+        Darwin)
+            IS_MACOS=true
+            PLATFORM="macOS"
+            ;;
+        Linux)
+            IS_LINUX=true
+            PLATFORM="Linux"
+            [ -f /etc/os-release ] && grep -q "NixOS" /etc/os-release && IS_NIXOS=true && PLATFORM="NixOS"
+            ;;
+        *)
+            PLATFORM="Unknown"
+            ;;
+    esac
+}
 
 # Status tracking
 ISSUES_FOUND=0
 WARNINGS=0
 
-# Platform detection
-OS="$(uname -s)"
-IS_MACOS=false
-IS_LINUX=false
-IS_NIXOS=false
+# Set PLATFORM display name
+if $IS_NIXOS; then
+    PLATFORM="NixOS"
+elif $IS_MACOS; then
+    PLATFORM="macOS"
+elif $IS_LINUX; then
+    PLATFORM="Linux"
+else
+    PLATFORM="${OS:-Unknown}"
+fi
 
-case "$OS" in
-    Darwin)
-        IS_MACOS=true
-        PLATFORM="macOS"
-        ;;
-    Linux)
-        IS_LINUX=true
-        PLATFORM="Linux"
-        if [ -f /etc/os-release ] && grep -q "NixOS" /etc/os-release; then
-            IS_NIXOS=true
-            PLATFORM="NixOS"
-        fi
-        ;;
-    *)
-        PLATFORM="Unknown"
-        ;;
-esac
-
-echo -e "${BLUE}🔍 Dotfiles Setup Verification${NC}"
+echo -e "${BLUE} Dotfiles Setup Verification${NC}"
 echo "=================================="
 echo -e "Platform: ${CYAN}$PLATFORM${NC}"
 echo ""
@@ -52,12 +64,12 @@ check() {
     
     echo -n "Checking $description... "
     if eval "$command" >/dev/null 2>&1; then
-        echo -e "${GREEN}✓${NC}"
+        echo -e "${GREEN}OK${NC}"
         return 0
     else
-        echo -e "${RED}✗${NC}"
+        echo -e "${RED}FAIL${NC}"
         if [ -n "$fix_hint" ]; then
-            echo -e "  ${YELLOW}→ Fix: $fix_hint${NC}"
+            echo -e "  ${YELLOW}Fix: $fix_hint${NC}"
         fi
         ((ISSUES_FOUND++))
         return 1
@@ -72,34 +84,34 @@ warn_check() {
     
     echo -n "Checking $description... "
     if eval "$command" >/dev/null 2>&1; then
-        echo -e "${GREEN}✓${NC}"
+        echo -e "${GREEN}OK${NC}"
         return 0
     else
-        echo -e "${YELLOW}⚠${NC}"
+        echo -e "${YELLOW}${NC}"
         if [ -n "$note" ]; then
-            echo -e "  ${CYAN}→ Note: $note${NC}"
+            echo -e "  ${CYAN}Note: $note${NC}"
         fi
         ((WARNINGS++))
         return 1
     fi
 }
 
-echo -e "${YELLOW}📋 Core Requirements${NC}"
+echo -e "${YELLOW} Core Requirements${NC}"
 echo "-------------------"
 check "chezmoi installed" \
-    "which chezmoi" \
+    "command -v chezmoi" \
     "Install chezmoi: https://www.chezmoi.io/install/"
 
 check "git installed" \
-    "which git" \
+    "command -v git" \
     "Install git via your package manager"
 
 check "zsh installed" \
-    "which zsh" \
+    "command -v zsh" \
     "Install zsh via your package manager"
 
 echo ""
-echo -e "${YELLOW}📁 Repository Status${NC}"
+echo -e "${YELLOW} Repository Status${NC}"
 echo "-------------------"
 check "in dotfiles directory" \
     "test -f chezmoi.toml" \
@@ -110,7 +122,7 @@ check "git repository initialized" \
     "Run: git init"
 
 echo ""
-echo -e "${YELLOW}🔧 Chezmoi Configuration${NC}"
+echo -e "${YELLOW} Chezmoi Configuration${NC}"
 echo "------------------------"
 check "chezmoi.toml exists" \
     "test -f chezmoi.toml" \
@@ -133,7 +145,7 @@ else
 fi
 
 echo ""
-echo -e "${YELLOW}🏠 Home Directory Files${NC}"
+echo -e "${YELLOW} Home Directory Files${NC}"
 echo "----------------------"
 
 if $DOTFILES_APPLIED; then
@@ -143,35 +155,35 @@ if $DOTFILES_APPLIED; then
     # Check for valid .zshrc content
     if [ -f ~/.zshrc ]; then
         if [ $(wc -l < ~/.zshrc) -lt 5 ]; then
-            echo -e "  ${YELLOW}⚠ .zshrc seems incomplete (less than 5 lines)${NC}"
-            echo -e "  ${CYAN}→ Run: chezmoi apply to update${NC}"
+            echo -e "  ${YELLOW} .zshrc seems incomplete (less than 5 lines)${NC}"
+            echo -e "  ${CYAN}Run: chezmoi apply to update${NC}"
             ((WARNINGS++))
         fi
     fi
 fi
 
 echo ""
-echo -e "${YELLOW}🛠️ Platform-Specific Tools${NC}"
+echo -e "${YELLOW} Platform-Specific Tools${NC}"
 echo "-------------------------"
 
 if $IS_MACOS; then
     warn_check "Homebrew installed" \
-        "which brew" \
+        "command -v brew" \
         "Optional but recommended for macOS"
 elif $IS_NIXOS; then
     check "Nix installed" \
-        "which nix" \
+        "command -v nix" \
         "Should be available on NixOS"
     
     warn_check "make command available" \
-        "which make" \
+        "command -v make" \
         "Install with: nix-env -iA nixpkgs.gnumake"
 fi
 
 # Check for Oh My Zsh if configured
-if grep -q "ohmyzsh = true" chezmoi.toml 2>/dev/null; then
+if is_config_enabled "ohmyzsh" "chezmoi.toml"; then
     echo ""
-    echo -e "${YELLOW}🎨 Optional Components${NC}"
+    echo -e "${YELLOW} Optional Components${NC}"
     echo "---------------------"
     warn_check "Oh My Zsh installed" \
         "test -d ~/.oh-my-zsh" \
@@ -181,7 +193,7 @@ fi
 # Check for Home Manager conflicts (NixOS)
 if $IS_NIXOS; then
     echo ""
-    echo -e "${YELLOW}🔍 NixOS Specific Checks${NC}"
+    echo -e "${YELLOW} NixOS Specific Checks${NC}"
     echo "-----------------------"
     
     if [ -L ~/.profile ]; then
@@ -189,12 +201,12 @@ if $IS_NIXOS; then
         if readlink ~/.profile | grep -q "home-manager-files"; then
             # Check if the target exists
             if [ ! -e ~/.profile ]; then
-                echo -e "Checking .profile symlink... ${RED}✗${NC}"
-                echo -e "  ${YELLOW}→ Broken Home Manager symlink detected${NC}"
-                echo -e "  ${YELLOW}→ Fix: rm ~/.profile && chezmoi apply${NC}"
+                echo -e "Checking .profile symlink... ${RED}[FAIL]${NC}"
+                echo -e "  ${YELLOW}Broken Home Manager symlink detected${NC}"
+                echo -e "  ${YELLOW}Fix: rm ~/.profile && chezmoi apply${NC}"
                 ((ISSUES_FOUND++))
             else
-                echo -e "Checking .profile symlink... ${GREEN}✓${NC}"
+                echo -e "Checking .profile symlink... ${GREEN}[OK]${NC}"
             fi
         fi
     fi
@@ -202,20 +214,20 @@ fi
 
 echo ""
 echo "=================================="
-echo -e "${BLUE}📊 Verification Summary${NC}"
+echo -e "${BLUE} Verification Summary${NC}"
 echo "=================================="
 
 if [ $ISSUES_FOUND -eq 0 ] && [ $WARNINGS -eq 0 ]; then
-    echo -e "${GREEN}✅ All checks passed!${NC}"
+    echo -e "${GREEN} All checks passed!${NC}"
     echo "Your dotfiles setup is complete and working correctly."
 elif [ $ISSUES_FOUND -eq 0 ]; then
-    echo -e "${GREEN}✅ Core setup complete${NC}"
-    echo -e "${YELLOW}⚠ $WARNINGS warning(s) found${NC}"
+    echo -e "${GREEN} Core setup complete${NC}"
+    echo -e "${YELLOW} $WARNINGS warning(s) found${NC}"
     echo "Your dotfiles are functional but some optional components may be missing."
 else
-    echo -e "${RED}❌ $ISSUES_FOUND issue(s) found${NC}"
+    echo -e "${RED} $ISSUES_FOUND issue(s) found${NC}"
     if [ $WARNINGS -gt 0 ]; then
-        echo -e "${YELLOW}⚠ $WARNINGS warning(s) found${NC}"
+        echo -e "${YELLOW} $WARNINGS warning(s) found${NC}"
     fi
     echo ""
     echo "Please address the issues above to complete your setup."
@@ -230,7 +242,6 @@ fi
 
 # Exit with appropriate code
 if [ $ISSUES_FOUND -gt 0 ]; then
-    exit 1
+    exit $EXIT_FAILURE
 else
-    exit 0
-fi
+    exit $EXIT_SUCCESS

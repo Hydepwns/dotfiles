@@ -1,14 +1,17 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Standard script initialization
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+UTILS_DIR="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1 | xargs dirname)"
+source "$UTILS_DIR/script-init.sh"
+
 
 # Script to detect function and alias conflicts in the modular system
 
-set -e
 
 # Source shared utilities
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [[ -f "$SCRIPT_DIR/colors.sh" ]]; then
+if file_exists "$SCRIPT_DIR/colors.sh"; then
     # shellcheck disable=SC1091
-    source "$SCRIPT_DIR/colors.sh"
 else
     echo "Warning: colors.sh not found"
 fi
@@ -26,7 +29,7 @@ FUNCTION_FILES=(
 # Extract function names
 FUNCTION_NAMES=()
 for file in "${FUNCTION_FILES[@]}"; do
-    if [[ -f "$file" ]]; then
+    if file_exists "$file"; then
         while IFS= read -r line; do
             if [[ $line =~ ^[a-zA-Z_][a-zA-Z0-9_]*\(\) ]]; then
                 func_name="${line%()}"

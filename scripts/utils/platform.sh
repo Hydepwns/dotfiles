@@ -1,32 +1,68 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Platform detection utility for dotfiles
+# Standard script initialization
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+UTILS_DIR="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1 | xargs dirname)"
+source "$UTILS_DIR/script-init.sh"
+
+
+# Platform detection utility for dotfiles with smart caching
 # This script provides platform-specific variables and functions
 
-# Detect operating system
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    OS="linux"
-    # Check for NixOS specifically
-    if [ -f /etc/os-release ] && grep -q "NixOS" /etc/os-release; then
-        IS_NIXOS=true
-        DISTRO="nixos"
+# Load cached platform detection if available
+if [[ -f "$SCRIPT_DIR/cache.sh" ]]; then
+    source "$SCRIPT_DIR/cache.sh"
+    # Use cached platform detection
+    if cached_platform_info=$(cached_platform_detect 2>/dev/null); then
+        eval "$cached_platform_info"
     else
-        IS_NIXOS=false
-        DISTRO="linux"
+        # Fallback to manual detection and cache it
+        perform_platform_detection
     fi
-elif [[ "$OSTYPE" == "darwin"* ]]; then
-    OS="macos"
-    IS_NIXOS=false
-    DISTRO="macos"
-elif [[ "$OSTYPE" == "cygwin" ]] || [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]]; then
-    OS="windows"
-    IS_NIXOS=false
-    DISTRO="windows"
 else
-    OS="unknown"
-    IS_NIXOS=false
-    DISTRO="unknown"
+    # Original detection method (fallback)
+    perform_platform_detection
 fi
+
+# Platform detection function
+perform_platform_detection() {
+    # Detect operating system
+    if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+        OS="linux"
+        ARCH="$(uname -m)"
+        IS_LINUX=true
+        IS_MACOS=false
+        # Check for NixOS specifically
+        if [ -f /etc/os-release ] && grep -q "NixOS" /etc/os-release; then
+            IS_NIXOS=true
+            DISTRO="nixos"
+        else
+            IS_NIXOS=false
+            DISTRO="linux"
+        fi
+    elif [[ "$OSTYPE" == "darwin"* ]]; then
+        OS="macos"
+        ARCH="$(uname -m)"
+        IS_MACOS=true
+        IS_LINUX=false
+        IS_NIXOS=false
+        DISTRO="macos"
+    elif [[ "$OSTYPE" == "cygwin" ]] || [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]]; then
+        OS="windows"
+        ARCH="$(uname -m)"
+        IS_MACOS=false
+        IS_LINUX=false
+        IS_NIXOS=false
+        DISTRO="windows"
+    else
+        OS="unknown"
+        ARCH="$(uname -m)"
+        IS_MACOS=false
+        IS_LINUX=false
+        IS_NIXOS=false
+        DISTRO="unknown"
+    fi
+}
 
 # Set boolean flags for convenience
 IS_MACOS=false

@@ -1,8 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Standard script initialization
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+UTILS_DIR="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1 | xargs dirname)"
+source "$UTILS_DIR/script-init.sh"
+
 # Common template utilities for DROO's dotfiles
 
 # Source helpers for consistent logging
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 if [[ -f "$SCRIPT_DIR/../helpers.sh" ]]; then
     source "$SCRIPT_DIR/../helpers.sh"
 fi
@@ -160,7 +165,7 @@ add_direnv_support() {
     local project_type="$1"
 
     if [[ -f .envrc ]]; then
-        echo "⚠️  .envrc already exists, skipping direnv setup"
+        echo "  .envrc already exists, skipping direnv setup"
         return
     fi
 
@@ -210,7 +215,7 @@ EOF
     esac
 
     direnv allow
-    echo "✅ Added direnv support for $project_type"
+    echo " Added direnv support for $project_type"
 }
 
 # Function to add devenv support to project
@@ -218,7 +223,7 @@ add_devenv_support() {
     local project_type="$1"
 
     if [[ -f devenv.nix ]]; then
-        echo "⚠️  devenv.nix already exists, skipping devenv setup"
+        echo "  devenv.nix already exists, skipping devenv setup"
         return
     fi
 
@@ -329,7 +334,7 @@ EOF
             ;;
     esac
 
-    echo "✅ Added devenv support for $project_type"
+    echo " Added devenv support for $project_type"
     echo "Run 'devenv up' to start the environment"
 }
 
