@@ -1,6 +1,13 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-set -e # -e: exit on error
+# Standard script initialization
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+UTILS_DIR="$(cd "$SCRIPT_DIR" && find . .. ../.. -name "script-init.sh" -type f | head -1 | xargs dirname)"
+source "$UTILS_DIR/script-init.sh"
+
+# Source constants
+
+
 
 if [ ! "$(command -v chezmoi)" ]; then
   bin_dir="$HOME/.local/bin"
@@ -11,7 +18,7 @@ if [ ! "$(command -v chezmoi)" ]; then
     sh -c "$(wget -qO- https://git.io/chezmoi)" -- -b "$bin_dir"
   else
     echo "To install chezmoi, you must have curl or wget installed." >&2
-    exit 1
+    exit $EXIT_FAILURE
   fi
 else
   chezmoi=chezmoi
