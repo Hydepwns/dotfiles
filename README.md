@@ -6,48 +6,56 @@
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/Hydepwns/dotfiles)
 
-Cross-platform dotfiles managed with [chezmoi] - featuring modular tool loading, project templates, and development automation.
+Cross-platform dotfiles managed with [chezmoi] - featuring modular tool loading, project templates, development automation, and standardized script architecture.
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 # One-liner install (30 seconds)
 curl -fsSL https://raw.githubusercontent.com/hydepwns/dotfiles/main/scripts/setup/quick-setup.sh | bash
 
-# NixOS-specific install (Installs chezmoi via `nix-env -iA nixpkgs.chezmoi`)
-curl -fsSL https://raw.githubusercontent.com/hydepwns/dotfiles/main/scripts/setup/nixos-setup.sh | bash
+# NixOS-specific quick fix for common issues
+bash scripts/setup/nixos-quick-fix.sh
 
 # MacOS/Darwin with brew
 brew install chezmoi && chezmoi init --apply https://github.com/hydepwns/dotfiles.git
+
+# Verify your setup (after installation)
+bash scripts/utils/verify-setup.sh
+
+# NixOS quick fix for common issues
+bash scripts/setup/nixos-quick-fix.sh
 ```
 
 > **NixOS**: Doesn't allow dynamically linked executables from generic Linux, [docs/nixos-installation.md](docs/nixos-installation.md) has even more install options.
 
-## 🛠️ Usage
+## Usage
 
 | Category | Command | Description |
 |----------|---------|-------------|
-| **🏠 Core** | `make install` | Install dotfiles |
-| **🔄 Sync** | `make update` | Update from remote |
-| **🏥 Health** | `make doctor` | System health check |
-| **📡 Sync** | `make sync` | Sync local changes |
+| **Core** | `make install` | Install dotfiles |
+| **Sync** | `make update` | Update from remote |
+| **Health** | `make doctor` | System health check |
+| **Sync** | `make sync` | Sync local changes |
+| **Verify** | `bash scripts/utils/verify-setup.sh` | Verify setup is complete |
+| **Test** | `make test` | Run comprehensive test suite |
 
-## ⚙️ Config
+## Configuration
 
-### 🎯 Initial Setup
+### Initial Setup
 
 The setup process will prompt for:
 
 | Setting | Purpose | Example |
 |---------|---------|---------|
-| **📧 Email** | Git config | `user@example.com` |
-| **👤 Username** | Git config | `Your Name` |
-| **🛠️ Tool Preferences** | Nix, Oh My Zsh, asdf | `y/n` for each tool |
-| **💻 Machine Type** | Personal (SSH keys) or Work | `personal` or `work` |
+| **Email** | Git config | `user@example.com` |
+| **Username** | Git config | `Your Name` |
+| **Tool Preferences** | Nix, Oh My Zsh, asdf | `y/n` for each tool |
+| **Machine Type** | Personal (SSH keys) or Work | `personal` or `work` |
 
-## 🤔 Optionals
+## Optional Features
 
-### 🔑 SSH & GitHub Setup
+### SSH & GitHub Setup
 
 ```bash
 # Set GitHub token for SSH key fetching
@@ -76,32 +84,32 @@ chezmoi verify
 chezmoi apply --source-path ~/.local/share/chezmoi
 ```
 
-## 🛠️ Core Tools
+## Core Tools
 
 | Category | Tools | Languages | Version Managers |
 |----------|-------|-----------|------------------|
 | **Core** | ![chezmoi-badge][] ![zsh-badge][] ![kitty-badge][] ![neovim-badge][] ![cursor-badge][] | ![node-badge][] ![python-badge][] ![rust-badge][] ![elixir-badge][] ![erlang-badge][] ![lua-badge][] | ![asdf-badge][] ![direnv-badge][] ![devenv-badge][] ![nix-badge][] |
 | **Web3** | ![ethereum-badge][] ![foundry-badge][] ![solana-badge][] | ![nextjs-badge][] ![react-badge][] ![typescript-badge][] ![tailwind-badge][] | - |
 
-## 🔗 Neovim Plugins
+## Neovim Plugins
 
 See [docs/nvim-plugins.md](docs/nvim-plugins.md) for a full categorized list and descriptions.
 
 | Category | Count | Key Plugins |
 |----------|-------|-------------|
-| **🎨 UI & Theme** | 4 | twilight.nvim, mini.hipatterns, synthwave84.nvim, mona.nvim |
-| **💬 Comments & Completion** | 6 | nvim-cmp, LuaSnip, Comment.nvim, todo-comments.nvim, ts-context-commentstring, friendly-snippets |
-| **📁 File Management & Git** | 4 | mini.files, nvim-tree.lua, gitsigns.nvim, mini.diff |
-| **🛠️ LSP & Diagnostics** | 4 | nvim-lspconfig, mason.nvim, trouble.nvim, conform.nvim |
-| **📝 Editing & Movement** | 8 | mini.pairs, mini.surround, mini.ai, mini.move, mini.operators, mini.align, mini.trailspace, hlargs.nvim |
-| **📊 Status & Testing** | 6 | mini.statusline, lualine.nvim, mini.tabline, neotest, neotest-*, mini.sessions |
-| **🔍 Fuzzy Finder & Keybindings** | 5 | telescope.nvim, mini.visits, which-key.nvim, flash.nvim, mini.extra |
-| **📚 Note-taking & Utilities** | 6 | orgmode, neorg, mini.nvim, noice.nvim, nvim-notify, dressing.nvim |
-| **🎯 Treesitter & Animation** | 3 | nvim-treesitter, mini.animate, SmoothCursor.nvim |
-| **🔧 Development** | 4 | neoconf.nvim, neodev.nvim, mini.indentscope, mini.cursorword |
+| **UI & Theme** | 4 | twilight.nvim, mini.hipatterns, synthwave84.nvim, mona.nvim |
+| **Comments & Completion** | 6 | nvim-cmp, LuaSnip, Comment.nvim, todo-comments.nvim, ts-context-commentstring, friendly-snippets |
+| **File Management & Git** | 4 | mini.files, nvim-tree.lua, gitsigns.nvim, mini.diff |
+| **LSP & Diagnostics** | 4 | nvim-lspconfig, mason.nvim, trouble.nvim, conform.nvim |
+| **Editing & Movement** | 8 | mini.pairs, mini.surround, mini.ai, mini.move, mini.operators, mini.align, mini.trailspace, hlargs.nvim |
+| **Status & Testing** | 6 | mini.statusline, lualine.nvim, mini.tabline, neotest, neotest-*, mini.sessions |
+| **Fuzzy Finder & Keybindings** | 5 | telescope.nvim, mini.visits, which-key.nvim, flash.nvim, mini.extra |
+| **Note-taking & Utilities** | 6 | orgmode, neorg, mini.nvim, noice.nvim, nvim-notify, dressing.nvim |
+| **Treesitter & Animation** | 3 | nvim-treesitter, mini.animate, SmoothCursor.nvim |
+| **Development** | 4 | neoconf.nvim, neodev.nvim, mini.indentscope, mini.cursorword |
 | **Total** | 56 | |
 
-## 📋 Templates
+## Templates
 
 See [docs/templates.md](docs/templates.md) for detailed template information and usage examples.
 
@@ -115,7 +123,7 @@ See [docs/templates.md](docs/templates.md) for detailed template information and
 | ![python-template-badge][] | Python applications | Ansible, Poetry, Pytest, Black, MyPy, FastAPI |
 | ![go-template-badge][] | Go services | Modules, Testing, Linting, Protobuf |
 
-### 🎨 Templates Usage
+### Template Usage
 
 ```bash
 # Quick examples
@@ -127,7 +135,7 @@ make generate-template rust my-cli --with-docs --with-ci
 make generate-template
 ```
 
-## ⚡ Performance
+## Performance
 
 Shell startup is up to **95% faster** with [lazy loading](https://github.com/Hydepwns/dotfiles/blob/main/scripts/utils/lazy-loading-benchmark.sh) and modular architecture. See [docs/performance.md](docs/performance.md) for detailed benchmarks.
 
@@ -135,6 +143,7 @@ Shell startup is up to **95% faster** with [lazy loading](https://github.com/Hyd
 |---------|-------------|--------|
 | **Lazy Loading** | 0.9s saved per shell | 95% faster startup |
 | **Modular Architecture** | On-demand loading | Reduced memory usage |
+| **Standardized Scripts** | Unified initialization | Faster development |
 | **Template System** | 8 project types | Faster project setup |
 | **Real-time Monitoring** | Live performance tracking | Continuous optimization |
 | **Enhanced Analytics** | Detailed metrics & reports | Data-driven improvements |
@@ -163,7 +172,7 @@ Shell startup is up to **95% faster** with [lazy loading](https://github.com/Hyd
 | Performance Test  | Benchmark script | Startup, tool load     | `make perf`            |
 | Analytics/Reports | Data aggregation | Optimization feedback  | `make perf-report`     |
 
-## ❓ FAQ
+## FAQ
 
 **Q: How do I customize the configuration?**
 A: Edit files directly with `chezmoi edit ~/.zshrc` or modify templates in the source.

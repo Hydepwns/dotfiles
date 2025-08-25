@@ -6,12 +6,35 @@
 # Detect operating system
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     OS="linux"
+    # Check for NixOS specifically
+    if [ -f /etc/os-release ] && grep -q "NixOS" /etc/os-release; then
+        IS_NIXOS=true
+        DISTRO="nixos"
+    else
+        IS_NIXOS=false
+        DISTRO="linux"
+    fi
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     OS="macos"
+    IS_NIXOS=false
+    DISTRO="macos"
 elif [[ "$OSTYPE" == "cygwin" ]] || [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]]; then
     OS="windows"
+    IS_NIXOS=false
+    DISTRO="windows"
 else
     OS="unknown"
+    IS_NIXOS=false
+    DISTRO="unknown"
+fi
+
+# Set boolean flags for convenience
+IS_MACOS=false
+IS_LINUX=false
+if [[ "$OS" == "macos" ]]; then
+    IS_MACOS=true
+elif [[ "$OS" == "linux" ]]; then
+    IS_LINUX=true
 fi
 
 # Detect architecture
@@ -42,12 +65,24 @@ else
     HAS_PACMAN=false
 fi
 
+# Check for Nix
+if command -v nix &> /dev/null; then
+    HAS_NIX=true
+else
+    HAS_NIX=false
+fi
+
 # Export variables
 export OS
 export ARCH
+export DISTRO
+export IS_MACOS
+export IS_LINUX
+export IS_NIXOS
 export HAS_BREW
 export HAS_APT
 export HAS_PACMAN
+export HAS_NIX
 export BREW_PREFIX
 
 # Platform-specific functions
