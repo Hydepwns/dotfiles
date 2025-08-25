@@ -30,17 +30,23 @@ status: ## Show status of dotfiles
 
 # Backup operations
 backup: ## Create backup of current dotfiles
-	@$(SCRIPTS_DIR)/utils/backup.sh data
+	@$(DOTFILES_ROOT)/utils/backup.sh data
 
 backup-full: ## Create full backup with archive
-	@$(SCRIPTS_DIR)/utils/backup.sh full
+	@$(DOTFILES_ROOT)/utils/backup.sh full
+
+backup-config: ## Backup configuration files only
+	@$(DOTFILES_ROOT)/utils/backup.sh config
+
+backup-list: ## List existing backups
+	@$(DOTFILES_ROOT)/utils/backup.sh list
 
 clean: ## Clean up temporary files and backups
 	@$(SCRIPTS_DIR)/utils/clean.sh
 
 # Health and maintenance
 doctor: ## Run health check on dotfiles setup
-	@$(SCRIPTS_DIR)/utils/health-check.sh
+	@$(DOTFILES_ROOT)/utils/health-check.sh
 
 bootstrap: ## Run bootstrap script for fresh installation
 	@$(SCRIPTS_DIR)/setup/bootstrap.sh
