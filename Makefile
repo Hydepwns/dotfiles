@@ -58,10 +58,10 @@ install-optional: ## Install optional tools interactively
 
 # Testing and development
 test: ## Run comprehensive dotfiles test suite
-	@echo "🧪 Running Dotfiles Test Suite..."
+	@echo "Running Dotfiles Test Suite..."
 	@$(SCRIPTS_DIR)/utils/test-suite.sh
 	@echo ""
-	@echo "📋 Test Categories:"
+	@echo "Test Categories:"
 	@echo "  • Core Infrastructure (chezmoi, git, config)"
 	@echo "  • Shell Configuration (zsh, modules)"
 	@echo "  • Tool Installation (Homebrew, Oh My Zsh, dev tools)"
@@ -69,8 +69,6 @@ test: ## Run comprehensive dotfiles test suite
 	@echo "  • Integration Tests (zsh syntax)"
 	@echo "  • Security Tests (sensitive files, SSH config)"
 
-performance-test: ## Run performance tests
-	@$(SCRIPTS_DIR)/utils/performance-test.sh
 
 perf: ## Run performance test
 	@$(SCRIPTS_DIR)/utils/performance-monitor.sh measure
@@ -96,9 +94,6 @@ lazy-load-stats: ## Show lazy loading stats
 lazy-load-clean: ## Clean lazy loading data
 	@$(SCRIPTS_DIR)/utils/lazy-load-tools.sh clean
 
-# CI/CD setup
-setup-ci: ## Setup CI/CD tools and pre-commit hooks
-	@$(SCRIPTS_DIR)/setup/setup-ci.sh
 
 # Template generation
 generate-template: ## Generate project template
@@ -108,10 +103,3 @@ generate-template: ## Generate project template
 		$(SCRIPTS_DIR)/utils/template-manager.sh list; \
 	fi
 
-# Tool version management
-tool-versions: ## Manage tool versions
-	@if [ -n "$(COMMAND)" ]; then \
-		$(SCRIPTS_DIR)/utils/update-tool-versions.sh "$(COMMAND)"; \
-	else \
-		$(SCRIPTS_DIR)/utils/update-tool-versions.sh --help; \
-	fi

@@ -19,7 +19,7 @@ linux environments out of the box.
 ### Method 1: NixOS-Specific Script (Recommended)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/hydepwns/dotfiles/main/scripts/setup/nixos-setup.sh | bash
+bash scripts/setup/nixos-quick-fix.sh
 ```
 
 This script:
