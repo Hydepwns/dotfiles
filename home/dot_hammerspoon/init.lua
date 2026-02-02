@@ -98,10 +98,9 @@ end
 -- Development tools launcher
 local function launchDevTools()
     local devApps = {
-        "kitty",
-        "Cursor",
-        "Neovim",
+        "Ghostty",
         "Zed",
+        "Neovim",
         "Brave Browser",
         "Firefox Developer Edition",
     }
@@ -117,21 +116,21 @@ end
 
 -- Quick terminal access
 local function quickTerminal()
-    local term = application.get("kitty")
+    local term = application.get("Ghostty")
     if term then
         term:activate()
     else
-        application.launchOrFocus("iTerm2")
+        application.launchOrFocus("Ghostty")
     end
 end
 
 -- Quick code editor access
 local function quickEditor()
-    local editor = application.get("Zed") or application.get("Cursor")
+    local editor = application.get("Zed")
     if editor then
         editor:activate()
     else
-        application.launchOrFocus("Neovim")
+        application.launchOrFocus("Zed")
     end
 end
 
@@ -255,8 +254,8 @@ hotkey.bind(cmd_alt, "b", toggleBluetooth)
 hotkey.bind(cmd_alt, "v", showClipboardHistory)
 
 -- Quick app switching
-hotkey.bind(cmd_alt, "1", function() launchOrFocus("Cursor") end)
-hotkey.bind(cmd_alt, "2", function() launchOrFocus("kitty") end)
+hotkey.bind(cmd_alt, "1", function() launchOrFocus("Zed") end)
+hotkey.bind(cmd_alt, "2", function() launchOrFocus("Ghostty") end)
 hotkey.bind(cmd_alt, "3", function() launchOrFocus("Brave Browser") end)
 hotkey.bind(cmd_alt, "4", function() launchOrFocus("Firefox Developer Edition") end)
 hotkey.bind(cmd_alt, "5", function() launchOrFocus("Neovim") end)

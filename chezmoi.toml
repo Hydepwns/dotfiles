@@ -6,6 +6,7 @@ name = "Hydepwns"
 # Oh My Zsh configuration
 oh_my_zsh_theme = "robbyrussell"
 oh_my_zsh_plugins = "git"
+starship = true
 
 # Personal flag for SSH templates
 personal = true
@@ -16,8 +17,8 @@ ohmyzsh = true
 nvm = false
 nodejs = true
 asdf = true
-elixir = false
-erlang = false
+elixir = true
+erlang = true
 lua = true
 direnv = true
 devenv = false
@@ -29,6 +30,10 @@ foundry = false
 huff = false
 solana = false
 orbstack = false
+tailscale = true
+onepassword = true
+aws = true
+infisical = true
 work = false
 
 # Platform-specific

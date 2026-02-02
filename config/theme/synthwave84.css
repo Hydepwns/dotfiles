@@ -1,0 +1,32 @@
+/* Synthwave84 Theme - CSS Variables
+ * Auto-generated from config/theme/synthwave84.toml
+ */
+
+:root {
+  /* Primary */
+  --sw84-bg: #262335;
+  --sw84-bg-dark: #241b2f;
+  --sw84-bg-light: #2a2139;
+  --sw84-fg: #ffffff;
+  --sw84-fg-dim: #848bbd;
+
+  /* Accent */
+  --sw84-accent: #ff7edb;
+  --sw84-accent-secondary: #36f9f6;
+
+  /* ANSI */
+  --sw84-black: #241b2f;
+  --sw84-red: #fe4450;
+  --sw84-green: #72f1b8;
+  --sw84-yellow: #fede5d;
+  --sw84-blue: #03edf9;
+  --sw84-magenta: #ff7edb;
+  --sw84-cyan: #36f9f6;
+  --sw84-white: #ffffff;
+
+  /* Status */
+  --sw84-error: #fe4450;
+  --sw84-warning: #fede5d;
+  --sw84-success: #72f1b8;
+  --sw84-info: #03edf9;
+}

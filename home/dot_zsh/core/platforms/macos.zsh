@@ -18,5 +18,12 @@ alias paste="pbpaste"
 alias ls="ls -G"
 alias flushdns="sudo dscacheutil -flushcache"
 
-# iTerm2 integration
-test -e "{{ .chezmoi.homeDir }}/.iterm2_shell_integration.zsh" && source "{{ .chezmoi.homeDir }}/.iterm2_shell_integration.zsh"
+# Terminal integration
+# Ghostty shell integration (primary terminal)
+if [[ "$TERM_PROGRAM" == "ghostty" ]]; then
+    # Ghostty has built-in shell integration
+    :
+# Fallback: iTerm2 integration
+elif test -e "{{ .chezmoi.homeDir }}/.iterm2_shell_integration.zsh"; then
+    source "{{ .chezmoi.homeDir }}/.iterm2_shell_integration.zsh"
+fi

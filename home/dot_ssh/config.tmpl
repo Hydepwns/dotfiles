@@ -5,14 +5,77 @@ HashKnownHosts no
 Host *
   AddKeysToAgent yes
   UseKeychain yes
+  IdentityFile ~/.ssh/id_ed25519
+  IdentitiesOnly yes
+{{- else }}
+
+Host *
+  AddKeysToAgent yes
+  IdentityFile ~/.ssh/id_ed25519
+  IdentitiesOnly yes
 {{- end }}
 
 Host github.com
   User git
+  IdentityFile ~/.ssh/id_ed25519
 
-# Add your custom hosts here
-# Example:
-# Host myserver
-#   HostName myserver.example.com
-#   User username
-#   ForwardAgent yes
+# Tailscale hosts (MagicDNS)
+# These use Tailscale's MagicDNS for name resolution
+Host bazzite
+  HostName bazzite
+  User droo
+  ForwardAgent yes
+
+Host dappnode-droo
+  HostName dappnode-droo
+  User droo
+  ForwardAgent yes
+
+Host dravado
+  HostName dravado
+  User droo
+  ForwardAgent yes
+
+Host mini-axol
+  HostName mini-axol
+  User droo
+  ForwardAgent yes
+
+Host ovh-solver
+  HostName ovh-solver
+  User droo
+  ForwardAgent yes
+
+Host ovh-ubuntu1
+  HostName ovh-ubuntu1
+  User droo
+  ForwardAgent yes
+
+Host slcl03-blackknight
+  HostName slcl03-blackknight
+  User droo
+  ForwardAgent yes
+
+Host turing-node-1
+  HostName turing-node-1
+  User droo
+  ForwardAgent yes
+
+Host turing-node-2
+  HostName turing-node-2
+  User droo
+  ForwardAgent yes
+
+Host turing-node-3
+  HostName turing-node-3
+  User droo
+  ForwardAgent yes
+
+Host udm-pro
+  HostName udm-pro
+  User root
+  ForwardAgent yes
+
+# Tailscale wildcard for any .ts.net hosts
+Host *.tail*.ts.net
+  ForwardAgent yes

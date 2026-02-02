@@ -35,9 +35,32 @@ function setup_go() {
 
 # Elixir development environment
 function setup_elixir() {
+    # Enable shell history in IEx
     export ERL_AFLAGS="-kernel shell_history enabled"
-    export ECTO_EDITOR="code"
+    # Editor for Ecto migrations
+    export ECTO_EDITOR="zed"
+    # Hex package manager
+    export HEX_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/hex"
+    export MIX_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/mix"
+    # Add escripts to PATH
+    export PATH="$MIX_HOME/escripts:$PATH"
+    # Enable ANSI colors in IEx
+    export ELIXIR_ERL_OPTIONS="-elixir ansi_enabled true"
     echo "Elixir environment configured"
+}
+
+# Phoenix project scaffold
+function phx_new() {
+    local name="${1:?Project name required}"
+    local opts="${2:-}"
+    mix archive.install hex phx_new --force
+    mix phx.new "$name" $opts
+}
+
+# Run Elixir script with dependencies
+function exs() {
+    local script="${1:?Script path required}"
+    elixir -r "$script"
 }
 
 # Web3 development environment
@@ -136,6 +159,11 @@ function setup_project() {
         "python"|"django"|"flask")
             setup_python
             echo "Python project environment ready"
+            ;;
+        "elixir"|"phoenix"|"phx")
+            setup_elixir
+            setup_db
+            echo "Elixir/Phoenix project environment ready"
             ;;
         "web3"|"solidity")
             setup_web3

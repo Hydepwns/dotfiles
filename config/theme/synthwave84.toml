@@ -1,0 +1,83 @@
+# Synthwave84 Theme - Single Source of Truth
+# Based on https://github.com/Hydepwns/synthwave84-zed
+#
+# This file defines all colors for the Synthwave84 theme.
+# Use scripts/utils/theme-generator.sh to generate configs for all tools.
+
+[meta]
+name = "Synthwave84"
+author = "Hydepwns"
+variant = "dark"
+
+[palette]
+# Primary colors
+background = "#262335"
+background_dark = "#241b2f"
+background_light = "#2a2139"
+foreground = "#ffffff"
+foreground_dim = "#848bbd"
+
+# Accent colors
+accent = "#ff7edb"          # Hot pink - primary accent
+accent_secondary = "#36f9f6" # Cyan - secondary accent
+
+# Cursor and selection
+cursor = "#ff7edb"
+selection_bg = "#ff7edb"
+selection_fg = "#241b2f"
+
+# UI elements
+border = "#495495"
+comment = "#848bbd"
+line_highlight = "#2a2139"
+
+# Syntax colors
+keyword = "#ff7edb"         # Pink - keywords, operators
+string = "#ff8b39"          # Orange - strings
+number = "#f97e72"          # Coral - numbers
+function = "#36f9f6"        # Cyan - functions
+variable = "#ff7edb"        # Pink - variables
+type = "#72f1b8"            # Green - types
+constant = "#f97e72"        # Coral - constants
+parameter = "#fe4450"       # Red - parameters
+
+# ANSI Terminal Colors
+[ansi]
+# Normal (0-7)
+black = "#241b2f"
+red = "#fe4450"
+green = "#72f1b8"
+yellow = "#fede5d"
+blue = "#03edf9"
+magenta = "#ff7edb"
+cyan = "#36f9f6"
+white = "#ffffff"
+
+# Bright (8-15)
+bright_black = "#495495"
+bright_red = "#fe4450"
+bright_green = "#72f1b8"
+bright_yellow = "#fede5d"
+bright_blue = "#03edf9"
+bright_magenta = "#ff7edb"
+bright_cyan = "#36f9f6"
+bright_white = "#ffffff"
+
+# Extended palette for UI elements
+[extended]
+error = "#fe4450"
+warning = "#fede5d"
+info = "#03edf9"
+success = "#72f1b8"
+hint = "#848bbd"
+
+# Git colors
+git_added = "#72f1b8"
+git_modified = "#fede5d"
+git_deleted = "#fe4450"
+git_untracked = "#ff7edb"
+
+# Diff colors
+diff_add_bg = "#72f1b820"
+diff_delete_bg = "#fe445020"
+diff_change_bg = "#fede5d20"

@@ -96,6 +96,67 @@ lazy-load-stats: ## Show lazy loading stats
 lazy-load-clean: ## Clean lazy loading data
 	@$(SCRIPTS_DIR)/utils/lazy-load-tools.sh clean
 
+# Tailscale setup
+setup-tailscale: ## Install and configure Tailscale
+	@$(SCRIPTS_DIR)/setup/setup-tailscale.sh install
+
+tailscale-status: ## Show Tailscale network status
+	@$(SCRIPTS_DIR)/setup/setup-tailscale.sh status
+
+# Secrets management setup
+setup-secrets: ## Install 1Password, AWS CLI, Infisical, Tailscale
+	@$(SCRIPTS_DIR)/setup/setup-secrets.sh all
+
+secrets-status: ## Show secrets tools installation status
+	@$(SCRIPTS_DIR)/setup/setup-secrets.sh status
+
+# SSH key rotation
+rotate-keys: ## Generate new SSH key, store in 1Password, sync to Tailscale hosts
+	@$(SCRIPTS_DIR)/utils/secrets-rotation.sh rotate
+
+sync-keys: ## Sync SSH public key to all Tailscale hosts
+	@$(SCRIPTS_DIR)/utils/secrets-rotation.sh sync
+
+keys-status: ## Show SSH key rotation status
+	@$(SCRIPTS_DIR)/utils/secrets-rotation.sh status
+
+# Dashboard
+dashboard: ## Show comprehensive service status dashboard
+	@$(SCRIPTS_DIR)/utils/dashboard.sh --all
+
+dashboard-watch: ## Show dashboard with auto-refresh
+	@$(SCRIPTS_DIR)/utils/dashboard.sh --watch
+
+dashboard-secrets: ## Show secrets providers status only
+	@$(SCRIPTS_DIR)/utils/dashboard.sh --secrets
+
+# Theming
+theme-generate: ## Generate all tool configs from unified theme
+	@$(SCRIPTS_DIR)/utils/theme-generator.sh all
+
+theme-list: ## List available theme generators
+	@$(SCRIPTS_DIR)/utils/theme-generator.sh list
+
+# Starship prompt
+setup-starship: ## Install and configure Starship prompt
+	@$(SCRIPTS_DIR)/setup/setup-starship.sh install
+
+# Brewfile management
+brew-install: ## Install packages from Brewfile
+	@$(SCRIPTS_DIR)/setup/setup-brew.sh install
+
+brew-dump: ## Update Brewfile from current system
+	@$(SCRIPTS_DIR)/setup/setup-brew.sh dump
+
+brew-check: ## Check for packages not in Brewfile
+	@$(SCRIPTS_DIR)/setup/setup-brew.sh check
+
+brew-cleanup: ## Remove packages not in Brewfile
+	@$(SCRIPTS_DIR)/setup/setup-brew.sh cleanup
+
+brew-update: ## Update Homebrew and all packages
+	@$(SCRIPTS_DIR)/setup/setup-brew.sh update
+
 # CI/CD setup
 setup-ci: ## Setup CI/CD tools and pre-commit hooks
 	@$(SCRIPTS_DIR)/setup/setup-ci.sh

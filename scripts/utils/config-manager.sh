@@ -18,8 +18,9 @@ get_config_file() {
         "tmux") echo "$HOME/.tmux.conf" ;;
         "nvim") echo "$HOME/.config/nvim/init.lua" ;;
         "kitty") echo "$HOME/.config/kitty/kitty.conf" ;;
+        "ghostty") echo "$HOME/Library/Application Support/com.mitchellh.ghostty/config" ;;
+        "aws") echo "$HOME/.aws/config" ;;
         "zed") echo "$HOME/.config/zed/settings.json" ;;
-        "cursor") echo "$HOME/Library/Application Support/Cursor/User/settings.json" ;;
         *) echo "" ;;
     esac
 }
@@ -106,7 +107,7 @@ set_config_value() {
 # List all configuration files
 list_configs() {
     echo "Available configuration files:"
-    local config_types=("chezmoi" "git" "zsh" "ssh" "tmux" "nvim" "kitty" "zed" "cursor")
+    local config_types=("chezmoi" "git" "zsh" "ssh" "tmux" "nvim" "kitty" "ghostty" "aws" "zed")
 
     for config_type in "${config_types[@]}"; do
         local config_file
@@ -114,9 +115,9 @@ list_configs() {
         local status=""
 
         if [[ -f "$config_file" ]]; then
-            status="✓"
+            status="[ok]"
         else
-            status="✗"
+            status="[--]"
         fi
 
         printf "  %-15s %s %s\n" "$config_type" "$status" "$config_file"
@@ -127,7 +128,7 @@ list_configs() {
 check_config_health() {
     local issues=()
 
-    local config_types=("chezmoi" "git" "zsh" "ssh" "tmux" "nvim" "kitty" "zed" "cursor")
+    local config_types=("chezmoi" "git" "zsh" "ssh" "tmux" "nvim" "kitty" "ghostty" "aws" "zed")
 
     for config_type in "${config_types[@]}"; do
         local config_file
