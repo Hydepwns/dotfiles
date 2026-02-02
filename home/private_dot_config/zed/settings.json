@@ -1,0 +1,180 @@
+{
+  "theme": "Synthwave84 Soft",
+  "buffer_font_family": "Monaspace Neon",
+  "buffer_font_size": 14,
+  "buffer_line_height": {
+    "custom": 1.4
+  },
+  "buffer_font_features": {
+    "liga": true,
+    "calt": true,
+    "ss01": true,
+    "ss02": true,
+    "ss03": true,
+    "ss04": true,
+    "ss05": true,
+    "ss06": true,
+    "ss07": true,
+    "ss08": true,
+    "zero": true
+  },
+  "ui_font_family": "Monaspace Neon",
+  "ui_font_size": 14,
+  "tab_size": 2,
+  "hard_tabs": false,
+  "ensure_final_newline_on_save": true,
+  "remove_trailing_whitespace_on_save": true,
+  "format_on_save": "on",
+  "autosave": "on_focus_change",
+  "soft_wrap": "bounded",
+  "preferred_line_length": 100,
+  "show_whitespaces": "selection",
+  "relative_line_numbers": false,
+  "cursor_blink": true,
+  "scrollbar": {
+    "show": "auto"
+  },
+  "gutter": {
+    "line_numbers": true,
+    "code_actions": true,
+    "runnables": true,
+    "folds": true
+  },
+  "vertical_scroll_margin": 5,
+  "indent_guides": {
+    "enabled": true,
+    "coloring": "indent_aware"
+  },
+  "inlay_hints": {
+    "enabled": true,
+    "show_type_hints": true,
+    "show_parameter_hints": true
+  },
+  "git": {
+    "git_gutter": "tracked_files",
+    "inline_blame": {
+      "enabled": true,
+      "delay_ms": 500
+    }
+  },
+  "terminal": {
+    "font_family": "Monaspace Neon",
+    "font_size": 13,
+    "line_height": {
+      "custom": 1.3
+    },
+    "blinking": "on",
+    "shell": {
+      "program": "zsh"
+    },
+    "env": {
+      "TERM": "xterm-256color"
+    }
+  },
+  "project_panel": {
+    "dock": "left",
+    "git_status": true,
+    "indent_size": 16,
+    "auto_reveal_entries": true,
+    "auto_fold_dirs": false
+  },
+  "outline_panel": {
+    "dock": "right"
+  },
+  "collaboration_panel": {
+    "dock": "right"
+  },
+  "notification_panel": {
+    "dock": "right"
+  },
+  "chat_panel": {
+    "dock": "right"
+  },
+  "assistant": {
+    "enabled": true,
+    "version": "2",
+    "default_model": {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-20250514"
+    }
+  },
+  "features": {
+    "inline_completion_provider": "copilot"
+  },
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
+  },
+  "file_scan_exclusions": [
+    "**/.git",
+    "**/.svn",
+    "**/.hg",
+    "**/CVS",
+    "**/.DS_Store",
+    "**/Thumbs.db",
+    "**/node_modules",
+    "**/dist",
+    "**/build",
+    "**/target",
+    "**/_build",
+    "**/deps",
+    "**/.elixir_ls",
+    "**/.next",
+    "**/.nuxt",
+    "**/coverage",
+    "**/.nyc_output"
+  ],
+  "file_types": {
+    "Elixir": ["ex", "exs", "heex", "leex", "sface"],
+    "Shell Script": ["sh", "bash", "zsh"],
+    "TOML": ["toml"],
+    "Lua": ["lua"]
+  },
+  "languages": {
+    "Elixir": {
+      "tab_size": 2,
+      "format_on_save": "on"
+    },
+    "TypeScript": {
+      "tab_size": 2,
+      "format_on_save": "on"
+    },
+    "JavaScript": {
+      "tab_size": 2,
+      "format_on_save": "on"
+    },
+    "Rust": {
+      "tab_size": 4,
+      "format_on_save": "on"
+    },
+    "Go": {
+      "tab_size": 4,
+      "hard_tabs": true,
+      "format_on_save": "on"
+    },
+    "Lua": {
+      "tab_size": 2,
+      "format_on_save": "on"
+    },
+    "Python": {
+      "tab_size": 4,
+      "format_on_save": "on"
+    }
+  },
+  "lsp": {
+    "elixir-ls": {
+      "settings": {
+        "dialyzerEnabled": true,
+        "fetchDeps": false,
+        "suggestSpecs": true
+      }
+    },
+    "rust-analyzer": {
+      "settings": {
+        "checkOnSave": {
+          "command": "clippy"
+        }
+      }
+    }
+  }
+}

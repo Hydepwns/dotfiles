@@ -23,6 +23,7 @@ brew "wget"
 brew "git"
 brew "shellcheck"              # Shell linting
 brew "starship"                # Cross-shell prompt
+brew "tldr"                    # Simplified man pages
 
 # =============================================================================
 # LANGUAGES & RUNTIMES
@@ -94,6 +95,8 @@ brew "pkgconf"
 # Git utilities
 brew "bfg"                     # Repo cleaner
 brew "git-filter-repo"
+brew "git-delta"               # Better git diffs
+brew "gh"                      # GitHub CLI
 
 # LLVM/Compilers
 brew "zig"

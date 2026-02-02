@@ -82,7 +82,10 @@ export PATH="$HOME/.asdf/installs/nodejs/18.19.0/bin:$PATH"
 |--------|-------------|---------|
 | `home/dot_*` | `~/.*` | Chezmoi-managed dotfiles |
 | `home/dot_zsh/` | `~/.zsh/` | Modular zsh configuration |
-| `config/` | Manual deploy | App configs (ghostty, kitty, nvim, zed) |
+| `home/dot_claude/` | `~/.claude/` | Claude Code config (CLAUDE.md, settings.json) |
+| `home/private_dot_config/ghostty/` | `~/.config/ghostty/` | Ghostty terminal config |
+| `home/private_dot_config/zed/` | `~/.config/zed/` | Zed editor settings |
+| `config/` | Manual deploy | Theme source, starship, extra configs |
 | `scripts/setup/` | - | One-time installation scripts |
 | `scripts/utils/` | - | Ongoing maintenance utilities |
 

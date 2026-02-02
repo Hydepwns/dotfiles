@@ -59,6 +59,7 @@ Thumbs.db
 .claude/ide/
 .claude/paste-cache/
 .claude/plans/
+.claude/plugins/
 .claude/projects/
 .claude/session-env/
 .claude/settings.local.json
@@ -69,6 +70,17 @@ Thumbs.db
 .claude/telemetry/
 .claude/todos/
 .claude.json
+
+# Zed (ignore runtime files, keep settings)
+.config/zed/conversations/
+.config/zed/embeddings/
+.config/zed/extensions/
+.config/zed/languages/
+.config/zed/prompts/
+.config/zed/themes/
+.config/zed/users/
+.config/zed/*.backup
+.config/zed/settings_backup.json
 
 # Development tools
 .cargo/
