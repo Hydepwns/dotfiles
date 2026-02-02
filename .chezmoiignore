@@ -82,6 +82,13 @@ Thumbs.db
 .config/zed/*.backup
 .config/zed/settings_backup.json
 
+# Neovim (ignore runtime files)
+.config/nvim/.git/
+.config/nvim/lazy-lock.json
+.local/share/nvim/
+.local/state/nvim/
+.cache/nvim/
+
 # Development tools
 .cargo/
 .rustup/
