@@ -1,0 +1,45 @@
+# shellcheck disable=all
+# This file contains chezmoi template syntax which will be processed by chezmoi
+{{- if eq .chezmoi.os "darwin" -}}
+# MacPorts Installer addition
+export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+export MANPATH="/opt/local/share/man:$MANPATH"
+
+# Homebrew
+eval "$({{ .brewPrefix }}/bin/brew shellenv)"
+
+{{- if .solana -}}
+# Solana
+export PATH="{{ .chezmoi.homeDir }}/.local/share/solana/install/active_release/bin:$PATH"
+{{- end -}}
+
+{{- if .orbstack -}}
+# Added by OrbStack: command-line tools and integration
+source ~/.orbstack/shell/init.zsh 2>/dev/null || :
+{{- end -}}
+
+{{- if .rbenv -}}
+# rbenv initialization
+eval "$(rbenv init - --no-rehash zsh)"
+{{- end -}}
+
+# pipx
+export PATH="$PATH:{{ .chezmoi.homeDir }}/.local/bin"
+
+{{- else if eq .chezmoi.os "linux" -}}
+# Linux-specific profile settings
+export PATH="/usr/local/bin:$PATH"
+
+{{- if .orbstack -}}
+# Added by OrbStack: command-line tools and integration
+source ~/.orbstack/shell/init.zsh 2>/dev/null || :
+{{- end -}}
+
+{{- if .rbenv -}}
+# rbenv initialization
+eval "$(rbenv init - --no-rehash zsh)"
+{{- end -}}
+
+# pipx
+export PATH="$PATH:{{ .chezmoi.homeDir }}/.local/bin"
+{{- end -}}
