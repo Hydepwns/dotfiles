@@ -96,39 +96,39 @@ bind -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "xclip 
 {{ end -}}
 
 # -----------------------------------------------------------------------------
-# Synthwave84 Theme
+# {{ .theme.name }} Theme
 # -----------------------------------------------------------------------------
 
 # Pane borders
-set -g pane-border-style "fg=#495495"
-set -g pane-active-border-style "fg=#ff7edb"
+set -g pane-border-style "fg={{ .theme.border }}"
+set -g pane-active-border-style "fg={{ .theme.accent }}"
 
 # Status bar
 set -g status-position bottom
 set -g status-justify left
-set -g status-style "bg=#262335,fg=#ffffff"
+set -g status-style "bg={{ .theme.bg }},fg={{ .theme.fg }}"
 
 # Status left - session name
 set -g status-left-length 30
-set -g status-left "#[fg=#262335,bg=#ff7edb,bold] #S #[fg=#ff7edb,bg=#262335]"
+set -g status-left "#[fg={{ .theme.bg }},bg={{ .theme.accent }},bold] #S #[fg={{ .theme.accent }},bg={{ .theme.bg }}]"
 
 # Status right - date/time
 set -g status-right-length 50
-set -g status-right "#[fg=#495495]#[fg=#ffffff,bg=#495495] %H:%M #[fg=#72f1b8]#[fg=#262335,bg=#72f1b8,bold] %d-%b "
+set -g status-right "#[fg={{ .theme.border }}]#[fg={{ .theme.fg }},bg={{ .theme.border }}] %H:%M #[fg={{ .theme.green }}]#[fg={{ .theme.bg }},bg={{ .theme.green }},bold] %d-%b "
 
 # Window status
-setw -g window-status-format "#[fg=#495495,bg=#262335] #I:#W "
-setw -g window-status-current-format "#[fg=#262335,bg=#36f9f6]#[fg=#262335,bg=#36f9f6,bold] #I:#W #[fg=#36f9f6,bg=#262335]"
+setw -g window-status-format "#[fg={{ .theme.border }},bg={{ .theme.bg }}] #I:#W "
+setw -g window-status-current-format "#[fg={{ .theme.bg }},bg={{ .theme.accent2 }}]#[fg={{ .theme.bg }},bg={{ .theme.accent2 }},bold] #I:#W #[fg={{ .theme.accent2 }},bg={{ .theme.bg }}]"
 
 # Message style
-set -g message-style "fg=#262335,bg=#fede5d,bold"
-set -g message-command-style "fg=#262335,bg=#fede5d"
+set -g message-style "fg={{ .theme.bg }},bg={{ .theme.yellow }},bold"
+set -g message-command-style "fg={{ .theme.bg }},bg={{ .theme.yellow }}"
 
 # Mode style (selection)
-setw -g mode-style "fg=#262335,bg=#ff7edb,bold"
+setw -g mode-style "fg={{ .theme.bg }},bg={{ .theme.accent }},bold"
 
 # Clock
-setw -g clock-mode-colour "#72f1b8"
+setw -g clock-mode-colour "{{ .theme.green }}"
 
 # -----------------------------------------------------------------------------
 # Session Management

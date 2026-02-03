@@ -26,10 +26,10 @@ local hyper = { "cmd", "alt", "ctrl", "shift" }
 local meh = { "cmd", "alt", "ctrl" }
 local super = { "cmd", "alt" }
 
--- Alert styling (Synthwave84 inspired)
+-- Alert styling ({{ .theme.name }} inspired)
 alert.defaultStyle.strokeColor = { white = 0, alpha = 0 }
-alert.defaultStyle.fillColor = { hex = "#262335", alpha = 0.95 }
-alert.defaultStyle.textColor = { hex = "#ff7edb" }
+alert.defaultStyle.fillColor = { hex = "{{ .theme.bg }}", alpha = 0.95 }
+alert.defaultStyle.textColor = { hex = "{{ .theme.accent }}" }
 alert.defaultStyle.textFont = "Monaspace Neon"
 alert.defaultStyle.textSize = 18
 alert.defaultStyle.radius = 8
