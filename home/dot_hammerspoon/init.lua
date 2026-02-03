@@ -1,87 +1,128 @@
--- Hammerspoon configuration for DROO's dotfiles
--- Customized for development workflow and productivity
+-- DROO's Hammerspoon Config
+-- Window management, app launching, and productivity tools
+-- =============================================================================
 
--- Load required modules
-local hs = require("hs")
 local hotkey = require("hs.hotkey")
 local window = require("hs.window")
 local screen = require("hs.screen")
 local grid = require("hs.grid")
 local alert = require("hs.alert")
-local fnutils = require("hs.fnutils")
-local keycodes = require("hs.keycodes")
 local application = require("hs.application")
+local caffeinate = require("hs.caffeinate")
+local pasteboard = require("hs.pasteboard")
+local chooser = require("hs.chooser")
+local timer = require("hs.timer")
 
--- Configure grid
-grid.setGrid('12x12')
-grid.setMargins({0, 0})
+-- =============================================================================
+-- Configuration
+-- =============================================================================
 
--- Set up hotkey mods
-local hyper = {"cmd", "alt", "ctrl", "shift"}
-local cmd_alt = {"cmd", "alt"}
-local cmd_shift = {"cmd", "shift"}
+-- Grid setup
+grid.setGrid("12x12")
+grid.setMargins({ 0, 0 })
 
--- Window management functions
-local function moveWindowToScreen(direction)
-    local win = window.focusedWindow()
-    if win then
-        local currentScreen = win:screen()
-        local screens = screen.allScreens()
-        local currentIndex = fnutils.indexOf(screens, currentScreen)
-        local targetIndex = nil
+-- Hotkey modifiers
+local hyper = { "cmd", "alt", "ctrl", "shift" }
+local meh = { "cmd", "alt", "ctrl" }
+local super = { "cmd", "alt" }
 
-        if direction == "left" then
-            targetIndex = currentIndex - 1
-            if targetIndex < 1 then targetIndex = #screens end
-        elseif direction == "right" then
-            targetIndex = currentIndex + 1
-            if targetIndex > #screens then targetIndex = 1 end
-        end
+-- Alert styling (Synthwave84 inspired)
+alert.defaultStyle.strokeColor = { white = 0, alpha = 0 }
+alert.defaultStyle.fillColor = { hex = "#262335", alpha = 0.95 }
+alert.defaultStyle.textColor = { hex = "#ff7edb" }
+alert.defaultStyle.textFont = "Monaspace Neon"
+alert.defaultStyle.textSize = 18
+alert.defaultStyle.radius = 8
+alert.defaultStyle.fadeInDuration = 0.1
+alert.defaultStyle.fadeOutDuration = 0.1
 
-        if targetIndex then
-            win:moveToScreen(screens[targetIndex])
-            alert.show("Moved window to screen " .. targetIndex)
-        end
-    end
-end
+-- =============================================================================
+-- Window Management
+-- =============================================================================
 
--- Grid positioning functions
-local function snapToGrid(x, y, w, h)
+-- Snap window to grid position
+local function snapTo(x, y, w, h)
     local win = window.focusedWindow()
     if win then
         grid.set(win, hs.geometry.rect(x, y, w, h))
     end
 end
 
--- Development-specific window layouts
-local function setupDevLayout()
+-- Common layouts
+local layouts = {
+    left_half = function() snapTo(0, 0, 6, 12) end,
+    right_half = function() snapTo(6, 0, 6, 12) end,
+    left_third = function() snapTo(0, 0, 4, 12) end,
+    center_third = function() snapTo(4, 0, 4, 12) end,
+    right_third = function() snapTo(8, 0, 4, 12) end,
+    left_two_thirds = function() snapTo(0, 0, 8, 12) end,
+    right_two_thirds = function() snapTo(4, 0, 8, 12) end,
+    top_half = function() snapTo(0, 0, 12, 6) end,
+    bottom_half = function() snapTo(0, 6, 12, 6) end,
+    full = function() snapTo(0, 0, 12, 12) end,
+    center = function() snapTo(2, 1, 8, 10) end,
+    -- Quadrants
+    top_left = function() snapTo(0, 0, 6, 6) end,
+    top_right = function() snapTo(6, 0, 6, 6) end,
+    bottom_left = function() snapTo(0, 6, 6, 6) end,
+    bottom_right = function() snapTo(6, 6, 6, 6) end,
+}
+
+-- Move window to next/prev screen
+local function moveToScreen(direction)
     local win = window.focusedWindow()
-    if win then
-        -- Left: Terminal/Editor (8/12 width)
-        -- Right: Browser/Docs (4/12 width)
-        grid.set(win, hs.geometry.rect(0, 0, 8, 12))
-        alert.show("Dev Layout: Terminal/Editor")
+    if not win then return end
+
+    local screens = screen.allScreens()
+    local currentScreen = win:screen()
+    local currentIndex = hs.fnutils.indexOf(screens, currentScreen) or 1
+
+    local targetIndex
+    if direction == "next" then
+        targetIndex = currentIndex + 1
+        if targetIndex > #screens then targetIndex = 1 end
+    else
+        targetIndex = currentIndex - 1
+        if targetIndex < 1 then targetIndex = #screens end
     end
+
+    win:moveToScreen(screens[targetIndex])
+    alert.show("Screen " .. targetIndex)
 end
 
-local function setupFullScreenLayout()
-    local win = window.focusedWindow()
-    if win then
-        grid.set(win, hs.geometry.rect(0, 0, 12, 12))
-        alert.show("Full Screen")
-    end
-end
+-- =============================================================================
+-- Window Keybindings
+-- =============================================================================
 
-local function setupSplitLayout()
-    local win = window.focusedWindow()
-    if win then
-        -- Left half
-        grid.set(win, hs.geometry.rect(0, 0, 6, 12))
-        alert.show("Split Layout: Left Half")
-    end
-end
+-- Halves (super + arrows)
+hotkey.bind(super, "left", layouts.left_half)
+hotkey.bind(super, "right", layouts.right_half)
+hotkey.bind(super, "up", layouts.full)
+hotkey.bind(super, "down", layouts.center)
 
--- Application launcher functions
+-- Thirds (super + 1-3)
+hotkey.bind(super, "1", layouts.left_third)
+hotkey.bind(super, "2", layouts.center_third)
+hotkey.bind(super, "3", layouts.right_third)
+
+-- Two-thirds (super + 4-5)
+hotkey.bind(super, "4", layouts.left_two_thirds)
+hotkey.bind(super, "5", layouts.right_two_thirds)
+
+-- Quadrants (meh + arrows)
+hotkey.bind(meh, "left", layouts.top_left)
+hotkey.bind(meh, "right", layouts.top_right)
+hotkey.bind(meh, "up", layouts.bottom_left)
+hotkey.bind(meh, "down", layouts.bottom_right)
+
+-- Move between screens (hyper + h/l)
+hotkey.bind(hyper, "h", function() moveToScreen("prev") end)
+hotkey.bind(hyper, "l", function() moveToScreen("next") end)
+
+-- =============================================================================
+-- Application Launching
+-- =============================================================================
+
 local function launchOrFocus(appName)
     local app = application.get(appName)
     if app then
@@ -95,230 +136,206 @@ local function launchOrFocus(appName)
     end
 end
 
--- Development tools launcher
-local function launchDevTools()
-    local devApps = {
-        "Ghostty",
-        "Zed",
-        "Neovim",
-        "Brave Browser",
-        "Firefox Developer Edition",
+-- App shortcuts (super + letter)
+hotkey.bind(super, "t", function() launchOrFocus("Ghostty") end)
+hotkey.bind(super, "e", function() launchOrFocus("Zed") end)
+hotkey.bind(super, "b", function() launchOrFocus("Brave Browser") end)
+hotkey.bind(super, "f", function() launchOrFocus("Firefox") end)
+hotkey.bind(super, "d", function() launchOrFocus("Discord") end)
+hotkey.bind(super, "s", function() launchOrFocus("Slack") end)
+hotkey.bind(super, "m", function() launchOrFocus("Messages") end)
+hotkey.bind(super, "n", function() launchOrFocus("Notes") end)
+
+-- =============================================================================
+-- Application Chooser
+-- =============================================================================
+
+local appChooser = nil
+
+local function showAppChooser()
+    local apps = {
+        { text = "Ghostty", subText = "Terminal", app = "Ghostty" },
+        { text = "Zed", subText = "Editor", app = "Zed" },
+        { text = "Neovim", subText = "Editor", app = "Neovim" },
+        { text = "Brave", subText = "Browser", app = "Brave Browser" },
+        { text = "Firefox", subText = "Browser", app = "Firefox" },
+        { text = "Discord", subText = "Chat", app = "Discord" },
+        { text = "Slack", subText = "Chat", app = "Slack" },
+        { text = "1Password", subText = "Secrets", app = "1Password" },
+        { text = "Docker", subText = "Containers", app = "Docker" },
+        { text = "OrbStack", subText = "Containers", app = "OrbStack" },
     }
 
-    for _, appName in ipairs(devApps) do
-        local app = application.get(appName)
-        if app then
-            app:activate()
-            break
+    appChooser = chooser.new(function(choice)
+        if choice then
+            launchOrFocus(choice.app)
         end
-    end
+    end)
+
+    appChooser:choices(apps)
+    appChooser:searchSubText(true)
+    appChooser:show()
 end
 
--- Quick terminal access
-local function quickTerminal()
-    local term = application.get("Ghostty")
-    if term then
-        term:activate()
-    else
-        application.launchOrFocus("Ghostty")
-    end
-end
+hotkey.bind(super, "space", showAppChooser)
 
--- Quick code editor access
-local function quickEditor()
-    local editor = application.get("Zed")
-    if editor then
-        editor:activate()
-    else
-        application.launchOrFocus("Zed")
-    end
-end
+-- =============================================================================
+-- Clipboard History
+-- =============================================================================
 
--- Quick Zed access
-local function quickZed()
-    local zed = application.get("Zed")
-    if zed then
-        zed:activate()
-    else
-        application.launchOrFocus("Zed")
-    end
-end
+local clipHistory = {}
+local maxClipHistory = 20
 
--- Browser management
-local function cycleBrowsers()
-    local browsers = {"Brave Browser", "Firefox Developer Edition", "Ladybird"}
-    local currentApp = application.frontmostApplication()
-    local currentIndex = fnutils.indexOf(browsers, currentApp:name())
-
-    local nextIndex = 1
-    if currentIndex then
-        nextIndex = currentIndex + 1
-        if nextIndex > #browsers then nextIndex = 1 end
-    end
-
-    launchOrFocus(browsers[nextIndex])
-end
-
--- System utilities
-local function toggleWiFi()
-    local wifi = hs.wifi.interfaceDetails()
-    if wifi then
-        hs.wifi.setPower(false)
-        alert.show("WiFi: OFF")
-    else
-        hs.wifi.setPower(true)
-        alert.show("WiFi: ON")
-    end
-end
-
-local function toggleBluetooth()
-    local bt = hs.bluetooth.state()
-    if bt == "PoweredOn" then
-        hs.bluetooth.power(false)
-        alert.show("Bluetooth: OFF")
-    else
-        hs.bluetooth.power(true)
-        alert.show("Bluetooth: ON")
-    end
-end
-
--- Clipboard management
-local clipboardHistory = {}
-local maxClipboardHistory = 10
-
-local function saveToClipboardHistory()
-    local content = hs.pasteboard.getContents()
+local function saveClip()
+    local content = pasteboard.getContents()
     if content and content ~= "" then
-        table.insert(clipboardHistory, 1, content)
-        if #clipboardHistory > maxClipboardHistory then
-            table.remove(clipboardHistory)
-        end
-    end
-end
-
-local function showClipboardHistory()
-    if #clipboardHistory > 0 then
-        local choices = {}
-        for i, content in ipairs(clipboardHistory) do
-            local preview = string.sub(content, 1, 50)
-            if #content > 50 then preview = preview .. "..." end
-            table.insert(choices, {text = preview, subText = content})
-        end
-
-        local chooser = hs.chooser.new(function(choice)
-            if choice then
-                hs.pasteboard.setContents(choice.subText)
-                alert.show("Copied to clipboard")
+        -- Avoid duplicates
+        for i, v in ipairs(clipHistory) do
+            if v == content then
+                table.remove(clipHistory, i)
+                break
             end
-        end)
-        chooser:choices(choices)
-        chooser:show()
+        end
+        table.insert(clipHistory, 1, content)
+        if #clipHistory > maxClipHistory then
+            table.remove(clipHistory)
+        end
     end
 end
 
--- Monitor clipboard changes
-hs.timer.doEvery(1, saveToClipboardHistory)
+local function showClipHistory()
+    if #clipHistory == 0 then
+        alert.show("Clipboard empty")
+        return
+    end
 
--- Hotkey bindings
--- Window management
-hotkey.bind(hyper, "h", function() moveWindowToScreen("left") end)
-hotkey.bind(hyper, "l", function() moveWindowToScreen("right") end)
-hotkey.bind(hyper, "j", function() window.focusedWindow():focusWindowWest() end)
-hotkey.bind(hyper, "k", function() window.focusedWindow():focusWindowEast() end)
+    local choices = {}
+    for i, content in ipairs(clipHistory) do
+        local preview = string.gsub(content, "\n", " ")
+        preview = string.sub(preview, 1, 60)
+        if #content > 60 then preview = preview .. "..." end
+        table.insert(choices, { text = preview, full = content })
+    end
 
--- Grid positioning
-hotkey.bind(cmd_alt, "1", function() snapToGrid(0, 0, 6, 12) end)   -- Left half
-hotkey.bind(cmd_alt, "2", function() snapToGrid(6, 0, 6, 12) end)   -- Right half
-hotkey.bind(cmd_alt, "3", function() snapToGrid(0, 0, 8, 12) end)   -- Left 2/3
-hotkey.bind(cmd_alt, "4", function() snapToGrid(8, 0, 4, 12) end)   -- Right 1/3
-hotkey.bind(cmd_alt, "5", function() snapToGrid(0, 0, 4, 12) end)   -- Left 1/3
-hotkey.bind(cmd_alt, "6", function() snapToGrid(4, 0, 8, 12) end)   -- Right 2/3
+    local clipChooser = chooser.new(function(choice)
+        if choice then
+            pasteboard.setContents(choice.full)
+            alert.show("Copied")
+        end
+    end)
 
--- Layout presets
-hotkey.bind(cmd_alt, "d", setupDevLayout)
-hotkey.bind(cmd_alt, "f", setupFullScreenLayout)
-hotkey.bind(cmd_alt, "s", setupSplitLayout)
-
--- Application launchers
-hotkey.bind(cmd_alt, "t", quickTerminal)
-hotkey.bind(cmd_alt, "e", quickEditor)
-hotkey.bind(cmd_alt, "z", quickZed)
-hotkey.bind(cmd_alt, "b", cycleBrowsers)
-hotkey.bind(cmd_alt, "a", launchDevTools)
-
--- System utilities
-hotkey.bind(cmd_alt, "w", toggleWiFi)
-hotkey.bind(cmd_alt, "b", toggleBluetooth)
-
--- Clipboard management
-hotkey.bind(cmd_alt, "v", showClipboardHistory)
-
--- Quick app switching
-hotkey.bind(cmd_alt, "1", function() launchOrFocus("Zed") end)
-hotkey.bind(cmd_alt, "2", function() launchOrFocus("Ghostty") end)
-hotkey.bind(cmd_alt, "3", function() launchOrFocus("Brave Browser") end)
-hotkey.bind(cmd_alt, "4", function() launchOrFocus("Firefox Developer Edition") end)
-hotkey.bind(cmd_alt, "5", function() launchOrFocus("Neovim") end)
-
--- Development-specific shortcuts
-hotkey.bind(cmd_alt, "d", function() launchOrFocus("Docker") end)
-hotkey.bind(cmd_alt, "o", function() launchOrFocus("OrbStack") end)
-hotkey.bind(cmd_alt, "p", function() launchOrFocus("Postman") end)
-
--- Utility functions
-local function reloadConfig()
-    hs.reload()
-    alert.show("Hammerspoon config reloaded")
+    clipChooser:choices(choices)
+    clipChooser:show()
 end
 
-hotkey.bind(cmd_alt, "r", reloadConfig)
+timer.doEvery(1, saveClip)
+hotkey.bind(super, "v", showClipHistory)
 
--- Auto-reload on file changes
-hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reloadConfig):start()
+-- =============================================================================
+-- Quick Actions
+-- =============================================================================
 
--- Status indicator
-local statusMenu = hs.menubar.new()
-statusMenu:setTitle("🔨")
-statusMenu:setMenu({
-    {title = "Reload Config", fn = reloadConfig},
-    {title = "-"},
-    {title = "Dev Layout", fn = setupDevLayout},
-    {title = "Full Screen", fn = setupFullScreenLayout},
-    {title = "Split Layout", fn = setupSplitLayout},
-    {title = "-"},
-    {title = "Terminal", fn = quickTerminal},
-    {title = "Editor", fn = quickEditor},
-    {title = "Browsers", fn = cycleBrowsers},
-    {title = "-"},
-    {title = "Clipboard History", fn = showClipboardHistory},
-    {title = "-"},
-    {title = "Quit", fn = function() hs.quit() end}
+-- Lock screen
+hotkey.bind(hyper, "q", function()
+    caffeinate.lockScreen()
+end)
+
+-- Toggle dark mode
+hotkey.bind(hyper, "d", function()
+    hs.osascript.applescript([[
+        tell application "System Events"
+            tell appearance preferences
+                set dark mode to not dark mode
+            end tell
+        end tell
+    ]])
+    alert.show("Dark mode toggled")
+end)
+
+-- Caffeinate (prevent sleep)
+local caffeine = nil
+hotkey.bind(hyper, "c", function()
+    if caffeine then
+        caffeine:stop()
+        caffeine = nil
+        alert.show("Sleep enabled")
+    else
+        caffeine = caffeinate.set("displayIdle", true, true)
+        alert.show("Caffeinated")
+    end
+end)
+
+-- =============================================================================
+-- Window Hints
+-- =============================================================================
+
+hotkey.bind(super, "w", function()
+    hs.hints.windowHints()
+end)
+
+-- =============================================================================
+-- Reload Config
+-- =============================================================================
+
+hotkey.bind(hyper, "r", function()
+    hs.reload()
+end)
+
+hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", function()
+    hs.reload()
+end):start()
+
+-- =============================================================================
+-- Menu Bar
+-- =============================================================================
+
+local menu = hs.menubar.new()
+menu:setTitle("HS")
+menu:setMenu({
+    { title = "Windows", disabled = true },
+    { title = "  Left Half", fn = layouts.left_half },
+    { title = "  Right Half", fn = layouts.right_half },
+    { title = "  Full Screen", fn = layouts.full },
+    { title = "  Center", fn = layouts.center },
+    { title = "-" },
+    { title = "Apps", disabled = true },
+    { title = "  Ghostty", fn = function() launchOrFocus("Ghostty") end },
+    { title = "  Zed", fn = function() launchOrFocus("Zed") end },
+    { title = "  Browser", fn = function() launchOrFocus("Brave Browser") end },
+    { title = "-" },
+    { title = "Tools", disabled = true },
+    { title = "  Clipboard History", fn = showClipHistory },
+    { title = "  Lock Screen", fn = function() caffeinate.lockScreen() end },
+    { title = "-" },
+    { title = "Reload", fn = function() hs.reload() end },
 })
 
--- Welcome message
-alert.show("Hammerspoon loaded! 🔨", 2)
+-- =============================================================================
+-- Startup
+-- =============================================================================
 
--- Print available shortcuts
-print("=== Hammerspoon Shortcuts ===")
-print("Window Management:")
-print("  Cmd+Alt+Ctrl+Shift + h/l: Move window between screens")
-print("  Cmd+Alt+Ctrl+Shift + j/k: Focus window left/right")
-print("")
-print("Grid Positioning:")
-print("  Cmd+Alt + 1-6: Snap to grid positions")
-print("  Cmd+Alt + d: Development layout")
-print("  Cmd+Alt + f: Full screen")
-print("  Cmd+Alt + s: Split layout")
-print("")
-print("Application Launchers:")
-print("  Cmd+Alt + t: Terminal")
-print("  Cmd+Alt + e: Code Editor")
-print("  Cmd+Alt + z: Zed Editor")
-print("  Cmd+Alt + b: Cycle browsers")
-print("  Cmd+Alt + a: Launch dev tools")
-print("")
-print("System:")
-print("  Cmd+Alt + w: Toggle WiFi")
-print("  Cmd+Alt + v: Clipboard history")
-print("  Cmd+Alt + r: Reload config")
-print("=============================")
+alert.show("Hammerspoon loaded", 1)
+
+print([[
+=== Hammerspoon Shortcuts ===
+Window Management:
+  Cmd+Alt + arrows    : Halves/Full/Center
+  Cmd+Alt + 1-5       : Thirds
+  Cmd+Alt+Ctrl + arr  : Quadrants
+  Hyper + h/l         : Move to screen
+
+Apps:
+  Cmd+Alt + t         : Ghostty
+  Cmd+Alt + e         : Zed
+  Cmd+Alt + b         : Brave
+  Cmd+Alt + space     : App chooser
+
+Utilities:
+  Cmd+Alt + v         : Clipboard history
+  Cmd+Alt + w         : Window hints
+  Hyper + q           : Lock screen
+  Hyper + c           : Caffeinate
+  Hyper + d           : Toggle dark mode
+  Hyper + r           : Reload config
+=============================
+]])

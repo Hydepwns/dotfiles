@@ -166,17 +166,17 @@ cask "font-monaspace-nerd-font"
 # vscode "golang.go"
 # vscode "rust-lang.rust-analyzer"
 
-# Additional dev tools
-# brew "gh"                    # GitHub CLI
-# brew "fd"                    # Better find
-# brew "ripgrep"               # Better grep
-# brew "bat"                   # Better cat
-# brew "eza"                   # Better ls
-# brew "fzf"                   # Fuzzy finder
-# brew "jq"                    # JSON processor
-# brew "yq"                    # YAML processor
-# brew "htop"
-# brew "tree"
+# Terminal power tools
+brew "fd"                      # Better find
+brew "ripgrep"                 # Better grep
+brew "bat"                     # Better cat
+brew "eza"                     # Better ls
+brew "fzf"                     # Fuzzy finder
+brew "zoxide"                  # Smarter cd
+brew "jq"                      # JSON processor
+brew "yq"                      # YAML processor
+brew "htop"                    # Better top
+brew "tree"                    # Directory tree
 
 # Kubernetes
 # brew "kubectl"

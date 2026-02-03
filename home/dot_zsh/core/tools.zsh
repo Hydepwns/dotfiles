@@ -1,25 +1,143 @@
-# shellcheck disable=all
-# Tool-specific configurations for DROO's dotfiles
+# Terminal Power Tools Integration
+# fzf, zoxide, eza, bat, fd, ripgrep
 
-# Load lazy loading system
-source "{{ .chezmoi.homeDir }}/.zsh/core/lazy-loading.zsh"
+# =============================================================================
+# FZF - Fuzzy Finder
+# =============================================================================
 
-# Note: Version managers are now lazy-loaded for better performance
-# They will be loaded only when first used
+if command -v fzf &>/dev/null; then
+    # Source fzf keybindings and completion
+    [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
 
-# devenv configuration
-if command -v devenv &> /dev/null; then
-    export DEVENV_DOTFILE=.devenv
-    export DEVENV_PROFILE=.devenv/.profile
+    # Source from brew if available
+    if [[ -f /opt/homebrew/opt/fzf/shell/completion.zsh ]]; then
+        source /opt/homebrew/opt/fzf/shell/completion.zsh
+        source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
+    fi
+
+    # Use fd for fzf if available (faster, respects .gitignore)
+    if command -v fd &>/dev/null; then
+        export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+        export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+        export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
+    fi
+
+    # Synthwave84 colors for fzf
+    export FZF_DEFAULT_OPTS="
+        --height 40%
+        --layout=reverse
+        --border
+        --info=inline
+        --color=bg+:#262335,bg:#262335,spinner:#ff7edb,hl:#fe4450
+        --color=fg:#ffffff,header:#72f1b8,info:#fede5d,pointer:#ff7edb
+        --color=marker:#72f1b8,fg+:#ffffff,prompt:#36f9f6,hl+:#fe4450
+        --bind='ctrl-/:toggle-preview'
+        --bind='ctrl-y:execute-silent(echo {} | pbcopy)'
+    "
+
+    # Preview with bat if available
+    if command -v bat &>/dev/null; then
+        export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range :500 {}'"
+    fi
+
+    # Preview directories with eza
+    if command -v eza &>/dev/null; then
+        export FZF_ALT_C_OPTS="--preview 'eza --tree --level=2 --color=always {}'"
+    fi
+
+    # fe - fuzzy edit
+    fe() {
+        local file
+        file=$(fzf --query="$1" --select-1 --exit-0)
+        [[ -n "$file" ]] && ${EDITOR:-nvim} "$file"
+    }
+
+    # fcd - fuzzy cd
+    fcd() {
+        local dir
+        dir=$(fd --type d --hidden --follow --exclude .git 2>/dev/null | fzf +m --query="$1")
+        [[ -n "$dir" ]] && cd "$dir"
+    }
+
+    # fkill - fuzzy kill process
+    fkill() {
+        local pid
+        pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+        [[ -n "$pid" ]] && echo "$pid" | xargs kill -${1:-9}
+    }
+
+    # fh - fuzzy history
+    fh() {
+        print -z $(fc -l 1 | fzf --tac +s --query="$*" | sed 's/ *[0-9]* *//')
+    }
+
+    # fbr - fuzzy git branch
+    fbr() {
+        local branch
+        branch=$(git branch -a | fzf --query="$1" | sed 's/^[* ]*//' | sed 's#remotes/origin/##')
+        [[ -n "$branch" ]] && git checkout "$branch"
+    }
 fi
 
-# Nix-specific settings
-if command -v nix &> /dev/null; then
-    # Nix shell integration
-    if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then
-        . ~/.nix-profile/etc/profile.d/nix.sh
-    fi
-    if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
-        . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-    fi
+# =============================================================================
+# ZOXIDE - Smarter cd
+# =============================================================================
+
+if command -v zoxide &>/dev/null; then
+    eval "$(zoxide init zsh)"
+fi
+
+# =============================================================================
+# EZA - Better ls
+# =============================================================================
+
+if command -v eza &>/dev/null; then
+    alias ls='eza --icons --group-directories-first'
+    alias ll='eza -l --icons --group-directories-first --git'
+    alias la='eza -la --icons --group-directories-first --git'
+    alias lt='eza --tree --level=2 --icons'
+    alias lta='eza --tree --level=2 --icons -a'
+    alias l='eza -l --icons --group-directories-first'
+else
+    alias ll='ls -lh'
+    alias la='ls -lah'
+fi
+
+# =============================================================================
+# BAT - Better cat
+# =============================================================================
+
+if command -v bat &>/dev/null; then
+    alias cat='bat --paging=never'
+    alias catp='bat'
+    alias catl='bat --style=numbers'
+    export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+    export MANROFFOPT="-c"
+    export BAT_THEME="Dracula"
+fi
+
+# =============================================================================
+# FD - Better find
+# =============================================================================
+
+if command -v fd &>/dev/null; then
+    alias find='fd'
+fi
+
+# =============================================================================
+# RIPGREP - Better grep
+# =============================================================================
+
+if command -v rg &>/dev/null; then
+    alias grep='rg'
+    alias rgi='rg -i'
+    alias rgl='rg -l'
+fi
+
+# =============================================================================
+# HTOP - Better top
+# =============================================================================
+
+if command -v htop &>/dev/null; then
+    alias top='htop'
 fi

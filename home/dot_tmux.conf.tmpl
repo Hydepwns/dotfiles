@@ -1,0 +1,158 @@
+# DROO's tmux config - Modern and minimal
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# General Settings
+# -----------------------------------------------------------------------------
+
+set -g default-terminal "tmux-256color"
+set -ag terminal-overrides ",xterm-256color:RGB"
+set -g mouse on
+set -g history-limit 50000
+set -g base-index 1
+setw -g pane-base-index 1
+set -g renumber-windows on
+set -g set-clipboard on
+set -sg escape-time 0
+set -g focus-events on
+setw -g aggressive-resize on
+
+# -----------------------------------------------------------------------------
+# Prefix Key - Ctrl+a (like screen)
+# -----------------------------------------------------------------------------
+
+unbind C-b
+set -g prefix C-a
+bind C-a send-prefix
+
+# -----------------------------------------------------------------------------
+# Key Bindings
+# -----------------------------------------------------------------------------
+
+# Reload config
+bind r source-file ~/.tmux.conf \; display "Config reloaded"
+
+# Split panes with | and -
+bind | split-window -h -c "#{pane_current_path}"
+bind - split-window -v -c "#{pane_current_path}"
+unbind '"'
+unbind %
+
+# New window in current path
+bind c new-window -c "#{pane_current_path}"
+
+# Vim-style pane navigation
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+
+# Alt+arrow pane navigation (no prefix)
+bind -n M-Left select-pane -L
+bind -n M-Right select-pane -R
+bind -n M-Up select-pane -U
+bind -n M-Down select-pane -D
+
+# Shift+arrow window navigation (no prefix)
+bind -n S-Left previous-window
+bind -n S-Right next-window
+
+# Pane resizing
+bind -r H resize-pane -L 5
+bind -r J resize-pane -D 5
+bind -r K resize-pane -U 5
+bind -r L resize-pane -R 5
+
+# Quick pane cycling
+bind -r Tab select-pane -t :.+
+
+# Kill pane/window without confirm
+bind x kill-pane
+bind X kill-window
+
+# Swap windows
+bind -r "<" swap-window -d -t -1
+bind -r ">" swap-window -d -t +1
+
+# -----------------------------------------------------------------------------
+# Copy Mode (vi style)
+# -----------------------------------------------------------------------------
+
+setw -g mode-keys vi
+bind -T copy-mode-vi v send-keys -X begin-selection
+bind -T copy-mode-vi C-v send-keys -X rectangle-toggle
+bind -T copy-mode-vi Escape send-keys -X cancel
+
+{{ if eq .chezmoi.os "darwin" -}}
+# macOS clipboard
+bind -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "pbcopy"
+bind -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "pbcopy"
+bind -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "pbcopy"
+{{ else -}}
+# Linux clipboard
+bind -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "xclip -selection clipboard"
+bind -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "xclip -selection clipboard"
+bind -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "xclip -selection clipboard"
+{{ end -}}
+
+# -----------------------------------------------------------------------------
+# Synthwave84 Theme
+# -----------------------------------------------------------------------------
+
+# Pane borders
+set -g pane-border-style "fg=#495495"
+set -g pane-active-border-style "fg=#ff7edb"
+
+# Status bar
+set -g status-position bottom
+set -g status-justify left
+set -g status-style "bg=#262335,fg=#ffffff"
+
+# Status left - session name
+set -g status-left-length 30
+set -g status-left "#[fg=#262335,bg=#ff7edb,bold] #S #[fg=#ff7edb,bg=#262335]"
+
+# Status right - date/time
+set -g status-right-length 50
+set -g status-right "#[fg=#495495]#[fg=#ffffff,bg=#495495] %H:%M #[fg=#72f1b8]#[fg=#262335,bg=#72f1b8,bold] %d-%b "
+
+# Window status
+setw -g window-status-format "#[fg=#495495,bg=#262335] #I:#W "
+setw -g window-status-current-format "#[fg=#262335,bg=#36f9f6]#[fg=#262335,bg=#36f9f6,bold] #I:#W #[fg=#36f9f6,bg=#262335]"
+
+# Message style
+set -g message-style "fg=#262335,bg=#fede5d,bold"
+set -g message-command-style "fg=#262335,bg=#fede5d"
+
+# Mode style (selection)
+setw -g mode-style "fg=#262335,bg=#ff7edb,bold"
+
+# Clock
+setw -g clock-mode-colour "#72f1b8"
+
+# -----------------------------------------------------------------------------
+# Session Management
+# -----------------------------------------------------------------------------
+
+# Quick session switching
+bind s choose-tree -sZ
+bind S choose-session
+
+# Create new session
+bind N new-session
+
+# -----------------------------------------------------------------------------
+# Plugins (TPM) - Optional
+# -----------------------------------------------------------------------------
+
+# To use plugins, install TPM first:
+# git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+# List of plugins
+# set -g @plugin 'tmux-plugins/tpm'
+# set -g @plugin 'tmux-plugins/tmux-sensible'
+# set -g @plugin 'tmux-plugins/tmux-resurrect'
+# set -g @plugin 'tmux-plugins/tmux-continuum'
+
+# Initialize TPM (keep at bottom)
+# run '~/.tmux/plugins/tpm/tpm'
