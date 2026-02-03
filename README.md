@@ -1,10 +1,9 @@
 # DROO's Dotfiles
 
-[![Plugins](https://dotfyle.com/Hydepwns/dotfiles-config-nvim/badges/plugins?style=flat)](https://dotfyle.com/Hydepwns/dotfiles-config-nvim)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/Hydepwns/dotfiles)
 
-Cross-platform dotfiles managed with [chezmoi](https://chezmoi.io) - featuring modular zsh, unified Synthwave84 theming, secrets management, and Tailscale integration.
+Cross-platform dotfiles managed with [chezmoi](https://chezmoi.io) - featuring modular zsh, unified Synthwave84 theming, terminal power tools, and secrets management.
 
 ## Quick Start
 
@@ -14,135 +13,143 @@ curl -fsSL https://raw.githubusercontent.com/Hydepwns/dotfiles/main/scripts/inst
 
 # Minimal install
 brew install chezmoi && chezmoi init --apply https://github.com/Hydepwns/dotfiles.git
-
-# NixOS
-curl -fsSL https://raw.githubusercontent.com/Hydepwns/dotfiles/main/scripts/setup/nixos-setup.sh | bash
 ```
 
-## Core Commands
-
-| Command | Description |
-|---------|-------------|
-| `make install` | Install dotfiles |
-| `make update` | Update from remote |
-| `make doctor` | Health check |
-| `make dashboard` | Service status dashboard |
-| `make sync` | Sync local changes |
-
-## Tools
+## What's Included
 
 | Category | Tools |
 |----------|-------|
-| **Terminal** | Ghostty (macOS), Kitty (Linux) |
-| **Editor** | Zed, Neovim |
-| **Shell** | Zsh + Starship prompt |
+| **Terminal** | Ghostty + Synthwave84 theme |
+| **Editor** | Zed, Neovim (lean config) |
+| **Shell** | Zsh + Starship + fzf + zoxide |
+| **Terminal Tools** | eza, bat, fd, ripgrep, delta |
+| **Window Mgmt** | Hammerspoon (macOS) |
+| **Multiplexer** | tmux with modern config |
 | **Secrets** | 1Password, AWS CLI, Infisical |
-| **Network** | Tailscale |
-| **Languages** | Node.js, Rust, Python, Elixir, Go, Lua |
-| **Version Mgmt** | asdf, direnv, devenv, Nix |
+| **Network** | Tailscale with pre-configured hosts |
+| **Languages** | Elixir, Node.js, Rust, Python, Go, Lua |
 
-## Features
+## Terminal Power Tools
 
-### Secrets Management
+| Tool | Replaces | Key Binding / Alias |
+|------|----------|---------------------|
+| fzf | - | `Ctrl+R` history, `Ctrl+T` files, `Alt+C` cd |
+| zoxide | cd | `z` - smart jump (`z proj` -> `/path/to/project`) |
+| eza | ls | `ls`, `ll`, `la`, `lt` - icons + git status |
+| bat | cat | `cat` - syntax highlighting |
+| fd | find | `find` - faster, respects .gitignore |
+| ripgrep | grep | `grep`, `rg` - faster search |
+| delta | diff | Git diffs with syntax highlighting |
+
+## Key Bindings
+
+### Hammerspoon (macOS)
+
+| Key | Action |
+|-----|--------|
+| `Cmd+Alt + arrows` | Window halves / full / center |
+| `Cmd+Alt + 1-5` | Window thirds |
+| `Cmd+Alt + t` | Ghostty |
+| `Cmd+Alt + e` | Zed |
+| `Cmd+Alt + b` | Brave Browser |
+| `Cmd+Alt + space` | App chooser |
+| `Cmd+Alt + v` | Clipboard history |
+| `Hyper + q` | Lock screen |
+
+### tmux
+
+| Key | Action |
+|-----|--------|
+| `Ctrl+a` | Prefix (instead of Ctrl+b) |
+| `\|` | Split horizontal |
+| `-` | Split vertical |
+| `hjkl` | Navigate panes |
+| `Shift + arrows` | Switch windows |
+
+### Neovim
+
+| Key | Action |
+|-----|--------|
+| `Space + ff` | Find files (Telescope) |
+| `Space + fg` | Live grep |
+| `Space + e` | File explorer |
+| `s` | Flash jump |
+| `gd` | Go to definition |
+
+## Commands
 
 ```bash
-make setup-secrets    # Install 1Password, AWS CLI, Infisical, Tailscale
-make dashboard        # Check auth status for all services
+# Chezmoi
+make install          # Fresh install
+make update           # Pull and apply remote
+chezmoi apply         # Apply local changes
+
+# Tools
+make brew-install     # Install Brewfile packages
+make setup-secrets    # Install 1Password, AWS, Infisical, Tailscale
+make dashboard        # Service status dashboard
+
+# SSH
+make rotate-keys      # Generate, store in 1Password, sync to hosts
+make sync-keys        # Sync public key to Tailscale nodes
 ```
 
-| Provider | Purpose | Commands |
-|----------|---------|----------|
-| **1Password** | Primary secrets, SSH agent | `opl`, `opw`, `op-secret` |
-| **AWS CLI** | Cloud credentials | `awsw`, `aws-profile`, `aws-login` |
+## Secrets Management
+
+| Provider | Purpose | Quick Commands |
+|----------|---------|----------------|
+| **1Password** | Primary secrets, SSH agent | `opl`, `opw` |
+| **AWS CLI** | Cloud credentials | `awsw`, `aws-profile` |
 | **Infisical** | Backup secrets | `infl`, `inf-env` |
-
-### SSH & Tailscale
-
-```bash
-make rotate-keys      # Generate new SSH key, store in 1Password, sync to hosts
-make sync-keys        # Sync public key to all Tailscale nodes
-make keys-status      # Show rotation status
-```
-
-Pre-configured Tailscale hosts: bazzite, dappnode-droo, dravado, mini-axol, ovh-solver, ovh-ubuntu1, slcl03-blackknight, turing-node-1/2/3, udm-pro
-
-### Unified Theming
-
-Single source of truth for Synthwave84 theme across all tools.
-
-```bash
-make theme-generate   # Generate configs for Ghostty, Kitty, Alacritty
-```
-
-Theme source: `config/theme/synthwave84.toml`
-
-### Starship Prompt
-
-Fast, minimal prompt with git status and language versions.
-
-```bash
-make setup-starship   # Install and configure
-```
-
-### XDG Compliance
-
-Configs organized under `~/.config/`, data under `~/.local/share/`, cache under `~/.cache/`.
-
-### Performance
-
-95% faster shell startup via lazy loading.
-
-```bash
-make perf             # Benchmark startup
-make perf-report      # Generate report
-```
-
-## Project Templates
-
-```bash
-make generate-template TEMPLATE=web3 NAME=my-project
-make generate-template TEMPLATE=nextjs NAME=my-app
-make generate-template TEMPLATE=rust NAME=my-cli
-```
-
-Available: web3, nextjs, rust, elixir, node, python, go
 
 ## Configuration
 
-Edit `chezmoi.toml` to enable/disable features:
+Edit `~/.config/chezmoi/chezmoi.toml`:
 
 ```toml
 [data]
-ohmyzsh = true
 starship = true
 tailscale = true
 onepassword = true
 aws = true
+elixir = true
 nodejs = true
-nix = true
 ```
 
 ## Directory Structure
 
 ```
 dotfiles/
-├── home/              # Chezmoi source -> ~/
-│   ├── dot_zsh/       # Modular zsh config
-│   └── dot_ssh/       # SSH config with Tailscale hosts
-├── config/            # App configs (ghostty, kitty, nvim, zed, starship)
-│   └── theme/         # Unified Synthwave84 theme
+├── home/
+│   ├── dot_zsh/                    # Modular zsh
+│   │   └── core/tools.zsh          # fzf/zoxide/eza/bat
+│   ├── dot_hammerspoon/            # Window management
+│   ├── dot_tmux.conf.tmpl          # Modern tmux
+│   ├── private_dot_config/
+│   │   ├── ghostty/                # Terminal
+│   │   ├── zed/                    # Editor
+│   │   └── nvim/                   # Neovim (lean)
+│   └── dot_claude/                 # Claude Code prefs
+├── config/
+│   ├── theme/synthwave84.toml      # Theme source
+│   └── starship/                   # Prompt config
+├── Brewfile                        # macOS packages
 └── scripts/
-    ├── setup/         # Installation scripts
-    └── utils/         # Maintenance utilities
+    ├── setup/                      # Installation
+    └── utils/                      # Maintenance
 ```
 
-## Documentation
+## Theming
 
-- [Advanced Usage](docs/advanced-usage.md)
-- [Neovim Plugins](docs/nvim-plugins.md) (56 plugins)
-- [Templates](docs/templates.md)
-- [Performance](docs/performance.md)
-- [NixOS Installation](docs/nixos-installation.md)
+Unified Synthwave84 theme across all tools:
+- Ghostty terminal
+- tmux status bar
+- fzf colors
+- Neovim colorscheme
+- Starship prompt
+- Hammerspoon alerts
+
+Source: `config/theme/synthwave84.toml`
 
 ## Related
 
