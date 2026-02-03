@@ -101,3 +101,7 @@ node_modules/
 # Uncomment these lines if you don't want to use 1Password for SSH key management:
 # home/dot_ssh/id_rsa.pub.tmpl
 # home/dot_ssh/private_id_rsa.tmpl
+
+# Oh My Zsh - Entire directory managed by oh-my-zsh installer
+.oh-my-zsh
+.oh-my-zsh/**
