@@ -69,3 +69,7 @@ bright_blue = "#03edf9"
 bright_magenta = "#ff7edb"
 bright_cyan = "#36f9f6"
 bright_white = "#ffffff"
+
+[age]
+    identity = "~/.config/chezmoi/age_key.txt"
+    recipient = "age1pf2v9lee0rtqp8ur4tatk5w0kpp45t9d7st7zakdlsv7ykdk2ewqacwwjp"

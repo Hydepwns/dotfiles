@@ -173,6 +173,25 @@ else
     print_status "WARN" "chezmoi configuration not found"
 fi
 
+# Check age encryption
+print_subsection "Age Encryption"
+if command -v age &> /dev/null; then
+    print_status "OK" "age CLI installed ($(age --version 2>&1 || echo 'unknown'))"
+else
+    print_status "WARN" "age CLI not installed (encrypted files will not decrypt)"
+fi
+
+if [[ -f "$HOME/.config/chezmoi/age_key.txt" ]]; then
+    age_perms=$(stat -f '%Lp' "$HOME/.config/chezmoi/age_key.txt" 2>/dev/null || stat -c '%a' "$HOME/.config/chezmoi/age_key.txt" 2>/dev/null)
+    if [[ "$age_perms" == "600" ]]; then
+        print_status "OK" "Age key file exists (mode: $age_perms)"
+    else
+        print_status "WARN" "Age key file permissions are $age_perms (should be 600)"
+    fi
+else
+    print_status "WARN" "Age key file not found at ~/.config/chezmoi/age_key.txt"
+fi
+
 # Check if dotfiles are applied
 if chezmoi status &> /dev/null; then
     print_status "OK" "Dotfiles are properly applied"

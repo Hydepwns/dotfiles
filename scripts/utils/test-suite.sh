@@ -24,11 +24,12 @@ source "$SCRIPT_DIR/platform.sh" 2>/dev/null || {
     # Fallback platform detection
     OS="$(uname -s)"
     IS_MACOS=false
-    IS_LINUX=false
+    IS_LINUX=false  # exported by platform.sh, used externally
+    export IS_LINUX
     IS_NIXOS=false
     case "$OS" in
         Darwin) IS_MACOS=true ;;
-        Linux) 
+        Linux)
             IS_LINUX=true
             [ -f /etc/os-release ] && grep -q "NixOS" /etc/os-release && IS_NIXOS=true
             ;;
@@ -71,14 +72,14 @@ skip_test() {
 preflight_check() {
     echo -e "${BLUE:-}Pre-flight Check${NC:-}"
     echo "=================================="
-    
+
     # Check if chezmoi has been applied
     if [ ! -d "$HOME/.zsh" ] && [ -d home/dot_zsh ]; then
         echo -e "${YELLOW:-}Warning: Dotfiles not applied yet!${NC:-}"
         echo -e "Run: ${GREEN:-}chezmoi apply${NC:-} to apply your dotfiles"
         echo ""
     fi
-    
+
     # Platform info
     local platform_name="${OS}"
     if $IS_NIXOS; then
@@ -174,6 +175,16 @@ run_test "Config" "managed files exist" "chezmoi managed | head -5 | xargs -I {}
 echo -e "\n${YELLOW:-}Integration Tests${NC:-}"
 
 run_test "Integration" "zsh configuration syntax" "zsh -n \"$HOME/.zshrc\""
+
+# =============================================================================
+# ENCRYPTION TESTS
+# =============================================================================
+echo -e "\n${YELLOW:-}Encryption Tests${NC:-}"
+
+run_test "Encryption" "age CLI installed" "command -v age"
+run_test "Encryption" "age key file exists" "test -f \"$HOME/.config/chezmoi/age_key.txt\""
+run_test "Encryption" "age key file permissions" "test \"\$(stat -f '%Lp' \"$HOME/.config/chezmoi/age_key.txt\" 2>/dev/null || stat -c '%a' \"$HOME/.config/chezmoi/age_key.txt\" 2>/dev/null)\" = '600'"
+run_test "Encryption" "encrypted source files exist" "ls home/dot_ssh/encrypted_* home/dot_zsh/core/encrypted_* >/dev/null 2>&1"
 
 # =============================================================================
 # SECURITY TESTS
