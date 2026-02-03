@@ -22,15 +22,15 @@ if command -v fzf &>/dev/null; then
         export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
     fi
 
-    # Synthwave84 colors for fzf
+    # {{ .theme.name }} colors for fzf
     export FZF_DEFAULT_OPTS="
         --height 40%
         --layout=reverse
         --border
         --info=inline
-        --color=bg+:#262335,bg:#262335,spinner:#ff7edb,hl:#fe4450
-        --color=fg:#ffffff,header:#72f1b8,info:#fede5d,pointer:#ff7edb
-        --color=marker:#72f1b8,fg+:#ffffff,prompt:#36f9f6,hl+:#fe4450
+        --color=bg+:{{ .theme.bg }},bg:{{ .theme.bg }},spinner:{{ .theme.accent }},hl:{{ .theme.red }}
+        --color=fg:{{ .theme.fg }},header:{{ .theme.green }},info:{{ .theme.yellow }},pointer:{{ .theme.accent }}
+        --color=marker:{{ .theme.green }},fg+:{{ .theme.fg }},prompt:{{ .theme.accent2 }},hl+:{{ .theme.red }}
         --bind='ctrl-/:toggle-preview'
         --bind='ctrl-y:execute-silent(echo {} | pbcopy)'
     "

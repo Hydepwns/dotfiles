@@ -1,37 +1,37 @@
 # Ghostty Configuration
-# Synthwave84 Theme - https://github.com/Hydepwns/synthwave84-zed
+# {{ .theme.name }} Theme - Generated from chezmoi.toml
 
 # =============================================================================
-# THEME - Synthwave84
+# THEME - {{ .theme.name }}
 # =============================================================================
 
-background = #262335
-foreground = #ffffff
-cursor-color = #ff7edb
+background = {{ .theme.bg }}
+foreground = {{ .theme.fg }}
+cursor-color = {{ .theme.cursor }}
 cursor-style = block
 cursor-style-blink = true
-selection-background = #ff7edb
-selection-foreground = #241b2f
+selection-background = {{ .theme.selection_bg }}
+selection-foreground = {{ .theme.selection_fg }}
 
 # Normal colors (0-7)
-palette = 0=#241b2f
-palette = 1=#fe4450
-palette = 2=#72f1b8
-palette = 3=#fede5d
-palette = 4=#03edf9
-palette = 5=#ff7edb
-palette = 6=#36f9f6
-palette = 7=#ffffff
+palette = 0={{ .theme.black }}
+palette = 1={{ .theme.red }}
+palette = 2={{ .theme.green }}
+palette = 3={{ .theme.yellow }}
+palette = 4={{ .theme.blue }}
+palette = 5={{ .theme.magenta }}
+palette = 6={{ .theme.cyan }}
+palette = 7={{ .theme.white }}
 
 # Bright colors (8-15)
-palette = 8=#495495
-palette = 9=#fe4450
-palette = 10=#72f1b8
-palette = 11=#fede5d
-palette = 12=#03edf9
-palette = 13=#ff7edb
-palette = 14=#36f9f6
-palette = 15=#ffffff
+palette = 8={{ .theme.bright_black }}
+palette = 9={{ .theme.bright_red }}
+palette = 10={{ .theme.bright_green }}
+palette = 11={{ .theme.bright_yellow }}
+palette = 12={{ .theme.bright_blue }}
+palette = 13={{ .theme.bright_magenta }}
+palette = 14={{ .theme.bright_cyan }}
+palette = 15={{ .theme.bright_white }}
 
 # =============================================================================
 # FONT
