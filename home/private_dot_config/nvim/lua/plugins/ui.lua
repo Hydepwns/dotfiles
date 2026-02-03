@@ -48,4 +48,17 @@ return {
       { "<leader>ft", "<cmd>TodoTelescope<cr>", desc = "Todo" },
     },
   },
+
+  -- Font rendering
+  {
+    "hydepwns/mona.nvim",
+    lazy = false,
+    build = ":MonaInstall variable all",
+    opts = {
+      font_features = {
+        texture_healing = true,
+        ligatures = { enable = true },
+      },
+    },
+  },
 }
