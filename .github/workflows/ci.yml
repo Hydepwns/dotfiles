@@ -14,7 +14,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup chezmoi
         run: |
@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: lint
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup chezmoi
         run: |
@@ -72,7 +72,12 @@ jobs:
           # Mock environment for testing
           export HOME=/tmp/test-home
           mkdir -p $HOME
-          ./scripts/utils/health-check.sh || true
+          # Try new location first, then legacy
+          if [ -f ./utils/health-check.sh ]; then
+            ./utils/health-check.sh || true
+          elif [ -f ./scripts/utils/health-check.sh ]; then
+            ./scripts/utils/health-check.sh || true
+          fi
 
       - name: Test template generation
         run: |
@@ -83,7 +88,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: lint
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
@@ -104,7 +109,7 @@ jobs:
           fi
 
       - name: Upload Trivy scan results
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: 'trivy-results.sarif'
         continue-on-error: true

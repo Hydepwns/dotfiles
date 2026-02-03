@@ -1,10 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Colors.sh - Independent color utilities
+# NOTE: This file MUST NOT source script-init.sh to avoid circular dependency
+
 
 # Shared color utilities for dotfiles scripts
 # This file provides consistent color output across all scripts
 
 # Source constants if available
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 if [[ -f "$SCRIPT_DIR/constants.sh" ]]; then
     source "$SCRIPT_DIR/constants.sh"
 fi
@@ -50,23 +53,23 @@ print_status() {
     case "$status" in
         "OK")
             color="$(get_color GREEN)"
-            icon="✓"
+            icon="[OK]"
             ;;
         "WARN")
             color="$(get_color YELLOW)"
-            icon="⚠"
+            icon=""
             ;;
         "ERROR")
             color="$(get_color RED)"
-            icon="✗"
+            icon="[FAIL]"
             ;;
         "INFO")
             color="$(get_color BLUE)"
-            icon="ℹ"
+            icon=""
             ;;
         "DEBUG")
             color="$(get_color PURPLE)"
-            icon="🔍"
+            icon=""
             ;;
         *)
             color="$(get_color NC)"

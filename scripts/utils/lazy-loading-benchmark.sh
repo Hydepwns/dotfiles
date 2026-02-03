@@ -1,16 +1,30 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Use simple script initialization (no segfaults!)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/simple-init.sh"
+
 
 # Lazy Loading Performance Benchmark Script
 # This script measures the performance impact of lazy loading vs eager loading
 # and generates visualizations and reports
 
-set -e
 
-# Source shared utilities
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/constants.sh"
-source "$SCRIPT_DIR/helpers.sh"
-source "$SCRIPT_DIR/colors.sh"
+# Simple utilities (no dependencies)
+log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
+log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
+log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
+log_warning() { echo -e "${YELLOW:-}[WARNING]${NC:-} $1"; }
+
+# Exit codes
+EXIT_SUCCESS=0
+EXIT_INVALID_ARGS=1
+EXIT_FAILURE=1
+
+# Simple utility functions
+file_exists() { test -f "$1"; }
+dir_exists() { test -d "$1"; }
+command_exists() { command -v "$1" >/dev/null 2>&1; }
 
 # Configuration
 BENCHMARK_DATA_DIR="$HOME/.cache/dotfiles-benchmark"
@@ -47,23 +61,23 @@ measure_tool_load() {
                 export PATH="$HOME/.rbenv/shims:$PATH"
                 eval "$(rbenv init -)" >/dev/null 2>&1
             else
-                command -v rbenv >/dev/null 2>&1
+                command_exists rbenv
             fi
             ;;
         "asdf")
             if [[ "$load_type" == "eager" ]]; then
                 . /opt/homebrew/opt/asdf/libexec/asdf.sh >/dev/null 2>&1
             else
-                command -v asdf >/dev/null 2>&1
+                command_exists asdf
             fi
             ;;
         "direnv")
             if [[ "$load_type" == "eager" ]]; then
-                if command -v direnv &> /dev/null; then
+                if command_exists direnv; then
                     eval "$(direnv hook zsh)" >/dev/null 2>&1
                 fi
             else
-                command -v direnv >/dev/null 2>&1
+                command_exists direnv
             fi
             ;;
         "pyenv")
@@ -71,7 +85,7 @@ measure_tool_load() {
                 export PATH="$HOME/.pyenv/shims:$PATH"
                 eval "$(pyenv init -)" >/dev/null 2>&1
             else
-                command -v pyenv >/dev/null 2>&1
+                command_exists pyenv
             fi
             ;;
         "nodenv")
@@ -79,7 +93,7 @@ measure_tool_load() {
                 export PATH="$HOME/.nodenv/shims:$PATH"
                 eval "$(nodenv init -)" >/dev/null 2>&1
             else
-                command -v nodenv >/dev/null 2>&1
+                command_exists nodenv
             fi
             ;;
         "goenv")
@@ -87,7 +101,7 @@ measure_tool_load() {
                 export PATH="$HOME/.goenv/shims:$PATH"
                 eval "$(goenv init -)" >/dev/null 2>&1
             else
-                command -v goenv >/dev/null 2>&1
+                command_exists goenv
             fi
             ;;
         "rustup")
@@ -97,7 +111,7 @@ measure_tool_load() {
                     . "$HOME/.cargo/env" >/dev/null 2>&1
                 fi
             else
-                command -v rustup >/dev/null 2>&1
+                command_exists rustup
             fi
             ;;
     esac
@@ -216,17 +230,17 @@ EOF
         total_lazy=$(echo "$total_lazy + $lazy_avg" | bc -l 2>/dev/null || echo "$total_lazy")
 
         local improvement=0
-        local status="🟢"
+        local status="[OK]"
 
         if (( $(echo "$eager_avg > 0" | bc -l 2>/dev/null || echo "0") )); then
             improvement=$(echo "($eager_avg - $lazy_avg) / $eager_avg * 100" | bc -l 2>/dev/null || echo "0")
 
             if (( $(echo "$improvement > 50" | bc -l 2>/dev/null || echo "0") )); then
-                status="🟢"
+                status="[OK]"
             elif (( $(echo "$improvement > 25" | bc -l 2>/dev/null || echo "0") )); then
-                status="🟡"
+                status="[WARN]"
             else
-                status="🔴"
+                status="[ERROR]"
             fi
         fi
 
@@ -240,7 +254,7 @@ EOF
         total_improvement=$(echo "($total_eager - $total_lazy) / $total_eager * 100" | bc -l 2>/dev/null || echo "0")
     fi
 
-    printf "\n| **TOTAL** | **%.3fs** | **%.3fs** | **%.1f%%** | **📊** |\n" \
+    printf "\n| **TOTAL** | **%.3fs** | **%.3fs** | **%.1f%%** | **** |\n" \
         "$total_eager" "$total_lazy" "$total_improvement" >> "$matrix_file"
 
     cat >> "$matrix_file" << 'EOF'
@@ -254,9 +268,9 @@ EOF
 
 ## Recommendations
 
-- 🟢 **Excellent**: >50% improvement - Keep lazy loading
-- 🟡 **Good**: 25-50% improvement - Consider optimization
-- 🔴 **Poor**: <25% improvement - May not be worth lazy loading
+- [OK] **Excellent**: >50% improvement - Keep lazy loading
+- [WARN] **Good**: 25-50% improvement - Consider optimization
+- [ERROR] **Poor**: <25% improvement - May not be worth lazy loading
 
 ---
 *Generated on $(date)*
@@ -273,7 +287,6 @@ generate_visualization_script() {
     mkdir -p "$PLOTS_DIR"
 
     cat > "$script_file" << 'EOF'
-#!/usr/bin/env python3
 """
 Generate performance visualization plots for lazy loading benchmark
 """
@@ -451,7 +464,7 @@ generate_plots() {
     generate_visualization_script "$data_file"
 
     # Check if Python and matplotlib are available
-    if ! command -v python3 &> /dev/null; then
+    if ! command_exists python3; then
         log_warning "Python3 not found. Install Python3 to generate plots."
         return 1
     fi
@@ -469,7 +482,7 @@ generate_plots() {
         log_success "Plots generated successfully!"
 
         # Display summary
-        if [[ -f "$PLOTS_DIR/performance-summary.json" ]]; then
+        if file_exists "$PLOTS_DIR/performance-summary.json"; then
             local summary
             summary=$(cat "$PLOTS_DIR/performance-summary.json")
             local total_eager
@@ -479,10 +492,10 @@ generate_plots() {
             local improvement
             improvement=$(echo "$summary" | jq -r '.total_improvement_percent' 2>/dev/null || echo "0")
 
-            print_section "Benchmark Results"
-            print_status "INFO" "Total Eager Loading: ${total_eager}s"
-            print_status "INFO" "Total Lazy Loading: ${total_lazy}s"
-            print_status "SUCCESS" "Overall Improvement: ${improvement}%"
+            log_info "=== Benchmark Results ==="
+            log_info "Total Eager Loading: ${total_eager}s"
+            log_info "Total Lazy Loading: ${total_lazy}s"
+            log_success "Overall Improvement: ${improvement}%"
         fi
     else
         log_warning "Failed to generate plots"
@@ -543,7 +556,7 @@ update_readme() {
 
     # Update README.md
     local readme_file="README.md"
-    if [[ -f "$readme_file" ]]; then
+    if file_exists "$readme_file"; then
         # Create backup
         cp "$readme_file" "$readme_file.backup"
 
@@ -552,10 +565,10 @@ update_readme() {
         sed -i.tmp "s/Reduced from [0-9.]*s to [0-9.]*s (~[0-9]*% improvement)/Reduced from $(echo "$total_eager + $total_lazy" | bc -l 2>/dev/null || echo "0")s to ${total_lazy}s (~${improvement}% improvement)/" "$readme_file"
 
         # Add benchmark section if it doesn't exist
-        if ! grep -q "## 📊 Performance Benchmark" "$readme_file"; then
+        if ! grep -q "##  Performance Benchmark" "$readme_file"; then
             cat >> "$readme_file" << EOF
 
-## 📊 Performance Benchmark
+##  Performance Benchmark
 
 Latest benchmark results from lazy loading optimization:
 
@@ -589,7 +602,7 @@ run_benchmark() {
 
     # Benchmark each tool
     for tool in $TOOLS; do
-        if command -v "$tool" &> /dev/null || [[ -d "$HOME/.$tool" ]] || [[ -d "$HOME/.nvm" && "$tool" == "nvm" ]]; then
+        if command -v "$tool" &> /dev/null || dir_exists "$HOME/.$tool" || dir_exists "$HOME/.nvm" && "$tool" == "nvm"; then
             echo "[INFO] Benchmarking $tool..." >&2
             local tool_results
             tool_results=$(benchmark_tool "$tool")
@@ -638,7 +651,7 @@ show_results() {
 
     log_info "Benchmark results from: $BENCHMARK_DATA_FILE"
 
-    if [[ -f "$RESULTS_DIR/performance-matrix.md" ]]; then
+    if file_exists "$RESULTS_DIR/performance-matrix.md"; then
         cat "$RESULTS_DIR/performance-matrix.md"
     else
         cat "$BENCHMARK_DATA_FILE" | jq '.' 2>/dev/null || cat "$BENCHMARK_DATA_FILE"
@@ -664,7 +677,7 @@ main() {
             generate_plots "$BENCHMARK_DATA_FILE"
             ;;
         "matrix")
-            if [[ -f "$BENCHMARK_DATA_FILE" ]]; then
+            if file_exists "$BENCHMARK_DATA_FILE"; then
                 local data
                 data=$(cat "$BENCHMARK_DATA_FILE")
                 generate_performance_matrix "$data"
@@ -690,7 +703,7 @@ main() {
             echo "  clean         - Clean benchmark data"
             echo ""
             echo "Results will be saved to: $BENCHMARK_DATA_DIR"
-            exit 1
+            exit $EXIT_FAILURE
             ;;
     esac
 }

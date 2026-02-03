@@ -1,18 +1,23 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Use simple script initialization (no segfaults!)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/../utils/simple-init.sh"
 
 # Setup script for CI/CD tools and pre-commit hooks
 # This script installs and configures development tools for the dotfiles repository
 
-set -e
+# Simple utilities (no dependencies)
+log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
+log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
+log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
 
-# Source shared utilities
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# shellcheck source=../utils/constants.sh
-source "$SCRIPT_DIR/../utils/constants.sh"
-# shellcheck source=../utils/helpers.sh
-source "$SCRIPT_DIR/../utils/helpers.sh"
-# shellcheck source=../utils/colors.sh
-source "$SCRIPT_DIR/../utils/colors.sh"
+# Status printing functions
+print_section() { echo -e "\n${BLUE:-}=== $1 ===${NC:-}"; }
+
+# Exit codes
+EXIT_SUCCESS=0
+EXIT_FAILURE=1
 
 log_info "Setting up CI/CD tools and pre-commit hooks..."
 print_section "CI/CD Setup"
@@ -126,4 +131,4 @@ echo "  1. Commit your changes: git add . && git commit -m 'feat: add CI/CD setu
 echo "  2. Push to trigger GitHub Actions: git push"
 echo "  3. Check the Actions tab in your GitHub repository"
 echo ""
-echo "Happy coding! 🚀"
+echo "Happy coding! "

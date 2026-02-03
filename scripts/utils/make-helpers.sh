@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Makefile helper functions for DROO's dotfiles
 
 # Common make targets with descriptions

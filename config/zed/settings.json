@@ -1,5 +1,5 @@
 {
-  "theme": "One Dark Pro",
+  "theme": "Synthwave '84",
   "font_family": "Monaspace Variable",
   "font_size": 14,
   "line_height": 1.4,
@@ -84,7 +84,7 @@
     }
   },
   "workbench": {
-    "color_theme": "One Dark Pro",
+    "color_theme": "Synthwave '84",
     "icon_theme": "material-icon-theme",
     "tree": {
       "indent": 16,

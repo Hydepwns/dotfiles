@@ -1,17 +1,31 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Use simple script initialization (no segfaults!)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/simple-init.sh"
 
 # Script to detect function and alias conflicts in the modular system
 
-set -e
+# Simple utilities (no dependencies)
+log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
+log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
+log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
+log_warning() { echo -e "${YELLOW:-}[WARNING]${NC:-} $1"; }
 
-# Source shared utilities
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [[ -f "$SCRIPT_DIR/colors.sh" ]]; then
-    # shellcheck disable=SC1091
-    source "$SCRIPT_DIR/colors.sh"
-else
-    echo "Warning: colors.sh not found"
-fi
+# Status printing function
+print_status() {
+    local status=$1
+    local message=$2
+    case $status in
+        "OK") echo -e "${GREEN:-}[OK]${NC:-} $message" ;;
+        "WARN") echo -e "${YELLOW:-}[WARN]${NC:-} $message" ;;
+        "ERROR") echo -e "${RED:-}[ERROR]${NC:-} $message" ;;
+        "INFO") echo -e "${BLUE:-}[INFO]${NC:-} $message" ;;
+    esac
+}
+
+# Simple utility functions
+file_exists() { test -f "$1"; }
 
 print_status "INFO" "Checking for function and alias conflicts..."
 
@@ -26,7 +40,7 @@ FUNCTION_FILES=(
 # Extract function names
 FUNCTION_NAMES=()
 for file in "${FUNCTION_FILES[@]}"; do
-    if [[ -f "$file" ]]; then
+    if file_exists "$file"; then
         while IFS= read -r line; do
             if [[ $line =~ ^[a-zA-Z_][a-zA-Z0-9_]*\(\) ]]; then
                 func_name="${line%()}"

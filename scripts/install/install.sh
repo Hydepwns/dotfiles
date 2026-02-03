@@ -1,6 +1,13 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-set -e # -e: exit on error
+# Use simple script initialization (no segfaults!)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/../utils/simple-init.sh"
+
+# Exit codes
+EXIT_SUCCESS=0
+EXIT_FAILURE=1
+
 
 if [ ! "$(command -v chezmoi)" ]; then
   bin_dir="$HOME/.local/bin"
@@ -11,7 +18,7 @@ if [ ! "$(command -v chezmoi)" ]; then
     sh -c "$(wget -qO- https://git.io/chezmoi)" -- -b "$bin_dir"
   else
     echo "To install chezmoi, you must have curl or wget installed." >&2
-    exit 1
+    exit $EXIT_FAILURE
   fi
 else
   chezmoi=chezmoi

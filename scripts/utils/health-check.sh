@@ -1,15 +1,30 @@
 #!/usr/bin/env bash
 
+# Use simple script initialization (no segfaults!)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/simple-init.sh"
+
 # Health check script for dotfiles
 # This script verifies that all components are properly installed and configured
 
-set -e
+# Simple utilities (no dependencies)
+log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
+log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
+log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
 
-# Source shared utilities
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/constants.sh"
-source "$SCRIPT_DIR/helpers.sh"
-source "$SCRIPT_DIR/colors.sh"
+# Status printing functions
+print_section() { echo -e "\n${BLUE:-}=== $1 ===${NC:-}"; }
+print_subsection() { echo -e "\n${YELLOW:-}--- $1 ---${NC:-}"; }
+print_status() {
+    local status=$1
+    local message=$2
+    case $status in
+        "OK") echo -e "  ${GREEN:-}[OK]${NC:-} $message" ;;
+        "WARN") echo -e "  ${YELLOW:-}[WARN]${NC:-} $message" ;;
+        "ERROR") echo -e "  ${RED:-}[ERROR]${NC:-} $message" ;;
+        "INFO") echo -e "  ${BLUE:-}[INFO]${NC:-} $message" ;;
+    esac
+}
 
 log_info "Running dotfiles health check..."
 print_section "Health Check"

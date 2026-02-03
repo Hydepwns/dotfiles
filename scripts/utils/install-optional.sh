@@ -1,11 +1,30 @@
 #!/usr/bin/env bash
+
+# Use simple script initialization (no segfaults!)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/simple-init.sh"
+
 # Install optional tools utility for DROO's dotfiles
 
-# Source common utilities
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/constants.sh"
-source "$SCRIPT_DIR/helpers.sh"
-source "$SCRIPT_DIR/colors.sh"
+# Simple utilities (no dependencies)
+log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
+log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
+log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
+log_warning() { echo -e "${YELLOW:-}[WARNING]${NC:-} $1"; }
+
+# Exit codes
+EXIT_SUCCESS=0
+EXIT_INVALID_ARGS=1
+EXIT_FAILURE=1
+
+# Simple utility functions
+command_exists() { command -v "$1" >/dev/null 2>&1; }
+validate_args() {
+    local min_args="$1"
+    shift
+    local provided_args=("$@")
+    [[ ${#provided_args[@]} -ge $min_args ]]
+}
 
 # Optional tools registry (using functions for compatibility)
 get_optional_tool_description() {
@@ -96,9 +115,9 @@ list_optional_tools() {
         local status=""
 
         if command_exists "$tool"; then
-            status="✓"
+            status="[OK]"
         else
-            status="✗"
+            status="[FAIL]"
         fi
 
         printf "  %-15s %s %s\n" "$tool" "$status" "$description"

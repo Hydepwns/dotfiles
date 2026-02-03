@@ -1,15 +1,28 @@
 #!/usr/bin/env bash
 
+# Use simple script initialization (no segfaults!)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/simple-init.sh"
+
 # Enhanced Lazy Loading System for DROO's dotfiles
 # This script provides comprehensive lazy loading for development tools
 
-set -e
+# Simple utilities (no dependencies)
+log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
+log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
+log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
+log_warning() { echo -e "${YELLOW:-}[WARNING]${NC:-} $1"; }
+log_debug() { [[ "${DEBUG:-false}" == "true" ]] && echo -e "${BLUE:-}[DEBUG]${NC:-} $1"; }
 
-# Source shared utilities
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/constants.sh"
-source "$SCRIPT_DIR/helpers.sh"
-source "$SCRIPT_DIR/colors.sh"
+# Exit codes
+EXIT_SUCCESS=0
+EXIT_FAILURE=1
+
+# Simple utility functions
+file_exists() { test -f "$1"; }
+dir_exists() { test -d "$1"; }
+ensure_dir() { mkdir -p "$1"; }
+command_exists() { command -v "$1" >/dev/null 2>&1; }
 
 # Performance tracking
 LAZY_LOAD_DATA_FILE="$HOME/.cache/dotfiles-lazy-load.json"
@@ -45,7 +58,7 @@ track_lazy_load() {
 
     # Log if loading takes more than 0.1 seconds
     if (( $(echo "$duration > 0.1" | bc -l 2>/dev/null || echo "0") )); then
-        log_info "⏱️  Loaded $tool_name in ${duration}s"
+        log_info "  Loaded $tool_name in ${duration}s"
     fi
 }
 
@@ -390,7 +403,7 @@ track_lazy_load() {
     
     # Log if loading takes more than 0.1 seconds
     if (( $(echo "$duration > 0.1" | bc -l 2>/dev/null || echo "0") )); then
-        echo "⏱️  Loaded $tool_name in ${duration}s"
+        echo "  Loaded $tool_name in ${duration}s"
     fi
 }
 
@@ -645,7 +658,7 @@ EOF
 # Performance reporting
 report_lazy_loading_performance() {
     if [[ -f "$LAZY_LOAD_STATS_FILE" ]]; then
-        echo "🚀 Lazy Loading Performance Report:"
+        echo " Lazy Loading Performance Report:"
         echo "=================================="
         
         local stats
@@ -711,10 +724,9 @@ main() {
             echo ""
             echo "This script provides enhanced lazy loading for development tools"
             echo "with performance tracking and analytics."
-            exit 1
+            exit $EXIT_FAILURE
             ;;
     esac
 }
 
 # Run main function
-main "$@" 

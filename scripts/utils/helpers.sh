@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
 
+# Helpers.sh - Independent utility functions
+# NOTE: This file MUST NOT source script-init.sh to avoid circular dependency
+
+# Basic path detection
+SCRIPT_DIR="${SCRIPT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
+DOTFILES_ROOT="${DOTFILES_ROOT:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+
+
 # Helper utilities for dotfiles management
 # This script provides common functions used across dotfiles
 
 # Source constants if available
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 if [[ -f "$SCRIPT_DIR/constants.sh" ]]; then
     source "$SCRIPT_DIR/constants.sh"
 fi
@@ -142,7 +149,7 @@ is_root() {
 require_root() {
     if ! is_root; then
         log_error "This operation requires root privileges"
-        exit 1
+        exit $EXIT_FAILURE
     fi
 }
 
@@ -233,4 +240,145 @@ show_progress() {
     if [[ "$current" -eq "$total" ]]; then
         echo
     fi
+}
+
+# Configuration file reading utilities
+read_config_value() {
+    local key="$1"
+    local config_file="$2"
+    local default_value="${3:-}"
+    
+    if file_exists "$config_file"; then
+        local value
+        value=$(grep -E "^${key}\s*=" "$config_file" 2>/dev/null | cut -d'=' -f2 | tr -d ' "'"'" | head -1)
+        echo "${value:-$default_value}"
+    else
+        echo "$default_value"
+    fi
+}
+
+# Check if feature/flag is enabled in config
+is_config_enabled() {
+    local key="$1"
+    local config_file="$2"
+    local value
+    value=$(read_config_value "$key" "$config_file" "false")
+    [[ "$value" == "true" || "$value" == "1" || "$value" == "yes" ]]
+}
+
+# Safe command execution with error handling
+safe_exec() {
+    local command="$1"
+    local error_message="${2:-Command failed}"
+    
+    if ! eval "$command" >/dev/null 2>&1; then
+        log_error "$error_message: $command"
+        return 1
+    fi
+    return 0
+}
+
+# Check if command exists (standardized replacement for 'which')
+has_command() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# Advanced validation functions
+validate_args() {
+    local min_args="$1"
+    shift
+    local provided_args=("$@")
+    
+    if [[ ${#provided_args[@]} -lt $min_args ]]; then
+        log_error "Expected at least $min_args arguments, got ${#provided_args[@]}"
+        return 1
+    fi
+    
+    for arg in "${provided_args[@]}"; do
+        if [[ -z "$arg" ]]; then
+            log_error "Empty argument provided"
+            return 1
+        fi
+    done
+    
+    return 0
+}
+
+# Standardized error handling setup
+setup_error_handling() {
+    local strict_mode="${1:-false}"
+    
+    set -e  # Exit on error
+    
+    if [[ "$strict_mode" == "true" ]]; then
+        set -u  # Exit on undefined variable
+        set -o pipefail  # Exit on pipe failure
+    fi
+    
+    # Trap errors
+    trap 'log_error "Script failed at line $LINENO"' ERR
+}
+
+# Template file creation helper
+create_template_file() {
+    local target_file="$1"
+    local template_content="$2"
+    local backup="${3:-true}"
+    
+    if [[ -f "$target_file" ]] && [[ "$backup" == "true" ]]; then
+        backup_file "$target_file"
+    fi
+    
+    ensure_directory "$(dirname "$target_file")"
+    
+    echo "$template_content" > "$target_file"
+    
+    log_success "Created template file: $target_file"
+}
+
+# Git operations helper
+safe_git_operation() {
+    local operation="$1"
+    shift
+    local args=("$@")
+    
+    if ! is_git_repo; then
+        log_error "Not in a git repository"
+        return 1
+    fi
+    
+    case "$operation" in
+        "add")
+            git add "${args[@]}" || { log_error "Failed to add files"; return 1; }
+            ;;
+        "commit")
+            git commit "${args[@]}" || { log_error "Failed to commit"; return 1; }
+            ;;
+        "status")
+            git status "${args[@]}" || { log_error "Failed to get status"; return 1; }
+            ;;
+        *)
+            log_error "Unsupported git operation: $operation"
+            return 1
+            ;;
+    esac
+}
+
+# Download and execute pattern
+safe_download_execute() {
+    local url="$1"
+    local description="$2"
+    
+    log_info "Downloading and executing: $description"
+    
+    if has_command curl; then
+        sh -c "$(curl -fsSL "$url")" || { log_error "Failed to download/execute from $url"; return 1; }
+    elif has_command wget; then
+        sh -c "$(wget -qO- "$url")" || { log_error "Failed to download/execute from $url"; return 1; }
+    else
+        log_error "Neither curl nor wget available for download"
+        return 1
+    fi
+    
+    log_success "$description completed"
 }

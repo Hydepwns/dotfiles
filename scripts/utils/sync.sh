@@ -1,11 +1,20 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Use simple script initialization (no segfaults!)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/simple-init.sh"
+
 # Sync utility for DROO's dotfiles
 
-# Source common utilities
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/constants.sh"
-source "$SCRIPT_DIR/helpers.sh"
-source "$SCRIPT_DIR/colors.sh"
+# Simple utilities (no dependencies)
+log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
+log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
+log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
+
+# Exit codes
+EXIT_SUCCESS=0
+EXIT_INVALID_ARGS=1
+EXIT_FAILURE=1
 
 # Function to show usage
 show_usage() {

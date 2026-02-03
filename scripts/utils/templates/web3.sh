@@ -1,11 +1,26 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Use simple script initialization (no segfaults!)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/../simple-init.sh"
+
 # Web3 template generator for DROO's dotfiles
 
-# Source helpers for consistent logging
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [[ -f "$SCRIPT_DIR/../helpers.sh" ]]; then
-    source "$SCRIPT_DIR/../helpers.sh"
-fi
+# Simple utilities (no dependencies)
+log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
+log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
+log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
+log_warning() { echo -e "${YELLOW:-}[WARNING]${NC:-} $1"; }
+
+# Exit codes
+EXIT_SUCCESS=0
+EXIT_INVALID_ARGS=1
+EXIT_FAILURE=1
+
+# Simple utility functions
+file_exists() { test -f "$1"; }
+dir_exists() { test -d "$1"; }
+command_exists() { command -v "$1" >/dev/null 2>&1; }
 
 # Function to generate web3 project
 generate_web3_project() {
