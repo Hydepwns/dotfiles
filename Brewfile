@@ -22,6 +22,7 @@ brew "curl"
 brew "wget"
 brew "git"
 brew "shellcheck"              # Shell linting
+brew "age"                     # File encryption (chezmoi secrets)
 brew "starship"                # Cross-shell prompt
 brew "tldr"                    # Simplified man pages
 

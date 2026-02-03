@@ -1,4 +1,4 @@
-.PHONY: help install update diff status backup clean doctor bootstrap sync sync-from-remote backup-full install-optional performance-test generate-template tool-versions
+.PHONY: help install update diff status backup clean doctor bootstrap sync sync-from-remote backup-full install-optional performance-test generate-template tool-versions setup-age age-retrieve age-status
 
 # Configuration
 DOTFILES_ROOT := $(shell pwd)
@@ -119,6 +119,17 @@ sync-keys: ## Sync SSH public key to all Tailscale hosts
 
 keys-status: ## Show SSH key rotation status
 	@$(SCRIPTS_DIR)/utils/secrets-rotation.sh status
+
+# Age encryption
+setup-age: ## Generate age key and back up to 1Password
+	@$(SCRIPTS_DIR)/setup/setup-age.sh generate
+	@$(SCRIPTS_DIR)/setup/setup-age.sh backup
+
+age-retrieve: ## Retrieve age key from 1Password (new machine)
+	@$(SCRIPTS_DIR)/setup/setup-age.sh retrieve
+
+age-status: ## Show age encryption status
+	@$(SCRIPTS_DIR)/setup/setup-age.sh status
 
 # Dashboard
 dashboard: ## Show comprehensive service status dashboard

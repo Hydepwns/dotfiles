@@ -95,6 +95,16 @@ Three-tier approach in `core/secrets.zsh`:
 2. **AWS CLI** - SSO with `aws-profile <name>`
 3. **Infisical** (backup) - `inf-env <environment>`
 
+### Age Encryption
+
+Sensitive source files use chezmoi's age encryption (`encrypted_` prefix):
+- `home/dot_ssh/encrypted_config.tmpl` - SSH config with Tailscale host inventory
+- `home/dot_zsh/core/encrypted_secrets.zsh` - 1Password/AWS/Infisical integration
+
+Key location: `~/.config/chezmoi/age_key.txt` (mode 600, backed up to 1Password).
+
+New machine bootstrap: `make age-retrieve` pulls the key from 1Password. The age key must exist before `chezmoi apply` or encrypted files will fail to decrypt.
+
 ### Tmux
 
 Modern config in `home/dot_tmux.conf.tmpl`:

@@ -166,6 +166,62 @@ install_secrets_tools_manual() {
     fi
 }
 
+# Install age encryption tool
+install_age() {
+    if command -v age &>/dev/null; then
+        success "age already installed: $(age --version 2>&1 | head -1)"
+        return 0
+    fi
+
+    info "Installing age..."
+
+    if $IS_MAC; then
+        brew install age
+    elif $IS_NIXOS; then
+        nix-env -iA nixpkgs.age
+    else
+        if command -v apt &>/dev/null; then
+            sudo apt update && sudo apt install -y age
+        elif command -v dnf &>/dev/null; then
+            sudo dnf install -y age
+        elif command -v pacman &>/dev/null; then
+            sudo pacman -Syu --noconfirm age
+        else
+            warn "Could not install age automatically"
+            return 1
+        fi
+    fi
+
+    success "age installed"
+}
+
+# Retrieve age key from 1Password (needed before chezmoi apply)
+setup_age_key() {
+    local age_key_path="$HOME/.config/chezmoi/age_key.txt"
+
+    if [[ -f "$age_key_path" ]]; then
+        success "Age key already exists"
+        return 0
+    fi
+
+    if command -v op &>/dev/null && op whoami &>/dev/null 2>&1; then
+        info "Retrieving age key from 1Password..."
+        local key_content
+        key_content=$(op item get "Dotfiles Age Key" --vault "Private" --fields notesPlain 2>/dev/null || true)
+
+        if [[ -n "$key_content" ]]; then
+            mkdir -p "$(dirname "$age_key_path")"
+            printf '%s\n' "$key_content" > "$age_key_path"
+            chmod 600 "$age_key_path"
+            success "Age key retrieved from 1Password"
+            return 0
+        fi
+    fi
+
+    warn "Age key not available -- encrypted files will fail to decrypt"
+    warn "After signing in to 1Password, run: make age-retrieve"
+}
+
 # Initialize dotfiles
 init_dotfiles() {
     info "Initializing dotfiles..."
@@ -226,7 +282,10 @@ print_next_steps() {
     echo -e "     ${CYAN}make doctor${NC}            # Health check"
     echo -e "     ${CYAN}make dashboard${NC}         # Service status"
     echo ""
-    echo "  4. Load SSH keys:"
+    echo "  4. Age encryption key (if not auto-retrieved):"
+    echo -e "     ${CYAN}make age-retrieve${NC}      # Pull key from 1Password"
+    echo ""
+    echo "  5. Load SSH keys:"
     echo -e "     ${CYAN}ssh-add-keys${NC}           # Add keys to agent"
     echo ""
     echo -e "Documentation: ${BLUE}https://github.com/Hydepwns/dotfiles${NC}"
@@ -245,6 +304,8 @@ main() {
 
     install_chezmoi
     install_essentials
+    install_age
+    setup_age_key
     init_dotfiles
     install_from_brewfile
     setup_shell
