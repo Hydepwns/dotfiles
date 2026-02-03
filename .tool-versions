@@ -2,7 +2,7 @@ asdf 0.13.1
 direnv 2.32.3
 devenv 0.10.0
 nix 2.18.0
-node 23.4.0
+# node 23.4.0 - Now managed by nvm instead of asdf
 python 3.10.13
 rust 1.88.0
 elixir 1.18.3-otp-26

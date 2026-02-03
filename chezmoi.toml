@@ -6,7 +6,7 @@ name = "Hydepwns"
 # Oh My Zsh configuration
 oh_my_zsh_theme = "robbyrussell"
 oh_my_zsh_plugins = "git"
-starship = true
+starship = false  # Disabled - using oh-my-zsh theme instead
 
 # Personal flag for SSH templates
 personal = true
@@ -14,8 +14,8 @@ personal = true
 # Tool configurations
 rbenv = false
 ohmyzsh = true
-nvm = false
-nodejs = true
+nvm = true       # Use nvm for Node.js (takes priority over asdf)
+nodejs = false   # Disable asdf nodejs management (nvm handles it)
 asdf = true
 elixir = true
 erlang = true
