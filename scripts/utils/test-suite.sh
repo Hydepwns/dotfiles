@@ -20,16 +20,18 @@ log_warning() { echo -e "${YELLOW:-}[WARNING]${NC:-} $1"; }
 file_exists() { test -f "$1"; }
 dir_exists() { test -d "$1"; }
 command_exists() { command -v "$1" >/dev/null 2>&1; }
+# shellcheck source=platform.sh
 source "$SCRIPT_DIR/platform.sh" 2>/dev/null || {
     # Fallback platform detection
     OS="$(uname -s)"
     IS_MACOS=false
-    IS_LINUX=false  # exported by platform.sh, used externally
-    export IS_LINUX
+    # shellcheck disable=SC2034
+    IS_LINUX=false
     IS_NIXOS=false
     case "$OS" in
         Darwin) IS_MACOS=true ;;
         Linux)
+            # shellcheck disable=SC2034
             IS_LINUX=true
             [ -f /etc/os-release ] && grep -q "NixOS" /etc/os-release && IS_NIXOS=true
             ;;

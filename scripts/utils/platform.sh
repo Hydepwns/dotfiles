@@ -3,34 +3,13 @@
 # Platform.sh - Independent platform detection utilities
 # NOTE: This file MUST NOT source script-init.sh to avoid circular dependency
 
-
-# Platform detection utility for dotfiles with smart caching
-# This script provides platform-specific variables and functions
-
-# Load cached platform detection if available
-if [[ -f "$SCRIPT_DIR/cache.sh" ]]; then
-    source "$SCRIPT_DIR/cache.sh"
-    # Use cached platform detection
-    if cached_platform_info=$(cached_platform_detect 2>/dev/null); then
-        eval "$cached_platform_info"
-    else
-        # Fallback to manual detection and cache it
-        perform_platform_detection
-    fi
-else
-    # Original detection method (fallback)
-    perform_platform_detection
-fi
-
-# Platform detection function
+# Platform detection function (must be defined before use)
 perform_platform_detection() {
-    # Detect operating system
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         OS="linux"
         ARCH="$(uname -m)"
         IS_LINUX=true
         IS_MACOS=false
-        # Check for NixOS specifically
         if [ -f /etc/os-release ] && grep -q "NixOS" /etc/os-release; then
             IS_NIXOS=true
             DISTRO="nixos"
@@ -62,17 +41,17 @@ perform_platform_detection() {
     fi
 }
 
-# Set boolean flags for convenience
-IS_MACOS=false
-IS_LINUX=false
-if [[ "$OS" == "macos" ]]; then
-    IS_MACOS=true
-elif [[ "$OS" == "linux" ]]; then
-    IS_LINUX=true
+# Run detection: try cache first, fall back to direct detection
+if [[ -f "$SCRIPT_DIR/cache.sh" ]]; then
+    source "$SCRIPT_DIR/cache.sh"
+    if cached_platform_info=$(cached_platform_detect 2>/dev/null); then
+        eval "$cached_platform_info"
+    else
+        perform_platform_detection
+    fi
+else
+    perform_platform_detection
 fi
-
-# Detect architecture
-ARCH=$(uname -m)
 
 # Detect package managers
 if command -v brew &> /dev/null; then
@@ -99,7 +78,6 @@ else
     HAS_PACMAN=false
 fi
 
-# Check for Nix
 if command -v nix &> /dev/null; then
     HAS_NIX=true
 else
@@ -144,7 +122,6 @@ has_pacman() {
     [[ "$HAS_PACMAN" == true ]]
 }
 
-# Print platform info
 print_platform_info() {
     echo "Platform Information:"
     echo "  OS: $OS"
