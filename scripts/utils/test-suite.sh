@@ -169,7 +169,7 @@ echo -e "\n${YELLOW:-}Configuration Validation Tests${NC:-}"
 
 run_test "Config" "chezmoi verify" "chezmoi verify"
 run_test "Config" "no uncommitted changes" "git diff --quiet"
-run_test "Config" "managed files exist" "chezmoi managed | head -5 | xargs -I {} test -e {}"
+run_test "Config" "managed files exist" "chezmoi managed | head -5 | xargs -I {} test -e \"$HOME/{}\""
 
 # =============================================================================
 # INTEGRATION TESTS

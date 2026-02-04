@@ -1,0 +1,2 @@
+# Age-encrypted files are binary -- prevent hooks/diff from modifying them
+home/**/encrypted_* binary
