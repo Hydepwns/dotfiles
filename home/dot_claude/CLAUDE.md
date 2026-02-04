@@ -63,3 +63,25 @@
 - use Typer for CLI applications
 - use pydantic for data validation
 - prefer f-strings for formatting
+
+## Chezmoi Encrypted Files
+
+Dotfiles managed by chezmoi with age encryption. To edit encrypted templates:
+
+```bash
+# 1. Decrypt to temp file
+age -d -i ~/.config/chezmoi/age_key.txt <source_file> > /tmp/edit.txt
+
+# 2. Edit /tmp/edit.txt
+
+# 3. Re-encrypt in place
+age -r "age1pf2v9lee0rtqp8ur4tatk5w0kpp45t9d7st7zakdlsv7ykdk2ewqacwwjp" -o <source_file> /tmp/edit.txt
+
+# 4. Verify: chezmoi diff <target_path>
+# 5. Clean up: rm /tmp/edit.txt
+```
+
+- `chezmoi re-add` does NOT work for encrypted templates
+- `chezmoi edit` opens an interactive editor (not usable non-interactively)
+- source paths: `chezmoi source-path <target>` to find the encrypted file
+- always verify with `chezmoi diff` after re-encrypting
