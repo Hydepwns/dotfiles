@@ -217,11 +217,11 @@ if [ $FAILED_TESTS -eq 0 ]; then
     if [ $SKIPPED_TESTS -gt 0 ]; then
         echo -e "${CYAN:-}Note: $SKIPPED_TESTS tests were skipped (platform-specific or not configured)${NC:-}"
     fi
-    exit $EXIT_SUCCESS
+    exit 0
 else
     echo -e "\n${RED:-}Some tests failed. Please check the output above.${NC:-}"
     if [ ! -d "$HOME/.zsh" ] && [ -d home/dot_zsh ]; then
         echo -e "\n${YELLOW:-}Tip: Run 'chezmoi apply' to apply your dotfiles first${NC:-}"
     fi
-    exit $EXIT_FAILURE
+    exit 1
 fi
