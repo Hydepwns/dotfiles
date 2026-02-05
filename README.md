@@ -8,7 +8,7 @@
 Cross-platform dotfiles managed with [chezmoi](https://chezmoi.io) - featuring modular zsh, unified Synthwave84 theming, terminal power tools, and secrets management.
 
 <p align="center">
-  <img src="assets/terminal.jpg" alt="Terminal screenshot - Ghostty + Starship + fastfetch" width="700">
+  <img src="assets/terminal.png" alt="Terminal screenshot - Ghostty + Starship + fastfetch" width="700">
 </p>
 
 ## Quick Start
