@@ -27,7 +27,7 @@ mkdir -p "$(dirname "$LOG_FILE")"
 send_json_response() {
     local status_code="${1:-200}"
     local data="$2"
-    
+
     echo "HTTP/1.1 $status_code OK"
     echo "Content-Type: application/json"
     echo "Access-Control-Allow-Origin: *"
@@ -40,7 +40,7 @@ send_json_response() {
 send_error() {
     local status_code="$1"
     local message="$2"
-    
+
     local error_json
     error_json=$(cat << EOF
 {
@@ -52,7 +52,7 @@ send_error() {
 }
 EOF
 )
-    
+
     send_json_response "$status_code" "$error_json"
 }
 
@@ -62,9 +62,9 @@ get_system_info() {
     local memory_info
     local disk_info
     local cpu_info
-    
+
     os_info=$(uname -sr 2>/dev/null || echo "Unknown")
-    
+
     # Memory information
     if command -v free >/dev/null 2>&1; then
         local mem_total mem_used mem_percent
@@ -75,7 +75,7 @@ get_system_info() {
     else
         memory_info="\"memory\": {\"used\": 0, \"total\": 0, \"used_mb\": 0}"
     fi
-    
+
     # Disk information
     if command -v df >/dev/null 2>&1; then
         local disk_percent
@@ -84,7 +84,7 @@ get_system_info() {
     else
         disk_info="\"disk\": {\"used\": 0}"
     fi
-    
+
     # CPU information (simplified)
     if command -v top >/dev/null 2>&1; then
         local cpu_usage
@@ -93,7 +93,7 @@ get_system_info() {
     else
         cpu_info="\"cpu\": {\"usage\": 25}"
     fi
-    
+
     local system_json
     system_json=$(cat << EOF
 {
@@ -105,7 +105,7 @@ get_system_info() {
 }
 EOF
 )
-    
+
     send_json_response "200" "$system_json"
 }
 
@@ -114,25 +114,25 @@ get_framework_health() {
     local health_score=100
     local issues=()
     local status="healthy"
-    
+
     # Check if core utilities exist
     if [[ ! -f "$UTILS_DIR/common.sh" ]]; then
         health_score=$((health_score - 20))
         issues+=("\"Core utilities missing\"")
     fi
-    
+
     # Check if cache is working
     if [[ ! -d "$DOTFILES_ROOT/.cache" ]]; then
         health_score=$((health_score - 10))
         issues+=("\"Cache directory not accessible\"")
     fi
-    
-    # Check test framework
-    if [[ ! -f "$DOTFILES_ROOT/tests/framework/test-runner.sh" ]]; then
+
+    # Check test suite
+    if [[ ! -f "$DOTFILES_ROOT/scripts/utils/test-suite.sh" ]]; then
         health_score=$((health_score - 15))
-        issues+=("\"Test framework not available\"")
+        issues+=("\"Test suite not available\"")
     fi
-    
+
     # Determine overall status
     if [[ $health_score -ge 90 ]]; then
         status="excellent"
@@ -143,14 +143,14 @@ get_framework_health() {
     else
         status="critical"
     fi
-    
+
     local issues_json
     if [[ ${#issues[@]} -eq 0 ]]; then
         issues_json="[]"
     else
         issues_json="[$(IFS=','; echo "${issues[*]}")]"
     fi
-    
+
     local health_json
     health_json=$(cat << EOF
 {
@@ -161,14 +161,14 @@ get_framework_health() {
 }
 EOF
 )
-    
+
     send_json_response "200" "$health_json"
 }
 
 # Test results endpoint
 get_test_results() {
     local test_results_file="$DOTFILES_ROOT/.cache/test-results.json"
-    
+
     if [[ -f "$test_results_file" ]]; then
         local test_data
         test_data=$(cat "$test_results_file")
@@ -193,7 +193,7 @@ EOF
 # Plugin information endpoint
 get_plugins() {
     local plugins_registry="$DOTFILES_ROOT/plugins/.registry.json"
-    
+
     if [[ -f "$plugins_registry" ]]; then
         local plugins_data
         plugins_data=$(cat "$plugins_registry")
@@ -220,7 +220,7 @@ EOF
 # Performance metrics endpoint
 get_performance_metrics() {
     local metrics_json
-    
+
     # Generate sample performance data
     metrics_json=$(cat << EOF
 {
@@ -231,7 +231,7 @@ get_performance_metrics() {
 }
 EOF
 )
-    
+
     send_json_response "200" "$metrics_json"
 }
 
@@ -239,13 +239,13 @@ EOF
 run_tests() {
     local test_output
     local exit_code
-    
+
     # Run the actual test suite
     test_output=$("$DOTFILES_ROOT/dotfiles" test 2>&1)
     exit_code=$?
-    
+
     local passed failed coverage
-    
+
     if [[ $exit_code -eq 0 ]]; then
         passed=$(echo "$test_output" | grep -o 'Tests passed: [0-9]*' | grep -o '[0-9]*' || echo "49")
         failed=0
@@ -255,7 +255,7 @@ run_tests() {
         failed=$(echo "$test_output" | grep -o 'Tests failed: [0-9]*' | grep -o '[0-9]*' || echo "2")
         coverage=85
     fi
-    
+
     local results_json
     results_json=$(cat << EOF
 {
@@ -268,10 +268,10 @@ run_tests() {
 }
 EOF
 )
-    
+
     # Save results for future requests
     echo "$results_json" > "$DOTFILES_ROOT/.cache/test-results.json"
-    
+
     send_json_response "200" "$results_json"
 }
 
@@ -279,9 +279,9 @@ EOF
 handle_request() {
     local method="$1"
     local path="$2"
-    
+
     log_message "API Request: $method $path"
-    
+
     case "$method $path" in
         "GET /api/system")
             get_system_info
@@ -318,7 +318,7 @@ handle_request() {
 # Simple HTTP server using netcat or socat
 start_server() {
     log_message "Starting Dashboard API server on $API_HOST:$API_PORT"
-    
+
     if command -v socat >/dev/null 2>&1; then
         start_socat_server
     elif command -v nc >/dev/null 2>&1; then
@@ -330,7 +330,7 @@ start_server() {
 
 start_socat_server() {
     log_message "Using socat for HTTP server"
-    
+
     while true; do
         socat TCP-LISTEN:$API_PORT,reuseaddr,fork SYSTEM:"$0 handle_http_request" 2>/dev/null
         sleep 1
@@ -339,7 +339,7 @@ start_socat_server() {
 
 start_netcat_server() {
     log_message "Using netcat for HTTP server"
-    
+
     while true; do
         echo -e "HTTP/1.1 200 OK\nContent-Type: text/html\n\n<h1>Dashboard API</h1><p>Use /api endpoints</p>" | nc -l -p $API_PORT -q 1
         sleep 1
@@ -350,19 +350,19 @@ start_netcat_server() {
 handle_http_request() {
     local request_line
     local method path
-    
+
     # Read the first line of the HTTP request
     read -r request_line
-    
+
     # Parse method and path
     method=$(echo "$request_line" | cut -d' ' -f1)
     path=$(echo "$request_line" | cut -d' ' -f2)
-    
+
     # Skip headers
     while read -r line; do
         [[ "$line" == $'\r' ]] && break
     done
-    
+
     handle_request "$method" "$path"
 }
 
@@ -375,7 +375,7 @@ log_message() {
 # Main function
 main() {
     local command="${1:-server}"
-    
+
     case "$command" in
         "server"|"start")
             start_server

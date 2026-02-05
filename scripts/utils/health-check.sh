@@ -1,235 +1,162 @@
 #!/usr/bin/env bash
 
-# Use simple script initialization (no segfaults!)
+# Dotfiles health check
+# Usage: make doctor
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/simple-init.sh"
 
-# Health check script for dotfiles
-# This script verifies that all components are properly installed and configured
+print_section() { echo -e "\n${YELLOW:-}--- $1 ---${NC:-}"; }
+print_ok() { echo -e "  ${GREEN:-}[ok]${NC:-} $1"; }
+print_warn() { echo -e "  ${YELLOW:-}[!!]${NC:-} $1"; }
+print_fail() { echo -e "  ${RED:-}[xx]${NC:-} $1"; }
 
-# Simple utilities (no dependencies)
-log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
-log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
-log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
+PASS=0; WARN=0; FAIL=0
+ok()   { print_ok   "$1"; PASS=$((PASS + 1)); }
+warn() { print_warn "$1"; WARN=$((WARN + 1)); }
+fail() { print_fail "$1"; FAIL=$((FAIL + 1)); }
 
-# Status printing functions
-print_section() { echo -e "\n${BLUE:-}=== $1 ===${NC:-}"; }
-print_subsection() { echo -e "\n${YELLOW:-}--- $1 ---${NC:-}"; }
-print_status() {
-    local status=$1
-    local message=$2
-    case $status in
-        "OK") echo -e "  ${GREEN:-}[OK]${NC:-} $message" ;;
-        "WARN") echo -e "  ${YELLOW:-}[WARN]${NC:-} $message" ;;
-        "ERROR") echo -e "  ${RED:-}[ERROR]${NC:-} $message" ;;
-        "INFO") echo -e "  ${BLUE:-}[INFO]${NC:-} $message" ;;
-    esac
+check_cmd() {
+    local cmd="$1" level="${2:-warn}"
+    if command -v "$cmd" &>/dev/null; then
+        local ver
+        ver=$("$cmd" --version 2>/dev/null | head -1 | grep -oE '[0-9]+\.[0-9]+[^ ]*' | head -1 || true)
+        ok "$cmd${ver:+ $ver}"
+    else
+        "$level" "$cmd not found"
+    fi
 }
 
 log_info "Running dotfiles health check..."
-print_section "Health Check"
 
-# Check chezmoi installation
-print_subsection "Chezmoi"
-if command -v chezmoi &> /dev/null; then
-    print_status "OK" "chezmoi is installed ($(chezmoi --version))"
-else
-    print_status "ERROR" "chezmoi is not installed"
-fi
-
-# Check git configuration
-print_subsection "Git Configuration"
-if git config --global --get user.name &> /dev/null; then
-    print_status "OK" "Git user.name is set: $(git config --global --get user.name)"
-else
-    print_status "WARN" "Git user.name is not set"
-fi
-
-if git config --global --get user.email &> /dev/null; then
-    print_status "OK" "Git user.email is set: $(git config --global --get user.email)"
-else
-    print_status "WARN" "Git user.email is not set"
-fi
-
-# Check shell configuration
-print_subsection "Shell Configuration"
-print_status "INFO" "Current shell: $SHELL"
-
-if command -v zsh &> /dev/null; then
-    print_status "OK" "Zsh is installed ($(zsh --version | head -n1))"
-else
-    print_status "WARN" "Zsh is not installed"
-fi
-
-# Check if zsh is the default shell
-if [[ "$SHELL" == *"zsh"* ]]; then
-    print_status "OK" "Zsh is the default shell"
-else
-    print_status "WARN" "Zsh is not the default shell (current: $SHELL)"
-fi
-
-# Check development tools
-print_subsection "Development Tools"
-
-# Check Homebrew (macOS)
+# -- Core --
+print_section "Core"
+check_cmd chezmoi fail
+check_cmd git fail
+check_cmd zsh fail
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    if command -v brew &> /dev/null; then
-        print_status "OK" "Homebrew is installed"
+    check_cmd brew warn
+fi
+
+# -- Shell --
+print_section "Shell"
+if [[ -f "$HOME/.zshrc" ]]; then
+    ok ".zshrc exists ($(wc -l < "$HOME/.zshrc" | tr -d ' ') lines)"
+else
+    fail ".zshrc missing"
+fi
+
+if [[ -f "$HOME/.zsh/modules.zsh" ]]; then
+    ok "modules.zsh loaded"
+else
+    fail "modules.zsh missing"
+fi
+
+if command -v starship &>/dev/null && [[ -f "$HOME/.config/starship/starship.toml" ]]; then
+    ok "Starship prompt configured"
+elif command -v starship &>/dev/null; then
+    warn "Starship installed but config missing"
+else
+    warn "Starship not installed"
+fi
+
+# -- Terminal tools --
+print_section "Terminal Tools"
+for tool in fzf zoxide eza bat fd rg yazi btop fastfetch tldr delta; do
+    check_cmd "$tool"
+done
+
+# -- Dev tools --
+print_section "Development"
+check_cmd mise warn
+check_cmd direnv warn
+check_cmd nvim warn
+
+if command -v node &>/dev/null; then
+    ok "node $(node --version 2>/dev/null || true)"
+else
+    warn "node not found"
+fi
+
+if command -v rustc &>/dev/null; then
+    ok "rustc $(rustc --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' || true)"
+else
+    warn "rustc not found"
+fi
+
+if command -v python3 &>/dev/null; then
+    ok "python3 $(python3 --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' || true)"
+else
+    warn "python3 not found"
+fi
+
+if command -v elixir &>/dev/null; then
+    ok "elixir installed"
+else
+    warn "elixir not found"
+fi
+
+# -- Encryption --
+print_section "Encryption"
+AGE_KEY="$HOME/.config/chezmoi/age_key.txt"
+if [[ -f "$AGE_KEY" ]]; then
+    perms=$(stat -f '%Lp' "$AGE_KEY" 2>/dev/null) || perms=$(stat -c '%a' "$AGE_KEY" 2>/dev/null) || perms="unknown"
+    if [[ "$perms" == "600" ]]; then
+        ok "age key (mode 600)"
     else
-        print_status "WARN" "Homebrew is not installed"
+        warn "age key mode $perms (should be 600)"
     fi
-fi
-
-# Check Node.js
-if command -v node &> /dev/null; then
-    print_status "OK" "Node.js is installed ($(node --version))"
 else
-    print_status "WARN" "Node.js is not installed"
+    fail "age key missing"
 fi
+check_cmd age fail
 
-# Check Rust
-if command -v rustc &> /dev/null; then
-    print_status "OK" "Rust is installed ($(rustc --version))"
+# -- Git --
+print_section "Git"
+if git config user.name &>/dev/null; then
+    ok "$(git config user.name) <$(git config user.email)>"
 else
-    print_status "WARN" "Rust is not installed"
+    fail "git user not configured"
 fi
 
-# Check Python
-if command -v python3 &> /dev/null; then
-    print_status "OK" "Python 3 is installed ($(python3 --version))"
+if git config commit.gpgsign &>/dev/null; then
+    ok "GPG signing enabled"
 else
-    print_status "WARN" "Python 3 is not installed"
+    warn "GPG signing not configured"
 fi
 
-# Check Python version from .tool-versions
-if [[ -f .tool-versions ]] && grep -q "^python " .tool-versions; then
-    expected_version=$(grep "^python " .tool-versions | cut -d' ' -f2)
-    print_status "INFO" "Expected Python version: $expected_version"
-fi
-
-# Check asdf
-if command -v asdf &> /dev/null; then
-    print_status "OK" "asdf is installed"
+# -- SSH --
+print_section "SSH"
+ssh_keys=$(ssh-add -l 2>/dev/null || true)
+if [[ -n "$ssh_keys" ]] && [[ "$ssh_keys" != *"no identities"* ]]; then
+    ok "SSH keys loaded: $(echo "$ssh_keys" | head -1 | rev | cut -d' ' -f1 | rev)"
 else
-    print_status "INFO" "asdf is not installed"
+    warn "no SSH keys loaded"
 fi
 
-# Check NVM
-if command -v nvm &> /dev/null; then
-    print_status "OK" "NVM is installed"
-elif [[ -s "$HOME/.nvm/nvm.sh" ]]; then
-    print_status "OK" "NVM is installed but not loaded"
-else
-    print_status "INFO" "NVM is not installed"
-fi
-
-# Check rbenv
-if command -v rbenv &> /dev/null; then
-    print_status "OK" "rbenv is installed"
-else
-    print_status "INFO" "rbenv is not installed"
-fi
-
-# Check Elixir
-if command -v elixir &> /dev/null; then
-    print_status "OK" "Elixir is installed ($(elixir --version | head -n1))"
-else
-    print_status "INFO" "Elixir is not installed"
-fi
-
-# Check Lua
-if command -v lua &> /dev/null; then
-    print_status "OK" "Lua is installed ($(lua -v))"
-else
-    print_status "INFO" "Lua is not installed"
-fi
-
-# Check direnv
-if command -v direnv &> /dev/null; then
-    print_status "OK" "direnv is installed"
-else
-    print_status "INFO" "direnv is not installed"
-fi
-
-# Check Nix
-if command -v nix &> /dev/null; then
-    print_status "OK" "Nix is installed"
-else
-    print_status "INFO" "Nix is not installed"
-fi
-
-# Check Neovim
-if command -v nvim &> /dev/null; then
-    print_status "OK" "Neovim is installed ($(nvim --version | head -n1))"
-else
-    print_status "INFO" "Neovim is not installed"
-fi
-
-# Check chezmoi data
-print_subsection "Chezmoi Configuration"
+# -- Chezmoi --
+print_section "Chezmoi"
 if [[ -f "$HOME/.config/chezmoi/chezmoi.toml" ]]; then
-    print_status "OK" "chezmoi configuration exists"
+    ok "chezmoi.toml exists"
 else
-    print_status "WARN" "chezmoi configuration not found"
+    fail "chezmoi.toml missing"
 fi
 
-# Check age encryption
-print_subsection "Age Encryption"
-if command -v age &> /dev/null; then
-    print_status "OK" "age CLI installed ($(age --version 2>&1 || echo 'unknown'))"
+drift=$(chezmoi status 2>/dev/null | wc -l | tr -d ' ' || echo "0")
+if [[ "$drift" -eq 0 ]]; then
+    ok "no drift"
 else
-    print_status "WARN" "age CLI not installed (encrypted files will not decrypt)"
+    warn "$drift file(s) have drift (run chezmoi diff)"
 fi
 
-if [[ -f "$HOME/.config/chezmoi/age_key.txt" ]]; then
-    age_perms=$(stat -f '%Lp' "$HOME/.config/chezmoi/age_key.txt" 2>/dev/null || stat -c '%a' "$HOME/.config/chezmoi/age_key.txt" 2>/dev/null)
-    if [[ "$age_perms" == "600" ]]; then
-        print_status "OK" "Age key file exists (mode: $age_perms)"
-    else
-        print_status "WARN" "Age key file permissions are $age_perms (should be 600)"
-    fi
+# -- Summary --
+echo ""
+echo "---"
+total=$((PASS + WARN + FAIL))
+printf "Results: %d passed, %d warnings, %d failed (%d total)\n" "$PASS" "$WARN" "$FAIL" "$total"
+
+if [[ "$FAIL" -gt 0 ]]; then
+    exit 1
 else
-    print_status "WARN" "Age key file not found at ~/.config/chezmoi/age_key.txt"
+    log_success "Health check complete!"
 fi
-
-# Check if dotfiles are applied
-if chezmoi status &> /dev/null; then
-    print_status "OK" "Dotfiles are properly applied"
-else
-    print_status "WARN" "Dotfiles may not be properly applied"
-fi
-
-# Check SSH and GitHub configuration
-print_subsection "SSH and GitHub"
-check_ssh_keys() {
-    # Check for various SSH key types
-    local ssh_keys=()
-    [[ -f ~/.ssh/id_rsa ]] && ssh_keys+=("id_rsa")
-    [[ -f ~/.ssh/id_ed25519 ]] && ssh_keys+=("id_ed25519")
-    [[ -f ~/.ssh/id_ecdsa ]] && ssh_keys+=("id_ecdsa")
-    [[ -f ~/.ssh/id_dsa ]] && ssh_keys+=("id_dsa")
-
-    # Check for loaded SSH keys
-    if ssh-add -l &> /dev/null && [[ $(ssh-add -l | wc -l) -gt 0 ]]; then
-        local loaded_keys
-        loaded_keys=$(ssh-add -l | head -1 | cut -d' ' -f3)
-        print_status "OK" "SSH keys loaded: $loaded_keys"
-    elif [[ ${#ssh_keys[@]} -gt 0 ]]; then
-        print_status "OK" "SSH private keys found: ${ssh_keys[*]}"
-    else
-        print_status "WARN" "SSH private key not found"
-    fi
-}
-
-check_github_token() {
-    if [[ -n "$GITHUB_TOKEN" ]]; then
-        print_status "OK" "GitHub token is set"
-    else
-        print_status "WARN" "GitHub token not found"
-    fi
-}
-
-check_ssh_keys
-check_github_token
-
-log_success "Health check complete!"

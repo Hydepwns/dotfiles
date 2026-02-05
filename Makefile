@@ -1,4 +1,4 @@
-.PHONY: help install update diff status backup clean doctor bootstrap sync sync-from-remote backup-full install-optional performance-test generate-template tool-versions setup-age age-retrieve age-status setup-raycast raycast-export raycast-import raycast-status setup-takopi takopi-onboard takopi-backup takopi-status
+.PHONY: help install update diff status backup clean doctor bootstrap sync sync-from-remote backup-full install-optional performance-test generate-template tool-versions setup-age age-retrieve age-status setup-raycast raycast-export raycast-import raycast-status setup-takopi takopi-onboard takopi-backup takopi-status lint
 
 # Configuration
 DOTFILES_ROOT := $(shell pwd)
@@ -57,18 +57,22 @@ sync-from-remote: ## Sync from remote repository
 install-optional: ## Install optional tools interactively
 	@$(SCRIPTS_DIR)/utils/install-optional.sh
 
+# Linting
+lint: ## Run shellcheck on all shell scripts
+	@echo "Running shellcheck..."
+	@find scripts/ utils/ -name '*.sh' -not -path '*/templates/*' | sort | while read -r f; do \
+		printf "  %-50s" "$$f"; \
+		if shellcheck --severity=warning "$$f" 2>/dev/null; then \
+			echo "ok"; \
+		else \
+			echo "FAIL"; \
+		fi; \
+	done
+
 # Testing and development
 test: ## Run comprehensive dotfiles test suite
-	@echo "🧪 Running Dotfiles Test Suite..."
+	@echo "Running Dotfiles Test Suite..."
 	@$(SCRIPTS_DIR)/utils/test-suite.sh
-	@echo ""
-	@echo "📋 Test Categories:"
-	@echo "  • Core Infrastructure (chezmoi, git, config)"
-	@echo "  • Shell Configuration (zsh, modules)"
-	@echo "  • Tool Installation (Homebrew, Oh My Zsh, dev tools)"
-	@echo "  • Configuration Validation (chezmoi verify, git status)"
-	@echo "  • Integration Tests (zsh syntax)"
-	@echo "  • Security Tests (sensitive files, SSH config)"
 
 performance-test: ## Run performance tests
 	@$(SCRIPTS_DIR)/utils/performance-test.sh

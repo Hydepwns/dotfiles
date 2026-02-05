@@ -18,6 +18,7 @@ chezmoi apply             # Apply local changes to home directory
 
 # Development
 make test                 # Run test suite (zsh syntax, module loading, security)
+make lint                 # Run shellcheck on all shell scripts
 make doctor               # Health check all configs and tools
 make perf                 # Benchmark shell startup time
 
@@ -63,7 +64,7 @@ curl -fsSL https://raw.githubusercontent.com/Hydepwns/dotfiles/main/scripts/inst
 | `home/private_dot_config/direnv/` | `~/.config/direnv/` | direnv layouts (mise, poetry, node) |
 | `home/dot_takopi/` | `~/.takopi/` | takopi config (encrypted) |
 | `config/raycast/` | Manual deploy | Raycast settings export |
-| `config/` | Manual deploy | Theme source |
+| `config/` | Manual deploy | Theme source of truth |
 | `scripts/setup/` | - | Installation scripts |
 | `scripts/utils/` | - | Maintenance utilities |
 
@@ -87,7 +88,7 @@ home/dot_zsh/
 
 ### Terminal Power Tools
 
-Configured in `core/tools.zsh` with Synthwave84 theme colors:
+Configured in `core/tools.zsh.tmpl` with Synthwave84 theme colors. Includes zsh completions for mise, chezmoi, and make targets.
 
 | Tool | Alias | Usage |
 |------|-------|-------|

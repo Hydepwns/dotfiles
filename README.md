@@ -103,6 +103,7 @@ chezmoi apply         # Apply local changes
 
 # Tools
 make brew-install     # Install Brewfile packages
+make lint             # Run shellcheck on all scripts
 make setup-secrets    # Install 1Password, AWS, Infisical, Tailscale
 make setup-paperwm    # Install PaperWM.spoon for Hammerspoon
 make raycast-export   # Export Raycast settings to dotfiles
@@ -147,23 +148,27 @@ nodejs = true
 dotfiles/
 ├── home/
 │   ├── dot_zsh/                    # Modular zsh
-│   │   └── core/tools.zsh          # fzf/zoxide/eza/bat
-│   ├── dot_hammerspoon/            # Window management
+│   │   ├── core/tools.zsh.tmpl     # fzf/zoxide/eza/bat + completions
+│   │   ├── core/lazy-loading.zsh.tmpl  # mise, direnv
+│   │   ├── aliases/dev.zsh         # Shell aliases
+│   │   └── functions/              # Shell functions
+│   ├── dot_hammerspoon/            # Window management (PaperWM)
 │   ├── dot_tmux.conf.tmpl          # Modern tmux
 │   ├── private_dot_config/
 │   │   ├── ghostty/                # Terminal
 │   │   ├── zed/                    # Editor
-│   │   ├── nvim/                   # Neovim (lean)
+│   │   ├── nvim/                   # Neovim (27 plugins)
 │   │   ├── btop/                   # System monitor + theme
-│   │   ├── yazi/                   # File manager
-│   │   └── fastfetch/              # System info
+│   │   ├── yazi/                   # File manager + theme
+│   │   ├── fastfetch/              # System info
+│   │   ├── starship/               # Prompt config
+│   │   └── direnv/                 # direnv layouts (mise, poetry)
 │   ├── dot_takopi/                 # takopi config (encrypted)
 │   └── dot_claude/                 # Claude Code prefs
 ├── config/
 │   ├── raycast/                    # Raycast settings export
-│   ├── theme/synthwave84.toml      # Theme source
-│   └── starship/                   # Prompt config
-├── Brewfile                        # macOS packages
+│   └── theme/synthwave84.toml      # Theme source of truth
+├── Brewfile                        # macOS packages (auto-installs on apply)
 └── scripts/
     ├── setup/                      # Installation
     └── utils/                      # Maintenance

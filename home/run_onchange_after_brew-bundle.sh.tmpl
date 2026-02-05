@@ -1,0 +1,15 @@
+#!/bin/bash
+{{- if eq .chezmoi.os "darwin" }}
+# Brewfile hash: {{ output "shasum" "-a" "256" (joinPath .chezmoi.sourceDir ".." "Brewfile") }}
+# Auto-install Brewfile packages when Brewfile changes
+
+if command -v brew &>/dev/null; then
+    BREWFILE="{{ joinPath .chezmoi.sourceDir ".." "Brewfile" }}"
+    if [[ -f "$BREWFILE" ]]; then
+        if ! brew bundle check --file="$BREWFILE" --no-upgrade &>/dev/null; then
+            echo "[chezmoi] Brewfile changed, installing packages..."
+            brew bundle install --file="$BREWFILE" --no-upgrade
+        fi
+    fi
+fi
+{{- end }}
