@@ -4,214 +4,118 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Chezmoi-based cross-platform dotfiles with modular zsh configuration. Primary platform is macOS (Apple Silicon), with Linux/NixOS support. Uses template-driven configuration with 30+ conditional features and achieves ~386ms shell startup via caching and lazy-loading.
+Chezmoi-based cross-platform dotfiles. Primary platform: macOS (Apple Silicon), with Linux/NixOS support. Template-driven configuration with 30+ conditional features. Shell startup ~386ms via caching and lazy-loading.
 
 ## Key Commands
 
 ```bash
-# Core chezmoi operations
-make install              # Fresh install: chezmoi init --apply
-make update               # Pull and apply remote changes
-make diff                 # Preview pending changes
-make status               # Show dotfile status
-chezmoi apply             # Apply local changes to home directory
+make install              # chezmoi init --apply (fresh machine)
+make update               # Pull remote + chezmoi apply
+make diff                 # Preview pending chezmoi changes
+chezmoi apply             # Apply local source changes to home directory
+chezmoi apply --force     # Skip prompts for modified target files
 
-# Development
-make test                 # Run test suite (zsh syntax, module loading, security)
-make lint                 # Run shellcheck on all shell scripts
-make doctor               # Health check all configs and tools
-make perf                 # Benchmark shell startup time
+make lint                 # shellcheck on scripts/ and utils/
+make doctor               # Health check (32 checks across tools, config, security)
+make perf                 # 5-run shell startup benchmark
+make perf-report          # Bare vs configured startup breakdown
+make test                 # Test suite (zsh syntax, module loading)
 
-# Setup tools
-make setup-secrets        # Install 1Password CLI, AWS CLI, Infisical, Tailscale
-make brew-install         # Install all Brewfile packages
-make setup-takopi         # Install takopi via uv
-make takopi-onboard       # Interactive takopi setup wizard
-make takopi-backup        # Encrypt takopi config to chezmoi
-
-# Dashboard and monitoring
-make dashboard            # Show comprehensive service status
-make dashboard-watch      # Auto-refreshing dashboard
-
-# SSH key rotation
-make rotate-keys          # Generate new key, store in 1Password, sync to hosts
-make sync-keys            # Sync public key to all Tailscale hosts
+make brew-install         # Install Brewfile packages
+make brew-dump            # Update Brewfile from current system
+make dashboard            # Service status dashboard (CLI)
+make setup-secrets        # Install 1Password, AWS CLI, Infisical, Tailscale
+make rotate-keys          # SSH key rotation via 1Password + Tailscale sync
 ```
 
-## Bootstrap (Fresh Machine)
+## Chezmoi Architecture
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/Hydepwns/dotfiles/main/scripts/install/remote-bootstrap.sh | bash
-```
+**Source directory**: `home/` (set in `chezmoi.toml` as `sourceDir`). Chezmoi maps `home/dot_foo` -> `~/.foo`, `home/private_dot_config/` -> `~/.config/`.
 
-## Architecture
-
-### Directory Mapping
-
-| Source | Destination | Purpose |
-|--------|-------------|---------|
-| `home/dot_*` | `~/.*` | Chezmoi-managed dotfiles |
-| `home/dot_zsh/` | `~/.zsh/` | Modular zsh configuration |
-| `home/dot_claude/` | `~/.claude/` | Claude Code config |
-| `home/dot_hammerspoon/` | `~/.hammerspoon/` | macOS window management |
-| `home/private_dot_config/ghostty/` | `~/.config/ghostty/` | Ghostty terminal |
-| `home/private_dot_config/zed/` | `~/.config/zed/` | Zed editor |
-| `home/private_dot_config/nvim/` | `~/.config/nvim/` | Neovim (lean config) |
-| `home/private_dot_config/btop/` | `~/.config/btop/` | System monitor + Synthwave84 theme |
-| `home/private_dot_config/yazi/` | `~/.config/yazi/` | Terminal file manager |
-| `home/private_dot_config/fastfetch/` | `~/.config/fastfetch/` | System info display |
-| `home/private_dot_config/starship/` | `~/.config/starship/` | Starship prompt config |
-| `home/private_dot_config/direnv/` | `~/.config/direnv/` | direnv layouts (mise, poetry, node) |
-| `home/dot_takopi/` | `~/.takopi/` | takopi config (encrypted) |
-| `config/raycast/` | Manual deploy | Raycast settings export |
-| `config/` | Manual deploy | Theme source of truth |
-| `scripts/setup/` | - | Installation scripts |
-| `scripts/utils/` | - | Maintenance utilities |
-
-### Modular Zsh Architecture
+**Template system**: Files ending in `.tmpl` use Go template syntax. All boolean flags live in `chezmoi.toml` under `[data]`:
 
 ```
-home/dot_zsh/
-├── modules.zsh           # Loader
-├── core/
-│   ├── lazy-loading.zsh  # mise activation, deferred init for direnv
-│   ├── secrets.zsh       # 1Password, AWS, Infisical
-│   ├── ssh.zsh           # SSH agent management
-│   ├── tools.zsh         # fzf, zoxide, eza, bat integration
-│   ├── xdg.zsh           # XDG compliance
-│   ├── prompt.zsh        # Starship initialization
-│   └── platforms/        # macos.zsh, linux.zsh
-├── aliases/
-│   └── dev.zsh           # All shell aliases
-└── functions/            # Shell functions
+# Identity: name, email, github, gpg_signing_key, age_recipient, brewPrefix
+# Shell:    starship, ohmyzsh, oh_my_zsh_theme, oh_my_zsh_plugins
+# Tools:    mise, rust, elixir, erlang, lua, direnv, devenv, nix
+# Legacy:   rbenv, nvm, nodejs, asdf (all false -- use mise instead)
+# Services: tailscale, onepassword, aws, infisical, orbstack
+# macOS:    paperwm, raycast, llvm, postgres, psql
+# Web3:     foundry, huff, solana
+# Apps:     takopi, work, personal
+# Theme:    [data.theme] -- full Synthwave84 palette (bg, fg, accent, ANSI colors)
 ```
 
-### Terminal Power Tools
+Use in templates: `{{- if .rust -}}...{{- end -}}`. Use `{{- -}}` to trim whitespace.
 
-Configured in `core/tools.zsh.tmpl` with Synthwave84 theme colors. Includes zsh completions for mise, chezmoi, and make targets.
+**Template strictness**: `[template] options = ["missingkey=error"]` -- referencing an undefined key is a hard error. Always check that a flag exists in `chezmoi.toml` before using it in a template.
 
-| Tool | Alias | Usage |
-|------|-------|-------|
-| fzf | `fe`, `fcd`, `fkill`, `fh`, `fbr` | `Ctrl+R` history, `Ctrl+T` files, `Alt+C` cd |
-| zoxide | `z` | Smart cd (`z proj` jumps to project) |
-| eza | `ls`, `ll`, `la`, `lt` | Better ls with icons/git |
-| bat | `cat`, `catp`, `catl` | Syntax highlighted cat, man pager |
-| fd | `find` | Faster find, respects .gitignore |
-| ripgrep | `grep`, `rg`, `rgi`, `rgl` | Faster grep |
-| yazi | `y` | Terminal file manager with image/PDF/archive preview |
-| btop | `top`, `htop` | System monitor (Synthwave84 themed) |
-| fastfetch | `fetch`, `neofetch` | System info display |
-| jq / yq | - | JSON and YAML processing |
-| tldr | `help` | Simplified command examples |
-| tree | - | Directory tree view |
+**Run-onchange scripts** (auto-execute on `chezmoi apply`):
+- `run_onchange_after_brew-bundle.sh.tmpl` -- runs `brew bundle install` when Brewfile hash changes
+- `run_onchange_after_reload-hammerspoon.sh.tmpl` -- reloads Hammerspoon on config change (macOS)
 
-### Secrets Management
+**Age encryption**: Sensitive files use `encrypted_` prefix. Key at `~/.config/chezmoi/age_key.txt`. To edit encrypted templates, decrypt with `age -d`, edit, re-encrypt with `age -r "<recipient>"`, verify with `chezmoi diff`. `chezmoi re-add` does NOT work for encrypted files.
 
-Three-tier approach in `core/secrets.zsh`:
-1. **1Password** (primary) - SSH agent via `SSH_AUTH_SOCK`
-2. **AWS CLI** - SSO with `aws-profile <name>`
-3. **Infisical** (backup) - `inf-env <environment>`
+Encrypted files:
+- `home/dot_ssh/encrypted_config.tmpl` -- SSH config with Tailscale hosts
+- `home/dot_zsh/core/encrypted_secrets.zsh` -- 1Password/AWS/Infisical integration
+- `home/dot_takopi/encrypted_takopi.toml` -- takopi bot config
 
-### Age Encryption
+## Modular Zsh Architecture
 
-Sensitive source files use chezmoi's age encryption (`encrypted_` prefix):
-- `home/dot_ssh/encrypted_config.tmpl` - SSH config with Tailscale host inventory
-- `home/dot_zsh/core/encrypted_secrets.zsh` - 1Password/AWS/Infisical integration
-- `home/dot_takopi/encrypted_takopi.toml` - takopi Telegram bot config
+Entry: `dot_zshrc.tmpl` -> sources `~/.zsh/modules.zsh`
 
-Key location: `~/.config/chezmoi/age_key.txt` (mode 600, backed up to 1Password).
+`modules.zsh` auto-sources in order:
+1. `core/*.zsh` (alphabetically: config, lazy-loading, paths, prompt, secrets, ssh, tools, xdg)
+2. `core/platforms/*.zsh` (macos.zsh or linux.zsh)
+3. `aliases/*.zsh`
+4. `functions/*.zsh`
+5. `env.zsh` (explicit, not wildcard)
 
-New machine bootstrap: `make age-retrieve` pulls the key from 1Password. The age key must exist before `chezmoi apply` or encrypted files will fail to decrypt.
+**Performance-critical patterns** (don't break these):
+- `compinit -C` when `.zcompdump` is fresh (<24h), full `compinit` only when stale
+- Starship init cached to `$XDG_CACHE_HOME/zsh-completions/starship-init.zsh` (24h TTL)
+- Tool completions (mise, chezmoi) cached via `_cache_completion()` helper (24h TTL)
+- Oh My Zsh conditionally skipped when `starship = true` (saves ~1000ms)
+- Fastfetch deferred to one-shot `precmd` hook (runs after first prompt, not before)
+- `modules.zsh` sources `env.zsh` explicitly -- do NOT use root-level wildcards (stale files caused 1357ms regression)
 
-### Tmux
+**PATH management**: `core/paths.zsh.tmpl` defines a `PATH_REGISTRY` associative array and `build_path()` function. All PATH additions go through `add_to_path()` which checks directory existence. Registry keys: `base`, `macos_brew`, `linux_local`, `mise`, `rust`, `pnpm_macos`, `pnpm_linux`, `pipx`, `foundry`, `huff`, `solana`, `llvm`, `postgres_homebrew`, `postgres_app`, `rbenv`, `nvm`, `asdf`, `erlang`, `elixir_mix`, `lua_luarocks`, `nix_profile`.
 
-Modern config in `home/dot_tmux.conf.tmpl`:
-- Prefix: `Ctrl+a`
-- Splits: `|` horizontal, `-` vertical
-- Navigation: `hjkl` or `Alt+arrows`
-- Synthwave84 status bar
+## Writing Scripts
 
-### Hammerspoon (macOS)
+Scripts source `scripts/utils/simple-init.sh` for: `set -euo pipefail`, color vars, `log_info`/`log_success`/`log_error`/`log_warning`, auto-detected `$DOTFILES_ROOT`.
 
-Window management in `home/dot_hammerspoon/init.lua.tmpl`, gated by `paperwm` chezmoi flag:
+Shared constants from `scripts/utils/constants.sh`: exit codes (`EXIT_SUCCESS` through `EXIT_TIMEOUT`), identity vars from chezmoi data (`GITHUB_USER`, `USER_NAME`, `USER_EMAIL`, `AGE_RECIPIENT`), infrastructure (`OP_VAULT`, `TAILSCALE_USER`).
 
-**PaperWM mode** (`paperwm = true`) - scrollable tiling:
-- `Cmd+Alt + hjkl` - Focus left/right/down/up
-- `Cmd+Alt+Shift + hjkl` - Swap windows
-- `Cmd+Alt + r` - Cycle window width (1/3, 1/2, 2/3)
-- `Cmd+Alt + return` - Full width
-- `Cmd+Alt + c` - Center window
-- `Cmd+Alt + i/o` - Slurp/barf columns
-- `Cmd+Alt+Shift + space` - Toggle floating
-- `Cmd+Alt + 1-9` - Switch space
-- `Cmd+Alt+Shift + 1-9` - Move window to space
-- Setup: `make setup-paperwm`
+Setup scripts follow the pattern: `scripts/setup/setup-<tool>.sh` with subcommands (`install`, `status`, `config`). Add a Makefile target with `## comment` for `make help` discoverability.
 
-**Grid mode** (`paperwm = false`) - traditional snapping:
-- `Cmd+Alt + arrows` - Window halves/full
-- `Cmd+Alt + 1-5` - Window thirds
+## Pre-commit Hooks
 
-**Shared bindings** (both modes):
-- `Hyper + h/l` - Move window between screens
-- `Cmd+Alt + t/e/b` - Launch Ghostty/Zed/Brave
-- `Cmd+Alt + space` - App chooser
-- `Cmd+Alt + v` - Clipboard history
+Commits run: trailing-whitespace, end-of-file-fixer, check-yaml, check-added-large-files (500KB), check-merge-conflict, shellcheck (warning level, excludes `.zsh` files), black (Python), prettier (JSON/YAML/Markdown). Encrypted files (`encrypted_*`) are excluded from whitespace hooks.
 
-### Raycast (macOS)
+## Theming
 
-Settings export/import via `config/raycast/`:
-- `make raycast-export` -- opens Raycast export dialog, decompresses `.rayconfig` to `settings.json` for diffable version control
-- `make raycast-import` -- opens Raycast import dialog to restore from `.rayconfig`
-- `make raycast-status` -- show installation and export status
-- Gated by `raycast = true` in chezmoi.toml
+Single source of truth: `[data.theme]` in `chezmoi.toml` (Synthwave84 palette). Templates reference colors as `{{ .theme.bg }}`, `{{ .theme.accent }}`, etc. Applied to: fzf (`tools.zsh.tmpl`), Starship (`starship.toml.tmpl`), Hammerspoon alerts. Static theme files in `config/theme/synthwave84.toml` for tools that can't use chezmoi templates.
 
-### Neovim
+## Adding Features
 
-27 plugins across 8 modules in `home/private_dot_config/nvim/`:
-- Telescope, Treesitter, LSP+Mason, nvim-cmp
-- mini.files, mini.surround, mini.statusline, mini.indentscope
-- flash.nvim, gitsigns, lazygit, which-key, trouble, conform
-- mona.nvim (Synthwave84 colorscheme)
-- `<Space>ff` find files, `<Space>e` explorer
+**New alias**: Add to `home/dot_zsh/aliases/dev.zsh`
 
-### Starship Prompt
+**New conditional tool**:
+1. Add flag to `chezmoi.toml`: `mytool = true`
+2. Gate in templates: `{{- if .mytool -}}...{{- end -}}`
 
-Synthwave84-themed cross-shell prompt in `home/private_dot_config/starship/starship.toml.tmpl`:
-- Git branch (pink), status (yellow), state (rebase/merge indicator)
-- Language versions: node, rust, python, elixir, go (contextual)
-- Command duration (>2s), error status, SSH-aware username/hostname
-- Directory substitutions: `Documents` -> `docs`, `CODE` -> `code`
-- Gated by `starship = true` in chezmoi.toml (disables Oh My Zsh theme)
+**New setup script**:
+1. Create `scripts/setup/setup-mytool.sh` (source `simple-init.sh`, add subcommands)
+2. Add Makefile target with `## comment`
+3. Add to `.PHONY` line
 
-## Adding New Features
-
-### New shell alias
-Add to `home/dot_zsh/aliases/dev.zsh`
-
-### New conditional tool
-1. Add to `chezmoi.toml`: `mytool = true`
-2. Use in templates: `{{- if .mytool -}}...{{- end -}}`
-
-### New setup script
-Create `scripts/setup/setup-mytool.sh`, add Makefile target
+**New PATH entry**: Add key to `PATH_REGISTRY` in `paths.zsh.tmpl`, add conditional `add_to_path` call in `build_path()`
 
 ## Code Style
 
-- Shell: bash with `set -e`, shellcheck compliant
-- Chezmoi templates: Use `{{- -}}` to trim whitespace
-- Lua (Hammerspoon/Neovim): Follow existing patterns
-
-## Unified Theming
-
-Source: `config/theme/synthwave84.toml`
-
-Applied to: Ghostty, tmux, fzf, Neovim (mona.nvim), btop, yazi, fastfetch, Starship, Hammerspoon alerts
-
-## Brewfile (macOS)
-
-```bash
-make brew-install   # Install all packages
-make brew-dump      # Update from current system
-```
-
-Includes: fzf, zoxide, eza, bat, fd, ripgrep, delta, gh, tldr, btop, fastfetch, yazi, jq, yq, tree, direnv
+- Shell: bash with `set -euo pipefail`, shellcheck compliant, quote all variables
+- Use `[[ ]]` over `[ ]`, `$((expr))` over `((expr))` (the latter fails under `set -e` when result is 0)
+- Guard external commands that may return non-zero: `grep ... || true`, `command -v ... &>/dev/null`
+- Chezmoi templates: `{{- -}}` to trim whitespace, use `.chezmoi.homeDir` not `~`
