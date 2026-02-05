@@ -79,103 +79,6 @@ EOF
     success "Generated: $output"
 }
 
-# Generate Kitty theme
-generate_kitty() {
-    local output="$DOTFILES_ROOT/config/kitty/synthwave84.conf"
-    info "Generating Kitty theme..."
-
-    cat > "$output" << EOF
-# Synthwave84 Theme for Kitty
-# Auto-generated from config/theme/synthwave84.toml
-
-background $(get_toml_value "background")
-foreground $(get_toml_value "foreground")
-cursor $(get_toml_value "cursor")
-cursor_text_color $(get_toml_value "selection_fg")
-selection_background $(get_toml_value "selection_bg")
-selection_foreground $(get_toml_value "selection_fg")
-url_color $(get_toml_value "cyan")
-
-# Normal colors
-color0 $(get_toml_value "black")
-color1 $(get_toml_value "red")
-color2 $(get_toml_value "green")
-color3 $(get_toml_value "yellow")
-color4 $(get_toml_value "blue")
-color5 $(get_toml_value "magenta")
-color6 $(get_toml_value "cyan")
-color7 $(get_toml_value "white")
-
-# Bright colors
-color8 $(get_toml_value "bright_black")
-color9 $(get_toml_value "bright_red")
-color10 $(get_toml_value "bright_green")
-color11 $(get_toml_value "bright_yellow")
-color12 $(get_toml_value "bright_blue")
-color13 $(get_toml_value "bright_magenta")
-color14 $(get_toml_value "bright_cyan")
-color15 $(get_toml_value "bright_white")
-
-# Tab bar
-active_tab_background $(get_toml_value "accent")
-active_tab_foreground $(get_toml_value "background_dark")
-inactive_tab_background $(get_toml_value "background_dark")
-inactive_tab_foreground $(get_toml_value "foreground_dim")
-
-# Window borders
-active_border_color $(get_toml_value "accent")
-inactive_border_color $(get_toml_value "border")
-EOF
-
-    success "Generated: $output"
-}
-
-# Generate Alacritty theme (if needed)
-generate_alacritty() {
-    local output="$DOTFILES_ROOT/config/alacritty/synthwave84.toml"
-    mkdir -p "$(dirname "$output")"
-    info "Generating Alacritty theme..."
-
-    cat > "$output" << EOF
-# Synthwave84 Theme for Alacritty
-# Auto-generated from config/theme/synthwave84.toml
-
-[colors.primary]
-background = "$(get_toml_value "background")"
-foreground = "$(get_toml_value "foreground")"
-
-[colors.cursor]
-text = "$(get_toml_value "selection_fg")"
-cursor = "$(get_toml_value "cursor")"
-
-[colors.selection]
-text = "$(get_toml_value "selection_fg")"
-background = "$(get_toml_value "selection_bg")"
-
-[colors.normal]
-black = "$(get_toml_value "black")"
-red = "$(get_toml_value "red")"
-green = "$(get_toml_value "green")"
-yellow = "$(get_toml_value "yellow")"
-blue = "$(get_toml_value "blue")"
-magenta = "$(get_toml_value "magenta")"
-cyan = "$(get_toml_value "cyan")"
-white = "$(get_toml_value "white")"
-
-[colors.bright]
-black = "$(get_toml_value "bright_black")"
-red = "$(get_toml_value "bright_red")"
-green = "$(get_toml_value "bright_green")"
-yellow = "$(get_toml_value "bright_yellow")"
-blue = "$(get_toml_value "bright_blue")"
-magenta = "$(get_toml_value "bright_magenta")"
-cyan = "$(get_toml_value "bright_cyan")"
-white = "$(get_toml_value "bright_white")"
-EOF
-
-    success "Generated: $output"
-}
-
 # Generate CSS variables (for web projects)
 generate_css() {
     local output="$DOTFILES_ROOT/config/theme/synthwave84.css"
@@ -265,8 +168,6 @@ Generate tool configs from unified Synthwave84 theme
 Commands:
     all         Generate all configs (default)
     ghostty     Generate Ghostty theme
-    kitty       Generate Kitty theme
-    alacritty   Generate Alacritty theme
     css         Generate CSS variables
     shell       Generate shell color exports
     list        List available generators
@@ -287,21 +188,17 @@ main() {
     case "${1:-all}" in
         all)
             generate_ghostty
-            generate_kitty
-            generate_alacritty
             generate_css
             generate_shell
             echo ""
             success "All themes generated!"
             ;;
         ghostty) generate_ghostty ;;
-        kitty) generate_kitty ;;
-        alacritty) generate_alacritty ;;
         css) generate_css ;;
         shell) generate_shell ;;
         list)
             echo "Available generators:"
-            echo "  ghostty, kitty, alacritty, css, shell"
+            echo "  ghostty, css, shell"
             ;;
         help|--help|-h) show_usage ;;
         *)
