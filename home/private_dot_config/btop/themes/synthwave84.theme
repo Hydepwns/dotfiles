@@ -1,0 +1,68 @@
+# Synthwave84 theme for btop
+# Based on DROO's unified Synthwave84 palette
+
+# Main background and text
+theme[main_bg]="#262335"
+theme[main_fg]="#ffffff"
+
+# Title and highlight
+theme[title]="#ffffff"
+theme[hi_fg]="#ff7edb"
+
+# Selected/highlighted
+theme[selected_bg]="#34294f"
+theme[selected_fg]="#ffffff"
+
+# Inactive text
+theme[inactive_fg]="#848bbd"
+
+# Graph colors (gradient: green -> yellow -> red)
+theme[proc_misc]="#36f9f6"
+
+# Process box
+theme[process_start]="#72f1b8"
+theme[process_mid]="#fede5d"
+theme[process_end]="#fe4450"
+
+# CPU graph
+theme[cpu_start]="#72f1b8"
+theme[cpu_mid]="#fede5d"
+theme[cpu_end]="#fe4450"
+
+# Memory graph
+theme[mem_start]="#36f9f6"
+theme[mem_mid]="#ff7edb"
+theme[mem_end]="#fe4450"
+
+# Network graph
+theme[download_start]="#72f1b8"
+theme[download_mid]="#72f1b8"
+theme[download_end]="#36f9f6"
+theme[upload_start]="#ff7edb"
+theme[upload_mid]="#ff7edb"
+theme[upload_end]="#fe4450"
+
+# Temperature
+theme[temp_start]="#72f1b8"
+theme[temp_mid]="#fede5d"
+theme[temp_end]="#fe4450"
+
+# Free/cached/available
+theme[free_start]="#36f9f6"
+theme[free_mid]="#03edf9"
+theme[free_end]="#72f1b8"
+theme[cached_start]="#ff7edb"
+theme[cached_mid]="#ff7edb"
+theme[cached_end]="#fe4450"
+theme[available_start]="#72f1b8"
+theme[available_mid]="#fede5d"
+theme[available_end]="#fede5d"
+theme[used_start]="#fe4450"
+theme[used_mid]="#fede5d"
+theme[used_end]="#72f1b8"
+
+# Divider line
+theme[div_line]="#495495"
+
+# Meter gradient
+theme[meter_bg]="#241b2f"

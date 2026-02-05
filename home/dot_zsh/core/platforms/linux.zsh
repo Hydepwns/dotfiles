@@ -5,7 +5,6 @@
 # Linux-specific aliases
 alias copy="xclip -selection clipboard"
 alias paste="xclip -selection clipboard -o"
-alias ls="ls --color=auto"
 alias open="xdg-open"
 
 # Kitty terminal integration

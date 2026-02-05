@@ -73,7 +73,7 @@ EOF
     esac
 
     direnv allow
-    echo "✅ Created .envrc for $project_type project"
+    echo "[ok] Created .envrc for $project_type project"
 }
 
 # devenv helpers
@@ -162,7 +162,7 @@ EOF
             ;;
     esac
 
-    echo "✅ Created devenv.nix for $project_type project"
+    echo "[ok] Created devenv.nix for $project_type project"
     echo "Run 'devenv up' to start the environment"
 }
 
@@ -182,43 +182,43 @@ setup_dev_env() {
         devenv_setup "$project_type"
     fi
 
-    echo "✅ Development environment setup complete!"
+    echo "[ok] Development environment setup complete!"
 }
 
 # Environment status checker
 check_env_status() {
-    echo "🔍 Checking environment status..."
+    echo "Checking environment status..."
 
     # Check direnv
     if command -v direnv &> /dev/null; then
-        echo "✅ direnv: $(direnv --version)"
+        echo "[ok] direnv: $(direnv --version)"
         if [[ -f .envrc ]]; then
-            echo "📁 .envrc found: $(direnv status)"
+            echo "  - .envrc found: $(direnv status)"
         else
-            echo "📁 No .envrc found"
+            echo "  - No .envrc found"
         fi
     else
-        echo "❌ direnv not installed"
+        echo "[--] direnv not installed"
     fi
 
     # Check devenv
     if command -v devenv &> /dev/null; then
-        echo "✅ devenv: $(devenv --version)"
+        echo "[ok] devenv: $(devenv --version)"
         if [[ -f devenv.nix ]]; then
-            echo "📁 devenv.nix found"
-            devenv status 2>/dev/null || echo "⚠️  devenv status unavailable"
+            echo "  - devenv.nix found"
+            devenv status 2>/dev/null || echo "[!!] devenv status unavailable"
         else
-            echo "📁 No devenv.nix found"
+            echo "  - No devenv.nix found"
         fi
     else
-        echo "❌ devenv not installed"
+        echo "[--] devenv not installed"
     fi
 
     # Check Nix
     if command -v nix &> /dev/null; then
-        echo "✅ Nix: $(nix --version)"
+        echo "[ok] Nix: $(nix --version)"
     else
-        echo "❌ Nix not installed"
+        echo "[--] Nix not installed"
     fi
 }
 
@@ -288,16 +288,6 @@ ff() {
         return 1
     fi
     find . -name "*$name*" -type f
-}
-
-# Find directories by name
-fd() {
-    local name="$1"
-    if [[ -z "$name" ]]; then
-        echo "Usage: fd <dirname>"
-        return 1
-    fi
-    find . -name "*$name*" -type d
 }
 
 # Find files containing text
@@ -491,11 +481,6 @@ list_long() {
 # Quick directory listing with human readable sizes
 lh() {
     ls -lah "$@"
-}
-
-# Quick directory listing sorted by time
-lt() {
-    ls -lat "$@"
 }
 
 # Quick directory listing sorted by size

@@ -1,0 +1,24 @@
+# shellcheck shell=bash
+# direnv configuration
+# Loaded automatically by direnv for all projects
+
+# mise integration -- use in .envrc: `use mise`
+use_mise() {
+    direnv_load mise direnv exec
+}
+
+# Python Poetry -- use in .envrc: `layout poetry`
+layout_poetry() {
+    VIRTUAL_ENV="$(poetry env info --path 2>/dev/null)"
+    if [[ -z "$VIRTUAL_ENV" || ! -d "$VIRTUAL_ENV" ]]; then
+        poetry install
+        VIRTUAL_ENV="$(poetry env info --path)"
+    fi
+    export VIRTUAL_ENV
+    PATH_add "$VIRTUAL_ENV/bin"
+}
+
+# Node.js -- use in .envrc: `layout node`
+layout_node() {
+    PATH_add node_modules/.bin
+}

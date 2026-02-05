@@ -21,15 +21,15 @@ TESTS_WARNING=0
 run_test() {
     local test_name="$1"
     local test_cmd="$2"
-    
+
     echo -n "Testing $test_name... "
-    
+
     if eval "$test_cmd" >/dev/null 2>&1; then
-        echo -e "${GREEN}✓ PASSED${NC}"
+        echo -e "${GREEN}+ PASSED${NC}"
         ((TESTS_PASSED++))
         return 0
     else
-        echo -e "${RED}✗ FAILED${NC}"
+        echo -e "${RED}- FAILED${NC}"
         ((TESTS_FAILED++))
         return 1
     fi
@@ -39,14 +39,14 @@ run_test() {
 check_warning() {
     local test_name="$1"
     local test_cmd="$2"
-    
+
     echo -n "Checking $test_name... "
-    
+
     if eval "$test_cmd" >/dev/null 2>&1; then
-        echo -e "${GREEN}✓ OK${NC}"
+        echo -e "${GREEN}+ OK${NC}"
         ((TESTS_PASSED++))
     else
-        echo -e "${YELLOW}⚠ WARNING${NC}"
+        echo -e "${YELLOW}! WARNING${NC}"
         ((TESTS_WARNING++))
     fi
 }
@@ -131,9 +131,9 @@ echo -e "${RED}Failed: $TESTS_FAILED${NC}"
 echo ""
 
 if [ $TESTS_FAILED -eq 0 ]; then
-    echo -e "${GREEN}✓ All critical tests passed!${NC}"
+    echo -e "${GREEN}+ All critical tests passed!${NC}"
     exit 0
 else
-    echo -e "${RED}✗ Some tests failed. Please review.${NC}"
+    echo -e "${RED}- Some tests failed. Please review.${NC}"
     exit 1
 fi

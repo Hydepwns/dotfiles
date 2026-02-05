@@ -14,8 +14,8 @@ log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
 log_warning() { echo -e "${YELLOW:-}[WARNING]${NC:-} $1"; }
 
 # Exit codes
-EXIT_SUCCESS=0
-EXIT_FAILURE=1
+export EXIT_SUCCESS=0
+export EXIT_FAILURE=1
 
 # Simple utility functions
 file_exists() { test -f "$1"; }
@@ -38,7 +38,7 @@ mkdir -p "$(dirname "$LOG_FILE")"
 print_status() {
     local message="$1"
     local type="${2:-info}"
-    
+
     case "$type" in
         "success")
             echo -e "${GREEN}[OK]${RESET} $message"
@@ -47,7 +47,7 @@ print_status() {
             echo -e "${RED}[FAIL]${RESET} $message"
             ;;
         "warning")
-            echo -e "${YELLOW}⚠${RESET} $message"
+            echo -e "${YELLOW}!${RESET} $message"
             ;;
         *)
             echo -e "${BLUE}ℹ${RESET} $message"
@@ -93,26 +93,26 @@ start_dashboard() {
         get_status
         return 0
     fi
-    
+
     print_status "Starting Dashboard Server..." "info"
-    
+
     # Check if required files exist
     if [[ ! -f "$DASHBOARD_DIR/index.html" ]]; then
         print_status "Dashboard files not found in $DASHBOARD_DIR" "error"
         return $EXIT_FILE_NOT_FOUND
     fi
-    
+
     # Start simple HTTP server for static files
     local server_started=false
-    
+
     # Try Python HTTP server first
     if command -v python3 >/dev/null 2>&1; then
         print_status "Starting HTTP server with Python3..." "info"
         cd "$DASHBOARD_DIR" || exit $EXIT_FAILURE
-        
+
         python3 -m http.server $DASHBOARD_PORT >/dev/null 2>&1 &
         local server_pid=$!
-        
+
         # Wait a moment and check if server started
         sleep 2
         if kill -0 $server_pid 2>/dev/null; then
@@ -123,15 +123,15 @@ start_dashboard() {
             print_status "Failed to start Python HTTP server" "error"
         fi
     fi
-    
+
     # Fallback to other servers if Python failed
     if [[ "$server_started" != "true" ]] && command -v php >/dev/null 2>&1; then
         print_status "Starting HTTP server with PHP..." "info"
         cd "$DASHBOARD_DIR" || exit $EXIT_FAILURE
-        
+
         php -S localhost:$DASHBOARD_PORT >/dev/null 2>&1 &
         local server_pid=$!
-        
+
         sleep 2
         if kill -0 $server_pid 2>/dev/null; then
             echo $server_pid > "$PID_FILE"
@@ -141,27 +141,27 @@ start_dashboard() {
             print_status "Failed to start PHP server" "error"
         fi
     fi
-    
+
     if [[ "$server_started" != "true" ]]; then
         print_status "No suitable HTTP server found (tried: python3, php)" "error"
         print_status "Please install Python 3 or PHP to run the dashboard" "error"
         return $EXIT_FAILURE
     fi
-    
+
     # Start API server if available
     if [[ -f "$API_SCRIPT" ]] && [[ -x "$API_SCRIPT" ]]; then
         print_status "Starting Dashboard API on port $API_PORT..." "info"
-        
+
         DASHBOARD_PORT="$API_PORT" "$API_SCRIPT" server >/dev/null 2>&1 &
         local api_pid=$!
-        
+
         # Store both PIDs (simple approach - just overwrite with main server PID)
         echo $server_pid > "$PID_FILE"
         echo $api_pid >> "$PID_FILE.api"
-        
+
         print_status "Dashboard API started" "success"
     fi
-    
+
     # Open dashboard in browser if available
     local dashboard_url="http://localhost:$DASHBOARD_PORT"
     if command -v xdg-open >/dev/null 2>&1; then
@@ -171,10 +171,10 @@ start_dashboard() {
         print_status "Opening dashboard in browser..." "info"
         open "$dashboard_url" >/dev/null 2>&1 &
     fi
-    
+
     print_status "Dashboard is now running!" "success"
     print_status "Access it at: $dashboard_url" "info"
-    
+
     return 0
 }
 
@@ -184,35 +184,35 @@ stop_dashboard() {
         print_status "Dashboard is not running" "warning"
         return 0
     fi
-    
+
     print_status "Stopping Dashboard Server..." "info"
-    
+
     # Stop main server
     if [[ -f "$PID_FILE" ]]; then
         local pid
         pid=$(cat "$PID_FILE")
-        
+
         if kill "$pid" 2>/dev/null; then
             print_status "Dashboard server stopped" "success"
         else
             print_status "Failed to stop dashboard server (PID: $pid)" "warning"
         fi
-        
+
         rm -f "$PID_FILE"
     fi
-    
+
     # Stop API server
     if [[ -f "$PID_FILE.api" ]]; then
         local api_pid
         api_pid=$(cat "$PID_FILE.api")
-        
+
         if kill "$api_pid" 2>/dev/null; then
             print_status "Dashboard API stopped" "success"
         fi
-        
+
         rm -f "$PID_FILE.api"
     fi
-    
+
     return 0
 }
 
@@ -227,15 +227,15 @@ restart_dashboard() {
 # Open dashboard in browser
 open_dashboard() {
     local dashboard_url="http://localhost:$DASHBOARD_PORT"
-    
+
     if ! is_running; then
         print_status "Dashboard is not running. Starting it first..." "warning"
         start_dashboard || return $EXIT_FAILURE
         sleep 3
     fi
-    
+
     print_status "Opening dashboard: $dashboard_url" "info"
-    
+
     if command -v xdg-open >/dev/null 2>&1; then
         xdg-open "$dashboard_url" >/dev/null 2>&1 &
     elif command -v open >/dev/null 2>&1; then
@@ -248,7 +248,7 @@ open_dashboard() {
 # Show dashboard logs
 show_logs() {
     local lines="${1:-50}"
-    
+
     if [[ -f "$LOG_FILE" ]]; then
         print_status "Dashboard logs (last $lines lines):" "info"
         tail -n "$lines" "$LOG_FILE"
@@ -267,7 +267,7 @@ USAGE:
 
 COMMANDS:
     start       Start the dashboard server
-    stop        Stop the dashboard server  
+    stop        Stop the dashboard server
     restart     Restart the dashboard server
     status      Show dashboard status
     open        Open dashboard in browser
@@ -295,7 +295,7 @@ EOF
 # Main function
 main() {
     local command="${1:-help}"
-    
+
     case "$command" in
         "start")
             start_dashboard

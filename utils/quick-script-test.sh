@@ -8,19 +8,20 @@ echo ""
 # Test with very short timeout
 test_quick() {
     local script="$1"
-    local name=$(basename "$script")
-    
+    local name
+    name=$(basename "$script")
+
     echo -n "$name: "
-    
+
     # Very short timeout - if it doesn't respond quickly, it's problematic
     if timeout 2s bash -n "$script" >/dev/null 2>&1; then
         if timeout 2s bash "$script" --help >/dev/null 2>&1; then
-            echo "✓ WORKING"
+            echo "+ WORKING"
         else
-            echo "⚠ RUNTIME ISSUE"
+            echo "! RUNTIME ISSUE"
         fi
     else
-        echo "✗ SYNTAX/SEGFAULT"
+        echo "- SYNTAX/SEGFAULT"
     fi
 }
 

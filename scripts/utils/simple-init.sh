@@ -11,7 +11,7 @@ fi
 # Find dotfiles root
 find_dotfiles_root() {
     local dir="$SCRIPT_DIR"
-    
+
     while [[ "$dir" != "/" ]]; do
         if [[ -f "$dir/chezmoi.toml" ]] || [[ -f "$dir/Makefile" ]] || [[ -d "$dir/scripts" ]]; then
             echo "$dir"
@@ -19,9 +19,9 @@ find_dotfiles_root() {
         fi
         dir="$(dirname "$dir")"
     done
-    
+
     # Fallback
-    echo "/home/hydepwns/dotfiles"
+    echo "${HOME}/dotfiles"
 }
 
 # Set paths

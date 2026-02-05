@@ -4,37 +4,37 @@ echo "=== Dotfiles Health Check ==="
 
 # Check chezmoi
 if command -v chezmoi >/dev/null 2>&1; then
-    echo "✓ chezmoi: $(chezmoi --version | head -1)"
+    echo "+ chezmoi: $(chezmoi --version | head -1)"
 else
-    echo "✗ chezmoi: Not found"
+    echo "- chezmoi: Not found"
 fi
 
 # Check git
 if command -v git >/dev/null 2>&1; then
-    echo "✓ git: $(git --version)"
+    echo "+ git: $(git --version)"
     if git config user.name >/dev/null 2>&1; then
         echo "  - User: $(git config user.name) <$(git config user.email)>"
     else
         echo "  - No git user configured"
     fi
 else
-    echo "✗ git: Not found"
+    echo "- git: Not found"
 fi
 
 # Check shell
-echo "✓ Shell: $SHELL ($BASH_VERSION)"
+echo "+ Shell: $SHELL ($BASH_VERSION)"
 
 # Check dotfiles status
 if [[ -f ~/.zshrc ]]; then
-    echo "✓ ZSH config: ~/.zshrc exists"
+    echo "+ ZSH config: ~/.zshrc exists"
 else
-    echo "✗ ZSH config: ~/.zshrc missing"
+    echo "- ZSH config: ~/.zshrc missing"
 fi
 
 if [[ -f ~/.gitconfig ]]; then
-    echo "✓ Git config: ~/.gitconfig exists"
+    echo "+ Git config: ~/.gitconfig exists"
 else
-    echo "✗ Git config: ~/.gitconfig missing"
+    echo "- Git config: ~/.gitconfig missing"
 fi
 
 # Check chezmoi status

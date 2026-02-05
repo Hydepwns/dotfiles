@@ -6,7 +6,7 @@ set -e
 file_exists() { test -f "$1"; }
 command_exists() { command -v "$1" >/dev/null 2>&1; }
 
-echo "⚡ Quick setup for DROO's dotfiles..."
+echo "--- Quick setup for DROO's dotfiles ---"
 
 # Detect NixOS
 is_nixos() {
@@ -27,6 +27,7 @@ if ! command -v chezmoi &> /dev/null; then
 fi
 
 # Initialize and apply dotfiles
-chezmoi init --apply https://github.com/hydepwns/dotfiles.git
+GITHUB_USER="${GITHUB_USER:-hydepwns}"
+chezmoi init --apply "https://github.com/${GITHUB_USER}/dotfiles.git"
 
 echo " Setup complete! Restart your terminal."

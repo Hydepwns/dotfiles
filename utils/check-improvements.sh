@@ -17,11 +17,11 @@ echo "-----------------------------------"
 
 # Check for outdated references
 if grep -q "make doctor" "$DOTFILES_DIR/README.md" 2>/dev/null; then
-    echo -e "${YELLOW}⚠${NC}  README.md references 'make doctor' - consider updating to mention utils/health-check.sh as alternative"
+    echo -e "${YELLOW}!${NC}  README.md references 'make doctor' - consider updating to mention utils/health-check.sh as alternative"
 fi
 
 if grep -q "/scripts/utils/health-check.sh" "$DOTFILES_DIR"/**/*.sh 2>/dev/null; then
-    echo -e "${YELLOW}⚠${NC}  Some scripts reference old health-check.sh path"
+    echo -e "${YELLOW}!${NC}  Some scripts reference old health-check.sh path"
 fi
 
 echo ""
@@ -29,9 +29,9 @@ echo -e "${BLUE}2. Path Improvements:${NC}"
 echo "---------------------"
 
 # Check for hardcoded paths
-HARDCODED_COUNT=$(grep -r "/home/hydepwns/dotfiles" "$DOTFILES_DIR" --include="*.sh" 2>/dev/null | wc -l)
+HARDCODED_COUNT=$(grep -rE "/home/[a-z]+/dotfiles" "$DOTFILES_DIR" --include="*.sh" 2>/dev/null | wc -l)
 if [ "$HARDCODED_COUNT" -gt 0 ]; then
-    echo -e "${YELLOW}⚠${NC}  Found $HARDCODED_COUNT hardcoded paths - consider using dynamic paths"
+    echo -e "${YELLOW}!${NC}  Found $HARDCODED_COUNT hardcoded paths - consider using dynamic paths"
 fi
 
 echo ""
@@ -40,12 +40,12 @@ echo "-----------------------"
 
 # Check for scripts that could be optimized
 if [ -f "$DOTFILES_DIR/scripts/utils/script-init.sh" ]; then
-    echo -e "${YELLOW}⚠${NC}  script-init.sh causes segfaults - needs debugging or simplification"
+    echo -e "${YELLOW}!${NC}  script-init.sh causes segfaults - needs debugging or simplification"
 fi
 
 # Check for duplicate functionality
-echo -e "${GREEN}✓${NC} Health check has working alternative (utils/health-check.sh)"
-echo -e "${GREEN}✓${NC} Template listing has simple alternative (utils/list-templates.sh)"
+echo -e "${GREEN}+${NC} Health check has working alternative (utils/health-check.sh)"
+echo -e "${GREEN}+${NC} Template listing has simple alternative (utils/list-templates.sh)"
 
 echo ""
 echo -e "${BLUE}4. Performance Optimizations:${NC}"
@@ -53,7 +53,7 @@ echo "-----------------------------"
 
 # Check shell startup time
 ZSH_TIME=$(zsh -i -c 'exit' 2>&1 | grep real | sed 's/real.*0m//' | sed 's/,//' | sed 's/s//')
-echo -e "${GREEN}✓${NC} ZSH startup time: ${ZSH_TIME}ms (excellent!)"
+echo -e "${GREEN}+${NC} ZSH startup time: ${ZSH_TIME}ms (excellent!)"
 
 echo ""
 echo -e "${BLUE}5. Missing Features to Consider:${NC}"
@@ -71,7 +71,7 @@ echo "-------------------------"
 
 # Check for sensitive files
 if [ -f "$DOTFILES_DIR/home/dot_ssh/private_id_rsa.tmpl" ]; then
-    echo -e "${YELLOW}⚠${NC}  SSH key template found - ensure it's properly protected"
+    echo -e "${YELLOW}!${NC}  SSH key template found - ensure it's properly protected"
 fi
 
 # Check git config

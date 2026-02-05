@@ -94,10 +94,7 @@ alias env-status="echo '=== direnv status ===' && direnv status && echo '=== dev
 alias kill-port="kill -9 \$(lsof -ti:"
 alias flush-dns="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
 
-# Quick file operations
-alias ll="ls -la"
-alias la="ls -A"
-alias l="ls -CF"
+# Quick navigation
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
@@ -106,7 +103,6 @@ alias ......="cd ../../../.."
 # Editor shortcuts
 alias v="nvim"
 alias nv="nvim"
-alias z="zed"
 
 # Network utilities
 alias myip="curl -s https://ipinfo.io/ip"
@@ -147,6 +143,10 @@ alias infl="infisical login"
 alias infr="infisical run"
 alias infs="infisical secrets"
 alias infp="infisical export"
+
+# takopi (Telegram AI agent bridge)
+alias tk="takopi"
+alias tks="takopi --status"
 
 # Dotfiles dashboard and management
 alias dash="~/.local/share/chezmoi/scripts/utils/dashboard.sh"

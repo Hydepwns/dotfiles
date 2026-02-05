@@ -135,9 +135,44 @@ if command -v rg &>/dev/null; then
 fi
 
 # =============================================================================
-# HTOP - Better top
+# BTOP - Modern system monitor
 # =============================================================================
 
-if command -v htop &>/dev/null; then
-    alias top='htop'
+if command -v btop &>/dev/null; then
+    alias top='btop'
+    alias htop='btop'
+fi
+
+# =============================================================================
+# YAZI - Terminal file manager
+# =============================================================================
+
+# Shell wrapper that changes cwd on exit (q), use Q to exit without changing
+if command -v yazi &>/dev/null; then
+    function y() {
+        local tmp
+        tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+        yazi "$@" --cwd-file="$tmp"
+        if cwd="$(command cat -- "$tmp")" && [[ -n "$cwd" ]] && [[ "$cwd" != "$PWD" ]]; then
+            builtin cd -- "$cwd"
+        fi
+        rm -f -- "$tmp"
+    }
+fi
+
+# =============================================================================
+# FASTFETCH - System info
+# =============================================================================
+
+if command -v fastfetch &>/dev/null; then
+    alias fetch='fastfetch'
+    alias neofetch='fastfetch'
+fi
+
+# =============================================================================
+# TLDR - Simplified man pages
+# =============================================================================
+
+if command -v tldr &>/dev/null; then
+    alias help='tldr'
 fi

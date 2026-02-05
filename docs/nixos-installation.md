@@ -33,7 +33,7 @@ This script:
 ### Method 2: Updated Quick Setup Script
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/hydepwns/dotfiles/main/scripts/setup/quick-setup.sh | bash
+curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/dotfiles/main/scripts/setup/quick-setup.sh | bash
 ```
 
 The quick setup script now automatically detects NixOS and uses the appropriate installation method.
@@ -50,7 +50,7 @@ nix-env -iA nixpkgs.chezmoi
 nix-env -iA nixpkgs.git nixpkgs.zsh nixpkgs.curl
 
 # Initialize and apply dotfiles
-chezmoi init --apply https://github.com/hydepwns/dotfiles.git
+chezmoi init --apply https://github.com/YOUR_USERNAME/dotfiles.git
 ```
 
 ## What's Different on NixOS

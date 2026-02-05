@@ -1,9 +1,10 @@
-.PHONY: help install update diff status backup clean doctor bootstrap sync sync-from-remote backup-full install-optional performance-test generate-template tool-versions setup-age age-retrieve age-status
+.PHONY: help install update diff status backup clean doctor bootstrap sync sync-from-remote backup-full install-optional performance-test generate-template tool-versions setup-age age-retrieve age-status setup-raycast raycast-export raycast-import raycast-status setup-takopi takopi-onboard takopi-backup takopi-status
 
 # Configuration
 DOTFILES_ROOT := $(shell pwd)
 SCRIPTS_DIR := $(DOTFILES_ROOT)/scripts
 BACKUP_DIR := $(DOTFILES_ROOT)/backups
+GITHUB_USER ?= hydepwns
 
 # Default target
 help: ## Show this help message
@@ -13,7 +14,7 @@ help: ## Show this help message
 # Core operations
 install: ## Install dotfiles using chezmoi
 	@echo "Installing dotfiles..."
-	chezmoi init --apply https://github.com/hydepwns/dotfiles.git
+	chezmoi init --apply https://github.com/$(GITHUB_USER)/dotfiles.git
 
 update: ## Update dotfiles from remote repository
 	@echo "Updating dotfiles..."
@@ -151,6 +152,39 @@ theme-list: ## List available theme generators
 # Starship prompt
 setup-starship: ## Install and configure Starship prompt
 	@$(SCRIPTS_DIR)/setup/setup-starship.sh install
+
+# PaperWM (Hammerspoon tiling)
+setup-paperwm: ## Install PaperWM.spoon for Hammerspoon
+	@$(SCRIPTS_DIR)/setup/setup-paperwm.sh install
+
+paperwm-status: ## Show PaperWM installation status
+	@$(SCRIPTS_DIR)/setup/setup-paperwm.sh status
+
+# Raycast
+setup-raycast: ## Verify Raycast installation
+	@$(SCRIPTS_DIR)/setup/setup-raycast.sh install
+
+raycast-export: ## Export Raycast settings to dotfiles
+	@$(SCRIPTS_DIR)/setup/setup-raycast.sh export
+
+raycast-import: ## Import Raycast settings from dotfiles
+	@$(SCRIPTS_DIR)/setup/setup-raycast.sh import
+
+raycast-status: ## Show Raycast status
+	@$(SCRIPTS_DIR)/setup/setup-raycast.sh status
+
+# takopi (Telegram AI agent bridge)
+setup-takopi: ## Install takopi via uv
+	@$(SCRIPTS_DIR)/setup/setup-takopi.sh install
+
+takopi-onboard: ## Run takopi interactive onboarding
+	@$(SCRIPTS_DIR)/setup/setup-takopi.sh onboard
+
+takopi-backup: ## Encrypt takopi config to chezmoi source
+	@$(SCRIPTS_DIR)/setup/setup-takopi.sh config-backup
+
+takopi-status: ## Show takopi status
+	@$(SCRIPTS_DIR)/setup/setup-takopi.sh status
 
 # Brewfile management
 brew-install: ## Install packages from Brewfile

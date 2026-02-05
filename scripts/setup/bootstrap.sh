@@ -122,7 +122,7 @@ initialize_dotfiles() {
         print_status "WARN" "Dotfiles already initialized. Updating..."
         chezmoi update
     else
-        chezmoi init --apply https://github.com/hydepwns/dotfiles.git
+        chezmoi init --apply "${SCRIPT_REPO:-https://github.com/hydepwns/dotfiles}.git"
     fi
 }
 
@@ -182,7 +182,7 @@ main() {
     echo "2. Run 'make doctor' to verify the installation"
     echo "3. Customize your configuration as needed"
     echo ""
-    echo "For help, see: https://github.com/hydepwns/dotfiles"
+    echo "For help, see: ${SCRIPT_REPO:-https://github.com/hydepwns/dotfiles}"
 }
 
 # Run main function
