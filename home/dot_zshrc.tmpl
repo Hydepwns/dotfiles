@@ -1,26 +1,32 @@
 # shellcheck disable=all
-# Autoload completions
+# Autoload completions (only regenerate dump once per day)
 autoload -U compinit
-compinit -i
+if [[ -f ~/.zcompdump ]] && [[ $(find ~/.zcompdump -mtime +1 2>/dev/null) ]]; then
+    compinit
+elif [[ ! -f ~/.zcompdump ]]; then
+    compinit
+else
+    compinit -C
+fi
 
-{{ if .ohmyzsh -}}
-# Oh My Zsh configuration
+{{ if and .ohmyzsh (not .starship) -}}
+# Oh My Zsh (only when Starship is disabled -- our modules replace OMZ otherwise)
 export ZSH="{{ .chezmoi.homeDir }}/.oh-my-zsh"
-
-{{ if not .starship -}}
 ZSH_THEME="robbyrussell"
-{{ else -}}
-ZSH_THEME=""
-{{ end }}
 plugins=(git)
-
 source $ZSH/oh-my-zsh.sh
 {{ end -}}
 
 # Source modular configuration (loads core/, aliases/, functions/)
 source "{{ .chezmoi.homeDir }}/.zsh/modules.zsh"
 
-# Show system info on new terminal (not nested shells)
+# Show system info on new terminal (not nested shells, deferred to not block prompt)
 if [[ $- == *i* ]] && [[ ${SHLVL:-1} -le 2 ]]; then
-    command -v fastfetch &>/dev/null && fastfetch
+    if command -v fastfetch &>/dev/null; then
+        _fastfetch_precmd() {
+            precmd_functions=(${precmd_functions:#_fastfetch_precmd})
+            fastfetch
+        }
+        precmd_functions+=(_fastfetch_precmd)
+    fi
 fi

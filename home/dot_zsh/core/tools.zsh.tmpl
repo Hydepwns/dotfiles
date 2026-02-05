@@ -2,17 +2,28 @@
 # fzf, zoxide, eza, bat, fd, ripgrep
 
 # =============================================================================
-# COMPLETIONS - Tool-specific zsh completions
+# COMPLETIONS - Tool-specific zsh completions (cached for speed)
 # =============================================================================
 
-# mise completions
+# Cache helper: generate completion file if missing or stale (>24h)
+_cache_completion() {
+    local name="$1" cmd="$2"
+    local cache_file="${XDG_CACHE_HOME:-$HOME/.cache}/zsh-completions/_$name"
+    mkdir -p "$(dirname "$cache_file")"
+    if [[ ! -f "$cache_file" ]] || [[ $(find "$cache_file" -mtime +1 2>/dev/null) ]]; then
+        eval "$cmd" > "$cache_file" 2>/dev/null
+    fi
+    source "$cache_file" 2>/dev/null
+}
+
+# mise completions (cached)
 if command -v mise &>/dev/null; then
-    eval "$(mise completions zsh)"
+    _cache_completion mise "mise completions zsh"
 fi
 
-# chezmoi completions
+# chezmoi completions (cached -- saves ~140ms)
 if command -v chezmoi &>/dev/null; then
-    eval "$(chezmoi completion zsh)"
+    _cache_completion chezmoi "chezmoi completion zsh"
 fi
 
 # make target completion (reads ## comments from Makefile)

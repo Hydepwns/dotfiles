@@ -34,10 +34,6 @@ if [[ -d "$ZSH_MODULES_DIR" ]]; then
         done
     fi
 
-    # Source other modular files
-    for module_file in "$ZSH_MODULES_DIR"/*.zsh; do
-        if [[ -f "$module_file" ]] && [[ "$(basename "$module_file")" != "modules.zsh" ]]; then
-            source "$module_file"
-        fi
-    done
+    # Source root-level env (explicit, no wildcard to avoid stale files)
+    [[ -f "$ZSH_MODULES_DIR/env.zsh" ]] && source "$ZSH_MODULES_DIR/env.zsh"
 fi
