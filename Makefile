@@ -1,4 +1,4 @@
-.PHONY: help install update diff status backup clean doctor bootstrap sync sync-from-remote backup-full install-optional generate-template tool-versions setup-age age-retrieve age-status setup-raycast raycast-export raycast-import raycast-status setup-takopi takopi-onboard takopi-backup takopi-status lint perf perf-report
+.PHONY: help install update diff status backup clean doctor bootstrap sync sync-from-remote backup-full install-optional generate-template setup-age age-retrieve age-status setup-raycast raycast-export raycast-import raycast-status setup-takopi takopi-onboard takopi-backup takopi-status lint perf perf-report
 
 # Configuration
 DOTFILES_ROOT := $(shell pwd)
@@ -204,12 +204,4 @@ generate-template: ## Generate project template
 		$(SCRIPTS_DIR)/utils/template-manager.sh generate "$(TEMPLATE)" "$(NAME)" "$(OPTIONS)"; \
 	else \
 		$(SCRIPTS_DIR)/utils/template-manager.sh list; \
-	fi
-
-# Tool version management
-tool-versions: ## Manage tool versions
-	@if [ -n "$(COMMAND)" ]; then \
-		$(SCRIPTS_DIR)/utils/update-tool-versions.sh "$(COMMAND)"; \
-	else \
-		$(SCRIPTS_DIR)/utils/update-tool-versions.sh --help; \
 	fi
