@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Chezmoi-based cross-platform dotfiles with modular zsh configuration. Primary platform is macOS (Apple Silicon), with Linux/NixOS support. Uses template-driven configuration with 30+ conditional features and achieves 95% shell startup speedup via lazy-loading.
+Chezmoi-based cross-platform dotfiles with modular zsh configuration. Primary platform is macOS (Apple Silicon), with Linux/NixOS support. Uses template-driven configuration with 30+ conditional features and achieves ~386ms shell startup via caching and lazy-loading.
 
 ## Key Commands
 
@@ -176,7 +176,7 @@ Settings export/import via `config/raycast/`:
 
 ### Starship Prompt
 
-Synthwave84-themed cross-shell prompt in `home/private_dot_config/starship/starship.toml`:
+Synthwave84-themed cross-shell prompt in `home/private_dot_config/starship/starship.toml.tmpl`:
 - Git branch (pink), status (yellow), state (rebase/merge indicator)
 - Language versions: node, rust, python, elixir, go (contextual)
 - Command duration (>2s), error status, SSH-aware username/hostname

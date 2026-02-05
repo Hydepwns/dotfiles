@@ -2,15 +2,8 @@
 # macOS-specific environment setup
 # This file contains chezmoi template syntax which will be processed by chezmoi
 
-# Homebrew configuration
+# Homebrew environment (PATH already set by paths.zsh)
 eval "$({{ .brewPrefix }}/bin/brew shellenv)"
-
-# Apple Silicon specific configurations
-if [[ "$(arch)" = "arm64" ]]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-else
-    eval "$(/usr/local/bin/brew shellenv)"
-fi
 
 # macOS-specific aliases
 alias copy="pbcopy"

@@ -14,6 +14,14 @@ if [[ -d "$ZSH_MODULES_DIR" ]]; then
                 source "$core_file"
             fi
         done
+        # Source platform-specific modules
+        if [[ -d "$ZSH_MODULES_DIR/core/platforms" ]]; then
+            for platform_file in "$ZSH_MODULES_DIR"/core/platforms/*.zsh; do
+                if [[ -f "$platform_file" ]]; then
+                    source "$platform_file"
+                fi
+            done
+        fi
     fi
 
     # Source aliases

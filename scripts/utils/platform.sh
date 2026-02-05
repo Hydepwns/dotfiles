@@ -41,17 +41,8 @@ perform_platform_detection() {
     fi
 }
 
-# Run detection: try cache first, fall back to direct detection
-if [[ -f "$SCRIPT_DIR/cache.sh" ]]; then
-    source "$SCRIPT_DIR/cache.sh"
-    if cached_platform_info=$(cached_platform_detect 2>/dev/null); then
-        eval "$cached_platform_info"
-    else
-        perform_platform_detection
-    fi
-else
-    perform_platform_detection
-fi
+# Run detection
+perform_platform_detection
 
 # Detect package managers
 if command -v brew &> /dev/null; then

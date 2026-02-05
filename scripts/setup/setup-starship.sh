@@ -3,9 +3,6 @@
 
 set -e
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-
 info() { echo "[*] $1"; }
 success() { echo "[+] $1"; }
 warn() { echo "[!] $1"; }
@@ -40,25 +37,17 @@ install_starship() {
 }
 
 setup_config() {
-    local config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/starship"
-    local config_file="$config_dir/starship.toml"
-    local source_file="$DOTFILES_ROOT/config/starship/starship.toml"
+    local config_file="${XDG_CONFIG_HOME:-$HOME/.config}/starship/starship.toml"
 
     info "Setting up Starship config..."
 
-    mkdir -p "$config_dir"
-
-    if [[ -f "$source_file" ]]; then
-        if [[ -f "$config_file" ]] && [[ ! -L "$config_file" ]]; then
-            mv "$config_file" "$config_file.backup"
-            warn "Backed up existing config to $config_file.backup"
-        fi
-
-        ln -sf "$source_file" "$config_file"
-        success "Linked: $config_file -> $source_file"
+    # Config is managed by chezmoi (home/private_dot_config/starship/starship.toml.tmpl)
+    if [[ -f "$config_file" ]]; then
+        success "Config exists: $config_file (managed by chezmoi)"
     else
-        error "Source config not found: $source_file"
-        exit 1
+        info "Running chezmoi apply to deploy starship config..."
+        chezmoi apply ~/.config/starship/starship.toml
+        success "Config deployed via chezmoi"
     fi
 }
 

@@ -99,9 +99,6 @@ build_path() {
     {{- end }}
 
     # Legacy version managers (prefer mise)
-    {{- if .nodejs }}
-    add_to_path "${PATH_REGISTRY[nodejs]}"
-    {{- end }}
     {{- if .rbenv }}
     add_to_path "${PATH_REGISTRY[rbenv]}"
     {{- end }}
@@ -137,10 +134,3 @@ build_path() {
 
 # Initialize PATH
 build_path
-
-# Load platform-specific configurations (platforms/ not auto-sourced by modules.zsh)
-{{- if eq .chezmoi.os "darwin" }}
-source "{{ .chezmoi.homeDir }}/.zsh/core/platforms/macos.zsh"
-{{- else if eq .chezmoi.os "linux" }}
-source "{{ .chezmoi.homeDir }}/.zsh/core/platforms/linux.zsh"
-{{- end }}
