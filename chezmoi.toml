@@ -9,12 +9,13 @@ age_recipient = "age1pf2v9lee0rtqp8ur4tatk5w0kpp45t9d7st7zakdlsv7ykdk2ewqacwwjp"
 # Oh My Zsh configuration
 oh_my_zsh_theme = "robbyrussell"
 oh_my_zsh_plugins = "git"
-starship = false  # Disabled - using oh-my-zsh theme instead
+starship = true
 
 # Personal flag for SSH templates
 personal = true
 
 # Tool configurations
+rust = true
 rbenv = false
 ohmyzsh = true
 nvm = false

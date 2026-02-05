@@ -2,6 +2,32 @@
 # fzf, zoxide, eza, bat, fd, ripgrep
 
 # =============================================================================
+# COMPLETIONS - Tool-specific zsh completions
+# =============================================================================
+
+# mise completions
+if command -v mise &>/dev/null; then
+    eval "$(mise completions zsh)"
+fi
+
+# chezmoi completions
+if command -v chezmoi &>/dev/null; then
+    eval "$(chezmoi completion zsh)"
+fi
+
+# make target completion (reads ## comments from Makefile)
+_make_targets() {
+    if [[ -f Makefile ]]; then
+        local -a targets
+        targets=(${(f)"$(grep -E '^[a-zA-Z_-]+:.*?##' Makefile | sed 's/:.*##/\t/' | sed 's/^ *//')"})
+        _describe 'make targets' targets
+    else
+        _make
+    fi
+}
+compdef _make_targets make
+
+# =============================================================================
 # FZF - Fuzzy Finder
 # =============================================================================
 

@@ -15,11 +15,7 @@ repos:
     hooks:
       - id: shellcheck
         args: [--severity=warning]
-        exclude: |
-          (?x)^(
-              home/dot_zsh/.*\.zsh$|
-              home/dot_oh-my-zsh/.*\.zsh$
-          )$
+        exclude: home/dot_zsh/.*\.zsh$
 
   - repo: https://github.com/psf/black
     rev: 23.12.1
