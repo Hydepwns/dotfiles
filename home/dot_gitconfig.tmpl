@@ -1,7 +1,9 @@
 [user]
-    name = Hydepwns
-    email = drew@axol.io
-    signingkey = 1938C94528268692
+    name = {{ .name }}
+    email = {{ .email }}
+{{- if .gpg_signing_key }}
+    signingkey = {{ .gpg_signing_key }}
+{{- end }}
 
 [core]
     editor = zed --wait

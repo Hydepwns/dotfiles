@@ -2,6 +2,9 @@
 # User information
 email = "drew@axol.io"
 name = "Hydepwns"
+github = "hydepwns"
+gpg_signing_key = "1938C94528268692"
+age_recipient = "age1pf2v9lee0rtqp8ur4tatk5w0kpp45t9d7st7zakdlsv7ykdk2ewqacwwjp"
 
 # Oh My Zsh configuration
 oh_my_zsh_theme = "robbyrussell"
@@ -14,9 +17,10 @@ personal = true
 # Tool configurations
 rbenv = false
 ohmyzsh = true
-nvm = true       # Use nvm for Node.js (takes priority over asdf)
-nodejs = false   # Disable asdf nodejs management (nvm handles it)
-asdf = true
+nvm = false
+nodejs = false
+asdf = false
+mise = true
 elixir = true
 erlang = true
 lua = true
@@ -34,6 +38,9 @@ tailscale = true
 onepassword = true
 aws = true
 infisical = true
+paperwm = true
+raycast = true
+takopi = true
 work = false
 
 # Platform-specific

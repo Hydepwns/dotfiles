@@ -1,0 +1,121 @@
+{{- $name := promptStringOnce . "name" "Display name" -}}
+{{- $email := promptStringOnce . "email" "Email address" -}}
+{{- $github := promptStringOnce . "github" "GitHub username" -}}
+{{- $age_recipient := promptStringOnce . "age_recipient" "Age public key (press Enter to skip, generate later with: make setup-age)" -}}
+
+# Generated from .chezmoi.toml.tmpl -- edit the template, not this file
+encryption = "age"
+sourceDir = "{{ .chezmoi.workingTree }}/home"
+
+[data]
+# User identity (prompted on first chezmoi init)
+name = {{ $name | quote }}
+email = {{ $email | quote }}
+github = {{ $github | quote }}
+{{ if $age_recipient -}}
+age_recipient = {{ $age_recipient | quote }}
+{{ end -}}
+
+# Shell configuration
+gpg_signing_key = ""
+oh_my_zsh_theme = "robbyrussell"
+oh_my_zsh_plugins = "git"
+starship = false
+personal = true
+
+# Tool version management
+mise = true
+asdf = false
+nvm = false
+rbenv = false
+
+# Languages and runtimes
+rust = true
+nodejs = false
+elixir = true
+erlang = true
+lua = true
+ohmyzsh = true
+
+# Development tools
+direnv = true
+devenv = false
+nix = false
+llvm = false
+postgres = false
+psql = false
+orbstack = false
+
+# Services
+tailscale = false
+onepassword = false
+aws = false
+infisical = false
+
+# macOS features
+paperwm = false
+raycast = false
+takopi = false
+
+# Misc
+foundry = false
+huff = false
+solana = false
+work = false
+
+# Platform-specific
+{{- if and (eq .chezmoi.os "darwin") (eq .chezmoi.arch "arm64") }}
+brewPrefix = "/opt/homebrew"
+{{- else }}
+brewPrefix = "/usr/local"
+{{- end }}
+
+# Synthwave84 Theme
+[data.theme]
+name = "Synthwave84"
+bg = "#262335"
+bg_dark = "#241b2f"
+bg_light = "#2a2139"
+fg = "#ffffff"
+fg_dim = "#848bbd"
+accent = "#ff7edb"
+accent2 = "#36f9f6"
+cursor = "#ff7edb"
+selection_bg = "#ff7edb"
+selection_fg = "#241b2f"
+border = "#495495"
+black = "#241b2f"
+red = "#fe4450"
+green = "#72f1b8"
+yellow = "#fede5d"
+blue = "#03edf9"
+magenta = "#ff7edb"
+cyan = "#36f9f6"
+white = "#ffffff"
+bright_black = "#495495"
+bright_red = "#fe4450"
+bright_green = "#72f1b8"
+bright_yellow = "#fede5d"
+bright_blue = "#03edf9"
+bright_magenta = "#ff7edb"
+bright_cyan = "#36f9f6"
+bright_white = "#ffffff"
+
+[git]
+autoCommit = true
+autoPush = false
+
+{{ if $age_recipient -}}
+[age]
+identity = "~/.config/chezmoi/age_key.txt"
+recipient = {{ $age_recipient | quote }}
+{{ end -}}
+
+[template]
+options = ["missingkey=error"]
+
+[diff]
+pager = ""
+
+[status]
+pathStyle = "relative"

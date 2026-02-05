@@ -26,23 +26,23 @@ record_assertion() {
     local message="$2"
     local expected="${3:-}"
     local actual="${4:-}"
-    
+
     ((ASSERTION_COUNT++))
-    
+
     if [[ "$result" == "pass" ]]; then
         ((ASSERTION_PASSED++))
-        echo -e "    ${TEST_GREEN}✓${TEST_RESET} $message"
+        echo -e "    ${TEST_GREEN}+${TEST_RESET} $message"
     else
         ((ASSERTION_FAILED++))
         TEST_FAILED=true
-        echo -e "    ${TEST_RED}✗${TEST_RESET} $message"
-        
+        echo -e "    ${TEST_RED}-${TEST_RESET} $message"
+
         if [[ -n "$expected" && -n "$actual" ]]; then
             echo -e "      ${TEST_YELLOW}Expected:${TEST_RESET} $expected"
             echo -e "      ${TEST_YELLOW}Actual:${TEST_RESET} $actual"
         fi
     fi
-    
+
     # Record in coverage if enabled
     if [[ -n "${COVERAGE_FILE:-}" ]]; then
         echo "assertion:$message" >> "$COVERAGE_FILE"
@@ -53,7 +53,7 @@ record_assertion() {
 assert_true() {
     local condition="$1"
     local message="${2:-Assertion should be true}"
-    
+
     if [[ "$condition" == "true" ]] || [[ "$condition" == "0" ]]; then
         record_assertion "pass" "$message"
         return 0
@@ -66,7 +66,7 @@ assert_true() {
 assert_false() {
     local condition="$1"
     local message="${2:-Assertion should be false}"
-    
+
     if [[ "$condition" == "false" ]] || [[ "$condition" == "1" ]]; then
         record_assertion "pass" "$message"
         return 0
@@ -81,7 +81,7 @@ assert_equals() {
     local expected="$1"
     local actual="$2"
     local message="${3:-Values should be equal}"
-    
+
     if [[ "$expected" == "$actual" ]]; then
         record_assertion "pass" "$message"
         return 0
@@ -95,7 +95,7 @@ assert_not_equals() {
     local expected="$1"
     local actual="$2"
     local message="${3:-Values should not be equal}"
-    
+
     if [[ "$expected" != "$actual" ]]; then
         record_assertion "pass" "$message"
         return 0
@@ -109,7 +109,7 @@ assert_contains() {
     local string="$1"
     local substring="$2"
     local message="${3:-String should contain substring}"
-    
+
     if [[ "$string" =~ $substring ]]; then
         record_assertion "pass" "$message"
         return 0
@@ -123,7 +123,7 @@ assert_not_contains() {
     local string="$1"
     local substring="$2"
     local message="${3:-String should not contain substring}"
-    
+
     if [[ ! "$string" =~ $substring ]]; then
         record_assertion "pass" "$message"
         return 0
@@ -137,7 +137,7 @@ assert_matches() {
     local string="$1"
     local pattern="$2"
     local message="${3:-String should match pattern}"
-    
+
     if [[ "$string" =~ ^${pattern}$ ]]; then
         record_assertion "pass" "$message"
         return 0
@@ -152,7 +152,7 @@ assert_greater_than() {
     local actual="$1"
     local expected="$2"
     local message="${3:-Value should be greater than expected}"
-    
+
     if (( $(echo "$actual > $expected" | bc -l 2>/dev/null || echo "0") )); then
         record_assertion "pass" "$message"
         return 0
@@ -166,7 +166,7 @@ assert_less_than() {
     local actual="$1"
     local expected="$2"
     local message="${3:-Value should be less than expected}"
-    
+
     if (( $(echo "$actual < $expected" | bc -l 2>/dev/null || echo "0") )); then
         record_assertion "pass" "$message"
         return 0
@@ -181,7 +181,7 @@ assert_between() {
     local min="$2"
     local max="$3"
     local message="${4:-Value should be between min and max}"
-    
+
     if (( $(echo "$value >= $min && $value <= $max" | bc -l 2>/dev/null || echo "0") )); then
         record_assertion "pass" "$message"
         return 0
@@ -195,7 +195,7 @@ assert_between() {
 assert_file_exists() {
     local file="$1"
     local message="${2:-File should exist}"
-    
+
     if [[ -f "$file" ]]; then
         record_assertion "pass" "$message"
         return 0
@@ -208,7 +208,7 @@ assert_file_exists() {
 assert_file_not_exists() {
     local file="$1"
     local message="${2:-File should not exist}"
-    
+
     if [[ ! -f "$file" ]]; then
         record_assertion "pass" "$message"
         return 0
@@ -221,7 +221,7 @@ assert_file_not_exists() {
 assert_dir_exists() {
     local dir="$1"
     local message="${2:-Directory should exist}"
-    
+
     if [[ -d "$dir" ]]; then
         record_assertion "pass" "$message"
         return 0
@@ -234,7 +234,7 @@ assert_dir_exists() {
 assert_file_executable() {
     local file="$1"
     local message="${2:-File should be executable}"
-    
+
     if [[ -x "$file" ]]; then
         record_assertion "pass" "$message"
         return 0
@@ -247,7 +247,7 @@ assert_file_executable() {
 assert_file_readable() {
     local file="$1"
     local message="${2:-File should be readable}"
-    
+
     if [[ -r "$file" ]]; then
         record_assertion "pass" "$message"
         return 0
@@ -261,7 +261,7 @@ assert_file_readable() {
 assert_command_success() {
     local command="$1"
     local message="${2:-Command should succeed}"
-    
+
     if eval "$command" >/dev/null 2>&1; then
         record_assertion "pass" "$message"
         return 0
@@ -274,7 +274,7 @@ assert_command_success() {
 assert_command_fails() {
     local command="$1"
     local message="${2:-Command should fail}"
-    
+
     if ! eval "$command" >/dev/null 2>&1; then
         record_assertion "pass" "$message"
         return 0
@@ -288,10 +288,10 @@ assert_command_output() {
     local command="$1"
     local expected_output="$2"
     local message="${3:-Command output should match expected}"
-    
+
     local actual_output
     actual_output=$(eval "$command" 2>&1)
-    
+
     if [[ "$actual_output" == "$expected_output" ]]; then
         record_assertion "pass" "$message"
         return 0
@@ -305,10 +305,10 @@ assert_command_output_contains() {
     local command="$1"
     local expected_substring="$2"
     local message="${3:-Command output should contain substring}"
-    
+
     local actual_output
     actual_output=$(eval "$command" 2>&1)
-    
+
     if [[ "$actual_output" =~ $expected_substring ]]; then
         record_assertion "pass" "$message"
         return 0
@@ -322,7 +322,7 @@ assert_command_output_contains() {
 assert_variable_set() {
     local var_name="$1"
     local message="${2:-Variable should be set}"
-    
+
     if [[ -n "${!var_name:-}" ]]; then
         record_assertion "pass" "$message"
         return 0
@@ -335,7 +335,7 @@ assert_variable_set() {
 assert_variable_unset() {
     local var_name="$1"
     local message="${2:-Variable should be unset}"
-    
+
     if [[ -z "${!var_name:-}" ]]; then
         record_assertion "pass" "$message"
         return 0
@@ -349,7 +349,7 @@ assert_variable_unset() {
 assert_function_exists() {
     local function_name="$1"
     local message="${2:-Function should exist}"
-    
+
     if declare -f "$function_name" >/dev/null 2>&1; then
         record_assertion "pass" "$message"
         return 0
@@ -364,16 +364,16 @@ assert_execution_time_under() {
     local command="$1"
     local max_time="$2"
     local message="${3:-Execution time should be under threshold}"
-    
+
     local start_time end_time duration
     start_time=$(date +%s.%N)
-    
+
     eval "$command" >/dev/null 2>&1
     local exit_code=$?
-    
+
     end_time=$(date +%s.%N)
     duration=$(echo "$end_time - $start_time" | bc -l 2>/dev/null || echo "999")
-    
+
     if (( $(echo "$duration < $max_time" | bc -l 2>/dev/null || echo "0") )); then
         record_assertion "pass" "$message (${duration}s < ${max_time}s)"
         return $exit_code
@@ -418,7 +418,7 @@ print_test_summary() {
     echo "  Assertions: $ASSERTION_COUNT"
     echo "  Passed: $ASSERTION_PASSED"
     echo "  Failed: $ASSERTION_FAILED"
-    
+
     if [[ "$TEST_FAILED" == "true" ]]; then
         echo -e "  ${TEST_RED}Result: FAILED${TEST_RESET}"
         return 1
@@ -445,7 +445,7 @@ create_test_file() {
     local filename="$1"
     local content="$2"
     local test_dir="${TEST_FIXTURES_DIR:-/tmp/test_fixtures}"
-    
+
     mkdir -p "$test_dir"
     echo "$content" > "$test_dir/$filename"
     echo "$test_dir/$filename"
@@ -462,19 +462,19 @@ cleanup_test_files() {
 mock_function() {
     local function_name="$1"
     local mock_behavior="$2"
-    
+
     # Save original function if it exists
     if declare -f "$function_name" >/dev/null 2>&1; then
         eval "_original_${function_name}() $(declare -f "$function_name" | sed '1d')"
     fi
-    
+
     # Create mock
     eval "${function_name}() { $mock_behavior; }"
 }
 
 restore_function() {
     local function_name="$1"
-    
+
     if declare -f "_original_${function_name}" >/dev/null 2>&1; then
         eval "${function_name}() $(declare -f "_original_${function_name}" | sed '1d')"
         unset -f "_original_${function_name}"

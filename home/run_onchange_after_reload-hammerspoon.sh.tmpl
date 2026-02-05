@@ -1,0 +1,10 @@
+#!/bin/bash
+{{- if and (eq .chezmoi.os "darwin") .paperwm }}
+# Hammerspoon config hash: {{ include "dot_hammerspoon/init.lua.tmpl" | sha256sum }}
+# Reload Hammerspoon when config changes
+
+if pgrep -q Hammerspoon 2>/dev/null; then
+    osascript -e 'tell application "Hammerspoon" to execute lua code "hs.reload()"' 2>/dev/null && \
+        echo "[chezmoi] Hammerspoon reloaded" || true
+fi
+{{- end }}

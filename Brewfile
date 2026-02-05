@@ -18,6 +18,7 @@ tap "kurtosis-tech/tap"
 # =============================================================================
 
 brew "chezmoi"                 # Dotfile management
+brew "mise"                    # Tool version manager (replaces asdf/nvm)
 brew "curl"
 brew "wget"
 brew "git"
@@ -30,7 +31,7 @@ brew "tldr"                    # Simplified man pages
 # LANGUAGES & RUNTIMES
 # =============================================================================
 
-# Elixir/Erlang (primary via brew, also in asdf)
+# Elixir/Erlang (primary via mise, brew as fallback)
 brew "elixir"
 brew "erlang"
 
@@ -41,11 +42,11 @@ brew "lua-language-server"
 # Go
 brew "go"
 
-# Python (also via asdf)
+# Python (brew for system python, pyenv for project versions)
 brew "python@3.13"
 brew "pyenv"
 
-# Note: Node.js managed via asdf
+# Note: Node.js managed via mise
 # Note: Rust managed via rustup
 
 # =============================================================================
@@ -176,8 +177,15 @@ brew "fzf"                     # Fuzzy finder
 brew "zoxide"                  # Smarter cd
 brew "jq"                      # JSON processor
 brew "yq"                      # YAML processor
-brew "htop"                    # Better top
+brew "btop"                    # Modern system monitor (replaces htop)
+brew "fastfetch"               # System info fetch (neofetch successor)
 brew "tree"                    # Directory tree
+brew "direnv"                  # Directory-based env vars
+brew "yazi"                    # Terminal file manager
+brew "ffmpeg"                  # Video thumbnails (yazi)
+brew "sevenzip"                # Archive preview (yazi)
+brew "poppler"                 # PDF preview (yazi)
+brew "imagemagick"             # Image preview (yazi)
 
 # Kubernetes
 # brew "kubectl"

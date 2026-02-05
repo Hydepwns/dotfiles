@@ -31,7 +31,26 @@ get_error_message() {
 # Script metadata
 SCRIPT_VERSION="1.0.0"
 SCRIPT_AUTHOR="DROO"
-SCRIPT_REPO="https://github.com/hydepwns/dotfiles"
+
+# Identity (reads from chezmoi data when available)
+if command -v chezmoi &>/dev/null && command -v jq &>/dev/null; then
+    _chezmoi_data="$(chezmoi data --format json 2>/dev/null || echo '{}')"
+    GITHUB_USER="${GITHUB_USER:-$(echo "$_chezmoi_data" | jq -r '.github // empty' 2>/dev/null)}"
+    USER_NAME="${USER_NAME:-$(echo "$_chezmoi_data" | jq -r '.name // empty' 2>/dev/null)}"
+    USER_EMAIL="${USER_EMAIL:-$(echo "$_chezmoi_data" | jq -r '.email // empty' 2>/dev/null)}"
+    AGE_RECIPIENT="${AGE_RECIPIENT:-$(echo "$_chezmoi_data" | jq -r '.age_recipient // empty' 2>/dev/null)}"
+    unset _chezmoi_data
+fi
+GITHUB_USER="${GITHUB_USER:-}"
+USER_NAME="${USER_NAME:-}"
+USER_EMAIL="${USER_EMAIL:-}"
+AGE_RECIPIENT="${AGE_RECIPIENT:-}"
+SCRIPT_REPO="${SCRIPT_REPO:-https://github.com/${GITHUB_USER:-hydepwns}/dotfiles}"
+
+# Infrastructure (customize per-user via env vars)
+OP_VAULT="${OP_VAULT:-Private}"
+OP_AGE_ITEM="${OP_AGE_ITEM:-Dotfiles Age Key}"
+TAILSCALE_USER="${TAILSCALE_USER:-$USER}"
 
 # Common paths
 DOTFILES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
@@ -67,5 +86,7 @@ export EXIT_SUCCESS EXIT_FAILURE EXIT_INVALID_ARGS EXIT_MISSING_DEPENDENCY
 export EXIT_PERMISSION_DENIED EXIT_FILE_NOT_FOUND EXIT_NETWORK_ERROR EXIT_TIMEOUT
 export PLATFORM ARCH
 export SCRIPT_VERSION SCRIPT_AUTHOR SCRIPT_REPO
+export GITHUB_USER USER_NAME USER_EMAIL AGE_RECIPIENT
+export OP_VAULT OP_AGE_ITEM TAILSCALE_USER
 export DOTFILES_ROOT SCRIPTS_DIR BACKUP_DIR CONFIG_DIR CACHE_DIR
 export get_tool_command

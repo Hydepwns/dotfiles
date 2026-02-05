@@ -1,59 +1,6 @@
-# Node.js ecosystem
-nodejs 18.19.0
-npm 10.2.3
-yarn 1.22.22
-pnpm 9.6.0
-
-# Python ecosystem
+# Managed by mise (https://mise.jdx.dev)
+# Only list tools that mise actually manages
+nodejs 22.22.0
 python 3.10.13
-pip 23.0.1
-
-# Ruby ecosystem
-ruby 2.6.10
-bundler 2.4.22
-
-# Elixir ecosystem
-elixir 26.2.4
 erlang 26.2.4
-mix 26.2.4
-
-# Rust ecosystem
-rust 1.88.0
-cargo 1.88.0
-
-# Go ecosystem
-golang 1.24.2
-
-# Lua ecosystem
-lua 5.4.8
-luarocks 3.12.2
-
-# Development tools
-direnv 2.32.3
-devenv 1.8.0
-asdf 0.13.1
-
-# Web3 tools
-foundry 0.3.0
-solana 1.8.1
-anchor 0.31.1
-
-# Database tools
-postgresql 14.17
-
-# Build tools
-cmake 4.0.0
-make 3.81
-
-# Version control
-git 2.50.1
-
-# Shell
-zsh 5.9
-
-# Editors
-neovim 0.11.3
-zed 0.195.5
-
-# Package managers
-brew 4.5.10
+elixir 1.18.3-otp-26

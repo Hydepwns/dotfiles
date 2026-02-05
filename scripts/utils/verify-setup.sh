@@ -13,9 +13,9 @@ log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
 log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
 
 # Exit codes
-EXIT_SUCCESS=0
-EXIT_INVALID_ARGS=1
-EXIT_FAILURE=1
+export EXIT_SUCCESS=0
+export EXIT_INVALID_ARGS=1
+export EXIT_FAILURE=1
 
 # Simple utility functions
 command_exists() { command -v "$1" >/dev/null 2>&1; }
@@ -67,7 +67,7 @@ else
     PLATFORM="${OS:-Unknown}"
 fi
 
-echo -e "${BLUE:-}⚡ Dotfiles Setup Verification${NC:-}"
+echo -e "${BLUE:-}--- Dotfiles Setup Verification ---${NC:-}"
 echo "=================================="
 echo -e "Platform: ${BLUE:-}$PLATFORM${NC:-}"
 echo ""
@@ -77,7 +77,7 @@ check() {
     local description="$1"
     local command="$2"
     local fix_hint="$3"
-    
+
     echo -n "Checking $description... "
     if eval "$command" >/dev/null 2>&1; then
         echo -e "${GREEN:-}OK${NC:-}"
@@ -97,7 +97,7 @@ warn_check() {
     local description="$1"
     local command="$2"
     local note="$3"
-    
+
     echo -n "Checking $description... "
     if eval "$command" >/dev/null 2>&1; then
         echo -e "${GREEN:-}OK${NC:-}"
@@ -167,10 +167,10 @@ echo "----------------------"
 if $DOTFILES_APPLIED; then
     check ".zshrc exists" "test -f ~/.zshrc" "Run: chezmoi apply"
     check ".zsh directory exists" "test -d ~/.zsh" "Run: chezmoi apply"
-    
+
     # Check for valid .zshrc content
     if [ -f ~/.zshrc ]; then
-        if [ $(wc -l < ~/.zshrc) -lt 5 ]; then
+        if [ "$(wc -l < ~/.zshrc)" -lt 5 ]; then
             echo -e "  ${YELLOW:-} .zshrc seems incomplete (less than 5 lines)${NC:-}"
             echo -e "  ${CYAN:-}Run: chezmoi apply to update${NC:-}"
             ((WARNINGS++))
@@ -190,7 +190,7 @@ elif $IS_NIXOS; then
     check "Nix installed" \
         "command -v nix" \
         "Should be available on NixOS"
-    
+
     warn_check "make command available" \
         "command -v make" \
         "Install with: nix-env -iA nixpkgs.gnumake"
@@ -211,7 +211,7 @@ if $IS_NIXOS; then
     echo ""
     echo -e "${YELLOW:-} NixOS Specific Checks${NC:-}"
     echo "-----------------------"
-    
+
     if [ -L ~/.profile ]; then
         # Check if it's a Home Manager symlink
         if readlink ~/.profile | grep -q "home-manager-files"; then
@@ -247,7 +247,7 @@ else
     fi
     echo ""
     echo "Please address the issues above to complete your setup."
-    
+
     if ! $DOTFILES_APPLIED; then
         echo ""
         echo -e "${BLUE:-}Quick fix for most issues:${NC:-}"

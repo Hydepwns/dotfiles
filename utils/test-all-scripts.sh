@@ -21,31 +21,31 @@ echo ""
 # Test function
 test_script() {
     local script="$1"
-    local name=$(basename "$script")
-    local status=""
-    
+    local name
+    name=$(basename "$script")
+
     echo -n "Testing $name... "
     ((TOTAL++))
-    
+
     # Run script with timeout and capture exit code
     timeout 10s bash "$script" --help >/dev/null 2>&1
     local exit_code=$?
-    
+
     case $exit_code in
         0)
-            echo -e "${GREEN}✓ WORKING${NC}"
+            echo -e "${GREEN}+ WORKING${NC}"
             ((WORKING++))
             ;;
         124)
-            echo -e "${YELLOW}⚠ TIMEOUT${NC}"
+            echo -e "${YELLOW}! TIMEOUT${NC}"
             ((ERRORS++))
             ;;
         139)
-            echo -e "${RED}✗ SEGFAULT${NC}"
+            echo -e "${RED}x SEGFAULT${NC}"
             ((SEGFAULTS++))
             ;;
         *)
-            echo -e "${YELLOW}⚠ ERROR (exit $exit_code)${NC}"
+            echo -e "${YELLOW}! ERROR (exit $exit_code)${NC}"
             ((ERRORS++))
             ;;
     esac
@@ -98,16 +98,16 @@ echo ""
 
 # Calculate percentage
 if [ $TOTAL -gt 0 ]; then
-    local success_rate=$(( (WORKING * 100) / TOTAL ))
+    success_rate=$(( (WORKING * 100) / TOTAL ))
     echo "Success rate: ${success_rate}%"
-    
+
     if [ $SEGFAULTS -gt 0 ]; then
         echo ""
         echo -e "${RED}Scripts with segfaults need the working alternatives in utils/${NC}"
     fi
-    
+
     if [ $WORKING -eq $TOTAL ]; then
-        echo -e "${GREEN}🎉 All scripts working!${NC}"
+        echo -e "${GREEN}All scripts working!${NC}"
         exit 0
     else
         echo -e "${YELLOW}Some scripts need attention${NC}"

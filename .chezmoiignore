@@ -71,6 +71,9 @@ Thumbs.db
 .claude/todos/
 .claude.json
 
+# takopi (runtime lockfile)
+.takopi/takopi.lock
+
 # Zed (ignore runtime files, keep settings)
 .config/zed/conversations/
 .config/zed/embeddings/

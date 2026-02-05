@@ -24,6 +24,9 @@ make perf                 # Benchmark shell startup time
 # Setup tools
 make setup-secrets        # Install 1Password CLI, AWS CLI, Infisical, Tailscale
 make brew-install         # Install all Brewfile packages
+make setup-takopi         # Install takopi via uv
+make takopi-onboard       # Interactive takopi setup wizard
+make takopi-backup        # Encrypt takopi config to chezmoi
 
 # Dashboard and monitoring
 make dashboard            # Show comprehensive service status
@@ -53,7 +56,14 @@ curl -fsSL https://raw.githubusercontent.com/Hydepwns/dotfiles/main/scripts/inst
 | `home/private_dot_config/ghostty/` | `~/.config/ghostty/` | Ghostty terminal |
 | `home/private_dot_config/zed/` | `~/.config/zed/` | Zed editor |
 | `home/private_dot_config/nvim/` | `~/.config/nvim/` | Neovim (lean config) |
-| `config/` | Manual deploy | Theme source, starship |
+| `home/private_dot_config/btop/` | `~/.config/btop/` | System monitor + Synthwave84 theme |
+| `home/private_dot_config/yazi/` | `~/.config/yazi/` | Terminal file manager |
+| `home/private_dot_config/fastfetch/` | `~/.config/fastfetch/` | System info display |
+| `home/private_dot_config/starship/` | `~/.config/starship/` | Starship prompt config |
+| `home/private_dot_config/direnv/` | `~/.config/direnv/` | direnv layouts (mise, poetry, node) |
+| `home/dot_takopi/` | `~/.takopi/` | takopi config (encrypted) |
+| `config/raycast/` | Manual deploy | Raycast settings export |
+| `config/` | Manual deploy | Theme source |
 | `scripts/setup/` | - | Installation scripts |
 | `scripts/utils/` | - | Maintenance utilities |
 
@@ -63,7 +73,7 @@ curl -fsSL https://raw.githubusercontent.com/Hydepwns/dotfiles/main/scripts/inst
 home/dot_zsh/
 ├── modules.zsh           # Loader
 ├── core/
-│   ├── lazy-loading.zsh  # Deferred init for nvm, asdf, direnv
+│   ├── lazy-loading.zsh  # mise activation, deferred init for direnv
 │   ├── secrets.zsh       # 1Password, AWS, Infisical
 │   ├── ssh.zsh           # SSH agent management
 │   ├── tools.zsh         # fzf, zoxide, eza, bat integration
@@ -81,12 +91,18 @@ Configured in `core/tools.zsh` with Synthwave84 theme colors:
 
 | Tool | Alias | Usage |
 |------|-------|-------|
-| fzf | - | `Ctrl+R` history, `Ctrl+T` files, `Alt+C` cd |
+| fzf | `fe`, `fcd`, `fkill`, `fh`, `fbr` | `Ctrl+R` history, `Ctrl+T` files, `Alt+C` cd |
 | zoxide | `z` | Smart cd (`z proj` jumps to project) |
 | eza | `ls`, `ll`, `la`, `lt` | Better ls with icons/git |
-| bat | `cat` | Syntax highlighted cat |
-| fd | `find` | Faster find |
-| ripgrep | `grep`, `rg` | Faster grep |
+| bat | `cat`, `catp`, `catl` | Syntax highlighted cat, man pager |
+| fd | `find` | Faster find, respects .gitignore |
+| ripgrep | `grep`, `rg`, `rgi`, `rgl` | Faster grep |
+| yazi | `y` | Terminal file manager with image/PDF/archive preview |
+| btop | `top`, `htop` | System monitor (Synthwave84 themed) |
+| fastfetch | `fetch`, `neofetch` | System info display |
+| jq / yq | - | JSON and YAML processing |
+| tldr | `help` | Simplified command examples |
+| tree | - | Directory tree view |
 
 ### Secrets Management
 
@@ -100,6 +116,7 @@ Three-tier approach in `core/secrets.zsh`:
 Sensitive source files use chezmoi's age encryption (`encrypted_` prefix):
 - `home/dot_ssh/encrypted_config.tmpl` - SSH config with Tailscale host inventory
 - `home/dot_zsh/core/encrypted_secrets.zsh` - 1Password/AWS/Infisical integration
+- `home/dot_takopi/encrypted_takopi.toml` - takopi Telegram bot config
 
 Key location: `~/.config/chezmoi/age_key.txt` (mode 600, backed up to 1Password).
 
@@ -115,20 +132,55 @@ Modern config in `home/dot_tmux.conf.tmpl`:
 
 ### Hammerspoon (macOS)
 
-Window management in `home/dot_hammerspoon/init.lua`:
+Window management in `home/dot_hammerspoon/init.lua.tmpl`, gated by `paperwm` chezmoi flag:
+
+**PaperWM mode** (`paperwm = true`) - scrollable tiling:
+- `Cmd+Alt + hjkl` - Focus left/right/down/up
+- `Cmd+Alt+Shift + hjkl` - Swap windows
+- `Cmd+Alt + r` - Cycle window width (1/3, 1/2, 2/3)
+- `Cmd+Alt + return` - Full width
+- `Cmd+Alt + c` - Center window
+- `Cmd+Alt + i/o` - Slurp/barf columns
+- `Cmd+Alt+Shift + space` - Toggle floating
+- `Cmd+Alt + 1-9` - Switch space
+- `Cmd+Alt+Shift + 1-9` - Move window to space
+- Setup: `make setup-paperwm`
+
+**Grid mode** (`paperwm = false`) - traditional snapping:
 - `Cmd+Alt + arrows` - Window halves/full
 - `Cmd+Alt + 1-5` - Window thirds
+
+**Shared bindings** (both modes):
+- `Hyper + h/l` - Move window between screens
 - `Cmd+Alt + t/e/b` - Launch Ghostty/Zed/Brave
 - `Cmd+Alt + space` - App chooser
 - `Cmd+Alt + v` - Clipboard history
 
+### Raycast (macOS)
+
+Settings export/import via `config/raycast/`:
+- `make raycast-export` -- opens Raycast export dialog, decompresses `.rayconfig` to `settings.json` for diffable version control
+- `make raycast-import` -- opens Raycast import dialog to restore from `.rayconfig`
+- `make raycast-status` -- show installation and export status
+- Gated by `raycast = true` in chezmoi.toml
+
 ### Neovim
 
-Lean config (~540 lines) in `home/private_dot_config/nvim/`:
-- Telescope, Treesitter, LSP+Mason
-- mini.files, flash.nvim, gitsigns
-- Synthwave84 theme
+27 plugins across 8 modules in `home/private_dot_config/nvim/`:
+- Telescope, Treesitter, LSP+Mason, nvim-cmp
+- mini.files, mini.surround, mini.statusline, mini.indentscope
+- flash.nvim, gitsigns, lazygit, which-key, trouble, conform
+- mona.nvim (Synthwave84 colorscheme)
 - `<Space>ff` find files, `<Space>e` explorer
+
+### Starship Prompt
+
+Synthwave84-themed cross-shell prompt in `home/private_dot_config/starship/starship.toml`:
+- Git branch (pink), status (yellow), state (rebase/merge indicator)
+- Language versions: node, rust, python, elixir, go (contextual)
+- Command duration (>2s), error status, SSH-aware username/hostname
+- Directory substitutions: `Documents` -> `docs`, `CODE` -> `code`
+- Gated by `starship = true` in chezmoi.toml (disables Oh My Zsh theme)
 
 ## Adding New Features
 
@@ -152,7 +204,7 @@ Create `scripts/setup/setup-mytool.sh`, add Makefile target
 
 Source: `config/theme/synthwave84.toml`
 
-Applied to: Ghostty, tmux, fzf, Neovim, Starship, Hammerspoon alerts
+Applied to: Ghostty, tmux, fzf, Neovim (mona.nvim), btop, yazi, fastfetch, Starship, Hammerspoon alerts
 
 ## Brewfile (macOS)
 
@@ -161,4 +213,4 @@ make brew-install   # Install all packages
 make brew-dump      # Update from current system
 ```
 
-Includes: fzf, zoxide, eza, bat, fd, ripgrep, delta, gh, tldr, htop, jq, yq
+Includes: fzf, zoxide, eza, bat, fd, ripgrep, delta, gh, tldr, btop, fastfetch, yazi, jq, yq, tree, direnv

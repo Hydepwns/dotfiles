@@ -5,24 +5,30 @@
 local hotkey = require("hs.hotkey")
 local window = require("hs.window")
 local screen = require("hs.screen")
-local grid = require("hs.grid")
 local alert = require("hs.alert")
 local application = require("hs.application")
 local caffeinate = require("hs.caffeinate")
 local pasteboard = require("hs.pasteboard")
 local chooser = require("hs.chooser")
 local timer = require("hs.timer")
+{{- if not .paperwm }}
+local grid = require("hs.grid")
+{{- end }}
 
 -- =============================================================================
 -- Configuration
 -- =============================================================================
 
+{{- if not .paperwm }}
+
 -- Grid setup
 grid.setGrid("12x12")
 grid.setMargins({ 0, 0 })
+{{- end }}
 
 -- Hotkey modifiers
 local hyper = { "cmd", "alt", "ctrl", "shift" }
+local super_shift = { "cmd", "alt", "shift" }
 local meh = { "cmd", "alt", "ctrl" }
 local super = { "cmd", "alt" }
 
@@ -40,7 +46,91 @@ alert.defaultStyle.fadeOutDuration = 0.1
 -- Window Management
 -- =============================================================================
 
--- Snap window to grid position
+-- Move window to next/prev screen
+local function moveToScreen(direction)
+    local win = window.focusedWindow()
+    if not win then return end
+
+    local screens = screen.allScreens()
+    local currentIndex = hs.fnutils.indexOf(screens, win:screen()) or 1
+
+    local targetIndex
+    if direction == "next" then
+        targetIndex = currentIndex + 1
+        if targetIndex > #screens then targetIndex = 1 end
+    else
+        targetIndex = currentIndex - 1
+        if targetIndex < 1 then targetIndex = #screens end
+    end
+
+    win:moveToScreen(screens[targetIndex])
+    alert.show("Screen " .. targetIndex)
+end
+
+hotkey.bind(hyper, "h", function() moveToScreen("prev") end)
+hotkey.bind(hyper, "l", function() moveToScreen("next") end)
+
+{{- if .paperwm }}
+
+-- PaperWM scrollable tiling
+PaperWM = hs.loadSpoon("PaperWM")
+PaperWM.window_gap = 8
+PaperWM.window_ratios = { 1 / 3, 1 / 2, 2 / 3 }
+
+PaperWM:bindHotkeys({
+    -- Focus
+    focus_left = { super, "h" },
+    focus_right = { super, "l" },
+    focus_down = { super, "j" },
+    focus_up = { super, "k" },
+
+    -- Swap
+    swap_left = { super_shift, "h" },
+    swap_right = { super_shift, "l" },
+    swap_down = { super_shift, "j" },
+    swap_up = { super_shift, "k" },
+
+    -- Resize
+    cycle_width = { super, "r" },
+    reverse_cycle_width = { super_shift, "r" },
+    cycle_height = { super, "u" },
+    reverse_cycle_height = { super_shift, "u" },
+
+    -- Layout
+    center_window = { super, "c" },
+    full_width = { super, "return" },
+    slurp_in = { super, "i" },
+    barf_out = { super, "o" },
+
+    -- Floating
+    toggle_floating = { super_shift, "space" },
+
+    -- Spaces
+    switch_space_1 = { super, "1" },
+    switch_space_2 = { super, "2" },
+    switch_space_3 = { super, "3" },
+    switch_space_4 = { super, "4" },
+    switch_space_5 = { super, "5" },
+    switch_space_6 = { super, "6" },
+    switch_space_7 = { super, "7" },
+    switch_space_8 = { super, "8" },
+    switch_space_9 = { super, "9" },
+    move_window_1 = { super_shift, "1" },
+    move_window_2 = { super_shift, "2" },
+    move_window_3 = { super_shift, "3" },
+    move_window_4 = { super_shift, "4" },
+    move_window_5 = { super_shift, "5" },
+    move_window_6 = { super_shift, "6" },
+    move_window_7 = { super_shift, "7" },
+    move_window_8 = { super_shift, "8" },
+    move_window_9 = { super_shift, "9" },
+})
+
+PaperWM:start()
+
+{{- else }}
+
+-- Grid-based window snapping
 local function snapTo(x, y, w, h)
     local win = window.focusedWindow()
     if win then
@@ -68,32 +158,6 @@ local layouts = {
     bottom_right = function() snapTo(6, 6, 6, 6) end,
 }
 
--- Move window to next/prev screen
-local function moveToScreen(direction)
-    local win = window.focusedWindow()
-    if not win then return end
-
-    local screens = screen.allScreens()
-    local currentScreen = win:screen()
-    local currentIndex = hs.fnutils.indexOf(screens, currentScreen) or 1
-
-    local targetIndex
-    if direction == "next" then
-        targetIndex = currentIndex + 1
-        if targetIndex > #screens then targetIndex = 1 end
-    else
-        targetIndex = currentIndex - 1
-        if targetIndex < 1 then targetIndex = #screens end
-    end
-
-    win:moveToScreen(screens[targetIndex])
-    alert.show("Screen " .. targetIndex)
-end
-
--- =============================================================================
--- Window Keybindings
--- =============================================================================
-
 -- Halves (super + arrows)
 hotkey.bind(super, "left", layouts.left_half)
 hotkey.bind(super, "right", layouts.right_half)
@@ -115,9 +179,7 @@ hotkey.bind(meh, "right", layouts.top_right)
 hotkey.bind(meh, "up", layouts.bottom_left)
 hotkey.bind(meh, "down", layouts.bottom_right)
 
--- Move between screens (hyper + h/l)
-hotkey.bind(hyper, "h", function() moveToScreen("prev") end)
-hotkey.bind(hyper, "l", function() moveToScreen("next") end)
+{{- end }}
 
 -- =============================================================================
 -- Application Launching
@@ -292,11 +354,21 @@ end):start()
 local menu = hs.menubar.new()
 menu:setTitle("HS")
 menu:setMenu({
+{{- if .paperwm }}
+    { title = "Windows (PaperWM)", disabled = true },
+    { title = "  Focus: super+hjkl" },
+    { title = "  Swap: super+shift+hjkl" },
+    { title = "  Cycle Width: super+r" },
+    { title = "  Full Width: super+return" },
+    { title = "  Center: super+c" },
+    { title = "  Float: super+shift+space" },
+{{- else }}
     { title = "Windows", disabled = true },
     { title = "  Left Half", fn = layouts.left_half },
     { title = "  Right Half", fn = layouts.right_half },
     { title = "  Full Screen", fn = layouts.full },
     { title = "  Center", fn = layouts.center },
+{{- end }}
     { title = "-" },
     { title = "Apps", disabled = true },
     { title = "  Ghostty", fn = function() launchOrFocus("Ghostty") end },
@@ -316,26 +388,58 @@ menu:setMenu({
 
 alert.show("Hammerspoon loaded", 1)
 
+{{- if .paperwm }}
+print([[
+=== Hammerspoon Shortcuts ===
+Window Management (PaperWM):
+  Cmd+Alt + hjkl        : Focus left/right/down/up
+  Cmd+Alt+Shift + hjkl  : Swap left/right/down/up
+  Cmd+Alt + r            : Cycle window width
+  Cmd+Alt + return       : Full width
+  Cmd+Alt + c            : Center window
+  Cmd+Alt + i/o          : Slurp/barf columns
+  Cmd+Alt+Shift + space  : Toggle floating
+  Cmd+Alt + 1-9          : Switch space
+  Cmd+Alt+Shift + 1-9    : Move window to space
+  Hyper + h/l            : Move to screen
+
+Apps:
+  Cmd+Alt + t            : Ghostty
+  Cmd+Alt + e            : Zed
+  Cmd+Alt + b            : Brave
+  Cmd+Alt + space        : App chooser
+
+Utilities:
+  Cmd+Alt + v            : Clipboard history
+  Cmd+Alt + w            : Window hints
+  Hyper + q              : Lock screen
+  Hyper + c              : Caffeinate
+  Hyper + d              : Toggle dark mode
+  Hyper + r              : Reload config
+=============================
+]])
+{{- else }}
 print([[
 === Hammerspoon Shortcuts ===
 Window Management:
-  Cmd+Alt + arrows    : Halves/Full/Center
-  Cmd+Alt + 1-5       : Thirds
-  Cmd+Alt+Ctrl + arr  : Quadrants
-  Hyper + h/l         : Move to screen
+  Cmd+Alt + arrows       : Halves/Full/Center
+  Cmd+Alt + 1-5          : Thirds
+  Cmd+Alt+Ctrl + arr     : Quadrants
+  Hyper + h/l            : Move to screen
 
 Apps:
-  Cmd+Alt + t         : Ghostty
-  Cmd+Alt + e         : Zed
-  Cmd+Alt + b         : Brave
-  Cmd+Alt + space     : App chooser
+  Cmd+Alt + t            : Ghostty
+  Cmd+Alt + e            : Zed
+  Cmd+Alt + b            : Brave
+  Cmd+Alt + space        : App chooser
 
 Utilities:
-  Cmd+Alt + v         : Clipboard history
-  Cmd+Alt + w         : Window hints
-  Hyper + q           : Lock screen
-  Hyper + c           : Caffeinate
-  Hyper + d           : Toggle dark mode
-  Hyper + r           : Reload config
+  Cmd+Alt + v            : Clipboard history
+  Cmd+Alt + w            : Window hints
+  Hyper + q              : Lock screen
+  Hyper + c              : Caffeinate
+  Hyper + d              : Toggle dark mode
+  Hyper + r              : Reload config
 =============================
 ]])
+{{- end }}

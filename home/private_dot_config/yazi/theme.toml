@@ -1,0 +1,217 @@
+# Synthwave84 theme for yazi
+# Based on DROO's unified Synthwave84 palette
+
+# : Manager {{{
+
+[mgr]
+cwd = { fg = "#36f9f6" }
+
+# Find
+find_keyword  = { fg = "#fede5d", bold = true, italic = true, underline = true }
+find_position = { fg = "#ff7edb", bg = "reset", bold = true, italic = true }
+
+# Symlink
+symlink_target = { fg = "#848bbd", italic = true }
+
+# Marker
+marker_copied   = { fg = "#72f1b8", bg = "#72f1b8" }
+marker_cut      = { fg = "#fe4450", bg = "#fe4450" }
+marker_marked   = { fg = "#36f9f6", bg = "#36f9f6" }
+marker_selected = { fg = "#fede5d", bg = "#fede5d" }
+
+# Count
+count_copied   = { fg = "#241b2f", bg = "#72f1b8" }
+count_cut      = { fg = "#ffffff", bg = "#fe4450" }
+count_selected = { fg = "#241b2f", bg = "#fede5d" }
+
+# Border
+border_symbol = "│"
+border_style  = { fg = "#495495" }
+
+# : }}}
+
+
+# : Tabs {{{
+
+[tabs]
+active   = { fg = "#241b2f", bg = "#ff7edb", bold = true }
+inactive = { fg = "#ff7edb", bg = "#241b2f" }
+
+sep_inner = { open = "", close = "" }
+sep_outer = { open = "", close = "" }
+
+# : }}}
+
+
+# : Mode {{{
+
+[mode]
+normal_main = { fg = "#241b2f", bg = "#36f9f6", bold = true }
+normal_alt  = { fg = "#36f9f6", bg = "#241b2f" }
+
+select_main = { fg = "#241b2f", bg = "#fe4450", bold = true }
+select_alt  = { fg = "#fe4450", bg = "#241b2f" }
+
+unset_main = { fg = "#241b2f", bg = "#fede5d", bold = true }
+unset_alt  = { fg = "#fede5d", bg = "#241b2f" }
+
+# : }}}
+
+
+# : Status bar {{{
+
+[status]
+overall   = {}
+sep_left  = { open = "", close = "" }
+sep_right = { open = "", close = "" }
+
+perm_sep   = { fg = "#495495" }
+perm_type  = { fg = "#72f1b8" }
+perm_read  = { fg = "#fede5d" }
+perm_write = { fg = "#fe4450" }
+perm_exec  = { fg = "#36f9f6" }
+
+progress_label  = { bold = true }
+progress_normal = { fg = "#72f1b8", bg = "#241b2f" }
+progress_error  = { fg = "#fede5d", bg = "#fe4450" }
+
+# : }}}
+
+
+# : Which {{{
+
+[which]
+cols            = 3
+mask            = { bg = "#241b2f" }
+cand            = { fg = "#36f9f6" }
+rest            = { fg = "#495495" }
+desc            = { fg = "#ff7edb" }
+separator       = "  "
+separator_style = { fg = "#495495" }
+
+# : }}}
+
+
+# : Confirmation {{{
+
+[confirm]
+border     = { fg = "#ff7edb" }
+title      = { fg = "#ff7edb" }
+body       = {}
+list       = {}
+btn_yes    = { reversed = true }
+btn_no     = {}
+btn_labels = [ "  [Y]es  ", "  (N)o  " ]
+
+# : }}}
+
+
+# : Spotter {{{
+
+[spot]
+border = { fg = "#ff7edb" }
+title  = { fg = "#ff7edb" }
+
+tbl_col  = { fg = "#03edf9" }
+tbl_cell = { fg = "#fede5d", reversed = true }
+
+# : }}}
+
+
+# : Notification {{{
+
+[notify]
+title_info  = { fg = "#72f1b8" }
+title_warn  = { fg = "#fede5d" }
+title_error = { fg = "#fe4450" }
+
+icon_info  = ""
+icon_warn  = ""
+icon_error = ""
+
+# : }}}
+
+
+# : Picker {{{
+
+[pick]
+border   = { fg = "#ff7edb" }
+active   = { fg = "#36f9f6", bold = true }
+inactive = {}
+
+# : }}}
+
+
+# : Input {{{
+
+[input]
+border   = { fg = "#ff7edb" }
+title    = {}
+value    = {}
+selected = { reversed = true }
+
+# : }}}
+
+
+# : Completion {{{
+
+[cmp]
+border   = { fg = "#ff7edb" }
+active   = { reversed = true }
+inactive = {}
+
+icon_file    = ""
+icon_folder  = ""
+icon_command = ""
+
+# : }}}
+
+
+# : Tasks {{{
+
+[tasks]
+border  = { fg = "#ff7edb" }
+title   = {}
+hovered = { fg = "#36f9f6", bold = true }
+
+# : }}}
+
+
+# : Help {{{
+
+[help]
+on      = { fg = "#36f9f6" }
+run     = { fg = "#ff7edb" }
+desc    = {}
+hovered = { reversed = true, bold = true }
+footer  = { fg = "#241b2f", bg = "#ffffff" }
+
+# : }}}
+
+
+# : File-specific styles {{{
+
+[filetype]
+rules = [
+	# Images
+	{ mime = "image/*", fg = "#fede5d" },
+	# Media
+	{ mime = "{audio,video}/*", fg = "#ff7edb" },
+	# Archives
+	{ mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", fg = "#fe4450" },
+	# Documents
+	{ mime = "application/{pdf,doc,rtf}", fg = "#36f9f6" },
+	# Virtual file system
+	{ mime = "vfs/{absent,stale}", fg = "#495495" },
+	# Orphan
+	{ url = "*", is = "orphan", bg = "#fe4450" },
+	# Executable
+	{ url = "*", is = "exec", fg = "#72f1b8" },
+	# Dummy
+	{ url = "*", is = "dummy", bg = "#fe4450" },
+	{ url = "*/", is = "dummy", bg = "#fe4450" },
+	# Directory
+	{ url = "*/", fg = "#03edf9" },
+]
+
+# : }}}

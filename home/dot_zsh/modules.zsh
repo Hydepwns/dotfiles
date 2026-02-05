@@ -7,6 +7,15 @@ ZSH_MODULES_DIR="${0:A:h}"
 
 # Source modular configuration files
 if [[ -d "$ZSH_MODULES_DIR" ]]; then
+    # Source core modules first (paths, tools, etc.)
+    if [[ -d "$ZSH_MODULES_DIR/core" ]]; then
+        for core_file in "$ZSH_MODULES_DIR"/core/*.zsh; do
+            if [[ -f "$core_file" ]]; then
+                source "$core_file"
+            fi
+        done
+    fi
+
     # Source aliases
     if [[ -d "$ZSH_MODULES_DIR/aliases" ]]; then
         for alias_file in "$ZSH_MODULES_DIR"/aliases/*.zsh; do

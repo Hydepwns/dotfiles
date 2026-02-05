@@ -21,7 +21,7 @@ if [ -n "$GITHUB_TOKEN" ] && [ "$GITHUB_TOKEN" != "your_personal_access_token" ]
     echo " GitHub token is already set: ${GITHUB_TOKEN:0:10}..."
     echo ""
 else
-    echo "📝 Please follow these steps:"
+    echo "Please follow these steps:"
     echo ""
     echo "1. Go to: https://github.com/settings/tokens"
     echo "2. Click 'Generate new token (classic)'"
@@ -59,8 +59,13 @@ else
     fi
 fi
 
+# Load constants for identity
+DOTFILES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+# shellcheck source=../utils/constants.sh
+source "$DOTFILES_ROOT/scripts/utils/constants.sh"
+
 echo " Testing GitHub API access..."
-if curl -s -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/user | grep -q "hydepwns"; then
+if curl -s -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/user | grep -q "${GITHUB_USER:-hydepwns}"; then
     echo " GitHub API access working!"
     echo ""
     echo " Now you can run: chezmoi apply"

@@ -4,9 +4,12 @@
 
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=../utils/constants.sh
+source "$SCRIPT_DIR/../utils/constants.sh" 2>/dev/null || true
+
 AGE_KEY_PATH="$HOME/.config/chezmoi/age_key.txt"
-OP_ITEM_TITLE="Dotfiles Age Key"
-OP_VAULT="Private"
+OP_ITEM_TITLE="${OP_AGE_ITEM:-Dotfiles Age Key}"
 
 log_info() { echo "[INFO] $1"; }
 log_success() { echo "[OK] $1"; }
