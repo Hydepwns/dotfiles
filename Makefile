@@ -1,4 +1,4 @@
-.PHONY: help install update diff status backup clean doctor bootstrap sync sync-from-remote backup-full install-optional performance-test generate-template tool-versions setup-age age-retrieve age-status setup-raycast raycast-export raycast-import raycast-status setup-takopi takopi-onboard takopi-backup takopi-status lint
+.PHONY: help install update diff status backup clean doctor bootstrap sync sync-from-remote backup-full install-optional generate-template tool-versions setup-age age-retrieve age-status setup-raycast raycast-export raycast-import raycast-status setup-takopi takopi-onboard takopi-backup takopi-status lint perf perf-report
 
 # Configuration
 DOTFILES_ROOT := $(shell pwd)
@@ -74,23 +74,11 @@ test: ## Run comprehensive dotfiles test suite
 	@echo "Running Dotfiles Test Suite..."
 	@$(SCRIPTS_DIR)/utils/test-suite.sh
 
-performance-test: ## Run performance tests
-	@$(SCRIPTS_DIR)/utils/performance-test.sh
-
-perf: ## Run performance test
+perf: ## Benchmark shell startup time
 	@$(SCRIPTS_DIR)/utils/performance-monitor.sh measure
 
-perf-report: ## Generate performance report
+perf-report: ## Show shell startup breakdown
 	@$(SCRIPTS_DIR)/utils/performance-monitor.sh report
-
-perf-history: ## Show performance history
-	@$(SCRIPTS_DIR)/utils/performance-monitor.sh history
-
-perf-realtime: ## Start real-time performance monitoring
-	@$(SCRIPTS_DIR)/utils/performance-monitor.sh start-monitoring
-
-perf-stop: ## Stop real-time performance monitoring
-	@$(SCRIPTS_DIR)/utils/performance-monitor.sh stop-monitoring
 
 lazy-load-config: ## Generate lazy loading config
 	@$(SCRIPTS_DIR)/utils/lazy-load-tools.sh generate
