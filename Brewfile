@@ -128,8 +128,7 @@ cask "1password-cli"
 # Networking
 cask "tailscale-app"
 
-# Containers
-cask "docker"
+# Containers (OrbStack provides Docker compatibility)
 cask "orbstack"
 
 # Browsers
@@ -149,7 +148,7 @@ cask "ngrok"
 
 # Fonts
 cask "font-monaspace"
-cask "font-monaspace-nerd-font"
+cask "font-monaspice-nerd-font"
 
 # =============================================================================
 # OPTIONAL - Uncomment as needed
