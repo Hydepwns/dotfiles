@@ -5,9 +5,10 @@
 node = "22"
 
 [settings]
-# Disable GPG verification for node downloads (avoids keyring issues)
-node_verify = false
-# Use verbose output for debugging
 verbose = false
-# Always install exact versions
 always_keep_download = true
+
+# Disable GPG verification for node downloads (avoids keyring issues)
+# MISE_NODE_VERIFY is set via env var in shell profile
+[env]
+MISE_NODE_VERIFY = "false"
