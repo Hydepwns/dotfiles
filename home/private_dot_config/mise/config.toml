@@ -1,0 +1,13 @@
+# mise global configuration
+# See: https://mise.jdx.dev/configuration.html
+
+[tools]
+node = "22"
+
+[settings]
+# Disable GPG verification for node downloads (avoids keyring issues)
+node_verify = false
+# Use verbose output for debugging
+verbose = false
+# Always install exact versions
+always_keep_download = true
