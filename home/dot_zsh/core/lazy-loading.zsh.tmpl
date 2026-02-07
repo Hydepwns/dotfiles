@@ -1,137 +1,26 @@
 # shellcheck disable=all
 # Tool version management and lazy loading
-
-# Performance tracking
-PERF_START_TIME=$(date +%s.%N)
-
-track_loading() {
-    local tool_name="$1"
-    local start_time="$2"
-    local end_time
-    end_time=$(date +%s.%N)
-    local duration
-    duration=$(echo "$end_time - $start_time" | bc -l 2>/dev/null || echo "0")
-    export LAZY_LOAD_TIMES="${LAZY_LOAD_TIMES}${tool_name}:${duration}s "
-    if (( $(echo "$duration > 0.1" | bc -l 2>/dev/null || echo "0") )); then
-        echo "[perf] Loaded $tool_name in ${duration}s"
-    fi
-}
+# Uses mise as the primary version manager (replaces nvm/rbenv/asdf)
 
 {{- if .mise }}
-
-# mise (fast tool version manager - replaces asdf/nvm)
+# mise - fast polyglot tool version manager
 if command -v mise &>/dev/null; then
     eval "$(mise activate zsh)"
 fi
 {{- end }}
 
-{{- if .nvm }}
-
-# Lazy loading for NVM
-lazy_load_nvm() {
-    local start_time=$(date +%s.%N)
-    if ! command -v nvm &> /dev/null; then
-        export NVM_DIR="{{ .chezmoi.homeDir }}/.nvm"
-        if [[ -s "$NVM_DIR/nvm.sh" ]]; then
-            . "$NVM_DIR/nvm.sh"
-            . "$NVM_DIR/bash_completion" 2>/dev/null
-        fi
-    fi
-    track_loading "nvm" "$start_time"
-    nvm "$@"
-}
-alias nvm='lazy_load_nvm'
-{{- end }}
-
-{{- if .rbenv }}
-
-# Lazy loading for rbenv
-lazy_load_rbenv() {
-    local start_time=$(date +%s.%N)
-    if ! command -v rbenv &> /dev/null; then
-        export PATH="{{ .chezmoi.homeDir }}/.rbenv/shims:$PATH"
-        eval "$(rbenv init -)"
-    fi
-    track_loading "rbenv" "$start_time"
-    rbenv "$@"
-}
-lazy_load_ruby() {
-    local start_time=$(date +%s.%N)
-    local cmd="$1"; shift
-    if ! command -v rbenv &> /dev/null; then
-        export PATH="{{ .chezmoi.homeDir }}/.rbenv/shims:$PATH"
-        eval "$(rbenv init -)"
-    fi
-    track_loading "rbenv" "$start_time"
-    "$cmd" "$@"
-}
-alias rbenv='lazy_load_rbenv'
-alias ruby='lazy_load_ruby ruby'
-alias gem='lazy_load_ruby gem'
-alias bundle='lazy_load_ruby bundle'
-alias rake='lazy_load_ruby rake'
-{{- end }}
-
-{{- if .asdf }}
-
-# Lazy loading for asdf
-lazy_load_asdf() {
-    local start_time=$(date +%s.%N)
-    if ! command -v asdf &> /dev/null; then
-        . {{ .brewPrefix }}/opt/asdf/libexec/asdf.sh
-    fi
-    track_loading "asdf" "$start_time"
-    asdf "$@"
-}
-alias asdf='lazy_load_asdf'
-{{- end }}
-
 {{- if .direnv }}
-
-# Lazy loading for direnv
-lazy_load_direnv() {
-    local start_time=$(date +%s.%N)
-    if ! command -v direnv &> /dev/null; then
-        eval "$(direnv hook zsh)"
-    fi
-    track_loading "direnv" "$start_time"
-    direnv "$@"
-}
-alias direnv='lazy_load_direnv'
+# direnv - per-directory environment variables
+if command -v direnv &>/dev/null; then
+    eval "$(direnv hook zsh)"
+fi
 {{- end }}
 
 {{- if .devenv }}
-
-# Lazy loading for devenv
-lazy_load_devenv() {
-    local start_time=$(date +%s.%N)
-    if ! command -v devenv &> /dev/null; then
-        if command -v nix &> /dev/null; then
-            export PATH="/nix/var/nix/profiles/default/bin:$PATH"
-        fi
-    fi
-    track_loading "devenv" "$start_time"
-    devenv "$@"
-}
-alias devenv='lazy_load_devenv'
+# devenv - nix-based development environments
+if command -v devenv &>/dev/null; then
+    : # devenv is already on PATH from nix
+elif [[ -d /nix/var/nix/profiles/default/bin ]]; then
+    export PATH="/nix/var/nix/profiles/default/bin:$PATH"
+fi
 {{- end }}
-
-# Performance reporting (self-cleaning: runs once then removes itself)
-report_performance() {
-    if [[ -n "$LAZY_LOAD_TIMES" ]]; then
-        echo "[perf] Lazy loading:"
-        echo "$LAZY_LOAD_TIMES" | tr ' ' '\n' | grep -v '^$' | while read -r timing; do
-            [[ -n "$timing" ]] && echo "  $timing"
-        done
-    fi
-
-    local end_time=$(date +%s.%N)
-    local total_duration=$(echo "$end_time - $PERF_START_TIME" | bc -l 2>/dev/null || echo "0")
-    echo "[perf] Shell startup: ${total_duration}s"
-
-    unset LAZY_LOAD_TIMES PERF_START_TIME
-    add-zsh-hook -d precmd report_performance
-}
-
-autoload -U add-zsh-hook
-add-zsh-hook precmd report_performance

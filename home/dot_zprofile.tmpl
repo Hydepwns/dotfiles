@@ -18,11 +18,6 @@ export PATH="{{ .chezmoi.homeDir }}/.local/share/solana/install/active_release/b
 source ~/.orbstack/shell/init.zsh 2>/dev/null || :
 {{- end -}}
 
-{{- if .rbenv -}}
-# rbenv initialization
-eval "$(rbenv init - --no-rehash zsh)"
-{{- end -}}
-
 # pipx
 export PATH="$PATH:{{ .chezmoi.homeDir }}/.local/bin"
 
@@ -33,11 +28,6 @@ export PATH="/usr/local/bin:$PATH"
 {{- if .orbstack -}}
 # Added by OrbStack: command-line tools and integration
 source ~/.orbstack/shell/init.zsh 2>/dev/null || :
-{{- end -}}
-
-{{- if .rbenv -}}
-# rbenv initialization
-eval "$(rbenv init - --no-rehash zsh)"
 {{- end -}}
 
 # pipx

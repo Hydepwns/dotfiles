@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Colors.sh - Independent color utilities
-# NOTE: This file MUST NOT source script-init.sh to avoid circular dependency
+# Standalone utility - source directly where needed
 
 
 # Shared color utilities for dotfiles scripts

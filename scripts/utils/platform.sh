@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Platform.sh - Independent platform detection utilities
-# NOTE: This file MUST NOT source script-init.sh to avoid circular dependency
+# Standalone utility - source directly where needed
 
 # Platform detection function (must be defined before use)
 perform_platform_detection() {

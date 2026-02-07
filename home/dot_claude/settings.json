@@ -4,5 +4,7 @@
     "rust-analyzer-lsp@claude-plugins-official": true,
     "lua-lsp@claude-plugins-official": true
   },
-  "alwaysThinkingEnabled": true
+  "syntaxHighlightingDisabled": false,
+  "alwaysThinkingEnabled": true,
+  "autoUpdatesChannel": "stable"
 }

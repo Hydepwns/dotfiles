@@ -16,11 +16,7 @@ personal = true
 
 # Tool configurations
 rust = true
-rbenv = false
 ohmyzsh = true
-nvm = false
-nodejs = false
-asdf = false
 mise = true
 elixir = true
 erlang = true

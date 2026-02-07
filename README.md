@@ -145,7 +145,7 @@ tailscale = true
 onepassword = true
 aws = true
 elixir = true
-nodejs = true
+mise = true
 ```
 
 ## Directory Structure

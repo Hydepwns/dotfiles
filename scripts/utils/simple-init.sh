@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# Simple Script Initialization - No segfaults!
-# This is a simplified alternative to script-init.sh
+# Simple Script Initialization
+# Source this at the top of scripts for standard utilities
 
 # Set script directory
 if [[ -z "$SCRIPT_DIR" ]]; then

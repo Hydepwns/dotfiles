@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Helpers.sh - Independent utility functions
-# NOTE: This file MUST NOT source script-init.sh to avoid circular dependency
+# Standalone utility - source directly where needed
 
 # Basic path detection
 SCRIPT_DIR="${SCRIPT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
@@ -247,7 +247,7 @@ read_config_value() {
     local key="$1"
     local config_file="$2"
     local default_value="${3:-}"
-    
+
     if file_exists "$config_file"; then
         local value
         value=$(grep -E "^${key}\s*=" "$config_file" 2>/dev/null | cut -d'=' -f2 | tr -d ' "'"'" | head -1)
@@ -270,7 +270,7 @@ is_config_enabled() {
 safe_exec() {
     local command="$1"
     local error_message="${2:-Command failed}"
-    
+
     if ! eval "$command" >/dev/null 2>&1; then
         log_error "$error_message: $command"
         return 1
@@ -288,33 +288,33 @@ validate_args() {
     local min_args="$1"
     shift
     local provided_args=("$@")
-    
+
     if [[ ${#provided_args[@]} -lt $min_args ]]; then
         log_error "Expected at least $min_args arguments, got ${#provided_args[@]}"
         return 1
     fi
-    
+
     for arg in "${provided_args[@]}"; do
         if [[ -z "$arg" ]]; then
             log_error "Empty argument provided"
             return 1
         fi
     done
-    
+
     return 0
 }
 
 # Standardized error handling setup
 setup_error_handling() {
     local strict_mode="${1:-false}"
-    
+
     set -e  # Exit on error
-    
+
     if [[ "$strict_mode" == "true" ]]; then
         set -u  # Exit on undefined variable
         set -o pipefail  # Exit on pipe failure
     fi
-    
+
     # Trap errors
     trap 'log_error "Script failed at line $LINENO"' ERR
 }
@@ -324,15 +324,15 @@ create_template_file() {
     local target_file="$1"
     local template_content="$2"
     local backup="${3:-true}"
-    
+
     if [[ -f "$target_file" ]] && [[ "$backup" == "true" ]]; then
         backup_file "$target_file"
     fi
-    
+
     ensure_directory "$(dirname "$target_file")"
-    
+
     echo "$template_content" > "$target_file"
-    
+
     log_success "Created template file: $target_file"
 }
 
@@ -341,12 +341,12 @@ safe_git_operation() {
     local operation="$1"
     shift
     local args=("$@")
-    
+
     if ! is_git_repo; then
         log_error "Not in a git repository"
         return 1
     fi
-    
+
     case "$operation" in
         "add")
             git add "${args[@]}" || { log_error "Failed to add files"; return 1; }
@@ -368,9 +368,9 @@ safe_git_operation() {
 safe_download_execute() {
     local url="$1"
     local description="$2"
-    
+
     log_info "Downloading and executing: $description"
-    
+
     if has_command curl; then
         sh -c "$(curl -fsSL "$url")" || { log_error "Failed to download/execute from $url"; return 1; }
     elif has_command wget; then
@@ -379,6 +379,6 @@ safe_download_execute() {
         log_error "Neither curl nor wget available for download"
         return 1
     fi
-    
+
     log_success "$description completed"
 }
