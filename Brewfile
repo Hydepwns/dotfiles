@@ -8,7 +8,6 @@
 # =============================================================================
 
 tap "hashicorp/tap"
-tap "homebrew/bundle"
 tap "homebrew/services"
 tap "infisical/get-cli"
 tap "kurtosis-tech/tap"
@@ -127,7 +126,7 @@ cask "1password"
 cask "1password-cli"
 
 # Networking
-cask "tailscale"
+cask "tailscale-app"
 
 # Containers
 cask "docker"
