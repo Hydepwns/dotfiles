@@ -118,8 +118,8 @@ cask "ghostty"
 # Editor
 cask "zed"
 
-# AI
-cask "claude-code"
+# AI - claude-code installed via npm (arm64 native)
+# npm install -g @anthropic-ai/claude-code
 
 # Secrets & Auth
 cask "1password"
