@@ -29,10 +29,7 @@ declare -A PATH_REGISTRY=(
     ["postgres_homebrew"]="/opt/homebrew/opt/postgresql@15/bin"
     ["postgres_app"]="/Applications/Postgres.app/Contents/Versions/15/bin"
 
-    # Version managers (legacy, use mise instead)
-    ["rbenv"]="{{ .chezmoi.homeDir }}/.rbenv/shims"
-    ["nvm"]="{{ .chezmoi.homeDir }}/.nvm"
-    ["asdf"]="{{ .brewPrefix }}/opt/asdf/libexec"
+    # Language-specific paths
     ["erlang"]="{{ .brewPrefix }}/opt/erlang/bin"
     ["elixir_mix"]="{{ .chezmoi.homeDir }}/.mix/escripts"
     ["lua_luarocks"]="{{ .chezmoi.homeDir }}/.luarocks/bin"
@@ -98,16 +95,7 @@ build_path() {
     add_to_path "${PATH_REGISTRY[solana]}"
     {{- end }}
 
-    # Legacy version managers (prefer mise)
-    {{- if .rbenv }}
-    add_to_path "${PATH_REGISTRY[rbenv]}"
-    {{- end }}
-    {{- if .nvm }}
-    add_to_path "${PATH_REGISTRY[nvm]}"
-    {{- end }}
-    {{- if .asdf }}
-    add_to_path "${PATH_REGISTRY[asdf]}"
-    {{- end }}
+    # Language-specific paths
     {{- if .erlang }}
     add_to_path "${PATH_REGISTRY[erlang]}"
     {{- end }}

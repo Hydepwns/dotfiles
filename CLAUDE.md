@@ -38,7 +38,6 @@ make rotate-keys          # SSH key rotation via 1Password + Tailscale sync
 # Identity: name, email, github, gpg_signing_key, age_recipient, brewPrefix
 # Shell:    starship, ohmyzsh, oh_my_zsh_theme, oh_my_zsh_plugins
 # Tools:    mise, rust, elixir, erlang, lua, direnv, devenv, nix
-# Legacy:   rbenv, nvm, nodejs, asdf (all false -- use mise instead)
 # Services: tailscale, onepassword, aws, infisical, orbstack
 # macOS:    paperwm, raycast, llvm, postgres, psql
 # Web3:     foundry, huff, solana
@@ -80,7 +79,7 @@ Entry: `dot_zshrc.tmpl` -> sources `~/.zsh/modules.zsh`
 - Fastfetch deferred to one-shot `precmd` hook (runs after first prompt, not before)
 - `modules.zsh` sources `env.zsh` explicitly -- do NOT use root-level wildcards (stale files caused 1357ms regression)
 
-**PATH management**: `core/paths.zsh.tmpl` defines a `PATH_REGISTRY` associative array and `build_path()` function. All PATH additions go through `add_to_path()` which checks directory existence. Registry keys: `base`, `macos_brew`, `linux_local`, `mise`, `rust`, `pnpm_macos`, `pnpm_linux`, `pipx`, `foundry`, `huff`, `solana`, `llvm`, `postgres_homebrew`, `postgres_app`, `rbenv`, `nvm`, `asdf`, `erlang`, `elixir_mix`, `lua_luarocks`, `nix_profile`.
+**PATH management**: `core/paths.zsh.tmpl` defines a `PATH_REGISTRY` associative array and `build_path()` function. All PATH additions go through `add_to_path()` which checks directory existence. Registry keys: `base`, `macos_brew`, `linux_local`, `mise`, `rust`, `pnpm_macos`, `pnpm_linux`, `pipx`, `foundry`, `huff`, `solana`, `llvm`, `postgres_homebrew`, `postgres_app`, `erlang`, `elixir_mix`, `lua_luarocks`, `nix_profile`.
 
 ## Writing Scripts
 
