@@ -9,6 +9,23 @@ if [[ "$(uname -s)" == "Linux" ]]; then
     fi
 fi
 
+# macOS: Handle 1Password SSH agent conflict with Keychain-stored keys
+# 1Password sets SSH_AUTH_SOCK to its agent, but Keychain keys need macOS native agent
+if [[ "$(uname -s)" == "Darwin" ]]; then
+    # Detect if 1Password agent is active (contains "1password" in path)
+    if [[ "$SSH_AUTH_SOCK" == *"1password"* || "$SSH_AUTH_SOCK" == *"2BUA8C4S2C"* ]]; then
+        # Find macOS launchd SSH agent socket
+        _macos_agent=$(find /private/tmp -name "Listeners" -path "*/com.apple.launchd.*" 2>/dev/null | head -1)
+        if [[ -S "$_macos_agent" ]]; then
+            # Export for subprocesses (Ansible, git, etc.)
+            export SSH_AUTH_SOCK_MACOS="$_macos_agent"
+            # Override to use macOS agent for Keychain-stored keys
+            export SSH_AUTH_SOCK="$_macos_agent"
+        fi
+        unset _macos_agent
+    fi
+fi
+
 # Function to add SSH keys to agent
 ssh-add-keys() {
     local key_dir="${HOME}/.ssh"
