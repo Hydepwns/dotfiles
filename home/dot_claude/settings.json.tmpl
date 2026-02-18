@@ -13,7 +13,10 @@
   "alwaysThinkingEnabled": true,
   "autoUpdatesChannel": "stable",
   "cleanupPeriodDays": 365,
-  "statusLine": "{{ .chezmoi.homeDir }}/.claude/statusline.sh",
+  "statusLine": {
+    "type": "command",
+    "command": "{{ .chezmoi.homeDir }}/.claude/statusline.sh"
+  },
   "permissions": {
     "deny": [
       "Read(~/.ssh/**)",
@@ -41,12 +44,7 @@
           {
             "type": "command",
             "command": "{{ .chezmoi.homeDir }}/.claude/hooks/block-rm-rf.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
+          },
           {
             "type": "command",
             "command": "{{ .chezmoi.homeDir }}/.claude/hooks/block-push-main.sh"
