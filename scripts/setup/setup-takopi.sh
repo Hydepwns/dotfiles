@@ -4,15 +4,16 @@
 set -e
 
 DOTFILES_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+
+# Source centralized logging
+# shellcheck source=../utils/logging.sh
+source "$DOTFILES_ROOT/scripts/utils/logging.sh"
+
 # shellcheck source=../utils/constants.sh
 source "$DOTFILES_ROOT/scripts/utils/constants.sh"
+
 TAKOPI_CONFIG="$HOME/.takopi/takopi.toml"
 ENCRYPTED_CONFIG="$DOTFILES_ROOT/home/dot_takopi/encrypted_takopi.toml"
-
-info() { echo "[*] $1"; }
-success() { echo "[+] $1"; }
-warn() { echo "[!] $1"; }
-error() { echo "[-] $1" >&2; }
 
 install_takopi() {
     if ! command -v uv &>/dev/null; then

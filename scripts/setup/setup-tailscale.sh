@@ -1,14 +1,13 @@
 #!/bin/bash
 # Tailscale setup script for DROO's dotfiles
 
-set -e
+set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../utils/colors.sh" 2>/dev/null || true
+DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
-log_info() { echo "[INFO] $1"; }
-log_success() { echo "[OK] $1"; }
-log_error() { echo "[ERROR] $1" >&2; }
+# shellcheck source=../utils/logging.sh
+source "$DOTFILES_ROOT/scripts/utils/logging.sh"
 
 install_tailscale() {
     local os_type

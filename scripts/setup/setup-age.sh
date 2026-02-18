@@ -2,18 +2,19 @@
 # Age encryption key management for chezmoi dotfiles
 # Handles: key generation, 1Password backup, retrieval on new machines
 
-set -e
+set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+
+# shellcheck source=../utils/logging.sh
+source "$DOTFILES_ROOT/scripts/utils/logging.sh"
+
 # shellcheck source=../utils/constants.sh
-source "$SCRIPT_DIR/../utils/constants.sh" 2>/dev/null || true
+source "$DOTFILES_ROOT/scripts/utils/constants.sh" 2>/dev/null || true
 
 AGE_KEY_PATH="$HOME/.config/chezmoi/age_key.txt"
 OP_ITEM_TITLE="${OP_AGE_ITEM:-Dotfiles Age Key}"
-
-log_info() { echo "[INFO] $1"; }
-log_success() { echo "[OK] $1"; }
-log_error() { echo "[ERROR] $1" >&2; }
 
 # =============================================================================
 # Generate

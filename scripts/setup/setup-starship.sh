@@ -3,10 +3,12 @@
 
 set -e
 
-info() { echo "[*] $1"; }
-success() { echo "[+] $1"; }
-warn() { echo "[!] $1"; }
-error() { echo "[-] $1" >&2; }
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+
+# Source centralized logging
+# shellcheck source=../utils/logging.sh
+source "$DOTFILES_ROOT/scripts/utils/logging.sh"
 
 install_starship() {
     if command -v starship &>/dev/null; then

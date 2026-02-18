@@ -4,14 +4,14 @@
 set -e
 
 DOTFILES_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+
+# Source centralized logging
+# shellcheck source=../utils/logging.sh
+source "$DOTFILES_ROOT/scripts/utils/logging.sh"
+
 RAYCAST_DIR="$DOTFILES_ROOT/config/raycast"
 RAYCONFIG_FILE="$RAYCAST_DIR/raycast.rayconfig"
 SETTINGS_JSON="$RAYCAST_DIR/settings.json"
-
-info() { echo "[*] $1"; }
-success() { echo "[+] $1"; }
-warn() { echo "[!] $1"; }
-error() { echo "[-] $1" >&2; }
 
 check_raycast() {
     if [[ -d "/Applications/Raycast.app" ]]; then

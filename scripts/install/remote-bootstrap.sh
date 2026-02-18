@@ -7,7 +7,7 @@ set -e
 REPO="https://github.com/Hydepwns/dotfiles.git"
 DOTFILES_DIR="$HOME/.local/share/chezmoi"
 
-# Colors
+# Colors and logging defined inline (can't source logging.sh - repo not cloned yet)
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'

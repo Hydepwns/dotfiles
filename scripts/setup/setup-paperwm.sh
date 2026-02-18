@@ -3,13 +3,14 @@
 
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 SPOON_DIR="$HOME/.hammerspoon/Spoons/PaperWM.spoon"
 REPO_URL="https://github.com/mogenson/PaperWM.spoon"
 
-info() { echo "[*] $1"; }
-success() { echo "[+] $1"; }
-warn() { echo "[!] $1"; }
-error() { echo "[-] $1" >&2; }
+# Source centralized logging
+# shellcheck source=../utils/logging.sh
+source "$DOTFILES_ROOT/scripts/utils/logging.sh"
 
 install_paperwm() {
     if [[ -d "$SPOON_DIR" ]]; then

@@ -1,23 +1,34 @@
 #!/usr/bin/env bash
-
-# Use simple script initialization (no segfaults!)
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../utils/simple-init.sh"
-
 # Setup script for CI/CD tools and pre-commit hooks
 # This script installs and configures development tools for the dotfiles repository
 
-# Simple utilities (no dependencies)
-log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
-log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
-log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=../utils/simple-init.sh
+source "$SCRIPT_DIR/../utils/simple-init.sh"
+
+show_usage() {
+    cat <<EOF
+Usage: $0
+
+Setup CI/CD tools and pre-commit hooks for the dotfiles repository.
+
+Installs:
+    - pre-commit (Python)
+    - shellcheck
+    - black (Python formatter)
+    - prettier (JS/JSON/YAML/MD formatter)
+
+Must be run from the dotfiles repository root.
+EOF
+}
+
+if [[ "${1:-}" == "-h" ]] || [[ "${1:-}" == "--help" ]] || [[ "${1:-}" == "help" ]]; then
+    show_usage
+    exit 0
+fi
 
 # Status printing functions
 print_section() { echo -e "\n${BLUE:-}=== $1 ===${NC:-}"; }
-
-# Exit codes
-EXIT_SUCCESS=0
-EXIT_FAILURE=1
 
 log_info "Setting up CI/CD tools and pre-commit hooks..."
 print_section "CI/CD Setup"

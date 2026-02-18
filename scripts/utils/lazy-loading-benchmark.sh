@@ -1,25 +1,11 @@
 #!/usr/bin/env bash
-
-# Use simple script initialization (no segfaults!)
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/simple-init.sh"
-
-
 # Lazy Loading Performance Benchmark Script
 # This script measures the performance impact of lazy loading vs eager loading
 # and generates visualizations and reports
 
-
-# Simple utilities (no dependencies)
-log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
-log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
-log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
-log_warning() { echo -e "${YELLOW:-}[WARNING]${NC:-} $1"; }
-
-# Exit codes
-EXIT_SUCCESS=0
-EXIT_INVALID_ARGS=1
-EXIT_FAILURE=1
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=simple-init.sh
+source "$SCRIPT_DIR/simple-init.sh"
 
 # Simple utility functions
 file_exists() { test -f "$1"; }
@@ -602,7 +588,7 @@ run_benchmark() {
 
     # Benchmark each tool
     for tool in $TOOLS; do
-        if command -v "$tool" &> /dev/null || dir_exists "$HOME/.$tool" || dir_exists "$HOME/.nvm" && "$tool" == "nvm"; then
+        if command -v "$tool" &> /dev/null || dir_exists "$HOME/.$tool" || { dir_exists "$HOME/.nvm" && [[ "$tool" == "nvm" ]]; }; then
             echo "[INFO] Benchmarking $tool..." >&2
             local tool_results
             tool_results=$(benchmark_tool "$tool")
