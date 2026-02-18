@@ -1,4 +1,7 @@
 {
+  "auto_install_extensions": {
+    "zoir": true
+  },
   "theme": "Synthwave84 Soft",
   "buffer_font_family": "Monaspace Neon",
   "buffer_font_size": 14,
@@ -154,6 +157,10 @@
     },
     "Lua": {
       "tab_size": 2,
+      "format_on_save": "on"
+    },
+    "Noir": {
+      "tab_size": 4,
       "format_on_save": "on"
     },
     "Python": {
