@@ -80,11 +80,19 @@ check_packages() {
 
 # Remove packages not in Brewfile
 cleanup_packages() {
+    local force="${1:-}"
     info "Removing packages not in Brewfile..."
 
-    warn "This will uninstall packages not listed in Brewfile"
-    read -rp "Continue? [y/N] " confirm
-    [[ "$confirm" != "y" && "$confirm" != "Y" ]] && exit 0
+    if [[ "$force" != "--force" ]]; then
+        warn "This will uninstall packages not listed in Brewfile"
+        if [[ -t 0 ]]; then
+            read -rp "Continue? [y/N] " confirm
+            [[ "$confirm" != "y" && "$confirm" != "Y" ]] && exit 0
+        else
+            error "No TTY available. Use 'cleanup --force' to skip confirmation."
+            exit 1
+        fi
+    fi
 
     brew bundle cleanup --file="$BREWFILE" --force
 
@@ -164,7 +172,7 @@ Commands:
     install     Install packages from Brewfile (default)
     dump        Update Brewfile from current system
     check       Check for packages not in Brewfile
-    cleanup     Remove packages not in Brewfile
+    cleanup     Remove packages not in Brewfile (--force to skip prompt)
     update      Update Homebrew and all packages
     list        List installed packages
     info <pkg>  Show info for a package
@@ -201,7 +209,7 @@ main() {
             check_packages
             ;;
         cleanup)
-            cleanup_packages
+            cleanup_packages "$2"
             ;;
         update)
             update_packages

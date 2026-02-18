@@ -23,9 +23,14 @@ make test                 # Test suite (zsh syntax, module loading)
 
 make brew-install         # Install Brewfile packages
 make brew-dump            # Update Brewfile from current system
+make brew-check           # Check for packages not in Brewfile
+make brew-cleanup         # Remove packages not in Brewfile
 make dashboard            # Service status dashboard (CLI)
+make dashboard-watch      # Dashboard with auto-refresh
 make setup-secrets        # Install 1Password, AWS CLI, Infisical, Tailscale
 make rotate-keys          # SSH key rotation via 1Password + Tailscale sync
+make theme-generate       # Generate all tool configs from unified theme
+make lazy-load-stats      # Show lazy loading stats
 ```
 
 ## Chezmoi Architecture
@@ -85,7 +90,7 @@ Entry: `dot_zshrc.tmpl` -> sources `~/.zsh/modules.zsh`
 
 Scripts source `scripts/utils/simple-init.sh` for: `set -euo pipefail`, color vars, `log_info`/`log_success`/`log_error`/`log_warning`, auto-detected `$DOTFILES_ROOT`.
 
-Shared constants from `scripts/utils/constants.sh`: exit codes (`EXIT_SUCCESS` through `EXIT_TIMEOUT`), identity vars from chezmoi data (`GITHUB_USER`, `USER_NAME`, `USER_EMAIL`, `AGE_RECIPIENT`), infrastructure (`OP_VAULT`, `TAILSCALE_USER`).
+Shared constants from `scripts/utils/constants.sh`: exit codes (`EXIT_SUCCESS` through `EXIT_TIMEOUT`), identity vars from chezmoi data (`GITHUB_USER`, `USER_NAME`, `USER_EMAIL`, `AGE_RECIPIENT`), infrastructure (`OP_VAULT`, `TAILSCALE_USER`), platform detection (`PLATFORM`, `ARCH`).
 
 Setup scripts follow the pattern: `scripts/setup/setup-<tool>.sh` with subcommands (`install`, `status`, `config`). Add a Makefile target with `## comment` for `make help` discoverability.
 
