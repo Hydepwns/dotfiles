@@ -55,12 +55,14 @@ Use in templates: `{{- if .rust -}}...{{- end -}}`. Use `{{- -}}` to trim whites
 **Template strictness**: `[template] options = ["missingkey=error"]` -- referencing an undefined key is a hard error. Always check that a flag exists in `chezmoi.toml` before using it in a template.
 
 **Run-onchange scripts** (auto-execute on `chezmoi apply`):
+
 - `run_onchange_after_brew-bundle.sh.tmpl` -- runs `brew bundle install` when Brewfile hash changes
 - `run_onchange_after_reload-hammerspoon.sh.tmpl` -- reloads Hammerspoon on config change (macOS)
 
 **Age encryption**: Sensitive files use `encrypted_` prefix. Key at `~/.config/chezmoi/age_key.txt`. To edit encrypted templates, decrypt with `age -d`, edit, re-encrypt with `age -r "<recipient>"`, verify with `chezmoi diff`. `chezmoi re-add` does NOT work for encrypted files.
 
 Encrypted files:
+
 - `home/dot_ssh/encrypted_config.tmpl` -- SSH config with Tailscale hosts
 - `home/dot_zsh/core/encrypted_secrets.zsh` -- 1Password/AWS/Infisical integration
 - `home/dot_takopi/encrypted_takopi.toml` -- takopi bot config
@@ -70,6 +72,7 @@ Encrypted files:
 Entry: `dot_zshrc.tmpl` -> sources `~/.zsh/modules.zsh`
 
 `modules.zsh` auto-sources in order:
+
 1. `core/*.zsh` (alphabetically: config, lazy-loading, package-managers, paths, prompt, secrets, ssh, tools, xdg)
 2. `core/platforms/*.zsh` (macos.zsh or linux.zsh)
 3. `aliases/*.zsh`
@@ -77,6 +80,7 @@ Entry: `dot_zshrc.tmpl` -> sources `~/.zsh/modules.zsh`
 5. `env.zsh` (explicit, not wildcard)
 
 **Performance-critical patterns** (don't break these):
+
 - `compinit -C` when `.zcompdump` is fresh (<24h), full `compinit` only when stale
 - Starship init cached to `$XDG_CACHE_HOME/zsh-completions/starship-init.zsh` (24h TTL)
 - Tool completions (mise, chezmoi) cached via `_cache_completion()` helper (24h TTL)
@@ -107,10 +111,12 @@ Single source of truth: `[data.theme]` in `chezmoi.toml` (Synthwave84 palette). 
 **New alias**: Add to `home/dot_zsh/aliases/dev.zsh`
 
 **New conditional tool**:
+
 1. Add flag to `chezmoi.toml`: `mytool = true`
 2. Gate in templates: `{{- if .mytool -}}...{{- end -}}`
 
 **New setup script**:
+
 1. Create `scripts/setup/setup-mytool.sh` (source `simple-init.sh`, add subcommands)
 2. Add Makefile target with `## comment`
 3. Add to `.PHONY` line
