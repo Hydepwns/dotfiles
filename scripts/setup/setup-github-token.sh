@@ -1,14 +1,27 @@
 #!/usr/bin/env bash
+# Setup GitHub Personal Access Token for chezmoi
 
-# Use simple script initialization (no segfaults!)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=../utils/simple-init.sh
 source "$SCRIPT_DIR/../utils/simple-init.sh"
 
-# Simple utilities (no dependencies)
-log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
-log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
-log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
+show_usage() {
+    cat <<EOF
+Usage: $0
 
+Interactive setup for GitHub Personal Access Token.
+
+This token allows chezmoi to fetch SSH public keys from GitHub.
+The token will be saved to your shell profile (~/.zshrc or ~/.bash_profile).
+
+Required GitHub token scope: read:user
+EOF
+}
+
+if [[ "${1:-}" == "-h" ]] || [[ "${1:-}" == "--help" ]] || [[ "${1:-}" == "help" ]]; then
+    show_usage
+    exit 0
+fi
 
 echo " Setting up GitHub Personal Access Token for chezmoi"
 echo "=================================================="

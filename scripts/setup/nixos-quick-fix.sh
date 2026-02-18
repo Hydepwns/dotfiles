@@ -1,16 +1,10 @@
 #!/usr/bin/env bash
-
-# Use simple script initialization (no segfaults!)
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../utils/simple-init.sh"
-
 # Quick fix script for common NixOS dotfiles issues
 # This script addresses common problems when setting up dotfiles on NixOS
 
-# Simple utilities (no dependencies)
-log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
-log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
-log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=../utils/simple-init.sh
+source "$SCRIPT_DIR/../utils/simple-init.sh"
 
 echo -e "${BLUE:-}NixOS Dotfiles Quick Fix${NC:-}"
 echo "=================================="
@@ -20,7 +14,7 @@ echo ""
 fix_issue() {
     local description="$1"
     local command="$2"
-    
+
     echo -e "${YELLOW}>${NC} $description..."
     if eval "$command"; then
         echo -e "  ${GREEN}Fixed${NC}"
@@ -76,7 +70,7 @@ echo -e "${CYAN}Applying dotfiles...${NC}"
 
 if has_command chezmoi; then
     # Check if dotfiles haven't been applied
-    if [ ! -d "$HOME/.zsh" ] || [ ! -f "$HOME/.zshrc" ] || [ $(wc -l < "$HOME/.zshrc" 2>/dev/null || echo 0) -lt 5 ]; then
+    if [ ! -d "$HOME/.zsh" ] || [ ! -f "$HOME/.zshrc" ] || [ "$(wc -l < "$HOME/.zshrc" 2>/dev/null || echo 0)" -lt 5 ]; then
         echo -e "${YELLOW}>${NC} Dotfiles appear to be missing or incomplete"
         echo "Apply chezmoi dotfiles now? (y/n)"
         read -r response

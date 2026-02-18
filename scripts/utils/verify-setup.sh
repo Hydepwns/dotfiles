@@ -1,21 +1,10 @@
 #!/usr/bin/env bash
-
-# Use simple script initialization (no segfaults!)
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/simple-init.sh"
-
 # Setup verification script for dotfiles
 # This script checks if the dotfiles are properly set up and provides guidance
 
-# Simple utilities (no dependencies)
-log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
-log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
-log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
-
-# Exit codes
-export EXIT_SUCCESS=0
-export EXIT_INVALID_ARGS=1
-export EXIT_FAILURE=1
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=simple-init.sh
+source "$SCRIPT_DIR/simple-init.sh"
 
 # Simple utility functions
 command_exists() { command -v "$1" >/dev/null 2>&1; }

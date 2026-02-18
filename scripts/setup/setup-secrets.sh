@@ -2,11 +2,13 @@
 # Secrets management tools setup for DROO's dotfiles
 # Installs: 1Password CLI, AWS CLI, Infisical
 
-set -e
+set -euo pipefail
 
-log_info() { echo "[INFO] $1"; }
-log_success() { echo "[OK] $1"; }
-log_error() { echo "[ERROR] $1" >&2; }
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+
+# shellcheck source=../utils/logging.sh
+source "$DOTFILES_ROOT/scripts/utils/logging.sh"
 
 # =============================================================================
 # 1Password CLI

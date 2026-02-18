@@ -1,20 +1,13 @@
 #!/usr/bin/env bash
-
-# Use simple script initialization (no segfaults!)
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/simple-init.sh"
-
 # Comprehensive test suite for dotfiles
 # This script organizes tests into categories and provides clear reporting
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=simple-init.sh
+source "$SCRIPT_DIR/simple-init.sh"
+
 # Don't exit on error, we want to run all tests
 set +e
-
-# Simple utilities (no dependencies)
-log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
-log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
-log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
-log_warning() { echo -e "${YELLOW:-}[WARNING]${NC:-} $1"; }
 
 # Simple utility functions
 file_exists() { test -f "$1"; }
