@@ -1,5 +1,15 @@
 # Global Claude Code Preferences
 
+## Workflow Philosophy
+
+- Brainstorm before implementing non-trivial features - clarify requirements first
+- Don't declare victory with loose ends - finish what you start
+- Systematic debugging over ad-hoc fixes - understand root cause
+- Evidence over claims - verify before declaring success
+- YAGNI - don't build for hypothetical future requirements
+
+## General Preferences
+
 - avoid emojis, use ascii instead
 - never use mocks in tests unless explicitly requested
 - only write code idiomatic to the language being used
@@ -85,3 +95,20 @@ age -r "age1pf2v9lee0rtqp8ur4tatk5w0kpp45t9d7st7zakdlsv7ykdk2ewqacwwjp" -o <sour
 - `chezmoi edit` opens an interactive editor (not usable non-interactively)
 - source paths: `chezmoi source-path <target>` to find the encrypted file
 - always verify with `chezmoi diff` after re-encrypting
+
+## Claude Code Plugins
+
+One-time setup for recommended plugins:
+
+```bash
+# Superpowers - workflow discipline (brainstorming, systematic debugging, TDD)
+/plugin marketplace add obra/superpowers-marketplace
+/plugin install superpowers@superpowers-marketplace
+
+# Official plugins (PR review toolkit, frontend design)
+/plugin marketplace add anthropics/claude-plugins-official
+```
+
+Key skills from superpowers:
+- `/superpowers:brainstorm` - Refines ideas through questioning before implementation
+- `/superpowers:systematic-debugging` - Structured 4-phase root cause analysis
