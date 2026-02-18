@@ -31,40 +31,9 @@ export UTILS_DIR="${UTILS_DIR:-$DOTFILES_ROOT/scripts/utils}"
 # Basic error handling
 set -euo pipefail
 
-# Colors (optional)
-if [[ -t 1 ]]; then
-    export RED='\033[0;31m'
-    export GREEN='\033[0;32m'
-    export YELLOW='\033[1;33m'
-    export BLUE='\033[0;34m'
-    export NC='\033[0m'
-else
-    export RED=''
-    export GREEN=''
-    export YELLOW=''
-    export BLUE=''
-    export NC=''
-fi
-
-# Simple logging functions
-log_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
-}
-
-log_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
-}
-
-log_error() {
-    echo -e "${RED}[ERROR]${NC} $1" >&2
-}
-
-log_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
-}
-
-# Export functions
-export -f log_info log_success log_error log_warning
+# Source centralized logging (includes colors and all log functions)
+# shellcheck source=logging.sh
+source "$UTILS_DIR/logging.sh"
 
 # Success marker
 export SIMPLE_INIT_LOADED=true
