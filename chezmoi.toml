@@ -40,6 +40,9 @@ raycast = true
 takopi = true
 work = false
 
+# Claude Code configuration
+claude_anti_rationalization = false
+
 # Platform-specific
 brewPrefix = "/opt/homebrew"
 

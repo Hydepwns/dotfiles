@@ -2,7 +2,7 @@
 return {
   "nvim-treesitter/nvim-treesitter",
   build = ":TSUpdate",
-  event = { "BufReadPost", "BufNewFile" },
+  lazy = false,
   opts = {
     ensure_installed = {
       "bash", "c", "css", "diff", "elixir", "erlang", "go", "heex",
@@ -10,6 +10,7 @@ return {
       "markdown_inline", "python", "query", "regex", "rust", "toml",
       "tsx", "typescript", "vim", "vimdoc", "yaml",
     },
+    sync_install = true,
     auto_install = true,
     highlight = { enable = true },
     indent = { enable = true },
