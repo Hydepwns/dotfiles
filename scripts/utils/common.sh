@@ -1,27 +1,10 @@
 #!/usr/bin/env bash
-
-# Use simple script initialization (no segfaults!)
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/simple-init.sh"
-
-
 # Common utilities loader for dotfiles scripts
 # This file sources all commonly needed utilities in the correct order
 
-# Get the directory of this script
-
-# Source utilities in order of dependency
-# 1. Constants (defines variables used by other scripts)
-
-# 2. Colors (provides color definitions and functions)  
-
-# 3. Platform detection (OS, architecture, package managers)
-
-# 4. Helper functions (logging, validation, etc.)
-
-# 5. Consolidated patterns library (eliminates code duplication)
-
-# 6. Advanced patterns library (Level 2 consolidation)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=simple-init.sh
+source "$SCRIPT_DIR/simple-init.sh"
 
 # Additional consolidated functions
 # =================================
@@ -30,7 +13,7 @@ source "$SCRIPT_DIR/simple-init.sh"
 read_chezmoi_config() {
     local key="$1"
     local config_file="${2:-chezmoi.toml}"
-    
+
     if [ -f "$config_file" ]; then
         grep -E "^${key}\s*=" "$config_file" 2>/dev/null | cut -d'=' -f2 | tr -d ' "'"'"
     fi
@@ -40,7 +23,7 @@ read_chezmoi_config() {
 is_feature_enabled() {
     local feature="$1"
     local config_file="${2:-chezmoi.toml}"
-    
+
     local value
     value=$(read_chezmoi_config "$feature" "$config_file")
     [[ "$value" == "true" ]]
@@ -49,7 +32,7 @@ is_feature_enabled() {
 # Unified installation check
 can_install_package() {
     local package="$1"
-    
+
     if $IS_MACOS && command -v brew >/dev/null 2>&1; then
         return 0
     elif $IS_LINUX && command -v apt >/dev/null 2>&1; then
@@ -57,7 +40,7 @@ can_install_package() {
     elif $IS_NIXOS && command -v nix-env >/dev/null 2>&1; then
         return 0
     fi
-    
+
     return 1
 }
 
@@ -65,7 +48,7 @@ can_install_package() {
 install_package() {
     local package="$1"
     local nix_package="${2:-$package}"
-    
+
     if $IS_MACOS && command -v brew >/dev/null 2>&1; then
         print_status "INFO" "Installing $package via Homebrew..."
         brew install "$package"
@@ -94,18 +77,7 @@ case "$(uname -s)" in
     *) IS_MACOS=false; IS_LINUX=false; IS_NIXOS=false ;;
 esac
 
-# Simple utilities (no dependencies)
-log_info() { echo -e "${BLUE:-}[INFO]${NC:-} $1"; }
-log_success() { echo -e "${GREEN:-}[SUCCESS]${NC:-} $1"; }
-log_error() { echo -e "${RED:-}[ERROR]${NC:-} $1" >&2; }
-log_warning() { echo -e "${YELLOW:-}[WARNING]${NC:-} $1"; }
-
-# Exit codes
-EXIT_SUCCESS=0
-EXIT_INVALID_ARGS=1
-EXIT_FAILURE=1
-
-# Simple utility functions  
+# Simple utility functions (logging provided by simple-init.sh -> logging.sh)
 file_exists() { test -f "$1"; }
 dir_exists() { test -d "$1"; }
 command_exists() { command -v "$1" >/dev/null 2>&1; }
@@ -114,7 +86,7 @@ command_exists() { command -v "$1" >/dev/null 2>&1; }
 print_status() {
     local level="$1"
     local message="$2"
-    
+
     case "$level" in
         "OK") log_success "$message" ;;
         "INFO") log_info "$message" ;;

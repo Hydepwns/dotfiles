@@ -14,33 +14,33 @@ http_request() {
     local headers="${4:-}"
     local timeout="${5:-30}"
     local retries="${6:-3}"
-    
+
     local curl_args=(-s -L --max-time "$timeout")
-    
+
     # Add method
     [[ "$method" != "GET" ]] && curl_args+=(-X "$method")
-    
+
     # Add data
     [[ -n "$data" ]] && curl_args+=(-d "$data")
-    
+
     # Add headers
     if [[ -n "$headers" ]]; then
         while IFS= read -r header; do
             [[ -n "$header" ]] && curl_args+=(-H "$header")
         done <<< "$headers"
     fi
-    
+
     # Attempt request with retries
     local attempt=1
     while [[ $attempt -le $retries ]]; do
         if curl "${curl_args[@]}" "$url" 2>/dev/null; then
             return 0
         fi
-        
+
         [[ $attempt -lt $retries ]] && sleep $((attempt * 2))
         ((attempt++))
     done
-    
+
     return 1
 }
 
@@ -49,12 +49,12 @@ github_api() {
     local endpoint="$1"
     local method="${2:-GET}"
     local data="${3:-}"
-    
+
     local headers="Accept: application/vnd.github.v3+json"
     if [[ -n "${GITHUB_TOKEN:-}" ]]; then
         headers+=$'\n'"Authorization: token $GITHUB_TOKEN"
     fi
-    
+
     http_request "https://api.github.com/$endpoint" "$method" "$data" "$headers"
 }
 
@@ -66,19 +66,19 @@ declare -A PATH_CACHE
 resolve_path() {
     local path="$1"
     local cache_key="path:$path"
-    
+
     if [[ -n "${PATH_CACHE[$cache_key]:-}" ]]; then
         echo "${PATH_CACHE[$cache_key]}"
         return 0
     fi
-    
+
     local resolved
     if [[ -e "$path" ]]; then
         resolved="$(cd "$(dirname "$path")" && pwd)/$(basename "$path")"
     else
         resolved="$(cd "$(dirname "$path")" && pwd)/$(basename "$path")"
     fi
-    
+
     PATH_CACHE[$cache_key]="$resolved"
     echo "$resolved"
 }
@@ -88,7 +88,7 @@ find_file() {
     local name="$1"
     shift
     local search_paths=("$@")
-    
+
     # Default search paths if none provided
     if [[ ${#search_paths[@]} -eq 0 ]]; then
         search_paths=(
@@ -100,7 +100,7 @@ find_file() {
             "/usr/bin"
         )
     fi
-    
+
     for path in "${search_paths[@]}"; do
         local full_path="$path/$name"
         if [[ -f "$full_path" ]]; then
@@ -108,7 +108,7 @@ find_file() {
             return 0
         fi
     done
-    
+
     return 1
 }
 
@@ -120,9 +120,9 @@ read_config() {
     local file="$1"
     local key="$2"
     local format="${3:-auto}"
-    
+
     [[ ! -f "$file" ]] && return 1
-    
+
     # Auto-detect format
     if [[ "$format" == "auto" ]]; then
         case "${file##*.}" in
@@ -133,7 +133,7 @@ read_config() {
             *) format="shell" ;;
         esac
     fi
-    
+
     case "$format" in
         "toml")
             grep -E "^${key}\s*=" "$file" 2>/dev/null | cut -d'=' -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//;s/^["'\'']*//;s/["'\'']*$//'
@@ -164,11 +164,11 @@ read_config() {
 # Write configuration with backup
 write_config() {
     local file="$1"
-    local key="$2"  
+    local key="$2"
     local value="$3"
     local format="${4:-auto}"
     local backup="${5:-true}"
-    
+
     # Auto-detect format
     if [[ "$format" == "auto" ]]; then
         case "${file##*.}" in
@@ -179,14 +179,14 @@ write_config() {
             *) format="shell" ;;
         esac
     fi
-    
+
     # Create backup
     if [[ "$backup" == "true" ]] && [[ -f "$file" ]]; then
         cp "$file" "${file}.backup.$(get_timestamp file)"
     fi
-    
+
     ensure_dir "$(dirname "$file")"
-    
+
     case "$format" in
         "toml"|"env"|"shell")
             # Simple key=value format
@@ -217,14 +217,14 @@ manage_process() {
     local action="$1"
     local pid_file="$2"
     local command="${3:-}"
-    
+
     case "$action" in
         "start")
             if [[ -f "$pid_file" ]] && kill -0 "$(cat "$pid_file")" 2>/dev/null; then
                 echo "Process already running (PID: $(cat "$pid_file"))"
                 return 1
             fi
-            
+
             ensure_dir "$(dirname "$pid_file")"
             eval "$command" &
             echo $! > "$pid_file"
@@ -272,7 +272,7 @@ validate_data() {
     local data="$1"
     local type="$2"
     local constraints="${3:-}"
-    
+
     case "$type" in
         "email")
             [[ "$data" =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]]
@@ -321,7 +321,7 @@ manage_archive() {
     local action="$1"
     local archive="$2"
     local target="${3:-.}"
-    
+
     case "$action" in
         "create")
             case "${archive##*.}" in
@@ -409,20 +409,20 @@ process_template() {
     local template_file="$1"
     local output_file="$2"
     local variables_file="${3:-}"
-    
+
     [[ ! -f "$template_file" ]] && return 1
-    
+
     local temp_content
     temp_content=$(<"$template_file")
-    
+
     # Load variables if provided
     if [[ -n "$variables_file" ]] && [[ -f "$variables_file" ]]; then
         source "$variables_file"
     fi
-    
+
     # Replace environment variables
     temp_content=$(envsubst <<< "$temp_content")
-    
+
     # Write output
     ensure_dir "$(dirname "$output_file")"
     echo "$temp_content" > "$output_file"

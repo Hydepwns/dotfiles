@@ -16,32 +16,11 @@ if [[ -f "$SCRIPT_DIR/constants.sh" ]]; then
     source "$SCRIPT_DIR/constants.sh"
 fi
 
-# Logging functions
-log_info() {
-    if [[ "${QUIET:-false}" != "true" ]]; then
-        echo -e "${BLUE}[INFO]${NC} $1"
-    fi
-}
-
-log_success() {
-    if [[ "${QUIET:-false}" != "true" ]]; then
-        echo -e "${GREEN}[SUCCESS]${NC} $1"
-    fi
-}
-
-log_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
-}
-
-log_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
-}
-
-log_debug() {
-    if [[ "${DEBUG:-false}" == "true" ]]; then
-        echo -e "${PURPLE}[DEBUG]${NC} $1"
-    fi
-}
+# Source centralized logging
+# shellcheck source=logging.sh
+if [[ -f "$SCRIPT_DIR/logging.sh" ]]; then
+    source "$SCRIPT_DIR/logging.sh"
+fi
 
 # Check if command exists
 command_exists() {
@@ -63,10 +42,10 @@ validate_required_args() {
     for arg in "${args[@]}"; do
         if [[ -z "$arg" ]]; then
             log_error "Required argument is missing or empty"
-            return $EXIT_INVALID_ARGS
+            return "$EXIT_INVALID_ARGS"
         fi
     done
-    return $EXIT_SUCCESS
+    return "$EXIT_SUCCESS"
 }
 
 # Validate path
@@ -278,10 +257,8 @@ safe_exec() {
     return 0
 }
 
-# Check if command exists (standardized replacement for 'which')
-has_command() {
-    command -v "$1" >/dev/null 2>&1
-}
+# Alias for backward compatibility (use command_exists)
+has_command() { command_exists "$1"; }
 
 # Advanced validation functions
 validate_args() {
@@ -329,7 +306,7 @@ create_template_file() {
         backup_file "$target_file"
     fi
 
-    ensure_directory "$(dirname "$target_file")"
+    ensure_dir "$(dirname "$target_file")"
 
     echo "$template_content" > "$target_file"
 
