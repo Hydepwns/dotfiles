@@ -98,17 +98,21 @@ age -r "age1pf2v9lee0rtqp8ur4tatk5w0kpp45t9d7st7zakdlsv7ykdk2ewqacwwjp" -o <sour
 
 ## Claude Code Plugins
 
-One-time setup for recommended plugins:
+Currently installed (via settings.json):
+- `rust-analyzer-lsp@claude-plugins-official` - Rust LSP integration
+- `lua-lsp@claude-plugins-official` - Lua LSP integration
+
+Optional plugins (install interactively via `/plugin`):
 
 ```bash
+# Official plugins marketplace (PR review, frontend design)
+/plugin marketplace add anthropics/claude-plugins-official
+
 # Superpowers - workflow discipline (brainstorming, systematic debugging, TDD)
 /plugin marketplace add obra/superpowers-marketplace
 /plugin install superpowers@superpowers-marketplace
-
-# Official plugins (PR review toolkit, frontend design)
-/plugin marketplace add anthropics/claude-plugins-official
 ```
 
-Key skills from superpowers:
+Superpowers skills (if installed):
 - `/superpowers:brainstorm` - Refines ideas through questioning before implementation
 - `/superpowers:systematic-debugging` - Structured 4-phase root cause analysis
