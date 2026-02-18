@@ -70,7 +70,7 @@ Encrypted files:
 Entry: `dot_zshrc.tmpl` -> sources `~/.zsh/modules.zsh`
 
 `modules.zsh` auto-sources in order:
-1. `core/*.zsh` (alphabetically: config, lazy-loading, paths, prompt, secrets, ssh, tools, xdg)
+1. `core/*.zsh` (alphabetically: config, lazy-loading, package-managers, paths, prompt, secrets, ssh, tools, xdg)
 2. `core/platforms/*.zsh` (macos.zsh or linux.zsh)
 3. `aliases/*.zsh`
 4. `functions/*.zsh`
@@ -84,11 +84,11 @@ Entry: `dot_zshrc.tmpl` -> sources `~/.zsh/modules.zsh`
 - Fastfetch deferred to one-shot `precmd` hook (runs after first prompt, not before)
 - `modules.zsh` sources `env.zsh` explicitly -- do NOT use root-level wildcards (stale files caused 1357ms regression)
 
-**PATH management**: `core/paths.zsh.tmpl` defines a `PATH_REGISTRY` associative array and `build_path()` function. All PATH additions go through `add_to_path()` which checks directory existence. Registry keys: `base`, `macos_brew`, `linux_local`, `mise`, `rust`, `pnpm_macos`, `pnpm_linux`, `pipx`, `foundry`, `huff`, `solana`, `llvm`, `postgres_homebrew`, `postgres_app`, `erlang`, `elixir_mix`, `lua_luarocks`, `nix_profile`.
+**PATH management**: `core/paths.zsh.tmpl` defines a `PATH_REGISTRY` associative array and `build_path()` function. All PATH additions go through `add_to_path()` which checks directory existence. Registry keys: `base`, `macos_brew`, `linux_local`, `mise`, `rust`, `pnpm_macos`, `pnpm_linux`, `pipx`, `npm_global`, `foundry`, `huff`, `solana`, `llvm`, `postgres_homebrew`, `postgres_app`, `erlang`, `elixir_mix`, `lua_luarocks`, `nix_profile`.
 
 ## Writing Scripts
 
-Scripts source `scripts/utils/simple-init.sh` for: `set -euo pipefail`, color vars, `log_info`/`log_success`/`log_error`/`log_warning`, auto-detected `$DOTFILES_ROOT`.
+Scripts source `scripts/utils/simple-init.sh` for: `set -euo pipefail`, color vars, `log_info`/`log_success`/`log_error`/`log_warning`/`log_debug`, auto-detected `$DOTFILES_ROOT`. Logging is centralized in `scripts/utils/logging.sh` (sourced by simple-init.sh). Supports `QUIET=true` to suppress info/success and `DEBUG=true` for debug output. Also provides short aliases: `info`, `success`, `warn`, `error`.
 
 Shared constants from `scripts/utils/constants.sh`: exit codes (`EXIT_SUCCESS` through `EXIT_TIMEOUT`), identity vars from chezmoi data (`GITHUB_USER`, `USER_NAME`, `USER_EMAIL`, `AGE_RECIPIENT`), infrastructure (`OP_VAULT`, `TAILSCALE_USER`), platform detection (`PLATFORM`, `ARCH`).
 
@@ -96,7 +96,7 @@ Setup scripts follow the pattern: `scripts/setup/setup-<tool>.sh` with subcomman
 
 ## Pre-commit Hooks
 
-Commits run: trailing-whitespace, end-of-file-fixer, check-yaml, check-added-large-files (500KB), check-merge-conflict, shellcheck (warning level, excludes `.zsh` files), black (Python), prettier (JSON/YAML/Markdown). Encrypted files (`encrypted_*`) are excluded from whitespace hooks.
+Commits run: trailing-whitespace, end-of-file-fixer, check-yaml, check-added-large-files (500KB), check-merge-conflict, shellcheck (error level, `-x` to follow sources, excludes `home/dot_zsh/*.zsh`), black (Python), prettier (JSON/YAML/Markdown). Encrypted files (`encrypted_*`) are excluded from whitespace hooks.
 
 ## Theming
 
