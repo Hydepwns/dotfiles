@@ -85,7 +85,7 @@ age -d -i ~/.config/chezmoi/age_key.txt <source_file> > /tmp/edit.txt
 # 2. Edit /tmp/edit.txt
 
 # 3. Re-encrypt in place
-age -r "age1pf2v9lee0rtqp8ur4tatk5w0kpp45t9d7st7zakdlsv7ykdk2ewqacwwjp" -o <source_file> /tmp/edit.txt
+age -r "{{ .age_recipient }}" -o <source_file> /tmp/edit.txt
 
 # 4. Verify: chezmoi diff <target_path>
 # 5. Clean up: rm /tmp/edit.txt
