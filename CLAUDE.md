@@ -123,6 +123,22 @@ Single source of truth: `[data.theme]` in `chezmoi.toml` (Synthwave84 palette). 
 
 **New PATH entry**: Add key to `PATH_REGISTRY` in `paths.zsh.tmpl`, add conditional `add_to_path` call in `build_path()`
 
+## ETHSkills (Ethereum AI Context)
+
+For Ethereum/Web3 work, use [ETHSkills](https://ethskills.com/) to load accurate blockchain knowledge. Feed any skill URL to Claude for instant context correction.
+
+**Key skills**:
+
+| Skill     | URL                                | Use Case                                    |
+| --------- | ---------------------------------- | ------------------------------------------- |
+| Security  | `ethskills.com/security/SKILL.md`  | Reentrancy, oracles, vault inflation, MEV   |
+| Tools     | `ethskills.com/tools/SKILL.md`     | Blockscout MCP, Foundry, abi.ninja          |
+| L2s       | `ethskills.com/l2s/SKILL.md`       | Cross-chain, bridging, L2 economics         |
+| Standards | `ethskills.com/standards/SKILL.md` | ERC-8004, EIP-7702, token standards         |
+| Gas       | `ethskills.com/gas/SKILL.md`       | Current costs (mainnet ~$0.002, L2 ~$0.002) |
+
+**Blockscout MCP**: Configured in `~/.mcp.json`. Provides type-safe blockchain data queries (balances, tokens, NFTs, contracts) across multiple chains via Model Context Protocol.
+
 ## Code Style
 
 - Shell: bash with `set -euo pipefail`, shellcheck compliant, quote all variables
