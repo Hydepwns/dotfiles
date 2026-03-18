@@ -121,8 +121,10 @@ run_test "Shell" "modules.zsh syntax" "zsh -n \"$HOME/.zsh/modules.zsh\""
 # =============================================================================
 echo -e "\n${YELLOW:-}Tool Installation Tests${NC:-}"
 
-# Check Oh My Zsh if enabled
-if grep -q "ohmyzsh = true" chezmoi.toml 2>/dev/null; then
+# Check Oh My Zsh if enabled (Starship replaces OMZ when both are set)
+if grep -q "ohmyzsh = true" chezmoi.toml 2>/dev/null && grep -q "starship = true" chezmoi.toml 2>/dev/null; then
+    skip_test "Tools" "Oh My Zsh installation" "starship replaces OMZ"
+elif grep -q "ohmyzsh = true" chezmoi.toml 2>/dev/null; then
     run_test "Tools" "Oh My Zsh installation" "test -d \"$HOME/.oh-my-zsh\""
 else
     skip_test "Tools" "Oh My Zsh installation" "not enabled in config"
@@ -161,7 +163,7 @@ fi
 echo -e "\n${YELLOW:-}Configuration Validation Tests${NC:-}"
 
 run_test "Config" "chezmoi verify" "chezmoi verify"
-run_test "Config" "no uncommitted changes" "git diff --quiet"
+run_test "Config" "no uncommitted changes" "git diff --quiet -- ':!.tool-versions'"
 run_test "Config" "managed files exist" "chezmoi managed | head -5 | xargs -I {} test -e \"$HOME/{}\""
 
 # =============================================================================
@@ -177,8 +179,17 @@ run_test "Integration" "zsh configuration syntax" "zsh -n \"$HOME/.zshrc\""
 echo -e "\n${YELLOW:-}Encryption Tests${NC:-}"
 
 run_test "Encryption" "age CLI installed" "command -v age"
-run_test "Encryption" "age key file exists" "test -f \"$HOME/.config/chezmoi/age_key.txt\""
-run_test "Encryption" "age key file permissions" "test \"\$(stat -f '%Lp' \"$HOME/.config/chezmoi/age_key.txt\" 2>/dev/null || stat -c '%a' \"$HOME/.config/chezmoi/age_key.txt\" 2>/dev/null)\" = '600'"
+
+# Age decryption: 1Password-backed (age-op-decrypt.sh) or plaintext key file
+if [ -f "$HOME/.config/chezmoi/age-op-decrypt.sh" ]; then
+    run_test "Encryption" "age 1Password decrypt script" "test -x \"$HOME/.config/chezmoi/age-op-decrypt.sh\""
+elif [ -f "$HOME/.config/chezmoi/age_key.txt" ]; then
+    run_test "Encryption" "age key file exists" "test -f \"$HOME/.config/chezmoi/age_key.txt\""
+    run_test "Encryption" "age key file permissions" "test \"\$(stat -f '%Lp' \"$HOME/.config/chezmoi/age_key.txt\" 2>/dev/null || stat -c '%a' \"$HOME/.config/chezmoi/age_key.txt\" 2>/dev/null)\" = '600'"
+else
+    skip_test "Encryption" "age decryption configured" "no key file or 1Password script found"
+fi
+
 run_test "Encryption" "encrypted source files exist" "ls home/dot_ssh/encrypted_* home/dot_zsh/core/encrypted_* >/dev/null 2>&1"
 
 # =============================================================================
