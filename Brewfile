@@ -21,6 +21,7 @@ brew "mise"                    # Tool version manager (replaces asdf/nvm)
 brew "curl"
 brew "wget"
 brew "git"
+brew "pre-commit"              # Git hook framework
 brew "shellcheck"              # Shell linting
 brew "age"                     # File encryption (chezmoi secrets)
 brew "starship"                # Cross-shell prompt
