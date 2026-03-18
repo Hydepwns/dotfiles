@@ -107,8 +107,10 @@ update_lazy_load_stats() {
 # Enhanced lazy loading functions
 
 # NVM lazy loading
+# shellcheck disable=SC2120
 lazy_load_nvm() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v nvm &> /dev/null; then
         export NVM_DIR="$HOME/.nvm"
@@ -123,8 +125,10 @@ lazy_load_nvm() {
 }
 
 # rbenv lazy loading
+# shellcheck disable=SC2120
 lazy_load_rbenv() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v rbenv &> /dev/null; then
         export PATH="$HOME/.rbenv/shims:$PATH"
@@ -136,8 +140,10 @@ lazy_load_rbenv() {
 }
 
 # pyenv lazy loading
+# shellcheck disable=SC2120
 lazy_load_pyenv() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v pyenv &> /dev/null; then
         export PATH="$HOME/.pyenv/shims:$PATH"
@@ -150,7 +156,8 @@ lazy_load_pyenv() {
 
 # nodenv lazy loading
 lazy_load_nodenv() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v nodenv &> /dev/null; then
         export PATH="$HOME/.nodenv/shims:$PATH"
@@ -162,8 +169,10 @@ lazy_load_nodenv() {
 }
 
 # goenv lazy loading
+# shellcheck disable=SC2120
 lazy_load_goenv() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v goenv &> /dev/null; then
         export PATH="$HOME/.goenv/shims:$PATH"
@@ -176,7 +185,8 @@ lazy_load_goenv() {
 
 # asdf lazy loading
 lazy_load_asdf() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v asdf &> /dev/null; then
         if [[ -f "/opt/homebrew/opt/asdf/libexec/asdf.sh" ]]; then
@@ -192,7 +202,8 @@ lazy_load_asdf() {
 
 # direnv lazy loading
 lazy_load_direnv() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v direnv &> /dev/null; then
         eval "$(direnv hook zsh)"
@@ -204,7 +215,8 @@ lazy_load_direnv() {
 
 # devenv lazy loading
 lazy_load_devenv() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v devenv &> /dev/null; then
         if [[ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
@@ -218,7 +230,8 @@ lazy_load_devenv() {
 
 # Ruby command lazy loading
 lazy_load_ruby() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v ruby &> /dev/null || ! command -v gem &> /dev/null; then
         lazy_load_rbenv
@@ -229,7 +242,8 @@ lazy_load_ruby() {
 }
 
 lazy_load_gem() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v gem &> /dev/null; then
         lazy_load_rbenv
@@ -240,7 +254,8 @@ lazy_load_gem() {
 }
 
 lazy_load_bundle() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v bundle &> /dev/null; then
         lazy_load_rbenv
@@ -251,7 +266,8 @@ lazy_load_bundle() {
 }
 
 lazy_load_rake() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v rake &> /dev/null; then
         lazy_load_rbenv
@@ -263,7 +279,8 @@ lazy_load_rake() {
 
 # Node.js command lazy loading
 lazy_load_node() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v node &> /dev/null; then
         lazy_load_nvm
@@ -274,7 +291,8 @@ lazy_load_node() {
 }
 
 lazy_load_npm() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v npm &> /dev/null; then
         lazy_load_nvm
@@ -285,7 +303,8 @@ lazy_load_npm() {
 }
 
 lazy_load_yarn() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v yarn &> /dev/null; then
         lazy_load_nvm
@@ -297,7 +316,8 @@ lazy_load_yarn() {
 
 # Python command lazy loading
 lazy_load_python() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v python &> /dev/null && ! command -v python3 &> /dev/null; then
         lazy_load_pyenv
@@ -308,7 +328,8 @@ lazy_load_python() {
 }
 
 lazy_load_pip() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v pip &> /dev/null && ! command -v pip3 &> /dev/null; then
         lazy_load_pyenv
@@ -320,7 +341,8 @@ lazy_load_pip() {
 
 # Go command lazy loading
 lazy_load_go() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v go &> /dev/null; then
         lazy_load_goenv
@@ -332,7 +354,8 @@ lazy_load_go() {
 
 # Rust command lazy loading
 lazy_load_cargo() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v cargo &> /dev/null; then
         if [[ -s "$HOME/.cargo/env" ]]; then
@@ -345,7 +368,8 @@ lazy_load_cargo() {
 }
 
 lazy_load_rustc() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v rustc &> /dev/null; then
         if [[ -s "$HOME/.cargo/env" ]]; then
@@ -406,7 +430,8 @@ EOF
 
 # NVM lazy loading
 lazy_load_nvm() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v nvm &> /dev/null; then
         export NVM_DIR="$HOME/.nvm"
@@ -426,7 +451,8 @@ alias npm='lazy_load_npm'
 alias yarn='lazy_load_yarn'
 
 lazy_load_node() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v node &> /dev/null; then
         lazy_load_nvm
@@ -437,7 +463,8 @@ lazy_load_node() {
 }
 
 lazy_load_npm() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v npm &> /dev/null; then
         lazy_load_nvm
@@ -448,7 +475,8 @@ lazy_load_npm() {
 }
 
 lazy_load_yarn() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v yarn &> /dev/null; then
         lazy_load_nvm
@@ -466,7 +494,8 @@ EOF
 
 # rbenv lazy loading
 lazy_load_rbenv() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v rbenv &> /dev/null; then
         export PATH="$HOME/.rbenv/shims:$PATH"
@@ -484,7 +513,8 @@ alias bundle='lazy_load_bundle'
 alias rake='lazy_load_rake'
 
 lazy_load_ruby() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v ruby &> /dev/null; then
         lazy_load_rbenv
@@ -495,7 +525,8 @@ lazy_load_ruby() {
 }
 
 lazy_load_gem() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v gem &> /dev/null; then
         lazy_load_rbenv
@@ -506,7 +537,8 @@ lazy_load_gem() {
 }
 
 lazy_load_bundle() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v bundle &> /dev/null; then
         lazy_load_rbenv
@@ -517,7 +549,8 @@ lazy_load_bundle() {
 }
 
 lazy_load_rake() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v rake &> /dev/null; then
         lazy_load_rbenv
@@ -535,7 +568,8 @@ EOF
 
 # pyenv lazy loading
 lazy_load_pyenv() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v pyenv &> /dev/null; then
         export PATH="$HOME/.pyenv/shims:$PATH"
@@ -551,7 +585,8 @@ alias python='lazy_load_python'
 alias pip='lazy_load_pip'
 
 lazy_load_python() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v python &> /dev/null && ! command -v python3 &> /dev/null; then
         lazy_load_pyenv
@@ -562,7 +597,8 @@ lazy_load_python() {
 }
 
 lazy_load_pip() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v pip &> /dev/null && ! command -v pip3 &> /dev/null; then
         lazy_load_pyenv
@@ -580,7 +616,8 @@ EOF
 
 # asdf lazy loading
 lazy_load_asdf() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v asdf &> /dev/null; then
         if [[ -f "/opt/homebrew/opt/asdf/libexec/asdf.sh" ]]; then
@@ -604,7 +641,8 @@ EOF
 
 # direnv lazy loading
 lazy_load_direnv() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v direnv &> /dev/null; then
         eval "$(direnv hook zsh)"
@@ -624,7 +662,8 @@ EOF
 
 # devenv lazy loading
 lazy_load_devenv() {
-    local start_time=$(date +%s.%N)
+    local start_time
+    start_time=$(date +%s.%N)
 
     if ! command -v devenv &> /dev/null; then
         if [[ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
