@@ -5,7 +5,7 @@
 [![Shell Startup](https://img.shields.io/badge/shell%20startup-~386ms-brightgreen.svg)](home/dot_zshrc.tmpl)
 [![Measured On](https://img.shields.io/badge/measured%20on-MacBook%20Pro%20M1-informational.svg)](Makefile)
 
-Cross-platform dotfiles managed with [chezmoi](https://chezmoi.io) - featuring modular zsh, unified Synthwave84 theming, terminal power tools, and secrets management.
+My dotfiles. Managed with [chezmoi](https://chezmoi.io), themed in Synthwave84, built around zsh with ~386ms startup. Runs on macOS (Apple Silicon) with Linux support.
 
 <p align="center">
   <img src="assets/terminal.png" alt="Terminal screenshot - Ghostty + Starship + fastfetch" width="700">
@@ -14,53 +14,55 @@ Cross-platform dotfiles managed with [chezmoi](https://chezmoi.io) - featuring m
 ## Quick Start
 
 ```bash
-# Full bootstrap (installs everything)
+# Full bootstrap
 curl -fsSL https://raw.githubusercontent.com/Hydepwns/dotfiles/main/scripts/install/remote-bootstrap.sh | bash
 
-# Minimal install
+# Or just the basics
 brew install chezmoi && chezmoi init --apply https://github.com/Hydepwns/dotfiles.git
 ```
 
-## What's Included
+## What's In Here
 
 | Category | Tools |
 |----------|-------|
-| **Terminal** | Ghostty, tmux (Synthwave84 themed) |
-| **Editors** | Zed, Neovim (27 plugins, mona.nvim theme) |
+| **Terminal** | Ghostty, tmux |
+| **Editors** | Zed, Neovim (27 plugins, mona.nvim) |
 | **Shell** | Zsh + Starship + fzf + zoxide |
-| **CLI Tools** | eza, bat, fd, ripgrep, delta, jq, yq |
-| **File Manager** | yazi with image/PDF/archive preview |
-| **System** | btop (Synthwave84), fastfetch, tldr (`help`) |
-| **Window Mgmt** | Hammerspoon + PaperWM (macOS) |
-| **Launcher** | Raycast (macOS, `config/raycast/`) |
+| **CLI** | eza, bat, fd, ripgrep, delta, jq, yq |
+| **Files** | yazi with image/PDF/archive preview |
+| **System** | btop, fastfetch, tldr (`help`) |
+| **Windows** | Hammerspoon + PaperWM (macOS) |
+| **Launcher** | Raycast (macOS) |
 | **AI** | Claude Code, takopi (Telegram bridge) |
 | **Secrets** | 1Password (SSH agent + age encryption), AWS CLI, Infisical |
 | **Network** | Tailscale with pre-configured hosts |
 | **Languages** | Elixir, Rust, Go, Python, Node.js, Lua (via mise) |
 | **Fonts** | Monaspace + Nerd Font |
 
-## Terminal Power Tools
+## Terminal Tools
 
-| Tool | Replaces | Key Binding / Alias |
-|------|----------|---------------------|
+Everything's aliased to feel native. `ls` is eza, `cat` is bat, `grep` is ripgrep.
+
+| Tool | Replaces | Alias / Binding |
+|------|----------|-----------------|
 | fzf | - | `Ctrl+R` history, `Ctrl+T` files, `Alt+C` cd |
-| zoxide | cd | `z` - smart jump (`z proj` -> `/path/to/project`) |
-| eza | ls | `ls`, `ll`, `la`, `lt` - icons + git status |
-| bat | cat | `cat` - syntax highlighting + man pager |
-| fd | find | `find` - faster, respects .gitignore |
-| ripgrep | grep | `grep`, `rg` - faster search |
+| zoxide | cd | `z proj` jumps to `/path/to/project` |
+| eza | ls | `ls`, `ll`, `la`, `lt` -- icons + git status |
+| bat | cat | `cat` -- syntax highlighting, man pager |
+| fd | find | `find` -- faster, respects .gitignore |
+| ripgrep | grep | `grep`, `rg` |
 | delta | diff | Git diffs with syntax highlighting |
-| yazi | - | `y` - terminal file manager with preview |
-| btop | htop | `top`, `htop` - system monitor (Synthwave84) |
-| fastfetch | neofetch | `fetch` - system info display |
+| yazi | - | `y` -- file manager with preview |
+| btop | htop | `top`, `htop` |
+| fastfetch | neofetch | `fetch` |
 | jq / yq | - | JSON and YAML processing |
-| tldr | man | `help` - simplified command examples |
+| tldr | man | `help` -- short command examples |
 
 ## Key Bindings
 
 ### Hammerspoon (macOS)
 
-PaperWM scrollable tiling (set `paperwm = true` in chezmoi.toml, `make setup-paperwm`):
+PaperWM tiling -- enable with `paperwm = true` in chezmoi.toml, then `make setup-paperwm`.
 
 | Key | Action |
 |-----|--------|
@@ -74,7 +76,7 @@ PaperWM scrollable tiling (set `paperwm = true` in chezmoi.toml, `make setup-pap
 | `Cmd+Alt + 1-9` | Switch space |
 | `Cmd+Alt + t` | Ghostty |
 | `Cmd+Alt + e` | Zed |
-| `Cmd+Alt + b` | Brave Browser |
+| `Cmd+Alt + b` | Brave |
 | `Cmd+Alt + space` | App chooser |
 | `Cmd+Alt + v` | Clipboard history |
 | `Hyper + q` | Lock screen |
@@ -83,7 +85,7 @@ PaperWM scrollable tiling (set `paperwm = true` in chezmoi.toml, `make setup-pap
 
 | Key | Action |
 |-----|--------|
-| `Ctrl+a` | Prefix (instead of Ctrl+b) |
+| `Ctrl+a` | Prefix (not Ctrl+b) |
 | `\|` | Split horizontal |
 | `-` | Split vertical |
 | `hjkl` | Navigate panes |
@@ -103,37 +105,40 @@ PaperWM scrollable tiling (set `paperwm = true` in chezmoi.toml, `make setup-pap
 
 ```bash
 # Chezmoi
-make install          # Fresh install
-make update           # Pull and apply remote
+make install          # Fresh machine setup
+make update           # Pull remote + apply
 chezmoi apply         # Apply local changes
 
 # Tools
 make brew-install     # Install Brewfile packages
-make lint             # Run shellcheck on all scripts
-make setup-secrets    # Install 1Password, AWS, Infisical, Tailscale
-make setup-paperwm    # Install PaperWM.spoon for Hammerspoon
-make raycast-export   # Export Raycast settings to dotfiles
-make raycast-import   # Import Raycast settings from dotfiles
-make setup-takopi     # Install takopi via uv
-make takopi-onboard   # Interactive takopi setup wizard
-make dashboard        # Service status dashboard
+make lint             # Shellcheck everything
+make doctor           # 32-point health check
+make setup-secrets    # 1Password, AWS, Infisical, Tailscale
+make setup-paperwm    # PaperWM.spoon for Hammerspoon
+make dashboard        # Service status overview
 
 # SSH
 make rotate-keys      # Generate, store in 1Password, sync to hosts
-make sync-keys        # Sync public key to Tailscale nodes
+make sync-keys        # Push public key to Tailscale nodes
 ```
 
-## Secrets Management
+## Secrets
 
-| Provider | Purpose | Quick Commands |
-|----------|---------|----------------|
-| **1Password** | SSH agent, age decryption key, secrets | `opl`, `opw` |
+No plaintext secrets on disk. SSH keys and the age decryption key live in 1Password.
+
+| Provider | What it does | Aliases |
+|----------|-------------|---------|
+| **1Password** | SSH agent, age key, secrets vault | `opl`, `opw` |
 | **AWS CLI** | Cloud credentials | `awsw`, `aws-profile` |
 | **Infisical** | Backup secrets | `infl`, `inf-env` |
 
+**SSH**: 1Password's SSH agent handles keys on macOS. No `~/.ssh/id_*` files needed. Enable it in 1Password under Settings > Developer > "Use the SSH Agent".
+
+**Age encryption**: Encrypted files (SSH config, shell secrets, takopi config) are decrypted via a wrapper script that pulls the key from 1Password at runtime. On machines without 1Password, chezmoi falls back to `~/.config/chezmoi/age_key.txt`.
+
 ## Configuration
 
-Edit `~/.config/chezmoi/chezmoi.toml`:
+Toggle features in `~/.config/chezmoi/chezmoi.toml`:
 
 ```toml
 [data]
@@ -146,92 +151,70 @@ onepassword = true
 aws = true
 elixir = true
 mise = true
-
-[age]
-command = "~/.config/chezmoi/age-op-decrypt.sh"
-recipient = "age1..."
 ```
 
-**SSH keys**: Managed by 1Password SSH agent on macOS (no keys on disk). Enable in 1Password: Settings > Developer > "Use the SSH Agent".
+Then `chezmoi apply` to pick up the changes.
 
-**Age encryption**: Decryption key stored in 1Password (secure note), accessed via wrapper script -- no plaintext key on disk.
-
-## Directory Structure
+## Directory Layout
 
 ```
 dotfiles/
 ├── home/
-│   ├── dot_zsh/                    # Modular zsh
-│   │   ├── core/tools.zsh.tmpl     # fzf/zoxide/eza/bat + completions
+│   ├── dot_zsh/                        # Modular zsh
+│   │   ├── core/tools.zsh.tmpl         # fzf/zoxide/eza/bat + completions
 │   │   ├── core/lazy-loading.zsh.tmpl  # mise, direnv
-│   │   ├── aliases/dev.zsh         # Shell aliases
-│   │   └── functions/              # Shell functions
-│   ├── dot_hammerspoon/            # Window management (PaperWM)
-│   ├── dot_tmux.conf.tmpl          # Modern tmux
+│   │   ├── aliases/dev.zsh             # Shell aliases
+│   │   └── functions/                  # Shell functions
+│   ├── dot_hammerspoon/                # Window management (PaperWM)
+│   ├── dot_tmux.conf.tmpl             # tmux config
 │   ├── private_dot_config/
-│   │   ├── ghostty/                # Terminal
-│   │   ├── zed/                    # Editor
-│   │   ├── nvim/                   # Neovim (27 plugins)
-│   │   ├── btop/                   # System monitor + theme
-│   │   ├── yazi/                   # File manager + theme
-│   │   ├── fastfetch/              # System info
-│   │   ├── starship/               # Prompt config
-│   │   └── direnv/                 # direnv layouts (mise, poetry)
-│   ├── dot_takopi/                 # takopi config (encrypted)
-│   └── dot_claude/                 # Claude Code prefs
+│   │   ├── ghostty/                    # Terminal
+│   │   ├── zed/                        # Editor
+│   │   ├── nvim/                       # Neovim (27 plugins)
+│   │   ├── btop/                       # System monitor
+│   │   ├── yazi/                       # File manager
+│   │   ├── fastfetch/                  # System info
+│   │   ├── starship/                   # Prompt
+│   │   └── direnv/                     # direnv layouts
+│   ├── dot_takopi/                     # takopi config (encrypted)
+│   └── dot_claude/                     # Claude Code prefs
 ├── config/
-│   ├── raycast/                    # Raycast settings export
-│   └── theme/synthwave84.toml      # Theme source of truth
-├── Brewfile                        # macOS packages (auto-installs on apply)
+│   ├── raycast/                        # Raycast settings
+│   └── theme/synthwave84.toml          # Theme colors
+├── Brewfile                            # Packages (auto-installs on apply)
 └── scripts/
-    ├── setup/                      # Installation
-    └── utils/                      # Maintenance
+    ├── setup/                          # Setup scripts
+    └── utils/                          # Health checks, dashboards, etc.
 ```
 
 ## Theming
 
-Unified Synthwave84 theme across all tools:
-- Ghostty terminal
-- tmux status bar
-- fzf colors
-- Neovim colorscheme (mona.nvim)
-- btop system monitor
-- yazi file manager
-- fastfetch system info
-- Starship prompt
-- Hammerspoon alerts
+Everything runs Synthwave84. The palette lives in `config/theme/synthwave84.toml` and gets templated into Ghostty, tmux, fzf, Neovim (mona.nvim), btop, yazi, fastfetch, Starship, and Hammerspoon.
 
-Source: `config/theme/synthwave84.toml`
+## Forking
 
-## Fork This Repo
-
-This repo is designed to be forked. On first `chezmoi init`, you'll be prompted for your name, email, and GitHub username -- all configs adapt automatically.
+This is meant to be forked. On first `chezmoi init`, you get prompted for your name, email, and GitHub username. Everything adapts from there -- git config, SSH, encrypted secrets, the works.
 
 ```bash
-# 1. Fork on GitHub, then:
+# Fork on GitHub, then:
 brew install chezmoi
 chezmoi init --apply https://github.com/YOUR_USERNAME/dotfiles.git
 
-# 2. chezmoi prompts for your identity on first run:
-#    Display name:    Jane Doe
-#    Email address:   jane@example.com
-#    GitHub username: janedoe
-#    Age public key:  (Enter to skip)
+# chezmoi asks for your identity:
+#   Display name:    Jane Doe
+#   Email address:   jane@example.com
+#   GitHub username: janedoe
+#   Age public key:  (Enter to skip)
 
-# 3. Toggle features in ~/.config/chezmoi/chezmoi.toml:
-#    paperwm = true, tailscale = true, etc.
-
-# 4. Apply changes:
+# Toggle what you want in ~/.config/chezmoi/chezmoi.toml, then:
 chezmoi apply
 ```
 
-What adapts: git config, shell environment, SSH keys, encrypted secrets, setup scripts, and Makefile targets all read from your chezmoi data or `scripts/utils/constants.sh`.
-
 ## Related
 
-- [nix-mox](https://github.com/Hydepwns/nix-mox) - Nix Home Manager configuration
-- [synthwave84-zed](https://github.com/Hydepwns/synthwave84-zed) - Synthwave84 theme for Zed
-- [mona.nvim](https://github.com/Hydepwns/mona.nvim) - Synthwave84 Neovim colorscheme
+- [nix-mox](https://github.com/Hydepwns/nix-mox) -- Nix Home Manager config
+- [synthwave84-zed](https://github.com/Hydepwns/synthwave84-zed) -- Synthwave84 for Zed
+- [mona.nvim](https://github.com/Hydepwns/mona.nvim) -- Synthwave84 for Neovim
 
 ---
 
