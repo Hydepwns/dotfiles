@@ -142,6 +142,12 @@ cask "raycast"
 
 # Communication
 cask "discord"
+cask "signal"
+cask "spotify"
+cask "telegram"
+
+# Notes
+cask "obsidian"
 
 # Other
 cask "ngrok"

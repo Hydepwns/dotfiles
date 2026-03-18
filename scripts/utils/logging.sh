@@ -9,7 +9,7 @@
 # - Both naming conventions: log_info/info, log_success/success, etc.
 
 # Ensure colors are available
-if [[ -z "$NC" ]]; then
+if [[ -z "${NC:-}" ]]; then
     if [[ -t 1 ]]; then
         RED='\033[0;31m'
         GREEN='\033[0;32m'
