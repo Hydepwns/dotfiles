@@ -99,7 +99,10 @@ fi
 # -- Encryption --
 print_section "Encryption"
 AGE_KEY="$HOME/.config/chezmoi/age_key.txt"
-if [[ -f "$AGE_KEY" ]]; then
+AGE_OP_DECRYPT="$HOME/.config/chezmoi/age-op-decrypt.sh"
+if [[ -x "$AGE_OP_DECRYPT" ]]; then
+    ok "age key (1Password-backed)"
+elif [[ -f "$AGE_KEY" ]]; then
     perms=$(stat -f '%Lp' "$AGE_KEY" 2>/dev/null) || perms=$(stat -c '%a' "$AGE_KEY" 2>/dev/null) || perms="unknown"
     if [[ "$perms" == "600" ]]; then
         ok "age key (mode 600)"

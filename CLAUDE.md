@@ -59,11 +59,11 @@ Use in templates: `{{- if .rust -}}...{{- end -}}`. Use `{{- -}}` to trim whites
 - `run_onchange_after_brew-bundle.sh.tmpl` -- runs `brew bundle install` when Brewfile hash changes
 - `run_onchange_after_reload-hammerspoon.sh.tmpl` -- reloads Hammerspoon on config change (macOS)
 
-**Age encryption**: Sensitive files use `encrypted_` prefix. Key at `~/.config/chezmoi/age_key.txt`. To edit encrypted templates, decrypt with `age -d`, edit, re-encrypt with `age -r "<recipient>"`, verify with `chezmoi diff`. `chezmoi re-add` does NOT work for encrypted files.
+**Age encryption**: Sensitive files use `encrypted_` prefix. Decryption key is stored in 1Password (secure note "AGE-SECRET-KEY" in Employee vault) and accessed via `~/.config/chezmoi/age-op-decrypt.sh` wrapper -- no plaintext key on disk. To edit encrypted templates, decrypt with `age -d -i <(op read "op://Employee/AGE-SECRET-KEY/notesPlain" | grep "^AGE-SECRET-KEY-")`, edit, re-encrypt with `age -r "<recipient>"`, verify with `chezmoi diff`. `chezmoi re-add` does NOT work for encrypted files.
 
 Encrypted files:
 
-- `home/dot_ssh/encrypted_config.tmpl` -- SSH config with Tailscale hosts
+- `home/dot_ssh/encrypted_config.tmpl` -- SSH config with Tailscale hosts, 1Password SSH agent on macOS
 - `home/dot_zsh/core/encrypted_secrets.zsh` -- 1Password/AWS/Infisical integration
 - `home/dot_takopi/encrypted_takopi.toml` -- takopi bot config
 

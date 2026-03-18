@@ -34,7 +34,7 @@ brew install chezmoi && chezmoi init --apply https://github.com/Hydepwns/dotfile
 | **Window Mgmt** | Hammerspoon + PaperWM (macOS) |
 | **Launcher** | Raycast (macOS, `config/raycast/`) |
 | **AI** | Claude Code, takopi (Telegram bridge) |
-| **Secrets** | 1Password + age encryption, AWS CLI, Infisical |
+| **Secrets** | 1Password (SSH agent + age encryption), AWS CLI, Infisical |
 | **Network** | Tailscale with pre-configured hosts |
 | **Languages** | Elixir, Rust, Go, Python, Node.js, Lua (via mise) |
 | **Fonts** | Monaspace + Nerd Font |
@@ -127,7 +127,7 @@ make sync-keys        # Sync public key to Tailscale nodes
 
 | Provider | Purpose | Quick Commands |
 |----------|---------|----------------|
-| **1Password** | Primary secrets, SSH agent | `opl`, `opw` |
+| **1Password** | SSH agent, age decryption key, secrets | `opl`, `opw` |
 | **AWS CLI** | Cloud credentials | `awsw`, `aws-profile` |
 | **Infisical** | Backup secrets | `infl`, `inf-env` |
 
@@ -146,7 +146,15 @@ onepassword = true
 aws = true
 elixir = true
 mise = true
+
+[age]
+command = "~/.config/chezmoi/age-op-decrypt.sh"
+recipient = "age1..."
 ```
+
+**SSH keys**: Managed by 1Password SSH agent on macOS (no keys on disk). Enable in 1Password: Settings > Developer > "Use the SSH Agent".
+
+**Age encryption**: Decryption key stored in 1Password (secure note), accessed via wrapper script -- no plaintext key on disk.
 
 ## Directory Structure
 
