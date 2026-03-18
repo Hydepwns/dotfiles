@@ -25,8 +25,8 @@ declare -A PATH_REGISTRY=(
     ["solana"]="{{ .chezmoi.homeDir }}/.local/share/solana/install/active_release/bin"
 
     # Development tools
-    ["llvm"]="/opt/homebrew/opt/llvm/bin"
-    ["postgres_homebrew"]="/opt/homebrew/opt/postgresql@15/bin"
+    ["llvm"]="{{ .brewPrefix }}/opt/llvm/bin"
+    ["postgres_homebrew"]="{{ .brewPrefix }}/opt/postgresql@15/bin"
     ["postgres_app"]="/Applications/Postgres.app/Contents/Versions/15/bin"
 
     # npm global prefix

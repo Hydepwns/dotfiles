@@ -13,23 +13,17 @@ eval "$({{ .brewPrefix }}/bin/brew shellenv)"
 export PATH="{{ .chezmoi.homeDir }}/.local/share/solana/install/active_release/bin:$PATH"
 {{- end -}}
 
-{{- if .orbstack -}}
+{{- if .orbstack }}
 # Added by OrbStack: command-line tools and integration
-source ~/.orbstack/shell/init.zsh 2>/dev/null || :
-{{- end -}}
-
-# pipx
-export PATH="$PATH:{{ .chezmoi.homeDir }}/.local/bin"
+source "{{ .chezmoi.homeDir }}/.orbstack/shell/init.zsh" 2>/dev/null || :
+{{- end }}
 
 {{- else if eq .chezmoi.os "linux" -}}
 # Linux-specific profile settings
 export PATH="/usr/local/bin:$PATH"
 
-{{- if .orbstack -}}
+{{- if .orbstack }}
 # Added by OrbStack: command-line tools and integration
-source ~/.orbstack/shell/init.zsh 2>/dev/null || :
-{{- end -}}
-
-# pipx
-export PATH="$PATH:{{ .chezmoi.homeDir }}/.local/bin"
+source "{{ .chezmoi.homeDir }}/.orbstack/shell/init.zsh" 2>/dev/null || :
+{{- end }}
 {{- end -}}

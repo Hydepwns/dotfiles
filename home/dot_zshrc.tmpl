@@ -9,13 +9,13 @@ else
     compinit -C
 fi
 
-{{ if and .ohmyzsh (not .starship) -}}
+{{- if and .ohmyzsh (not .starship) }}
 # Oh My Zsh (only when Starship is disabled -- our modules replace OMZ otherwise)
 export ZSH="{{ .chezmoi.homeDir }}/.oh-my-zsh"
 ZSH_THEME="robbyrussell"
 plugins=(git)
 source $ZSH/oh-my-zsh.sh
-{{ end -}}
+{{- end }}
 
 # Source modular configuration (loads core/, aliases/, functions/)
 source "{{ .chezmoi.homeDir }}/.zsh/modules.zsh"

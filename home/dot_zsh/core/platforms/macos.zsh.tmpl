@@ -2,10 +2,7 @@
 # macOS-specific environment setup
 # This file contains chezmoi template syntax which will be processed by chezmoi
 
-# Homebrew environment (PATH already set by paths.zsh)
-eval "$({{ .brewPrefix }}/bin/brew shellenv)"
-
-# macOS-specific aliases
+# macOS-specific aliases (brew shellenv runs in .zprofile)
 alias copy="pbcopy"
 alias paste="pbpaste"
 alias flushdns="sudo dscacheutil -flushcache"

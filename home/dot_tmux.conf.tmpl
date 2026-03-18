@@ -83,17 +83,17 @@ bind -T copy-mode-vi v send-keys -X begin-selection
 bind -T copy-mode-vi C-v send-keys -X rectangle-toggle
 bind -T copy-mode-vi Escape send-keys -X cancel
 
-{{ if eq .chezmoi.os "darwin" -}}
+{{- if eq .chezmoi.os "darwin" }}
 # macOS clipboard
 bind -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "pbcopy"
 bind -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "pbcopy"
 bind -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "pbcopy"
-{{ else -}}
+{{- else }}
 # Linux clipboard
 bind -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "xclip -selection clipboard"
 bind -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "xclip -selection clipboard"
 bind -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "xclip -selection clipboard"
-{{ end -}}
+{{- end }}
 
 # -----------------------------------------------------------------------------
 # {{ .theme.name }} Theme

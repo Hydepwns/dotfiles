@@ -12,6 +12,3 @@ case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
-
-# pipx configuration
-export PATH="$PATH:{{ .chezmoi.homeDir }}/.local/bin"

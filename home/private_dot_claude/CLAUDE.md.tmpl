@@ -76,11 +76,11 @@
 
 ## Chezmoi Encrypted Files
 
-Dotfiles managed by chezmoi with age encryption. To edit encrypted templates:
+Dotfiles managed by chezmoi with age encryption. Decryption key is stored in 1Password (no plaintext key on disk). To edit encrypted templates:
 
 ```bash
-# 1. Decrypt to temp file
-age -d -i ~/.config/chezmoi/age_key.txt <source_file> > /tmp/edit.txt
+# 1. Decrypt to temp file (key from 1Password)
+age -d -i <(op read "op://Employee/AGE-SECRET-KEY/notesPlain" | grep "^AGE-SECRET-KEY-") <source_file> > /tmp/edit.txt
 
 # 2. Edit /tmp/edit.txt
 
