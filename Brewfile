@@ -8,7 +8,7 @@
 # =============================================================================
 
 tap "hashicorp/tap"
-tap "homebrew/services"
+# homebrew/services is now built-in, no tap needed
 tap "infisical/get-cli"
 tap "kurtosis-tech/tap"
 
@@ -127,7 +127,7 @@ cask "1password"
 cask "1password-cli"
 
 # Networking
-cask "tailscale-app"
+brew "tailscale"
 
 # Containers (OrbStack provides Docker compatibility)
 cask "orbstack"

@@ -4,7 +4,7 @@ email = "drew@axol.io"
 name = "Hydepwns"
 github = "hydepwns"
 gpg_signing_key = "1938C94528268692"
-age_recipient = "age1pf2v9lee0rtqp8ur4tatk5w0kpp45t9d7st7zakdlsv7ykdk2ewqacwwjp"
+age_recipient = "age1alqwmllzqv8pjmmn6yfjdwm0d8jz7x459clralv2xeefactyv5nq7wze36"
 
 # Oh My Zsh configuration
 oh_my_zsh_theme = "robbyrussell"
@@ -78,5 +78,5 @@ bright_cyan = "#36f9f6"
 bright_white = "#ffffff"
 
 [age]
-    identity = "~/.config/chezmoi/age_key.txt"
-    recipient = "age1pf2v9lee0rtqp8ur4tatk5w0kpp45t9d7st7zakdlsv7ykdk2ewqacwwjp"
+    command = "~/.config/chezmoi/age-op-decrypt.sh"
+    recipient = "age1alqwmllzqv8pjmmn6yfjdwm0d8jz7x459clralv2xeefactyv5nq7wze36"
