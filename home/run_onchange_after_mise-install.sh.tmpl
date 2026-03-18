@@ -1,0 +1,14 @@
+#!/bin/bash
+{{- if .mise }}
+# mise config hash: {{ include "private_dot_config/mise/config.toml" | sha256sum }}
+# Auto-install mise tool versions when config changes
+
+if command -v mise &>/dev/null; then
+    MISE_CONFIG="{{ .chezmoi.homeDir }}/.config/mise/config.toml"
+    if [[ -f "$MISE_CONFIG" ]]; then
+        echo "[chezmoi] mise config changed, installing tool versions..."
+        mise trust "$MISE_CONFIG" 2>/dev/null || true
+        mise install --yes
+    fi
+fi
+{{- end }}

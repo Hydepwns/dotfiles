@@ -134,6 +134,25 @@ install_from_brewfile() {
     fi
 }
 
+# Install mise tool versions
+install_mise_tools() {
+    if ! command -v mise &>/dev/null; then
+        warn "mise not found -- skipping tool version install"
+        warn "After bootstrap, run: make setup-mise"
+        return 0
+    fi
+
+    info "Installing mise tool versions..."
+
+    local mise_config="$HOME/.config/mise/config.toml"
+    if [[ -f "$mise_config" ]]; then
+        mise trust "$mise_config" 2>/dev/null || true
+    fi
+
+    mise install --yes || warn "Some mise tool versions may have failed to install"
+    success "mise tool versions installed"
+}
+
 # Manual install if Brewfile not available
 install_secrets_tools_manual() {
     info "Installing secrets management tools..."
@@ -288,6 +307,9 @@ print_next_steps() {
     echo "  5. Load SSH keys:"
     echo -e "     ${CYAN}ssh-add-keys${NC}           # Add keys to agent"
     echo ""
+    echo "  6. Verify mise tool versions:"
+    echo -e "     ${CYAN}make mise-status${NC}        # Show installed runtimes"
+    echo ""
     echo -e "Documentation: ${BLUE}https://github.com/Hydepwns/dotfiles${NC}"
     echo ""
 }
@@ -308,6 +330,7 @@ main() {
     setup_age_key
     init_dotfiles
     install_from_brewfile
+    install_mise_tools
     setup_shell
     post_install
     print_next_steps

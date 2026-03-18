@@ -1,4 +1,4 @@
-.PHONY: help install update diff status backup clean doctor bootstrap sync sync-from-remote backup-full install-optional generate-template setup-age age-retrieve age-status setup-raycast raycast-export raycast-import raycast-status setup-takopi takopi-onboard takopi-backup takopi-status lint perf perf-report
+.PHONY: help install update diff status backup clean doctor bootstrap sync sync-from-remote backup-full install-optional generate-template setup-age age-retrieve age-status setup-mise mise-status mise-upgrade mise-doctor setup-raycast raycast-export raycast-import raycast-status setup-takopi takopi-onboard takopi-backup takopi-status lint perf perf-report
 
 # Configuration
 DOTFILES_ROOT := $(shell pwd)
@@ -123,6 +123,19 @@ age-retrieve: ## Retrieve age key from 1Password (new machine)
 
 age-status: ## Show age encryption status
 	@$(SCRIPTS_DIR)/setup/setup-age.sh status
+
+# Mise runtime manager
+setup-mise: ## Install mise and all tool versions
+	@$(SCRIPTS_DIR)/setup/setup-mise.sh install
+
+mise-status: ## Show mise installed tools and versions
+	@$(SCRIPTS_DIR)/setup/setup-mise.sh status
+
+mise-upgrade: ## Upgrade mise tool versions
+	@$(SCRIPTS_DIR)/setup/setup-mise.sh upgrade
+
+mise-doctor: ## Run mise diagnostics
+	@$(SCRIPTS_DIR)/setup/setup-mise.sh doctor
 
 # Dashboard
 dashboard: ## Show comprehensive service status dashboard
