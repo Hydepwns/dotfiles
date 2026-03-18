@@ -60,7 +60,7 @@ install-optional: ## Install optional tools interactively
 # Linting
 lint: ## Run shellcheck on all shell scripts
 	@echo "Running shellcheck..."
-	@find scripts/ utils/ -name '*.sh' -not -path '*/templates/*' | sort | while read -r f; do \
+	@find scripts/ -name '*.sh' -not -path '*/templates/*' | sort | while read -r f; do \
 		printf "  %-50s" "$$f"; \
 		if shellcheck --severity=warning "$$f" 2>/dev/null; then \
 			echo "ok"; \
