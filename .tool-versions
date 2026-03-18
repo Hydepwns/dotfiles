@@ -1,5 +1,6 @@
 # Managed by mise (https://mise.jdx.dev)
-nodejs 22.22.0
+nodejs lts
 python 3.10.13
 erlang 26.2.4
 elixir 1.18.3-otp-26
+rust   latest
