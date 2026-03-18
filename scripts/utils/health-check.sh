@@ -74,14 +74,18 @@ check_cmd nvim warn
 
 if command -v node &>/dev/null; then
     ok "node $(node --version 2>/dev/null || true)"
+elif command -v mise &>/dev/null && mise which node &>/dev/null; then
+    ok "node $(mise exec -- node --version 2>/dev/null || true) (via mise)"
 else
-    warn "node not found"
+    warn "node not found (install: mise use node)"
 fi
 
 if command -v rustc &>/dev/null; then
     ok "rustc $(rustc --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' || true)"
+elif command -v mise &>/dev/null && mise which rustc &>/dev/null; then
+    ok "rustc $(mise exec -- rustc --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' || true) (via mise)"
 else
-    warn "rustc not found"
+    warn "rustc not found (install: mise use rust)"
 fi
 
 if command -v python3 &>/dev/null; then

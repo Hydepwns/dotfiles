@@ -4,7 +4,9 @@
 {{- $age_recipient := promptStringOnce . "age_recipient" "Age public key (press Enter to skip, generate later with: make setup-age)" -}}
 
 # Generated from .chezmoi.toml.tmpl -- edit the template, not this file
+{{ if $age_recipient -}}
 encryption = "age"
+{{ end -}}
 sourceDir = "{{ .chezmoi.workingTree }}/home"
 
 [data]
@@ -107,7 +109,13 @@ autoPush = false
 
 {{ if $age_recipient -}}
 [age]
+# To use 1Password-backed decryption (no key on disk), create ~/.config/chezmoi/age-op-decrypt.sh
+# Otherwise, use a plaintext key file: identity = "~/.config/chezmoi/age_key.txt"
+{{ if stat (joinPath .chezmoi.homeDir ".config/chezmoi/age-op-decrypt.sh") -}}
+command = "~/.config/chezmoi/age-op-decrypt.sh"
+{{ else -}}
 identity = "~/.config/chezmoi/age_key.txt"
+{{ end -}}
 recipient = {{ $age_recipient | quote }}
 {{ end -}}
 
