@@ -2,13 +2,14 @@
 # See: https://mise.jdx.dev/configuration.html
 
 [tools]
-node = "22"
+node = "lts"
+python = "3.10.13"
+erlang = "26.2.4"
+elixir = "1.18.3-otp-26"
 
 [settings]
 verbose = false
 always_keep_download = true
 
-# Disable GPG verification for node downloads (avoids keyring issues)
-# MISE_NODE_VERIFY is set via env var in shell profile
 [env]
 MISE_NODE_VERIFY = "false"

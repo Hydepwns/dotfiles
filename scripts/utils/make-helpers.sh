@@ -17,7 +17,7 @@ declare -A MAKE_TARGETS=(
     ["install-optional"]="Install optional tools interactively"
     ["performance-test"]="Run performance tests"
     ["generate-template"]="Generate project template"
-    ["tool-versions"]="Manage tool versions"
+    ["tool-versions"]="Manage tool versions (via mise)"
 )
 
 # Function to print help
@@ -142,9 +142,9 @@ show_tool_versions_help() {
     echo "Usage: make tool-versions COMMAND=<command>"
     echo ""
     echo "Available commands:"
-    echo "  update   - Update .tool-versions with current installed versions"
+    echo "  update   - Update mise config with current installed versions"
     echo "  check    - Check for outdated tools"
-    echo "  install  - Install missing tools using asdf"
+    echo "  install  - Install missing tools using mise"
     echo "  list     - List all tools and their versions"
     echo ""
     echo "Example: make tool-versions COMMAND=update"

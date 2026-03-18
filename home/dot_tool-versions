@@ -1,6 +1,0 @@
-# Managed by mise (https://mise.jdx.dev)
-# Only list tools that mise actually manages
-nodejs 22.22.0
-python 3.10.13
-erlang 26.2.4
-elixir 1.18.3-otp-26
