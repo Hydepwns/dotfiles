@@ -139,6 +139,24 @@ For Ethereum/Web3 work, use [ETHSkills](https://ethskills.com/) to load accurate
 
 **Blockscout MCP**: Configured in `~/.mcp.json`. Provides type-safe blockchain data queries (balances, tokens, NFTs, contracts) across multiple chains via Model Context Protocol.
 
+## MCP Servers
+
+Managed via `~/.mcp.json` (chezmoi template: `home/dot_mcp.json.tmpl`). Toggle in `chezmoi.toml`, then `chezmoi apply`.
+
+| Server     | Flag      | Transport | Notes                              |
+| ---------- | --------- | --------- | ---------------------------------- |
+| context7   | always on | stdio     | Library docs via npx               |
+| blockscout | always on | http      | Blockchain data queries            |
+| datadog    | `datadog` | http/OAuth| us5.datadoghq.com, no secrets      |
+| signoz     | `signoz`  | stdio     | API key from 1Password at runtime  |
+
+**Datadog:** Enable `datadog = true` in chezmoi.toml, `chezmoi apply`. OAuth via browser.
+
+**SigNoz setup:**
+1. `make setup-signoz-mcp` (builds from source, requires Go)
+2. Store API key: `op item create --vault Employee --category login --title "SigNoz API Key" credential=<key>`
+3. Set `signoz = true` in chezmoi.toml, `chezmoi apply`
+
 ## Code Style
 
 - Shell: bash with `set -euo pipefail`, shellcheck compliant, quote all variables

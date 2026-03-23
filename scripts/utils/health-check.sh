@@ -118,6 +118,28 @@ else
 fi
 check_cmd age fail
 
+# -- Security --
+print_section "Security"
+
+check_process() {
+    local name="$1"
+    if pgrep -q "$name" 2>/dev/null; then
+        ok "$name running"
+    else
+        warn "$name not running"
+    fi
+}
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    check_process LuLu
+    check_process BlockBlock
+    check_process OverSight
+fi
+
+for tool in gitleaks trivy trufflehog grype semgrep osv-scanner; do
+    check_cmd "$tool"
+done
+
 # -- Git --
 print_section "Git"
 if git config user.name &>/dev/null; then

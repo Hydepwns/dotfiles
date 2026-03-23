@@ -85,6 +85,26 @@ brew "mole"                    # SSH tunneling
 brew "socat"
 
 # =============================================================================
+# SECURITY - Endpoint Protection (Objective-See)
+# =============================================================================
+
+cask "lulu"                    # Firewall
+cask "blockblock"              # Persistence detection
+cask "oversight"               # Mic/camera alerts
+cask "knockknock"              # Persistence scanner
+
+# =============================================================================
+# SECURITY - DevSec CLI
+# =============================================================================
+
+brew "gitleaks"                # Secret scanning
+brew "trivy"                   # Vulnerability scanner (containers/IaC)
+brew "trufflehog"              # Credential detection
+brew "grype"                   # Container image CVEs
+brew "semgrep"                 # Static analysis (SAST)
+brew "osv-scanner"             # Dependency CVE scanning
+
+# =============================================================================
 # DEVELOPMENT TOOLS
 # =============================================================================
 
