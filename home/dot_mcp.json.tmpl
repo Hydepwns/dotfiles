@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    },
+    "blockscout": {
+      "type": "http",
+      "url": "https://mcp.blockscout.com/mcp"
+    }
+{{- if .datadog }},
+    "datadog": {
+      "type": "http",
+      "url": "https://{{ .datadog_site }}/api/mcp/sse"
+    }
+{{- end }}
+{{- if .signoz }},
+    "signoz": {
+      "command": "{{ .chezmoi.homeDir }}/.local/bin/signoz-mcp-wrapper.sh",
+      "args": []
+    }
+{{- end }}
+  }
+}

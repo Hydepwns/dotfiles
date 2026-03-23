@@ -1,4 +1,4 @@
-.PHONY: help install update diff status backup clean doctor bootstrap sync sync-from-remote backup-full install-optional generate-template setup-age age-retrieve age-status setup-mise mise-status mise-upgrade mise-doctor setup-raycast raycast-export raycast-import raycast-status setup-takopi takopi-onboard takopi-backup takopi-status lint perf perf-report
+.PHONY: help install update diff status backup clean doctor bootstrap sync sync-from-remote backup-full install-optional generate-template setup-age age-retrieve age-status setup-mise mise-status mise-upgrade mise-doctor setup-raycast raycast-export raycast-import raycast-status setup-takopi takopi-onboard takopi-backup takopi-status setup-signoz-mcp signoz-mcp-status signoz-mcp-update lint perf perf-report
 
 # Configuration
 DOTFILES_ROOT := $(shell pwd)
@@ -190,6 +190,16 @@ takopi-backup: ## Encrypt takopi config to chezmoi source
 
 takopi-status: ## Show takopi status
 	@$(SCRIPTS_DIR)/setup/setup-takopi.sh status
+
+# SigNoz MCP server
+setup-signoz-mcp: ## Build and install SigNoz MCP server from source
+	@$(SCRIPTS_DIR)/setup/setup-signoz-mcp.sh install
+
+signoz-mcp-status: ## Show SigNoz MCP server status
+	@$(SCRIPTS_DIR)/setup/setup-signoz-mcp.sh status
+
+signoz-mcp-update: ## Update SigNoz MCP server from source
+	@$(SCRIPTS_DIR)/setup/setup-signoz-mcp.sh update
 
 # Brewfile management
 brew-install: ## Install packages from Brewfile

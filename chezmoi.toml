@@ -39,6 +39,12 @@ paperwm = true
 raycast = true
 takopi = true
 work = false
+datadog = true
+signoz = false
+
+# MCP/Observability
+datadog_site = "us5.datadoghq.com"
+signoz_url = "http://mini-axol.tail9b2ce8.ts.net:3301"
 
 # Platform-specific
 brewPrefix = "/opt/homebrew"

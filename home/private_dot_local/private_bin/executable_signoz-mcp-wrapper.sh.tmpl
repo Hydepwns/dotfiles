@@ -1,0 +1,9 @@
+#!/bin/bash
+# Wrapper for signoz-mcp-server that injects API key from 1Password
+set -euo pipefail
+
+export SIGNOZ_URL="{{ .signoz_url }}"
+export SIGNOZ_API_KEY="$(op read "op://Employee/SigNoz API Key/credential")"
+export LOG_LEVEL="info"
+
+exec "{{ .chezmoi.homeDir }}/.local/bin/signoz-mcp-server" "$@"
