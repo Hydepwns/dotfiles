@@ -11,7 +11,7 @@
 {{- if .datadog }},
     "datadog": {
       "type": "http",
-      "url": "https://{{ .datadog_site }}/api/mcp"
+      "url": "https://mcp.{{ .datadog_site }}/api/unstable/mcp-server/mcp"
     }
 {{- end }}
 {{- if .signoz }},
