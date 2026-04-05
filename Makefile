@@ -1,4 +1,4 @@
-.PHONY: help install update diff status backup clean doctor bootstrap sync sync-from-remote backup-full install-optional generate-template setup-age age-retrieve age-status setup-mise mise-status mise-upgrade mise-doctor setup-raycast raycast-export raycast-import raycast-status setup-takopi takopi-onboard takopi-backup takopi-status setup-signoz-mcp signoz-mcp-status signoz-mcp-update lint perf perf-report
+.PHONY: help install update diff status backup clean doctor bootstrap sync sync-from-remote backup-full install-optional generate-template setup-age age-retrieve age-status setup-mise mise-status mise-upgrade mise-doctor setup-raycast raycast-export raycast-import raycast-status setup-takopi takopi-onboard takopi-backup takopi-status setup-signoz-mcp signoz-mcp-status signoz-mcp-update lint perf perf-report skills-status
 
 # Configuration
 DOTFILES_ROOT := $(shell pwd)
@@ -220,6 +220,17 @@ brew-update: ## Update Homebrew and all packages
 # CI/CD setup
 setup-ci: ## Setup CI/CD tools and pre-commit hooks
 	@$(SCRIPTS_DIR)/setup/setup-ci.sh
+
+# Claude Code skills
+skills-status: ## Show installed Claude Code skills
+	@echo "Skills (source):"
+	@ls -1 home/dot_agents/skills/ 2>/dev/null || echo "  (none)"
+	@echo ""
+	@echo "Skills (deployed):"
+	@ls -1 ~/.agents/skills/ 2>/dev/null || echo "  (none)"
+	@echo ""
+	@echo "Skills (symlinked):"
+	@ls -la ~/.claude/skills/ 2>/dev/null || echo "  (none)"
 
 # Template generation
 generate-template: ## Generate project template

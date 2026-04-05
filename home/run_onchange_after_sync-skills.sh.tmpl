@@ -1,0 +1,28 @@
+#!/bin/bash
+# Skills hash: {{ output "ls" "-1" (joinPath .chezmoi.sourceDir "dot_agents/skills") | trim | replace "\n" "," }}
+# Sync skills: ~/.agents/skills/* -> ~/.claude/skills/* (symlinks)
+
+set -euo pipefail
+
+SKILLS_DIR="$HOME/.agents/skills"
+CLAUDE_SKILLS_DIR="$HOME/.claude/skills"
+
+if [[ ! -d "$SKILLS_DIR" ]]; then
+    exit 0
+fi
+
+mkdir -p "$CLAUDE_SKILLS_DIR"
+
+# Remove broken symlinks
+find "$CLAUDE_SKILLS_DIR" -maxdepth 1 -type l ! -exec test -e {} \; -delete 2>/dev/null || true
+
+# Create symlinks for each skill
+for skill_dir in "$SKILLS_DIR"/*/; do
+    [[ -d "$skill_dir" ]] || continue
+    skill_name="$(basename "$skill_dir")"
+    link_path="$CLAUDE_SKILLS_DIR/$skill_name"
+    if [[ ! -L "$link_path" ]]; then
+        ln -s "../../.agents/skills/$skill_name" "$link_path"
+        echo "[chezmoi] Linked skill: $skill_name"
+    fi
+done

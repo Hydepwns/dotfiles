@@ -157,6 +157,17 @@ Managed via `~/.mcp.json` (chezmoi template: `home/dot_mcp.json.tmpl`). Toggle i
 2. Store API key: `op item create --vault Employee --category login --title "SigNoz API Key" credential=<key>`
 3. Set `signoz = true` in chezmoi.toml, `chezmoi apply`
 
+## Claude Code Skills
+
+Skills in `home/dot_agents/skills/` are deployed to `~/.agents/skills/` via chezmoi and symlinked to `~/.claude/skills/` by `run_onchange_after_sync-skills.sh.tmpl`.
+
+| Skill | Source | Triggers on |
+|-------|--------|-------------|
+| claude-api | Vendored (Anthropic) | `anthropic` imports, SDK usage |
+| droo-stack | Custom | Elixir, TS, Go, Rust, Python, Lua, Shell, Chezmoi |
+
+Skills provide detailed incorrect/correct code examples. CLAUDE.md provides preferences and philosophy. To add a new skill: create `home/dot_agents/skills/<name>/SKILL.md`, run `chezmoi apply`.
+
 ## Code Style
 
 - Shell: bash with `set -euo pipefail`, shellcheck compliant, quote all variables

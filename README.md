@@ -33,7 +33,7 @@ brew install chezmoi && chezmoi init --apply https://github.com/Hydepwns/dotfile
 | **System** | btop, fastfetch, tldr (`help`) |
 | **Windows** | Hammerspoon + PaperWM (macOS) |
 | **Launcher** | Raycast (macOS) |
-| **AI** | Claude Code, takopi (Telegram bridge) |
+| **AI** | Claude Code (custom skills, MCP servers), takopi (Telegram bridge) |
 | **Secrets** | 1Password (SSH agent + age encryption), AWS CLI, Infisical |
 | **Network** | Tailscale with pre-configured hosts |
 | **Languages** | Elixir, Rust, Go, Python, Node.js, Lua (via mise) |
@@ -120,6 +120,9 @@ make dashboard        # Service status overview
 # SSH
 make rotate-keys      # Generate, store in 1Password, sync to hosts
 make sync-keys        # Push public key to Tailscale nodes
+
+# Claude Code
+make skills-status    # Show installed AI coding skills
 ```
 
 ## Secrets
@@ -176,8 +179,11 @@ dotfiles/
 │   │   ├── fastfetch/                  # System info
 │   │   ├── starship/                   # Prompt
 │   │   └── direnv/                     # direnv layouts
+│   ├── dot_agents/skills/              # Claude Code skills (auto-symlinked)
+│   │   ├── claude-api/                # Anthropic SDK reference
+│   │   └── droo-stack/               # Custom polyglot patterns
 │   ├── dot_takopi/                     # takopi config (encrypted)
-│   └── dot_claude/                     # Claude Code prefs
+│   └── private_dot_claude/             # Claude Code config + hooks
 ├── config/
 │   ├── raycast/                        # Raycast settings
 │   └── theme/synthwave84.toml          # Theme colors
