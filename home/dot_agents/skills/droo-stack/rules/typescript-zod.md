@@ -175,9 +175,9 @@ const UpdateUserSchema = z.object({
 
 const UserResponseSchema = z.object({
   id: z.string().uuid(),
-  name: z.string().min(1),           // duplicated
-  email: z.string().email(),          // duplicated
-  role: z.enum(["admin", "member"]),  // duplicated
+  name: z.string().min(1), // duplicated
+  email: z.string().email(), // duplicated
+  role: z.enum(["admin", "member"]), // duplicated
   createdAt: z.string().datetime(),
 });
 ```

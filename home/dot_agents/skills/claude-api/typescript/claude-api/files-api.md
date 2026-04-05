@@ -89,10 +89,9 @@ await client.beta.files.delete("file_011CNha8iCJcU1wXNR6q4V8w", {
 ### Download a File
 
 ```typescript
-const response = await client.beta.files.download(
-  "file_011CNha8iCJcU1wXNR6q4V8w",
-  { betas: ["files-api-2025-04-14"] },
-);
+const response = await client.beta.files.download("file_011CNha8iCJcU1wXNR6q4V8w", {
+  betas: ["files-api-2025-04-14"],
+});
 const content = Buffer.from(await response.arrayBuffer());
 await fs.promises.writeFile("output.txt", content);
 ```

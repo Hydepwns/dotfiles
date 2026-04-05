@@ -10,10 +10,7 @@ const stream = client.messages.stream({
 });
 
 for await (const event of stream) {
-  if (
-    event.type === "content_block_delta" &&
-    event.delta.type === "text_delta"
-  ) {
+  if (event.type === "content_block_delta" && event.delta.type === "text_delta") {
     process.stdout.write(event.delta.text);
   }
 }
@@ -85,9 +82,7 @@ const runner = client.beta.messages.toolRunner({
   model: "claude-opus-4-6",
   max_tokens: 64000,
   tools: [getWeather],
-  messages: [
-    { role: "user", content: "What's the weather in Paris and London?" },
-  ],
+  messages: [{ role: "user", content: "What's the weather in Paris and London?" }],
   stream: true,
 });
 

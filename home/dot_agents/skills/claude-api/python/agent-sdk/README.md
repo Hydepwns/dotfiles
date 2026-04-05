@@ -31,17 +31,17 @@ anyio.run(main)
 
 ## Built-in Tools
 
-| Tool      | Description                          |
-| --------- | ------------------------------------ |
-| Read      | Read files in the workspace          |
-| Write     | Create new files                     |
-| Edit      | Make precise edits to existing files |
-| Bash      | Execute shell commands               |
-| Glob      | Find files by pattern                |
-| Grep      | Search files by content              |
-| WebSearch | Search the web for information       |
+| Tool            | Description                          |
+| --------------- | ------------------------------------ |
+| Read            | Read files in the workspace          |
+| Write           | Create new files                     |
+| Edit            | Make precise edits to existing files |
+| Bash            | Execute shell commands               |
+| Glob            | Find files by pattern                |
+| Grep            | Search files by content              |
+| WebSearch       | Search the web for information       |
 | WebFetch        | Fetch and analyze web pages          |
-| AskUserQuestion | Ask user clarifying questions         |
+| AskUserQuestion | Ask user clarifying questions        |
 | Agent           | Spawn subagents                      |
 
 ---
@@ -177,25 +177,25 @@ Available hook events: `PreToolUse`, `PostToolUse`, `PostToolUseFailure`, `UserP
 async for message in query(prompt="...", options=ClaudeAgentOptions(...)):
 ```
 
-| Option                              | Type   | Description                                                                |
-| ----------------------------------- | ------ | -------------------------------------------------------------------------- |
-| `cwd`                               | string | Working directory for file operations                                      |
-| `allowed_tools`                     | list   | Tools the agent can use (e.g., `["Read", "Edit", "Bash"]`)                |
-| `tools`                             | list   | Built-in tools to make available (restricts the default set)               |
-| `disallowed_tools`                  | list   | Tools to explicitly disallow                                               |
-| `permission_mode`                   | string | How to handle permission prompts                                           |
-| `mcp_servers`                       | dict   | MCP servers to connect to                                                  |
-| `hooks`                             | dict   | Hooks for customizing behavior                                             |
-| `system_prompt`                     | string | Custom system prompt                                                       |
-| `max_turns`                         | int    | Maximum agent turns before stopping                                        |
-| `max_budget_usd`                    | float  | Maximum budget in USD for the query                                        |
-| `model`                             | string | Model ID (default: determined by CLI)                                      |
-| `agents`                            | dict   | Subagent definitions (`dict[str, AgentDefinition]`)                        |
-| `output_format`                     | dict   | Structured output schema                                                   |
-| `thinking`                          | dict   | Thinking/reasoning control                                                 |
-| `betas`                             | list   | Beta features to enable (e.g., `["context-1m-2025-08-07"]`)               |
-| `setting_sources`                   | list   | Settings to load (e.g., `["project"]`). Default: none (no CLAUDE.md files) |
-| `env`                               | dict   | Environment variables to set for the session                               |
+| Option             | Type   | Description                                                                |
+| ------------------ | ------ | -------------------------------------------------------------------------- |
+| `cwd`              | string | Working directory for file operations                                      |
+| `allowed_tools`    | list   | Tools the agent can use (e.g., `["Read", "Edit", "Bash"]`)                 |
+| `tools`            | list   | Built-in tools to make available (restricts the default set)               |
+| `disallowed_tools` | list   | Tools to explicitly disallow                                               |
+| `permission_mode`  | string | How to handle permission prompts                                           |
+| `mcp_servers`      | dict   | MCP servers to connect to                                                  |
+| `hooks`            | dict   | Hooks for customizing behavior                                             |
+| `system_prompt`    | string | Custom system prompt                                                       |
+| `max_turns`        | int    | Maximum agent turns before stopping                                        |
+| `max_budget_usd`   | float  | Maximum budget in USD for the query                                        |
+| `model`            | string | Model ID (default: determined by CLI)                                      |
+| `agents`           | dict   | Subagent definitions (`dict[str, AgentDefinition]`)                        |
+| `output_format`    | dict   | Structured output schema                                                   |
+| `thinking`         | dict   | Thinking/reasoning control                                                 |
+| `betas`            | list   | Beta features to enable (e.g., `["context-1m-2025-08-07"]`)                |
+| `setting_sources`  | list   | Settings to load (e.g., `["project"]`). Default: none (no CLAUDE.md files) |
+| `env`              | dict   | Environment variables to set for the session                               |
 
 ---
 
@@ -226,6 +226,7 @@ async for message in query(prompt="...", options=ClaudeAgentOptions()):
 ```
 
 Typed task message subclasses are available for better type safety when handling subagent task events:
+
 - `TaskStartedMessage` — emitted when a subagent task is registered
 - `TaskProgressMessage` — real-time progress updates with cumulative usage metrics
 - `TaskNotificationMessage` — task completion notifications

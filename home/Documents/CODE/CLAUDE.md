@@ -39,16 +39,16 @@ Shared conventions for all projects in this directory. Project-level CLAUDE.md f
 
 Detect project language by these markers and apply corresponding conventions from global CLAUDE.md:
 
-| Marker | Language | Key conventions |
-|--------|----------|-----------------|
-| `mix.exs` | Elixir | Pattern matching, pipes, `with` chains, ExUnit |
-| `Cargo.toml` | Rust | Result over panic, clippy, thiserror/anyhow |
-| `pyproject.toml` | Python | Type hints, pathlib, Typer for CLI, pydantic |
-| `package.json` | TypeScript/JS | Strict TS, zod, functional patterns |
-| `go.mod` | Go | Table-driven tests, small interfaces, error wrapping |
-| `*.lua`, `.luarc.json` | Lua | Local vars, LuaLS annotations, metatables |
-| `justfile` | Just | Preferred over Makefile for non-chezmoi projects |
-| `Makefile` | Make | Used for chezmoi/dotfiles projects |
+| Marker                 | Language      | Key conventions                                      |
+| ---------------------- | ------------- | ---------------------------------------------------- |
+| `mix.exs`              | Elixir        | Pattern matching, pipes, `with` chains, ExUnit       |
+| `Cargo.toml`           | Rust          | Result over panic, clippy, thiserror/anyhow          |
+| `pyproject.toml`       | Python        | Type hints, pathlib, Typer for CLI, pydantic         |
+| `package.json`         | TypeScript/JS | Strict TS, zod, functional patterns                  |
+| `go.mod`               | Go            | Table-driven tests, small interfaces, error wrapping |
+| `*.lua`, `.luarc.json` | Lua           | Local vars, LuaLS annotations, metatables            |
+| `justfile`             | Just          | Preferred over Makefile for non-chezmoi projects     |
+| `Makefile`             | Make          | Used for chezmoi/dotfiles projects                   |
 
 ## Elixir Projects (Common Patterns)
 
@@ -88,11 +88,13 @@ Use `uv` for package management, `msgspec` for fast JSON, `structlog` for loggin
 ## Infrastructure Projects
 
 Ansible projects (`ansible-*`):
+
 - Roles in `roles/`, playbooks at root
 - Use `ansible-lint` before commits
 - Molecule for testing where available
 
 Terraform projects:
+
 - `terraform fmt -check`
 - `terraform validate`
 

@@ -10,7 +10,7 @@ tags: go, errors, wrapping, sentinel, is, as
 ## Always wrap errors with context
 
 Bare `return err` loses call-site information. Wrap with `fmt.Errorf` so the
-error chain tells you *where* and *why* things failed.
+error chain tells you _where_ and _why_ things failed.
 
 INCORRECT:
 

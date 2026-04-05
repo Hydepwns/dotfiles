@@ -182,9 +182,7 @@ for (const block of response.content) {
         { role: "assistant", content: response.content },
         {
           role: "user",
-          content: [
-            { type: "tool_result", tool_use_id: block.id, content: result },
-          ],
+          content: [{ type: "tool_result", tool_use_id: block.id, content: result }],
         },
       ],
     });
@@ -232,20 +230,19 @@ const response = await client.messages.create({
 // const tools: Anthropic.Tool[] = [{ type: "text_editor_20250728", ... }]
 ```
 
-| Interface | `name` | `type` |
-|---|---|---|
-| `ToolTextEditor20250124` | `str_replace_editor` | `text_editor_20250124` |
-| `ToolTextEditor20250429` | `str_replace_based_edit_tool` | `text_editor_20250429` |
-| `ToolTextEditor20250728` | `str_replace_based_edit_tool` | `text_editor_20250728` |
-| `ToolBash20250124` | `bash` | `bash_20250124` |
-| `WebSearchTool20260209` | `web_search` | `web_search_20260209` |
-| `WebFetchTool20260209` | `web_fetch` | `web_fetch_20260209` |
-| `CodeExecutionTool20260120` | `code_execution` | `code_execution_20260120` |
+| Interface                   | `name`                        | `type`                    |
+| --------------------------- | ----------------------------- | ------------------------- |
+| `ToolTextEditor20250124`    | `str_replace_editor`          | `text_editor_20250124`    |
+| `ToolTextEditor20250429`    | `str_replace_based_edit_tool` | `text_editor_20250429`    |
+| `ToolTextEditor20250728`    | `str_replace_based_edit_tool` | `text_editor_20250728`    |
+| `ToolBash20250124`          | `bash`                        | `bash_20250124`           |
+| `WebSearchTool20260209`     | `web_search`                  | `web_search_20260209`     |
+| `WebFetchTool20260209`      | `web_fetch`                   | `web_fetch_20260209`      |
+| `CodeExecutionTool20260120` | `code_execution`              | `code_execution_20260120` |
 
 **Don't mix beta and non-beta types**: if you call `client.beta.messages.create()`, the response `content` is `BetaContentBlock[]` — you cannot pass that to a non-beta `ContentBlockParam[]` without narrowing each element.
 
 ---
-
 
 ## Code Execution
 
@@ -262,8 +259,7 @@ const response = await client.messages.create({
   messages: [
     {
       role: "user",
-      content:
-        "Calculate the mean and standard deviation of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",
+      content: "Calculate the mean and standard deviation of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",
     },
   ],
   tools: [{ type: "code_execution_20260120", name: "code_execution" }],
@@ -340,9 +336,7 @@ for (const block of response.content) {
     if (result.type === "bash_code_execution_result" && result.content) {
       for (const fileRef of result.content) {
         if (fileRef.type === "bash_code_execution_output") {
-          const metadata = await client.beta.files.retrieveMetadata(
-            fileRef.file_id,
-          );
+          const metadata = await client.beta.files.retrieveMetadata(fileRef.file_id);
           const downloadResponse = await client.beta.files.download(fileRef.file_id);
           const fileBytes = Buffer.from(await downloadResponse.arrayBuffer());
           const safeName = path.basename(metadata.filename);

@@ -313,14 +313,14 @@ print(chat("Now add rate limiting and error handling"))
 
 The `stop_reason` field in the response indicates why the model stopped generating:
 
-| Value | Meaning |
-|-------|---------|
-| `end_turn` | Claude finished its response naturally |
-| `max_tokens` | Hit the `max_tokens` limit — increase it or use streaming |
-| `stop_sequence` | Hit a custom stop sequence |
-| `tool_use` | Claude wants to call a tool — execute it and continue |
-| `pause_turn` | Model paused and can be resumed (agentic flows) |
-| `refusal` | Claude refused for safety reasons — output may not match your schema |
+| Value           | Meaning                                                              |
+| --------------- | -------------------------------------------------------------------- |
+| `end_turn`      | Claude finished its response naturally                               |
+| `max_tokens`    | Hit the `max_tokens` limit — increase it or use streaming            |
+| `stop_sequence` | Hit a custom stop sequence                                           |
+| `tool_use`      | Claude wants to call a tool — execute it and continue                |
+| `pause_turn`    | Model paused and can be resumed (agentic flows)                      |
+| `refusal`       | Claude refused for safety reasons — output may not match your schema |
 
 ---
 

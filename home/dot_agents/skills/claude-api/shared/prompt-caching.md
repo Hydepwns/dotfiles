@@ -84,14 +84,14 @@ These are the decisions that matter more than marker placement. Fix these first.
 
 When reviewing code, grep for these inside anything that feeds the prompt prefix:
 
-| Pattern | Why it breaks caching |
-|---|---|
-| `datetime.now()` / `Date.now()` / `time.time()` in system prompt | Prefix changes every request |
-| `uuid4()` / `crypto.randomUUID()` / request IDs early in content | Same — every request is unique |
-| `json.dumps(d)` without `sort_keys=True` / iterating a `set` | Non-deterministic serialization → prefix bytes differ |
-| f-string interpolating session/user ID into system prompt | Per-user prefix; no cross-user sharing |
-| Conditional system sections (`if flag: system += ...`) | Every flag combination is a distinct prefix |
-| `tools=build_tools(user)` where set varies per user | Tools render at position 0; nothing caches across users |
+| Pattern                                                          | Why it breaks caching                                   |
+| ---------------------------------------------------------------- | ------------------------------------------------------- |
+| `datetime.now()` / `Date.now()` / `time.time()` in system prompt | Prefix changes every request                            |
+| `uuid4()` / `crypto.randomUUID()` / request IDs early in content | Same — every request is unique                          |
+| `json.dumps(d)` without `sort_keys=True` / iterating a `set`     | Non-deterministic serialization → prefix bytes differ   |
+| f-string interpolating session/user ID into system prompt        | Per-user prefix; no cross-user sharing                  |
+| Conditional system sections (`if flag: system += ...`)           | Every flag combination is a distinct prefix             |
+| `tools=build_tools(user)` where set varies per user              | Tools render at position 0; nothing caches across users |
 
 Fix by moving the dynamic piece after the last breakpoint, making it deterministic, or deleting it if it's not load-bearing.
 
@@ -117,11 +117,11 @@ Fix by moving the dynamic piece after the last breakpoint, making it determinist
 
 The response `usage` object reports cache activity:
 
-| Field | Meaning |
-|---|---|
+| Field                         | Meaning                                                                  |
+| ----------------------------- | ------------------------------------------------------------------------ |
 | `cache_creation_input_tokens` | Tokens written to cache this request (you paid the ~1.25× write premium) |
-| `cache_read_input_tokens` | Tokens served from cache this request (you paid ~0.1×) |
-| `input_tokens` | Tokens processed at full price (not cached) |
+| `cache_read_input_tokens`     | Tokens served from cache this request (you paid ~0.1×)                   |
+| `input_tokens`                | Tokens processed at full price (not cached)                              |
 
 If `cache_read_input_tokens` is zero across repeated requests with identical prefixes, a silent invalidator is at work — diff the rendered prompt bytes between two requests to find it.
 

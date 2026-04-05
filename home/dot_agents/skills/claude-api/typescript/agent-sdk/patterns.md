@@ -34,10 +34,7 @@ import { appendFileSync } from "fs";
 
 const logFileChange: HookCallback = async (input) => {
   const filePath = (input as any).tool_input?.file_path ?? "unknown";
-  appendFileSync(
-    "./audit.log",
-    `${new Date().toISOString()}: modified ${filePath}\n`,
-  );
+  appendFileSync("./audit.log", `${new Date().toISOString()}: modified ${filePath}\n`);
   return {};
 };
 

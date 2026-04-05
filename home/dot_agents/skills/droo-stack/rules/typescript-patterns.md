@@ -29,9 +29,7 @@ function getActiveEmails(users: User[]): string[] {
 
 ```typescript
 function getActiveEmails(users: readonly User[]): string[] {
-  return users
-    .filter((user) => user.active)
-    .map((user) => user.email.toLowerCase());
+  return users.filter((user) => user.active).map((user) => user.email.toLowerCase());
 }
 ```
 

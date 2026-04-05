@@ -26,9 +26,7 @@ const messageBatch = await client.messages.batches.create({
       params: {
         model: "claude-opus-4-6",
         max_tokens: 16000,
-        messages: [
-          { role: "user", content: "Summarize climate change impacts" },
-        ],
+        messages: [{ role: "user", content: "Summarize climate change impacts" }],
       },
     },
     {
@@ -36,9 +34,7 @@ const messageBatch = await client.messages.batches.create({
       params: {
         model: "claude-opus-4-6",
         max_tokens: 16000,
-        messages: [
-          { role: "user", content: "Explain quantum computing basics" },
-        ],
+        messages: [{ role: "user", content: "Explain quantum computing basics" }],
       },
     },
   ],
@@ -57,9 +53,7 @@ let batch;
 while (true) {
   batch = await client.messages.batches.retrieve(messageBatch.id);
   if (batch.processing_status === "ended") break;
-  console.log(
-    `Status: ${batch.processing_status}, processing: ${batch.request_counts.processing}`,
-  );
+  console.log(`Status: ${batch.processing_status}, processing: ${batch.request_counts.processing}`);
   await new Promise((resolve) => setTimeout(resolve, 60_000));
 }
 
@@ -73,14 +67,10 @@ console.log(`Errored: ${batch.request_counts.errored}`);
 ## Retrieve Results
 
 ```typescript
-for await (const result of await client.messages.batches.results(
-  messageBatch.id,
-)) {
+for await (const result of await client.messages.batches.results(messageBatch.id)) {
   switch (result.result.type) {
     case "succeeded":
-      console.log(
-        `[${result.custom_id}] ${result.result.message.content[0].text.slice(0, 100)}`,
-      );
+      console.log(`[${result.custom_id}] ${result.result.message.content[0].text.slice(0, 100)}`);
       break;
     case "errored":
       if (result.result.error.type === "invalid_request") {

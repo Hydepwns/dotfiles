@@ -25,13 +25,10 @@ Before reading code examples, determine which language the user is working in:
    - `*.py`, `requirements.txt`, `pyproject.toml`, `setup.py`, `Pipfile` → **Python** — read from `python/`
    - `*.ts`, `*.tsx`, `package.json`, `tsconfig.json` → **TypeScript** — read from `typescript/`
    - `*.js`, `*.jsx` (no `.ts` files present) → **TypeScript** — JS uses the same SDK, read from `typescript/`
-   - `*.java`, `pom.xml`, `build.gradle` → **Java** — read from `java/`
-   - `*.kt`, `*.kts`, `build.gradle.kts` → **Java** — Kotlin uses the Java SDK, read from `java/`
-   - `*.scala`, `build.sbt` → **Java** — Scala uses the Java SDK, read from `java/`
    - `*.go`, `go.mod` → **Go** — read from `go/`
-   - `*.rb`, `Gemfile` → **Ruby** — read from `ruby/`
-   - `*.cs`, `*.csproj` → **C#** — read from `csharp/`
-   - `*.php`, `composer.json` → **PHP** — read from `php/`
+   - `*.ex`, `*.exs`, `mix.exs` → **Elixir** — read from `elixir/`
+   - `*.rs`, `Cargo.toml` → **Rust** — read from `rust/`
+   - `*.lua`, `.luarc.json`, `.luacheckrc` → **Lua** — read from `lua/`
 
 2. **If multiple languages detected** (e.g., both Python and TypeScript files):
 
@@ -40,10 +37,10 @@ Before reading code examples, determine which language the user is working in:
 
 3. **If language can't be inferred** (empty project, no source files, or unsupported language):
 
-   - Use AskUserQuestion with options: Python, TypeScript, Java, Go, Ruby, cURL/raw HTTP, C#, PHP
+   - Use AskUserQuestion with options: Python, TypeScript, Go, Elixir, Rust, Lua, cURL/raw HTTP
    - If AskUserQuestion is unavailable, default to Python examples and note: "Showing Python examples. Let me know if you need a different language."
 
-4. **If unsupported language detected** (Rust, Swift, C++, Elixir, etc.):
+4. **If unsupported language detected** (Swift, C++, Java, C#, PHP, etc.):
 
    - Suggest cURL/raw HTTP examples from `curl/` and note that community SDKs may exist
    - Offer to show Python or TypeScript examples as reference implementations
@@ -52,16 +49,15 @@ Before reading code examples, determine which language the user is working in:
 
 ### Language-Specific Feature Support
 
-| Language   | Tool Runner | Agent SDK | Notes                                 |
-| ---------- | ----------- | --------- | ------------------------------------- |
-| Python     | Yes (beta)  | Yes       | Full support — `@beta_tool` decorator |
-| TypeScript | Yes (beta)  | Yes       | Full support — `betaZodTool` + Zod    |
-| Java       | Yes (beta)  | No        | Beta tool use with annotated classes  |
-| Go         | Yes (beta)  | No        | `BetaToolRunner` in `toolrunner` pkg  |
-| Ruby       | Yes (beta)  | No        | `BaseTool` + `tool_runner` in beta    |
-| cURL       | N/A         | N/A       | Raw HTTP, no SDK features             |
-| C#         | No          | No        | Official SDK                          |
-| PHP        | Yes (beta)  | No        | `BetaRunnableTool` + `toolRunner()`   |
+| Language   | Tool Runner | Agent SDK | Notes                                          |
+| ---------- | ----------- | --------- | ---------------------------------------------- |
+| Python     | Yes (beta)  | Yes       | Full support -- `@beta_tool` decorator         |
+| TypeScript | Yes (beta)  | Yes       | Full support -- `betaZodTool` + Zod            |
+| Go         | Yes (beta)  | No        | `BetaToolRunner` in `toolrunner` pkg           |
+| Elixir     | N/A         | N/A       | No official SDK -- uses Req + REST API         |
+| Rust       | N/A         | N/A       | No official SDK -- uses reqwest + REST API     |
+| Lua        | N/A         | N/A       | No official SDK -- uses lua-resty-http or LuaSocket |
+| cURL       | N/A         | N/A       | Raw HTTP, no SDK features                      |
 
 ---
 
@@ -226,7 +222,7 @@ Read the **language-specific Claude API folder** (`{language}/claude-api/`):
 8. **`shared/error-codes.md`** — Read when debugging HTTP errors or implementing error handling.
 9. **`shared/live-sources.md`** — WebFetch URLs for fetching the latest official documentation.
 
-> **Note:** For Java, Go, Ruby, C#, PHP, and cURL — these have a single file each covering all basics. Read that file plus `shared/tool-use-concepts.md` and `shared/error-codes.md` as needed.
+> **Note:** For Go, Elixir, Rust, Lua, and cURL -- these have a single file each covering all basics. Read that file plus `shared/tool-use-concepts.md` and `shared/error-codes.md` as needed.
 
 ### Agent SDK
 
