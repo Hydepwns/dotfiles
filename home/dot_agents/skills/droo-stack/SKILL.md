@@ -4,7 +4,8 @@ description: >
   Detailed coding patterns for a polyglot stack. TRIGGER when: working in
   Elixir, TypeScript, Go, Rust, Python, Lua, Shell/Bash, or chezmoi templates.
   Provides incorrect/correct examples that complement CLAUDE.md preferences.
-  DO NOT TRIGGER when: working with Claude API or Anthropic SDK (use claude-api skill).
+  DO NOT TRIGGER when: working with Claude API or Anthropic SDK (use claude-api skill),
+  or Raxol TUI/agent framework patterns (use raxol skill).
 metadata:
   author: droo
   version: "1.0.0"

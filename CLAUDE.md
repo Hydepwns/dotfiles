@@ -57,7 +57,9 @@ Use in templates: `{{- if .rust -}}...{{- end -}}`. Use `{{- -}}` to trim whites
 **Run-onchange scripts** (auto-execute on `chezmoi apply`):
 
 - `run_onchange_after_brew-bundle.sh.tmpl` -- runs `brew bundle install` when Brewfile hash changes
+- `run_onchange_after_mise-install.sh.tmpl` -- runs `mise install` when mise config changes
 - `run_onchange_after_reload-hammerspoon.sh.tmpl` -- reloads Hammerspoon on config change (macOS)
+- `run_onchange_after_sync-skills.sh.tmpl` -- symlinks skills from `~/.agents/skills/` to `~/.claude/skills/`
 
 **Age encryption**: Sensitive files use `encrypted_` prefix. Decryption key is stored in 1Password (secure note "AGE-SECRET-KEY" in Employee vault) and accessed via `~/.config/chezmoi/age-op-decrypt.sh` wrapper -- no plaintext key on disk. To edit encrypted templates, decrypt with `age -d -i <(op read "op://Employee/AGE-SECRET-KEY/notesPlain" | grep "^AGE-SECRET-KEY-")`, edit, re-encrypt with `age -r "<recipient>"`, verify with `chezmoi diff`. `chezmoi re-add` does NOT work for encrypted files.
 
@@ -168,6 +170,7 @@ Skills in `home/dot_agents/skills/` are deployed to `~/.agents/skills/` via chez
 |-------|--------|-------------|
 | claude-api | Vendored (Anthropic) | `anthropic` imports, SDK usage |
 | droo-stack | Custom | Elixir, TS, Go, Rust, Python, Lua, Shell, Chezmoi |
+| raxol | Custom | Raxol TUI/agent imports, headless/MCP tools |
 
 Skills provide detailed incorrect/correct code examples. CLAUDE.md provides preferences and philosophy. To add a new skill: create `home/dot_agents/skills/<name>/SKILL.md`, run `chezmoi apply`.
 
