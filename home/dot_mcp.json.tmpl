@@ -14,6 +14,12 @@
       "url": "https://mcp.{{ .datadog_site }}/api/unstable/mcp-server/mcp"
     }
 {{- end }}
+{{- if .sentry }},
+    "sentry": {
+      "type": "http",
+      "url": "https://mcp.sentry.dev/sse"
+    }
+{{- end }}
 {{- if .signoz }},
     "signoz": {
       "command": "{{ .chezmoi.homeDir }}/.local/bin/signoz-mcp-wrapper.sh",

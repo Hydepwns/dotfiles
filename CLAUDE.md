@@ -148,9 +148,12 @@ Managed via `~/.mcp.json` (chezmoi template: `home/dot_mcp.json.tmpl`). Toggle i
 | context7   | always on | stdio     | Library docs via npx               |
 | blockscout | always on | http      | Blockchain data queries            |
 | datadog    | `datadog` | http/OAuth| us5.datadoghq.com, no secrets      |
+| sentry     | `sentry`  | http/OAuth| mcp.sentry.dev, no secrets         |
 | signoz     | `signoz`  | stdio     | API key from 1Password at runtime  |
 
 **Datadog:** Enable `datadog = true` in chezmoi.toml, `chezmoi apply`. OAuth via browser.
+
+**Sentry:** Enable `sentry = true` in chezmoi.toml, `chezmoi apply`. OAuth via browser.
 
 **SigNoz setup:**
 1. `make setup-signoz-mcp` (builds from source, requires Go)
