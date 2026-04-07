@@ -23,40 +23,40 @@ brew install chezmoi && chezmoi init --apply https://github.com/Hydepwns/dotfile
 
 ## What's In Here
 
-| Category | Tools |
-|----------|-------|
-| **Terminal** | Ghostty, tmux |
-| **Editors** | Zed, Neovim (27 plugins, mona.nvim) |
-| **Shell** | Zsh + Starship + fzf + zoxide |
-| **CLI** | eza, bat, fd, ripgrep, delta, jq, yq |
-| **Files** | yazi with image/PDF/archive preview |
-| **System** | btop, fastfetch, tldr (`help`) |
-| **Windows** | Hammerspoon + PaperWM (macOS) |
-| **Launcher** | Raycast (macOS) |
-| **AI** | Claude Code (custom skills, MCP servers), takopi (Telegram bridge) |
-| **Secrets** | 1Password (SSH agent + age encryption), AWS CLI, Infisical |
-| **Network** | Tailscale with pre-configured hosts |
-| **Languages** | Elixir, Rust, Go, Python, Node.js, Lua (via mise) |
-| **Fonts** | Monaspace + Nerd Font |
+| Category      | Tools                                                              |
+| ------------- | ------------------------------------------------------------------ |
+| **Terminal**  | Ghostty, tmux                                                      |
+| **Editors**   | Zed, Neovim (27 plugins, mona.nvim)                                |
+| **Shell**     | Zsh + Starship + fzf + zoxide                                      |
+| **CLI**       | eza, bat, fd, ripgrep, delta, jq, yq                               |
+| **Files**     | yazi with image/PDF/archive preview                                |
+| **System**    | btop, fastfetch, tldr (`help`)                                     |
+| **Windows**   | Hammerspoon + PaperWM (macOS)                                      |
+| **Launcher**  | Raycast (macOS)                                                    |
+| **AI**        | Claude Code (custom skills, MCP servers), takopi (Telegram bridge) |
+| **Secrets**   | 1Password (SSH agent + age encryption), AWS CLI, Infisical         |
+| **Network**   | Tailscale with pre-configured hosts                                |
+| **Languages** | Elixir, Rust, Go, Python, Node.js, Lua (via mise)                  |
+| **Fonts**     | Monaspace + Nerd Font                                              |
 
 ## Terminal Tools
 
 Everything's aliased to feel native. `ls` is eza, `cat` is bat, `grep` is ripgrep.
 
-| Tool | Replaces | Alias / Binding |
-|------|----------|-----------------|
-| fzf | - | `Ctrl+R` history, `Ctrl+T` files, `Alt+C` cd |
-| zoxide | cd | `z proj` jumps to `/path/to/project` |
-| eza | ls | `ls`, `ll`, `la`, `lt` -- icons + git status |
-| bat | cat | `cat` -- syntax highlighting, man pager |
-| fd | find | `find` -- faster, respects .gitignore |
-| ripgrep | grep | `grep`, `rg` |
-| delta | diff | Git diffs with syntax highlighting |
-| yazi | - | `y` -- file manager with preview |
-| btop | htop | `top`, `htop` |
-| fastfetch | neofetch | `fetch` |
-| jq / yq | - | JSON and YAML processing |
-| tldr | man | `help` -- short command examples |
+| Tool      | Replaces | Alias / Binding                              |
+| --------- | -------- | -------------------------------------------- |
+| fzf       | -        | `Ctrl+R` history, `Ctrl+T` files, `Alt+C` cd |
+| zoxide    | cd       | `z proj` jumps to `/path/to/project`         |
+| eza       | ls       | `ls`, `ll`, `la`, `lt` -- icons + git status |
+| bat       | cat      | `cat` -- syntax highlighting, man pager      |
+| fd        | find     | `find` -- faster, respects .gitignore        |
+| ripgrep   | grep     | `grep`, `rg`                                 |
+| delta     | diff     | Git diffs with syntax highlighting           |
+| yazi      | -        | `y` -- file manager with preview             |
+| btop      | htop     | `top`, `htop`                                |
+| fastfetch | neofetch | `fetch`                                      |
+| jq / yq   | -        | JSON and YAML processing                     |
+| tldr      | man      | `help` -- short command examples             |
 
 ## Key Bindings
 
@@ -64,42 +64,42 @@ Everything's aliased to feel native. `ls` is eza, `cat` is bat, `grep` is ripgre
 
 PaperWM tiling -- enable with `paperwm = true` in chezmoi.toml, then `make setup-paperwm`.
 
-| Key | Action |
-|-----|--------|
-| `Cmd+Alt + hjkl` | Focus left/right/down/up |
-| `Cmd+Alt+Shift + hjkl` | Swap windows |
-| `Cmd+Alt + r` | Cycle width (1/3, 1/2, 2/3) |
-| `Cmd+Alt + return` | Full width |
-| `Cmd+Alt + c` | Center window |
-| `Cmd+Alt + i/o` | Slurp/barf columns |
-| `Cmd+Alt+Shift + space` | Toggle floating |
-| `Cmd+Alt + 1-9` | Switch space |
-| `Cmd+Alt + t` | Ghostty |
-| `Cmd+Alt + e` | Zed |
-| `Cmd+Alt + b` | Brave |
-| `Cmd+Alt + space` | App chooser |
-| `Cmd+Alt + v` | Clipboard history |
-| `Hyper + q` | Lock screen |
+| Key                     | Action                      |
+| ----------------------- | --------------------------- |
+| `Cmd+Alt + hjkl`        | Focus left/right/down/up    |
+| `Cmd+Alt+Shift + hjkl`  | Swap windows                |
+| `Cmd+Alt + r`           | Cycle width (1/3, 1/2, 2/3) |
+| `Cmd+Alt + return`      | Full width                  |
+| `Cmd+Alt + c`           | Center window               |
+| `Cmd+Alt + i/o`         | Slurp/barf columns          |
+| `Cmd+Alt+Shift + space` | Toggle floating             |
+| `Cmd+Alt + 1-9`         | Switch space                |
+| `Cmd+Alt + t`           | Ghostty                     |
+| `Cmd+Alt + e`           | Zed                         |
+| `Cmd+Alt + b`           | Brave                       |
+| `Cmd+Alt + space`       | App chooser                 |
+| `Cmd+Alt + v`           | Clipboard history           |
+| `Hyper + q`             | Lock screen                 |
 
 ### tmux
 
-| Key | Action |
-|-----|--------|
-| `Ctrl+a` | Prefix (not Ctrl+b) |
-| `\|` | Split horizontal |
-| `-` | Split vertical |
-| `hjkl` | Navigate panes |
-| `Shift + arrows` | Switch windows |
+| Key              | Action              |
+| ---------------- | ------------------- |
+| `Ctrl+a`         | Prefix (not Ctrl+b) |
+| `\|`             | Split horizontal    |
+| `-`              | Split vertical      |
+| `hjkl`           | Navigate panes      |
+| `Shift + arrows` | Switch windows      |
 
 ### Neovim
 
-| Key | Action |
-|-----|--------|
+| Key          | Action                 |
+| ------------ | ---------------------- |
 | `Space + ff` | Find files (Telescope) |
-| `Space + fg` | Live grep |
-| `Space + e` | File explorer |
-| `s` | Flash jump |
-| `gd` | Go to definition |
+| `Space + fg` | Live grep              |
+| `Space + e`  | File explorer          |
+| `s`          | Flash jump             |
+| `gd`         | Go to definition       |
 
 ## Commands
 
@@ -129,11 +129,11 @@ make skills-status    # Show installed AI coding skills
 
 No plaintext secrets on disk. SSH keys and the age decryption key live in 1Password.
 
-| Provider | What it does | Aliases |
-|----------|-------------|---------|
-| **1Password** | SSH agent, age key, secrets vault | `opl`, `opw` |
-| **AWS CLI** | Cloud credentials | `awsw`, `aws-profile` |
-| **Infisical** | Backup secrets | `infl`, `inf-env` |
+| Provider      | What it does                      | Aliases               |
+| ------------- | --------------------------------- | --------------------- |
+| **1Password** | SSH agent, age key, secrets vault | `opl`, `opw`          |
+| **AWS CLI**   | Cloud credentials                 | `awsw`, `aws-profile` |
+| **Infisical** | Backup secrets                    | `infl`, `inf-env`     |
 
 **SSH**: 1Password's SSH agent handles keys on macOS. No `~/.ssh/id_*` files needed. Enable it in 1Password under Settings > Developer > "Use the SSH Agent".
 
@@ -181,7 +181,11 @@ dotfiles/
 │   │   └── direnv/                     # direnv layouts
 │   ├── dot_agents/skills/              # Claude Code skills (auto-symlinked)
 │   │   ├── claude-api/                # Anthropic SDK reference
-│   │   └── droo-stack/               # Custom polyglot patterns
+│   │   ├── droo-stack/               # Polyglot patterns (Elixir/TS/Go/Rust/Py/Lua/Noir/Shell)
+│   │   ├── noir/                     # ZK circuit design, Aztec, nargo
+│   │   ├── solidity-audit/           # Solidity dev + security auditing
+│   │   ├── ethskills/                # Ethereum tooling + EIP/ERC reference
+│   │   └── raxol/                    # Raxol TUI/agent framework
 │   ├── dot_takopi/                     # takopi config (encrypted)
 │   └── private_dot_claude/             # Claude Code config + hooks
 ├── config/
@@ -215,6 +219,13 @@ chezmoi init --apply https://github.com/YOUR_USERNAME/dotfiles.git
 # Toggle what you want in ~/.config/chezmoi/chezmoi.toml, then:
 chezmoi apply
 ```
+
+## TODO
+
+- [ ] Add Zig skill to droo-stack (zmin, cross-platform bindings)
+- [ ] Add C skill to droo-stack (tree-sitter grammars, NIFs)
+- [ ] Add Nix/Nushell skill (nix-mox config framework)
+- [ ] Add Java skill to droo-stack (RuneLite plugin development)
 
 ## Related
 

@@ -125,19 +125,17 @@ Single source of truth: `[data.theme]` in `chezmoi.toml` (Synthwave84 palette). 
 
 **New PATH entry**: Add key to `PATH_REGISTRY` in `paths.zsh.tmpl`, add conditional `add_to_path` call in `build_path()`
 
-## ETHSkills (Ethereum AI Context)
+## ETHSkills & Web3 Context
 
-For Ethereum/Web3 work, use [ETHSkills](https://ethskills.com/) to load accurate blockchain knowledge. Feed any skill URL to Claude for instant context correction.
+Local skills (`ethskills/`, `solidity-audit/`, `noir/`) provide offline Ethereum, Solidity, and ZK knowledge. For supplemental or latest info, fetch from [ETHSkills](https://ethskills.com/) live sources (URLs listed in `solidity-audit/live-sources.md`).
 
-**Key skills**:
-
-| Skill     | URL                                | Use Case                                    |
-| --------- | ---------------------------------- | ------------------------------------------- |
-| Security  | `ethskills.com/security/SKILL.md`  | Reentrancy, oracles, vault inflation, MEV   |
-| Tools     | `ethskills.com/tools/SKILL.md`     | Blockscout MCP, Foundry, abi.ninja          |
-| L2s       | `ethskills.com/l2s/SKILL.md`       | Cross-chain, bridging, L2 economics         |
-| Standards | `ethskills.com/standards/SKILL.md` | ERC-8004, EIP-7702, token standards         |
-| Gas       | `ethskills.com/gas/SKILL.md`       | Current costs (mainnet ~$0.002, L2 ~$0.002) |
+| Live Skill | URL                                | Use Case                                    |
+| ---------- | ---------------------------------- | ------------------------------------------- |
+| Security   | `ethskills.com/security/SKILL.md`  | Reentrancy, oracles, vault inflation, MEV   |
+| Tools      | `ethskills.com/tools/SKILL.md`     | Blockscout MCP, Foundry, abi.ninja          |
+| L2s        | `ethskills.com/l2s/SKILL.md`       | Cross-chain, bridging, L2 economics         |
+| Standards  | `ethskills.com/standards/SKILL.md` | ERC-8004, EIP-7702, token standards         |
+| Gas        | `ethskills.com/gas/SKILL.md`       | Current costs (mainnet ~$0.002, L2 ~$0.002) |
 
 **Blockscout MCP**: Configured in `~/.mcp.json`. Provides type-safe blockchain data queries (balances, tokens, NFTs, contracts) across multiple chains via Model Context Protocol.
 
@@ -169,8 +167,11 @@ Skills in `home/dot_agents/skills/` are deployed to `~/.agents/skills/` via chez
 | Skill | Source | Triggers on |
 |-------|--------|-------------|
 | claude-api | Vendored (Anthropic) | `anthropic` imports, SDK usage |
-| droo-stack | Custom | Elixir, TS, Go, Rust, Python, Lua, Shell, Chezmoi |
+| droo-stack | Custom | Elixir, TS, Go, Rust, Python, Lua, Shell, Noir, Chezmoi |
 | raxol | Custom | Raxol TUI/agent imports, headless/MCP tools |
+| noir | Custom | `.nr` files, Nargo.toml, ZK circuits, Aztec contracts |
+| solidity-audit | Custom | `.sol` files, foundry.toml, auditing, security review |
+| ethskills | Custom | Ethereum tooling, EIP/ERC standards, framework selection |
 
 Skills provide detailed incorrect/correct code examples. CLAUDE.md provides preferences and philosophy. To add a new skill: create `home/dot_agents/skills/<name>/SKILL.md`, run `chezmoi apply`.
 

@@ -2,14 +2,16 @@
 name: droo-stack
 description: >
   Detailed coding patterns for a polyglot stack. TRIGGER when: working in
-  Elixir, TypeScript, Go, Rust, Python, Lua, Shell/Bash, or chezmoi templates.
-  Provides incorrect/correct examples that complement CLAUDE.md preferences.
-  DO NOT TRIGGER when: working with Claude API or Anthropic SDK (use claude-api skill),
-  or Raxol TUI/agent framework patterns (use raxol skill).
+  Elixir, TypeScript, Go, Rust, Python, Lua, Shell/Bash, Noir, or chezmoi
+  templates. Provides incorrect/correct examples that complement CLAUDE.md
+  preferences. DO NOT TRIGGER when: working with Claude API or Anthropic SDK
+  (use claude-api skill), Raxol TUI/agent framework patterns (use raxol skill),
+  Solidity smart contracts (use solidity-audit skill), or ZK circuit domain
+  questions (use noir skill -- this skill only covers Noir language syntax).
 metadata:
-  author: droo
+  author: hydepwns
   version: "1.0.0"
-  tags: elixir, typescript, go, rust, python, lua, shell, chezmoi
+  tags: elixir, typescript, go, rust, python, lua, shell, noir, chezmoi
 ---
 
 # droo-stack
@@ -26,6 +28,7 @@ This skill activates contextually when working in the languages below. Read the 
 
 - [go-errors](rules/go-errors.md) -- Error wrapping, `errors.Is`/`errors.As`, sentinel errors
 - [rust-errors](rules/rust-errors.md) -- thiserror/anyhow, `?` operator, From implementations
+- [noir-patterns](rules/noir-patterns.md) -- Field vs integers, constrained/unconstrained, nargo tests
 
 ### HIGH
 
