@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 permissions:
   contents: read
@@ -51,6 +51,11 @@ jobs:
               echo "Skipping $file (requires 1Password)"
               continue
             fi
+            # Skip signoz wrapper as it requires chezmoi data (signoz_url)
+            if [[ "$file" == *"signoz-mcp-wrapper"* ]]; then
+              echo "Skipping $file (requires chezmoi data)"
+              continue
+            fi
             chezmoi execute-template --init --promptString email=test@example.com --promptString name=test --promptString personal=false < "$file" > /dev/null
           done
 
@@ -93,10 +98,10 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          scan-type: 'fs'
-          scan-ref: '.'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
+          scan-type: "fs"
+          scan-ref: "."
+          format: "sarif"
+          output: "trivy-results.sarif"
 
       - name: Display Trivy results
         run: |
@@ -111,5 +116,5 @@ jobs:
       - name: Upload Trivy scan results
         uses: github/codeql-action/upload-sarif@v4
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: "trivy-results.sarif"
         continue-on-error: true

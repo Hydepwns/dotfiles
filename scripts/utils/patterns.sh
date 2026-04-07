@@ -156,6 +156,7 @@ read_config() {
             grep -E "^${key}=" "$file" | cut -d'=' -f2- | sed 's/^["'\'']*//;s/["'\'']*$//'
             ;;
         "shell")
+            # shellcheck source=/dev/null
             source "$file" 2>/dev/null && echo "${!key:-}"
             ;;
     esac
@@ -417,6 +418,7 @@ process_template() {
 
     # Load variables if provided
     if [[ -n "$variables_file" ]] && [[ -f "$variables_file" ]]; then
+        # shellcheck source=/dev/null
         source "$variables_file"
     fi
 
