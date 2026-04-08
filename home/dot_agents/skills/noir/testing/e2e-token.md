@@ -1,5 +1,7 @@
 ---
 title: Aztec E2E Token & AuthWit Testing
+impact: HIGH
+impactDescription: AuthWit and transfer test errors hide replay attacks and balance inconsistencies.
 tags: noir, aztec, e2e, testing, token, authwit, transfer, minting
 ---
 

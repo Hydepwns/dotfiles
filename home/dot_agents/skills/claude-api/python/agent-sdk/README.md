@@ -1,3 +1,10 @@
+---
+title: Claude Agent SDK for Python
+impact: CRITICAL
+impactDescription: Primary entry point for building AI agents with Python using built-in tools and safety features.
+tags: python, claude, api, agent-sdk, agents, tools
+---
+
 # Agent SDK — Python
 
 The Claude Agent SDK provides a higher-level interface for building AI agents with built-in tools, safety features, and agentic capabilities.

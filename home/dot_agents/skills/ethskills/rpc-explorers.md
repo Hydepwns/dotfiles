@@ -1,5 +1,7 @@
 ---
 title: RPC Providers & Block Explorers
+impact: MEDIUM
+impactDescription: Reference for provider selection, explorer URLs, and verification.
 tags: ethereum, rpc, explorer, testnet, faucet
 ---
 

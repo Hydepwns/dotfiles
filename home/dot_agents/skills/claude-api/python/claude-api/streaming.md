@@ -1,3 +1,10 @@
+---
+title: Streaming Responses with Claude API in Python
+impact: HIGH
+impactDescription: Real-time streaming patterns for the Python SDK including event handling and server-sent events.
+tags: python, claude, api, streaming, sse, real-time
+---
+
 # Streaming — Python
 
 ## Quick Start

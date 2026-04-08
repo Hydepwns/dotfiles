@@ -1,3 +1,10 @@
+---
+title: Streaming Responses with Claude API in TypeScript
+impact: HIGH
+impactDescription: Real-time streaming patterns for the TypeScript SDK including event handling and server-sent events.
+tags: typescript, claude, api, streaming, sse, real-time
+---
+
 # Streaming — TypeScript
 
 ## Quick Start

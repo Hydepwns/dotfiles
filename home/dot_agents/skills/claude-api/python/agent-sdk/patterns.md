@@ -1,3 +1,10 @@
+---
+title: Agent SDK Patterns in Python
+impact: HIGH
+impactDescription: Reusable agentic patterns including multi-agent orchestration and tool integration for the Python Agent SDK.
+tags: python, claude, api, agent-sdk, patterns, multi-agent
+---
+
 # Agent SDK Patterns — Python
 
 ## Basic Agent

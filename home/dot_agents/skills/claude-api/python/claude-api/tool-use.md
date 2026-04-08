@@ -1,3 +1,10 @@
+---
+title: Tool Use with Claude API in Python
+impact: CRITICAL
+impactDescription: Core agent pattern for defining and executing tools with the Python SDK.
+tags: python, claude, api, tool-use, agents, function-calling
+---
+
 # Tool Use — Python
 
 For conceptual overview (tool definitions, tool choice, tips), see [shared/tool-use-concepts.md](../../shared/tool-use-concepts.md).

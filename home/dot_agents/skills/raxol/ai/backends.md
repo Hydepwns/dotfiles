@@ -1,7 +1,8 @@
 ---
 title: AI Backends
 impact: HIGH
-tags: [raxol, agent, ai, backend, llm]
+impactDescription: Wrong backend configuration silently produces empty or incorrect LLM responses.
+tags: raxol, agent, ai, backend, llm
 ---
 
 # AI Backends

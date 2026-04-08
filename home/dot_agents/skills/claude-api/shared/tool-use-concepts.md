@@ -1,3 +1,10 @@
+---
+title: Tool Use Concepts and Design Patterns
+impact: CRITICAL
+impactDescription: Language-agnostic conceptual foundations for tool definitions, tool choice, and best practices.
+tags: claude, api, tool-use, concepts, function-calling, agents
+---
+
 # Tool Use Concepts
 
 This file covers the conceptual foundations of tool use with the Claude API. For language-specific code examples, see the `python/`, `typescript/`, or other language folders.

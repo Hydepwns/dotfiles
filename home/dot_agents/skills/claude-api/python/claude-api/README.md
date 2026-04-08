@@ -1,3 +1,10 @@
+---
+title: Claude API Python SDK Reference
+impact: CRITICAL
+impactDescription: Primary entry point for Python Claude API usage including installation, authentication, and core patterns.
+tags: python, claude, api, sdk, anthropic
+---
+
 # Claude API — Python
 
 ## Installation

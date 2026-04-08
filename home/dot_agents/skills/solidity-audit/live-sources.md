@@ -1,5 +1,7 @@
 ---
 title: Live Documentation Sources
+impact: MEDIUM
+impactDescription: Reference index for supplemental live documentation sources
 tags: solidity, ethskills, reference, webfetch
 ---
 

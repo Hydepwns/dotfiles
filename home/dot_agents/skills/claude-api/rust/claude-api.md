@@ -1,3 +1,10 @@
+---
+title: Claude API with Rust via REST
+impact: CRITICAL
+impactDescription: Primary entry point for Rust Claude API usage via reqwest and serde against the REST API directly.
+tags: rust, claude, api, rest, reqwest, serde, anthropic
+---
+
 # Claude API -- Rust
 
 > **Note:** There is no official Anthropic SDK for Rust. These patterns use `reqwest` + `serde` against the REST API directly. For tool-use concepts and prompt caching design, see `shared/tool-use-concepts.md` and `shared/prompt-caching.md`.

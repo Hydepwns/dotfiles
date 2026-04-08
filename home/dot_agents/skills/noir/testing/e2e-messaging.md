@@ -1,5 +1,7 @@
 ---
 title: Aztec E2E Cross-Chain & Events
+impact: HIGH
+impactDescription: Cross-chain message timing errors cause stuck funds or silent withdrawal failures.
 tags: noir, aztec, e2e, testing, l1, l2, messaging, events, cross-chain
 ---
 

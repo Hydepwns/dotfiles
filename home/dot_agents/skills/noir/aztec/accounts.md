@@ -1,5 +1,7 @@
 ---
 title: Aztec Account Abstraction & Access Control
+impact: HIGH
+impactDescription: Account and key management errors compromise authentication or lock users out permanently.
 tags: noir, aztec, accounts, authwit, access-control, keys, signing
 ---
 

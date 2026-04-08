@@ -1,3 +1,10 @@
+---
+title: Claude API TypeScript SDK Reference
+impact: CRITICAL
+impactDescription: Primary entry point for TypeScript Claude API usage including installation, authentication, and core patterns.
+tags: typescript, claude, api, sdk, anthropic
+---
+
 # Claude API — TypeScript
 
 ## Installation

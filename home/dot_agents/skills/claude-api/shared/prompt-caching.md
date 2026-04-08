@@ -1,3 +1,10 @@
+---
+title: Prompt Caching Design and Optimization
+impact: HIGH
+impactDescription: Cache-aware prompt design patterns to reduce latency and cost across all Claude API languages.
+tags: claude, api, prompt-caching, optimization, cost-reduction, latency
+---
+
 # Prompt Caching — Design & Optimization
 
 This file covers how to design prompt-building code for effective caching. For language-specific syntax, see the `## Prompt Caching` section in each language's README or single-file doc.

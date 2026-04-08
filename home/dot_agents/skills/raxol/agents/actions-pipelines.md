@@ -1,7 +1,8 @@
 ---
 title: Actions and Pipelines
 impact: HIGH
-tags: [raxol, agent, action, pipeline, tools]
+impactDescription: Actions bridge agents to LLM tool use and must return correct types to avoid runtime crashes.
+tags: raxol, agent, action, pipeline, tools
 ---
 
 # Actions and Pipelines
@@ -47,13 +48,13 @@ Field opts: `:required`, `:description`, `:default`.
 @callback after_run(map(), context()) :: map()     # transform after success
 ```
 
-### Incorrect
+INCORRECT:
 
 ```elixir
 def run(%{path: path}, _), do: File.read!(path)  # must return {:ok, map()}
 ```
 
-### Correct
+CORRECT:
 
 ```elixir
 def run(%{path: path}, _), do: {:ok, %{content: File.read!(path)}}

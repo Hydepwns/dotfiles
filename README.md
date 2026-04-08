@@ -181,11 +181,14 @@ dotfiles/
 │   │   └── direnv/                     # direnv layouts
 │   ├── dot_agents/skills/              # Claude Code skills (auto-symlinked)
 │   │   ├── claude-api/                # Anthropic SDK reference
-│   │   ├── droo-stack/               # Polyglot patterns (Elixir/TS/Go/Rust/Py/Lua/Noir/Shell)
+│   │   ├── droo-stack/               # Polyglot patterns (Elixir/TS/Go/Rust/C/Zig/Py/Lua/Noir/Shell)
 │   │   ├── noir/                     # ZK circuits, Aztec contracts/security/e2e testing
 │   │   ├── solidity-audit/           # Solidity dev + security auditing
 │   │   ├── ethskills/                # Ethereum tooling + EIP/ERC reference
-│   │   └── raxol/                    # Raxol TUI/agent framework
+│   │   ├── raxol/                    # Raxol TUI/agent framework
+│   │   ├── design-ux/               # UI/UX design, tokens, accessibility, TUI aesthetics
+│   │   ├── nix/                      # Nix language, flakes, NixOS, Home Manager
+│   │   └── native-code/              # NIFs (C/Rust), SIMD (Zig), BEAM boundary
 │   ├── dot_takopi/                     # takopi config (encrypted)
 │   └── private_dot_claude/             # Claude Code config + hooks
 ├── config/
@@ -222,9 +225,9 @@ chezmoi apply
 
 ## TODO
 
-- [ ] Add Zig skill to droo-stack (zmin, cross-platform bindings)
-- [ ] Add C skill to droo-stack (tree-sitter grammars, NIFs)
-- [ ] Add Nix/Nushell skill (nix-mox config framework)
+- [x] Add Zig skill to droo-stack (zmin, cross-platform bindings)
+- [x] Add C skill to droo-stack (tree-sitter grammars, NIFs)
+- [x] Add Nix skill (language, flakes, NixOS, Home Manager, agent integration)
 - [ ] Add Java skill to droo-stack (RuneLite plugin development)
 
 ## Related

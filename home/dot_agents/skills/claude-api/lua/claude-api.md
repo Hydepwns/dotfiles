@@ -1,3 +1,10 @@
+---
+title: Claude API with Lua via REST
+impact: CRITICAL
+impactDescription: Primary entry point for Lua Claude API usage via lua-cjson and HTTP clients against the REST API directly.
+tags: lua, claude, api, rest, lua-cjson, anthropic
+---
+
 # Claude API -- Lua
 
 > **Note:** There is no official Anthropic SDK for Lua. These patterns use `lua-cjson` for JSON and either `lua-resty-http` (OpenResty/nginx) or `socket.http` + `ssl.https` (LuaSocket) for HTTP. For tool-use concepts and prompt caching design, see `shared/tool-use-concepts.md` and `shared/prompt-caching.md`.

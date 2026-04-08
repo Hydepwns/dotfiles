@@ -1,3 +1,10 @@
+---
+title: Claude Model Catalog and Selection Guide
+impact: HIGH
+impactDescription: Authoritative model ID reference to prevent API errors from incorrect or guessed model identifiers.
+tags: claude, api, models, catalog, model-selection
+---
+
 # Claude Model Catalog
 
 **Only use exact model IDs listed in this file.** Never guess or construct model IDs — incorrect IDs will cause API errors. Use aliases wherever available. For the latest information, WebFetch the Models Overview URL in `shared/live-sources.md`, or query the Models API directly (see Programmatic Model Discovery below).

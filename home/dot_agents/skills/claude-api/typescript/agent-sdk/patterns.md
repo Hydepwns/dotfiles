@@ -1,3 +1,10 @@
+---
+title: Agent SDK Patterns in TypeScript
+impact: HIGH
+impactDescription: Reusable agentic patterns including multi-agent orchestration and tool integration for the TypeScript Agent SDK.
+tags: typescript, claude, api, agent-sdk, patterns, multi-agent
+---
+
 # Agent SDK Patterns — TypeScript
 
 ## Basic Agent

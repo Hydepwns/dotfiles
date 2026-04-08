@@ -11,7 +11,7 @@ description: >
 metadata:
   author: droo
   version: "1.0.0"
-  tags: [elixir, raxol, tui, agents, mcp, headless, orchestration]
+  tags: elixir, raxol, tui, agents, mcp, headless, orchestration
 ---
 
 # Raxol Skill
@@ -31,6 +31,12 @@ isolation, and hot reload. Package split: `:raxol` (core TUI) and
 | Best for | Agents with UI, reactive workflows | Autonomous background agents |
 | Crash recovery | OTP restart, fresh `init/1` | `context_snapshot` + `restore_context` |
 | AI backend | Manual (call in async commands) | Built-in via Strategy |
+
+## See also
+
+- `droo-stack` -- for general Elixir patterns (pipes, pattern matching, ExUnit)
+- `design-ux` -- for TUI design principles (terminal layout, box-drawing, density)
+- `claude-api` -- for Anthropic SDK integration in Elixir
 
 ## Reading Guide
 

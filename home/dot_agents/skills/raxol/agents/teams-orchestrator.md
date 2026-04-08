@@ -1,7 +1,8 @@
 ---
 title: Teams and Orchestrator
 impact: MEDIUM
-tags: [raxol, agent, team, orchestrator, cockpit]
+impactDescription: Multi-agent coordination is optional and only needed for complex workflows.
+tags: raxol, agent, team, orchestrator, cockpit
 ---
 
 # Teams and Orchestrator

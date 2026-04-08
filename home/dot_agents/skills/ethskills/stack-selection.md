@@ -1,5 +1,7 @@
 ---
 title: Framework & Stack Selection
+impact: HIGH
+impactDescription: Wrong framework choice wastes days of setup and migration.
 tags: ethereum, foundry, hardhat, scaffold-eth, framework
 ---
 

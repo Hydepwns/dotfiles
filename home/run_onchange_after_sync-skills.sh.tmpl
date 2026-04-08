@@ -16,6 +16,16 @@ mkdir -p "$CLAUDE_SKILLS_DIR"
 # Remove broken symlinks
 find "$CLAUDE_SKILLS_DIR" -maxdepth 1 -type l ! -exec test -e {} \; -delete 2>/dev/null || true
 
+# Remove stale symlinks (skill no longer exists in source)
+for link in "$CLAUDE_SKILLS_DIR"/*/; do
+    [[ -L "${link%/}" ]] || continue
+    link_name="$(basename "$link")"
+    if [[ ! -d "$SKILLS_DIR/$link_name" ]]; then
+        rm -f "$CLAUDE_SKILLS_DIR/$link_name"
+        echo "[chezmoi] Removed stale skill link: $link_name"
+    fi
+done
+
 # Create symlinks for each skill
 for skill_dir in "$SKILLS_DIR"/*/; do
     [[ -d "$skill_dir" ]] || continue

@@ -1,3 +1,10 @@
+---
+title: Message Batches API in TypeScript
+impact: MEDIUM
+impactDescription: Asynchronous batch processing of Claude API requests at reduced cost.
+tags: typescript, claude, api, batches, async, cost-optimization
+---
+
 # Message Batches API — TypeScript
 
 The Batches API (`POST /v1/messages/batches`) processes Messages API requests asynchronously at 50% of standard prices.

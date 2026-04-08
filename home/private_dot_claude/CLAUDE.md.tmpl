@@ -101,6 +101,9 @@ age -r "{{ "{{" }} .age_recipient {{ "}}" }}" -o <source_file> /tmp/edit.txt
 Currently installed (via settings.json):
 - `rust-analyzer-lsp@claude-plugins-official` - Rust LSP integration
 - `lua-lsp@claude-plugins-official` - Lua LSP integration
+- `typescript-lsp@claude-plugins-official` - TypeScript LSP integration
+- `gopls-lsp@claude-plugins-official` - Go LSP integration
+- `pyright-lsp@claude-plugins-official` - Python LSP integration
 
 Optional plugins (install interactively via `/plugin`):
 
@@ -121,9 +124,13 @@ Superpowers skills (if installed):
 
 Skills installed to `~/.agents/skills/` and auto-loaded:
 - `claude-api` -- Anthropic SDK reference (Python, TS, Go, Elixir, Rust, Lua, cURL)
-- `droo-stack` -- Polyglot patterns (Elixir, TS, Go, Rust, Python, Lua, Shell, Noir, Chezmoi)
+- `droo-stack` -- Polyglot patterns (Elixir, TS, Go, Rust, C, Zig, Python, Lua, Shell, Noir, Chezmoi)
 - `noir` -- ZK circuit design, Aztec contracts, constraint optimization, nargo testing
 - `solidity-audit` -- Solidity dev standards, vulnerability taxonomy, Foundry-first audit methodology
 - `ethskills` -- Ethereum tooling, framework selection, EIP/ERC standards, RPC/explorer reference
+- `design-ux` -- UI/UX design patterns, design tokens, accessibility, monospace-first terminal aesthetic
+- `raxol` -- Elixir TUI/agents framework (TEA agents, MCP, headless sessions)
+- `nix` -- Nix language, flakes, NixOS, Home Manager, packaging, agent-skills-nix/rigup integration
+- `native-code` -- NIF development (C/Rust/Rustler), SIMD (Zig @Vector), BEAM native boundary patterns
 
 Skills complement this file: CLAUDE.md sets preferences, skills provide detailed patterns.

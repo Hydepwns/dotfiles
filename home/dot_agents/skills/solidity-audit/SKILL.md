@@ -36,6 +36,12 @@ This skill activates when writing, reviewing, or auditing Solidity contracts.
 - For Noir/ZK circuit work -- use noir
 - For non-Solidity languages -- use droo-stack
 
+## See also
+
+- `ethskills` -- for EIP/ERC standard lookup, tool selection, and RPC/explorer reference
+- `noir` -- for ZK circuits that integrate with Solidity via verifier contracts
+- `design-ux` -- for smart contract frontend design and transaction UX
+
 ## Reading guide
 
 ### Development patterns

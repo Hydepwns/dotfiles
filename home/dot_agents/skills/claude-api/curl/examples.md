@@ -1,3 +1,10 @@
+---
+title: Claude API cURL and Raw HTTP Examples
+impact: CRITICAL
+impactDescription: Primary reference for raw HTTP requests to the Claude API, useful for any language without an official SDK.
+tags: curl, claude, api, http, rest, anthropic
+---
+
 # Claude API — cURL / Raw HTTP
 
 Use these examples when the user needs raw HTTP requests or is working in a language without an official SDK.

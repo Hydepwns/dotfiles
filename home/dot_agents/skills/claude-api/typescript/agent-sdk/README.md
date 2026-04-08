@@ -1,3 +1,10 @@
+---
+title: Claude Agent SDK for TypeScript
+impact: CRITICAL
+impactDescription: Primary entry point for building AI agents with TypeScript using built-in tools and safety features.
+tags: typescript, claude, api, agent-sdk, agents, tools
+---
+
 # Agent SDK — TypeScript
 
 The Claude Agent SDK provides a higher-level interface for building AI agents with built-in tools, safety features, and agentic capabilities.

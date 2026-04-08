@@ -1,4 +1,4 @@
-.PHONY: help install update diff status backup clean doctor bootstrap sync sync-from-remote backup-full install-optional generate-template setup-age age-retrieve age-status setup-mise mise-status mise-upgrade mise-doctor setup-raycast raycast-export raycast-import raycast-status setup-takopi takopi-onboard takopi-backup takopi-status setup-signoz-mcp signoz-mcp-status signoz-mcp-update lint perf perf-report skills-status
+.PHONY: help install update diff status backup clean doctor bootstrap sync sync-from-remote backup-full install-optional generate-template setup-age age-retrieve age-status setup-mise mise-status mise-upgrade mise-doctor setup-raycast raycast-export raycast-import raycast-status setup-takopi takopi-onboard takopi-backup takopi-status setup-signoz-mcp signoz-mcp-status signoz-mcp-update lint lint-skills perf perf-report skills-status
 
 # Configuration
 DOTFILES_ROOT := $(shell pwd)
@@ -58,7 +58,7 @@ install-optional: ## Install optional tools interactively
 	@$(SCRIPTS_DIR)/utils/install-optional.sh
 
 # Linting
-lint: ## Run shellcheck on all shell scripts
+lint: ## Run shellcheck and skills lint
 	@echo "Running shellcheck..."
 	@find scripts/ -name '*.sh' -not -path '*/templates/*' | sort | while read -r f; do \
 		printf "  %-50s" "$$f"; \
@@ -68,6 +68,8 @@ lint: ## Run shellcheck on all shell scripts
 			echo "FAIL"; \
 		fi; \
 	done
+	@echo ""
+	@$(SCRIPTS_DIR)/utils/skills-lint.sh
 
 # Testing and development
 test: ## Run comprehensive dotfiles test suite
@@ -222,6 +224,9 @@ setup-ci: ## Setup CI/CD tools and pre-commit hooks
 	@$(SCRIPTS_DIR)/setup/setup-ci.sh
 
 # Claude Code skills
+lint-skills: ## Lint skills for consistency (frontmatter, references)
+	@$(SCRIPTS_DIR)/utils/skills-lint.sh
+
 skills-status: ## Show installed Claude Code skills
 	@echo "Skills (source):"
 	@ls -1 home/dot_agents/skills/ 2>/dev/null || echo "  (none)"

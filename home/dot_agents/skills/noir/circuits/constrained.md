@@ -1,5 +1,7 @@
 ---
 title: Constrained Circuit Patterns
+impact: CRITICAL
+impactDescription: Field arithmetic bugs and unnecessary constraints cause unsound proofs or impractical proving times.
 tags: noir, constraints, field-arithmetic, optimization
 ---
 

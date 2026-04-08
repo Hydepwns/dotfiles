@@ -1,5 +1,7 @@
 ---
 title: Audit Methodology
+impact: CRITICAL
+impactDescription: Foundational 4-phase audit process covering scoping, automated analysis, manual review, and severity classification
 tags: solidity, audit, methodology, slither, mythril
 ---
 

@@ -1,5 +1,7 @@
 ---
 title: Reentrancy Vulnerabilities
+impact: CRITICAL
+impactDescription: Classic, cross-function, and read-only reentrancy patterns with CEI and guard defenses
 tags: solidity, reentrancy, CEI, security
 ---
 

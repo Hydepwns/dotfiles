@@ -29,6 +29,12 @@ resources.
 - For Noir/ZK circuit design -- use noir
 - For non-Ethereum languages -- use droo-stack
 
+## See also
+
+- `solidity-audit` -- for EIP/ERC implementation guidance and security review
+- `noir` -- for ZK circuit patterns and Aztec contract integration
+- `design-ux` -- for dApp frontend design patterns
+
 ## Reading guide
 
 | Question | Read |

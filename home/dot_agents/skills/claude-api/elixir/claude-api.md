@@ -1,3 +1,10 @@
+---
+title: Claude API with Elixir via REST
+impact: CRITICAL
+impactDescription: Primary entry point for Elixir Claude API usage via Req HTTP client against the REST API directly.
+tags: elixir, claude, api, rest, req, anthropic
+---
+
 # Claude API -- Elixir
 
 > **Note:** There is no official Anthropic SDK for Elixir. These patterns use `Req` (the standard Elixir HTTP client) against the REST API directly. For tool-use concepts and prompt caching design, see `shared/tool-use-concepts.md` and `shared/prompt-caching.md`.

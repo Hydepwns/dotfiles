@@ -1,5 +1,7 @@
 ---
 title: Foundry Testing Patterns
+impact: HIGH
+impactDescription: Fuzz testing, invariant testing, fork testing, and essential cheatcodes for security verification
 tags: solidity, foundry, forge, fuzz, invariant, fork
 ---
 

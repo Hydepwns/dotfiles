@@ -1,3 +1,10 @@
+---
+title: Live Documentation Sources for Claude API
+impact: MEDIUM
+impactDescription: WebFetch URLs for fetching current Claude API and Agent SDK documentation when cached content may be stale.
+tags: claude, api, documentation, live-sources, webfetch
+---
+
 # Live Documentation Sources
 
 This file contains WebFetch URLs for fetching current information from platform.claude.com and Agent SDK repositories. Use these when users need the latest data that may have changed since the cached content was last updated.

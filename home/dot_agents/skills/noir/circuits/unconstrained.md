@@ -1,5 +1,7 @@
 ---
 title: Unconstrained Computation Patterns
+impact: CRITICAL
+impactDescription: Misusing unconstrained functions lets provers forge arbitrary values, breaking proof soundness.
 tags: noir, unconstrained, oracle, brillig, optimization
 ---
 

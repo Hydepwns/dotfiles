@@ -1,7 +1,8 @@
 ---
 title: TEA Agent
 impact: CRITICAL
-tags: [raxol, agent, tea, elixir]
+impactDescription: Core agent abstraction that all other agent types build upon.
+tags: raxol, agent, tea, elixir
 ---
 
 # TEA Agent (`use Raxol.Agent`)
@@ -75,7 +76,7 @@ Three primitives via `Raxol.Agent.Comm` (see SKILL.md for message format referen
 :ok = Raxol.Agent.Comm.broadcast_team(:team_id, payload)
 ```
 
-### Incorrect: Forgetting Call Reply
+INCORRECT: Forgetting Call Reply
 
 ```elixir
 def update({:call, _pid, _ref, {:query, q}}, model) do
@@ -84,7 +85,7 @@ def update({:call, _pid, _ref, {:query, q}}, model) do
 end
 ```
 
-### Correct
+CORRECT:
 
 ```elixir
 def update({:call, pid, ref, {:query, q}}, model) do
@@ -93,7 +94,7 @@ def update({:call, pid, ref, {:query, q}}, model) do
 end
 ```
 
-### Incorrect: Sync Call Deadlock
+INCORRECT: Sync Call Deadlock
 
 ```elixir
 # Agent A update/2 calls B synchronously
@@ -102,13 +103,13 @@ end
 
 Break cycles with async `send_agent/2` for one direction.
 
-### Incorrect: Bare Model Return
+INCORRECT: Bare Model Return
 
 ```elixir
 def update(_, model), do: model  # wrong
 ```
 
-### Correct
+CORRECT:
 
 ```elixir
 def update(_, model), do: {model, Command.none()}

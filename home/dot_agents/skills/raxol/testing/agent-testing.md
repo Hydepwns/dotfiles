@@ -1,7 +1,8 @@
 ---
 title: Agent Testing
 impact: HIGH
-tags: [raxol, agent, testing, mock, headless]
+impactDescription: Tests that skip Backend.Mock risk hitting real LLM APIs and producing flaky, expensive failures.
+tags: raxol, agent, testing, mock, headless
 ---
 
 # Agent Testing

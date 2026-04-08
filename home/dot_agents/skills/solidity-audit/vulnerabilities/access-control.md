@@ -1,5 +1,7 @@
 ---
 title: Access Control Vulnerabilities
+impact: CRITICAL
+impactDescription: Missing authorization, tx.origin phishing, delegatecall context confusion, and unprotected privileged operations
 tags: solidity, access-control, authorization, delegatecall, tx.origin
 ---
 

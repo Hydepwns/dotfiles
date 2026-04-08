@@ -167,13 +167,42 @@ Skills in `home/dot_agents/skills/` are deployed to `~/.agents/skills/` via chez
 | Skill | Source | Triggers on |
 |-------|--------|-------------|
 | claude-api | Vendored (Anthropic) | `anthropic` imports, SDK usage |
-| droo-stack | Custom | Elixir, TS, Go, Rust, Python, Lua, Shell, Noir, Chezmoi |
+| droo-stack | Custom | Elixir, TS, Go, Rust, C, Zig, Python, Lua, Shell, Noir, Chezmoi |
 | raxol | Custom | Raxol TUI/agent imports, headless/MCP tools |
 | noir | Custom | `.nr` files, Nargo.toml, ZK circuits, Aztec contracts/security/e2e testing |
 | solidity-audit | Custom | `.sol` files, foundry.toml, auditing, security review |
 | ethskills | Custom | Ethereum tooling, EIP/ERC standards, framework selection |
+| design-ux | Custom | Component design, layout, tokens, accessibility, TUI aesthetics, DESIGN.md |
+| nix | Custom | `.nix` files, flakes, NixOS, Home Manager, agent-skills packaging, rigup |
+| native-code | Custom | NIFs (C/Rust), SIMD (Zig), erl_nif.h, Rustler, BEAM native boundary |
 
 Skills provide detailed incorrect/correct code examples. CLAUDE.md provides preferences and philosophy. To add a new skill: create `home/dot_agents/skills/<name>/SKILL.md`, run `chezmoi apply`.
+
+**Skills map** -- how skills relate:
+
+```
+                    droo-stack (code patterns)
+                   /    |    \        \        \
+             Elixir   TS/JS   Go/Rust   C/Zig  Py/Lua/Shell
+               |       |                 |
+            raxol    design-ux     native-code
+          (TUI)    (UI/UX)      (NIFs + SIMD)
+               \       /
+            terminal aesthetics
+
+              ethskills (ecosystem)
+             /         \
+    solidity-audit    noir (ZK)
+    (contracts)     (circuits)
+
+         nix (Nix ecosystem)
+        / |  \
+  flakes NixOS Home Manager
+              \
+        agent-skills packaging
+```
+
+Each skill has "See also" cross-references in its SKILL.md.
 
 ## Code Style
 

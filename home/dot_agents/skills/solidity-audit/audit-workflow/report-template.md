@@ -1,5 +1,7 @@
 ---
 title: Audit Report Template
+impact: HIGH
+impactDescription: Standardized finding and report structure for consistent audit deliverables
 tags: solidity, audit, report, template
 ---
 

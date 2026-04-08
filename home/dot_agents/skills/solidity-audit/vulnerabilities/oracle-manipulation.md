@@ -1,5 +1,7 @@
 ---
 title: Oracle Manipulation
+impact: CRITICAL
+impactDescription: Oracle exploitation via spot price manipulation, stale Chainlink data, and TWAP weaknesses
 tags: solidity, oracle, chainlink, twap, price-feed
 ---
 

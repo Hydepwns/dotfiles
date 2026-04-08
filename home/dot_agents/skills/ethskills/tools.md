@@ -1,5 +1,7 @@
 ---
 title: Ethereum Development Tools
+impact: HIGH
+impactDescription: Core tooling commands for smart contract development and debugging.
 tags: ethereum, foundry, blockscout, abi-ninja, tools
 ---
 

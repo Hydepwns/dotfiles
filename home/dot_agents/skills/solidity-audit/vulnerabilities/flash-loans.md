@@ -1,5 +1,7 @@
 ---
 title: Flash Loan Attack Vectors
+impact: CRITICAL
+impactDescription: Flash loan exploits enabling price manipulation, governance hijacking, and vault inflation attacks
 tags: solidity, flash-loans, price-manipulation, governance
 ---
 

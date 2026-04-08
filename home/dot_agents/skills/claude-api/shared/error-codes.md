@@ -1,3 +1,10 @@
+---
+title: Claude API HTTP Error Codes Reference
+impact: HIGH
+impactDescription: Comprehensive error code documentation with causes and handling strategies for the Claude API.
+tags: claude, api, errors, http, debugging, troubleshooting
+---
+
 # HTTP Error Codes Reference
 
 This file documents HTTP error codes returned by the Claude API, their common causes, and how to handle them. For language-specific error handling examples, see the `python/` or `typescript/` folders.

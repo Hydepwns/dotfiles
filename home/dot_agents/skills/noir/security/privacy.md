@@ -1,5 +1,7 @@
 ---
 title: Privacy & Information Leakage
+impact: CRITICAL
+impactDescription: Privacy leaks defeat the purpose of ZK circuits and expose sensitive user data permanently.
 tags: noir, privacy, public-inputs, leakage, nullifiers
 ---
 

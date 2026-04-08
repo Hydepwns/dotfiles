@@ -1,5 +1,7 @@
 ---
 title: Solidity Development Standards
+impact: HIGH
+impactDescription: Custom errors, NatSpec, event emission, storage packing, calldata usage, and upgradeable storage layout
 tags: solidity, natspec, errors, events, gas, storage
 ---
 

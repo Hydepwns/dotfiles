@@ -1,7 +1,8 @@
 ---
 title: Process Agent (Observe/Think/Act)
 impact: HIGH
-tags: [raxol, agent, process, autonomous]
+impactDescription: Autonomous agents require correct lifecycle handling to avoid silent failures.
+tags: raxol, agent, process, autonomous
 ---
 
 # Process Agent (`use Raxol.Agent.UseProcess`)
@@ -54,13 +55,13 @@ AI Strategy for LLM-driven tool loops.
 
 ## think/2 Return Values
 
-### Incorrect
+INCORRECT:
 
 ```elixir
 def think(_, state), do: {:ok, state}  # wrong -- that's act's format
 ```
 
-### Correct
+CORRECT:
 
 ```elixir
 def think(%{needs_work: true}, state), do: {:act, :do_work, state}

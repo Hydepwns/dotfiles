@@ -32,6 +32,12 @@ knowledge that requires ZK expertise.
 - For Solidity smart contracts -- use solidity-audit
 - For general Ethereum tooling -- use ethskills
 
+## See also
+
+- `droo-stack` -- for Noir language syntax (types, modules, generics)
+- `solidity-audit` -- for Solidity verifier contracts that consume Noir proofs
+- `ethskills` -- for Ethereum ecosystem tooling and standards
+
 ## Reading guide
 
 | Working on | Read |

@@ -1,5 +1,7 @@
 ---
 title: Testing with Nargo
+impact: HIGH
+impactDescription: Incomplete circuit testing misses constraint bugs that only surface during real proof generation.
 tags: noir, nargo, testing, proving, execution
 ---
 

@@ -1,7 +1,8 @@
 ---
 title: MCP Client
 impact: MEDIUM
-tags: [raxol, agent, mcp, client]
+impactDescription: MCP integration is supplementary and only needed when consuming external tool servers.
+tags: raxol, agent, mcp, client
 ---
 
 # MCP Client

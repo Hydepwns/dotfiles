@@ -1,5 +1,7 @@
 ---
 title: Aztec Contract Patterns
+impact: HIGH
+impactDescription: Wrong contract structure or note handling causes silent state corruption in private execution.
 tags: noir, aztec, private-functions, public-functions, notes, storage
 ---
 

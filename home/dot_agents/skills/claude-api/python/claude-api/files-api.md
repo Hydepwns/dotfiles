@@ -1,3 +1,10 @@
+---
+title: Files API in Python
+impact: MEDIUM
+impactDescription: File upload and reference patterns for the Python SDK to avoid re-uploads across API calls.
+tags: python, claude, api, files, upload, beta
+---
+
 # Files API — Python
 
 The Files API uploads files for use in Messages API requests. Reference files via `file_id` in content blocks, avoiding re-uploads across multiple API calls.

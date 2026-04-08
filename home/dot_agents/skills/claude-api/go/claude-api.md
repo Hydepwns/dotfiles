@@ -1,3 +1,10 @@
+---
+title: Claude API Go SDK Reference
+impact: CRITICAL
+impactDescription: Primary entry point for Go Claude API usage including installation, tool use, and beta features.
+tags: go, claude, api, sdk, anthropic
+---
+
 # Claude API — Go
 
 > **Note:** The Go SDK supports the Claude API and beta tool use with `BetaToolRunner`. Agent SDK is not yet available for Go.

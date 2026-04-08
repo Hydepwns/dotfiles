@@ -1,5 +1,7 @@
 ---
 title: MEV & Frontrunning Protection
+impact: HIGH
+impactDescription: Sandwich attacks, frontrunning prevention via commit-reveal, slippage bounds, and deadline parameters
 tags: solidity, mev, frontrunning, sandwich, commit-reveal
 ---
 

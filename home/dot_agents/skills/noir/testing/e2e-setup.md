@@ -1,5 +1,7 @@
 ---
 title: Aztec E2E Test Setup
+impact: HIGH
+impactDescription: Incorrect test setup causes flaky failures and resource leaks that mask real contract bugs.
 tags: noir, aztec, e2e, testing, setup, deployment, accounts
 ---
 

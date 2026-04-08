@@ -1,3 +1,10 @@
+---
+title: Files API in TypeScript
+impact: MEDIUM
+impactDescription: File upload and reference patterns for the TypeScript SDK to avoid re-uploads across API calls.
+tags: typescript, claude, api, files, upload, beta
+---
+
 # Files API — TypeScript
 
 The Files API uploads files for use in Messages API requests. Reference files via `file_id` in content blocks, avoiding re-uploads across multiple API calls.

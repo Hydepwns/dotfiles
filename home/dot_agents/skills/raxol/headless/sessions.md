@@ -1,7 +1,8 @@
 ---
 title: Headless Sessions
 impact: HIGH
-tags: [raxol, headless, testing, mcp]
+impactDescription: Headless mode is the primary interface for AI-driven testing and MCP tool integration.
+tags: raxol, headless, testing, mcp
 ---
 
 # Headless Sessions
@@ -31,13 +32,13 @@ Special keys (atoms): `:tab`, `:enter`, `:escape`, `:backspace`, `:up`, `:down`,
 `:left`, `:right`, `:home`, `:end`, `:page_up`, `:page_down`, `:delete`,
 `:insert`, `:f1`..`:f12`. Modifiers: `ctrl: true`, `alt: true`, `shift: true`.
 
-### Incorrect
+INCORRECT:
 
 ```elixir
 Raxol.Headless.send_key(:demo, "tab")  # wrong: 3-char string, not Tab key
 ```
 
-### Correct
+CORRECT:
 
 ```elixir
 Raxol.Headless.send_key(:demo, :tab)   # atom for special keys

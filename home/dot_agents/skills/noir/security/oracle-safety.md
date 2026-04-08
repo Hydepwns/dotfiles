@@ -1,5 +1,7 @@
 ---
 title: Oracle Safety
+impact: CRITICAL
+impactDescription: Unconstrained oracle outputs bypass all proof guarantees if not verified in-circuit.
 tags: noir, oracle, unconstrained, safety, verification
 ---
 

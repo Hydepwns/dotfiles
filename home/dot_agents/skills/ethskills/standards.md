@@ -1,5 +1,7 @@
 ---
 title: EIP & ERC Standards Reference
+impact: CRITICAL
+impactDescription: Incorrect standard usage causes incompatible or insecure contracts.
 tags: ethereum, eip, erc, standards, tokens
 ---
 

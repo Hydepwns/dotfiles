@@ -1,5 +1,7 @@
 ---
 title: Aztec Contract Security
+impact: CRITICAL
+impactDescription: Nullifier, note griefing, and front-running bugs cause double-spends, fund loss, or privacy breaches.
 tags: noir, aztec, security, nullifiers, front-running, notes, privacy
 ---
 
