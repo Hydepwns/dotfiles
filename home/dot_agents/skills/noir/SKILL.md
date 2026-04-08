@@ -40,5 +40,10 @@ knowledge that requires ZK expertise.
 | Oracle calls, unconstrained computation | [circuits/unconstrained](circuits/unconstrained.md) |
 | Privacy leaks, public/private input design | [security/privacy](security/privacy.md) |
 | Unconstrained return safety, oracle verification | [security/oracle-safety](security/oracle-safety.md) |
+| Aztec-specific attacks: nullifiers, MEV, leakage | [security/aztec-contracts](security/aztec-contracts.md) |
 | Aztec contract structure, notes, storage | [aztec/contracts](aztec/contracts.md) |
+| Account abstraction, access control, keys | [aztec/accounts](aztec/accounts.md) |
 | Testing with nargo, proof vs execution | [testing/nargo](testing/nargo.md) |
+| Aztec e2e test setup, accounts, deployment | [testing/e2e-setup](testing/e2e-setup.md) |
+| Token testing, AuthWit, balance assertions | [testing/e2e-token](testing/e2e-token.md) |
+| Cross-chain L1/L2, event testing | [testing/e2e-messaging](testing/e2e-messaging.md) |

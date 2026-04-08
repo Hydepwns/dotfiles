@@ -182,7 +182,7 @@ dotfiles/
 │   ├── dot_agents/skills/              # Claude Code skills (auto-symlinked)
 │   │   ├── claude-api/                # Anthropic SDK reference
 │   │   ├── droo-stack/               # Polyglot patterns (Elixir/TS/Go/Rust/Py/Lua/Noir/Shell)
-│   │   ├── noir/                     # ZK circuit design, Aztec, nargo
+│   │   ├── noir/                     # ZK circuits, Aztec contracts/security/e2e testing
 │   │   ├── solidity-audit/           # Solidity dev + security auditing
 │   │   ├── ethskills/                # Ethereum tooling + EIP/ERC reference
 │   │   └── raxol/                    # Raxol TUI/agent framework

@@ -169,7 +169,7 @@ Skills in `home/dot_agents/skills/` are deployed to `~/.agents/skills/` via chez
 | claude-api | Vendored (Anthropic) | `anthropic` imports, SDK usage |
 | droo-stack | Custom | Elixir, TS, Go, Rust, Python, Lua, Shell, Noir, Chezmoi |
 | raxol | Custom | Raxol TUI/agent imports, headless/MCP tools |
-| noir | Custom | `.nr` files, Nargo.toml, ZK circuits, Aztec contracts |
+| noir | Custom | `.nr` files, Nargo.toml, ZK circuits, Aztec contracts/security/e2e testing |
 | solidity-audit | Custom | `.sol` files, foundry.toml, auditing, security review |
 | ethskills | Custom | Ethereum tooling, EIP/ERC standards, framework selection |
 
