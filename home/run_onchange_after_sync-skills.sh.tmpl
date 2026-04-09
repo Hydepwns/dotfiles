@@ -1,5 +1,5 @@
 #!/bin/bash
-# Skills hash: {{ output "ls" "-1" (joinPath .chezmoi.sourceDir "dot_agents/skills") | trim | replace "\n" "," }}
+# Skills config hash: {{ include ".chezmoiexternal.toml" | sha256sum }}
 # Sync skills: ~/.agents/skills/* -> ~/.claude/skills/* (symlinks)
 
 set -euo pipefail

@@ -28,12 +28,3 @@ repos:
     hooks:
       - id: prettier
         types: [json, yaml, markdown]
-
-  - repo: local
-    hooks:
-      - id: skills-lint
-        name: skills-lint
-        entry: scripts/utils/skills-lint.sh
-        language: script
-        files: ^home/dot_agents/skills/
-        pass_filenames: false

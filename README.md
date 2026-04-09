@@ -179,16 +179,7 @@ dotfiles/
 │   │   ├── fastfetch/                  # System info
 │   │   ├── starship/                   # Prompt
 │   │   └── direnv/                     # direnv layouts
-│   ├── dot_agents/skills/              # Claude Code skills (auto-symlinked)
-│   │   ├── claude-api/                # Anthropic SDK reference
-│   │   ├── droo-stack/               # Polyglot patterns (Elixir/TS/Go/Rust/C/Zig/Py/Lua/Noir/Shell)
-│   │   ├── noir/                     # ZK circuits, Aztec contracts/security/e2e testing
-│   │   ├── solidity-audit/           # Solidity dev + security auditing
-│   │   ├── ethskills/                # Ethereum tooling + EIP/ERC reference
-│   │   ├── raxol/                    # Raxol TUI/agent framework
-│   │   ├── design-ux/               # UI/UX design, tokens, accessibility, TUI aesthetics
-│   │   ├── nix/                      # Nix language, flakes, NixOS, Home Manager
-│   │   └── native-code/              # NIFs (C/Rust), SIMD (Zig), BEAM boundary
+│   ├── .chezmoiexternal.toml           # External deps (agent-skills repo)
 │   ├── dot_takopi/                     # takopi config (encrypted)
 │   └── private_dot_claude/             # Claude Code config + hooks
 ├── config/

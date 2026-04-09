@@ -162,21 +162,21 @@ Managed via `~/.mcp.json` (chezmoi template: `home/dot_mcp.json.tmpl`). Toggle i
 
 ## Claude Code Skills
 
-Skills in `home/dot_agents/skills/` are deployed to `~/.agents/skills/` via chezmoi and symlinked to `~/.claude/skills/` by `run_onchange_after_sync-skills.sh.tmpl`.
+Skills are sourced from [Hydepwns/agent-skills](https://github.com/Hydepwns/agent-skills) and pulled via `home/.chezmoiexternal.toml` on `chezmoi apply`. Deployed to `~/.agents/skills/` and symlinked to `~/.claude/skills/` by `run_onchange_after_sync-skills.sh.tmpl`.
 
-| Skill | Source | Triggers on |
-|-------|--------|-------------|
-| claude-api | Vendored (Anthropic) | `anthropic` imports, SDK usage |
-| droo-stack | Custom | Elixir, TS, Go, Rust, C, Zig, Python, Lua, Shell, Noir, Chezmoi |
-| raxol | Custom | Raxol TUI/agent imports, headless/MCP tools |
-| noir | Custom | `.nr` files, Nargo.toml, ZK circuits, Aztec contracts/security/e2e testing |
-| solidity-audit | Custom | `.sol` files, foundry.toml, auditing, security review |
-| ethskills | Custom | Ethereum tooling, EIP/ERC standards, framework selection |
-| design-ux | Custom | Component design, layout, tokens, accessibility, TUI aesthetics, DESIGN.md |
-| nix | Custom | `.nix` files, flakes, NixOS, Home Manager, agent-skills packaging, rigup |
-| native-code | Custom | NIFs (C/Rust), SIMD (Zig), erl_nif.h, Rustler, BEAM native boundary |
+| Skill | Triggers on |
+|-------|-------------|
+| claude-api | `anthropic` imports, SDK usage |
+| droo-stack | Elixir, TS, Go, Rust, C, Zig, Python, Lua, Shell, Noir, Chezmoi |
+| raxol | Raxol TUI/agent imports, headless/MCP tools |
+| noir | `.nr` files, Nargo.toml, ZK circuits, Aztec contracts/security/e2e testing |
+| solidity-audit | `.sol` files, foundry.toml, auditing, security review |
+| ethskills | Ethereum tooling, EIP/ERC standards, framework selection |
+| design-ux | Component design, layout, tokens, accessibility, TUI aesthetics, DESIGN.md |
+| nix | `.nix` files, flakes, NixOS, Home Manager, agent-skills packaging, rigup |
+| native-code | NIFs (C/Rust), SIMD (Zig), erl_nif.h, Rustler, BEAM native boundary |
 
-Skills provide detailed incorrect/correct code examples. CLAUDE.md provides preferences and philosophy. To add a new skill: create `home/dot_agents/skills/<name>/SKILL.md`, run `chezmoi apply`.
+Skills provide detailed incorrect/correct code examples. CLAUDE.md provides preferences and philosophy. To add a new skill: add to the [agent-skills](https://github.com/Hydepwns/agent-skills) repo, tag a new version, bump the version in `home/.chezmoiexternal.toml`.
 
 **Skills map** -- how skills relate:
 
