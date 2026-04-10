@@ -4,7 +4,7 @@
 
 | Template | Description | Features |
 |----------|-------------|----------|
-| [web3](https://github.com/Hydepwns/dotfiles/tree/main/scripts/templates) | Full-stack blockchain | Foundry, Hardhat, Web3.js, Ethers.js |
+| [web3](https://github.com/DROOdotFOO/dotfiles/tree/main/scripts/templates) | Full-stack blockchain | Foundry, Hardhat, Web3.js, Ethers.js |
 | [nextjs](https://nextjs.org/) | Modern React apps | TypeScript, Tailwind, ESLint, Prettier |
 | [rust](https://www.rust-lang.org/) | CLI tools & services | Cargo, Clippy, Testing, Documentation |
 | [elixir](https://elixir-lang.org/) | Phoenix web apps | Mix, ExUnit, Dialyzer, Documentation |

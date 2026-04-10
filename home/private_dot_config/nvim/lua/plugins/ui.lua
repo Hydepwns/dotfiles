@@ -51,7 +51,7 @@ return {
 
   -- Font rendering
   {
-    "hydepwns/mona.nvim",
+    "DROOdotFOO/mona.nvim",
     lazy = false,
     build = ":MonaInstall variable all",
     opts = {

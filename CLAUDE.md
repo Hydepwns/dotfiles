@@ -163,7 +163,7 @@ Managed via `~/.mcp.json` (chezmoi template: `home/dot_mcp.json.tmpl`). Toggle i
 
 ## Claude Code Skills
 
-Skills are sourced from [Hydepwns/agent-skills](https://github.com/Hydepwns/agent-skills) and pulled via `home/.chezmoiexternal.toml` on `chezmoi apply`. Deployed to `~/.agents/skills/` and symlinked to `~/.claude/skills/` by `run_onchange_after_sync-skills.sh.tmpl`.
+Skills are sourced from [DROOdotFOO/agent-skills](https://github.com/DROOdotFOO/agent-skills) and pulled via `home/.chezmoiexternal.toml` on `chezmoi apply`. Deployed to `~/.agents/skills/` and symlinked to `~/.claude/skills/` by `run_onchange_after_sync-skills.sh.tmpl`.
 
 | Skill          | Triggers on                                                                |
 | -------------- | -------------------------------------------------------------------------- |
@@ -177,7 +177,7 @@ Skills are sourced from [Hydepwns/agent-skills](https://github.com/Hydepwns/agen
 | nix            | `.nix` files, flakes, NixOS, Home Manager, agent-skills packaging, rigup   |
 | native-code    | NIFs (C/Rust), SIMD (Zig), erl_nif.h, Rustler, BEAM native boundary        |
 
-Skills provide detailed incorrect/correct code examples. CLAUDE.md provides preferences and philosophy. To add a new skill: add to the [agent-skills](https://github.com/Hydepwns/agent-skills) repo, tag a new version, bump the version in `home/.chezmoiexternal.toml`.
+Skills provide detailed incorrect/correct code examples. CLAUDE.md provides preferences and philosophy. To add a new skill: add to the [agent-skills](https://github.com/DROOdotFOO/agent-skills) repo, tag a new version, bump the version in `home/.chezmoiexternal.toml`.
 
 **Skills map** -- how skills relate:
 

@@ -1,7 +1,7 @@
 # DROO's Dotfiles
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/Hydepwns/dotfiles)
+[![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/DROOdotFOO/dotfiles)
 [![Shell Startup](https://img.shields.io/badge/shell%20startup-~386ms-brightgreen.svg)](home/dot_zshrc.tmpl)
 [![Measured On](https://img.shields.io/badge/measured%20on-MacBook%20Pro%20M1-informational.svg)](Makefile)
 
@@ -15,10 +15,10 @@ My dotfiles. Managed with [chezmoi](https://chezmoi.io), themed in Synthwave84, 
 
 ```bash
 # Full bootstrap
-curl -fsSL https://raw.githubusercontent.com/Hydepwns/dotfiles/main/scripts/install/remote-bootstrap.sh | bash
+curl -fsSL https://raw.githubusercontent.com/DROOdotFOO/dotfiles/main/scripts/install/remote-bootstrap.sh | bash
 
 # Or just the basics
-brew install chezmoi && chezmoi init --apply https://github.com/Hydepwns/dotfiles.git
+brew install chezmoi && chezmoi init --apply https://github.com/DROOdotFOO/dotfiles.git
 ```
 
 ## What's In Here
@@ -223,9 +223,9 @@ chezmoi apply
 
 ## Related
 
-- [nix-mox](https://github.com/Hydepwns/nix-mox) -- Nix Home Manager config
-- [synthwave84-zed](https://github.com/Hydepwns/synthwave84-zed) -- Synthwave84 for Zed
-- [mona.nvim](https://github.com/Hydepwns/mona.nvim) -- Synthwave84 for Neovim
+- [nix-mox](https://github.com/DROOdotFOO/nix-mox) -- Nix Home Manager config
+- [synthwave84-zed](https://github.com/DROOdotFOO/synthwave84-zed) -- Synthwave84 for Zed
+- [mona.nvim](https://github.com/DROOdotFOO/mona.nvim) -- Synthwave84 for Neovim
 
 ---
 

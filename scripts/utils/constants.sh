@@ -45,7 +45,7 @@ GITHUB_USER="${GITHUB_USER:-}"
 USER_NAME="${USER_NAME:-}"
 USER_EMAIL="${USER_EMAIL:-}"
 AGE_RECIPIENT="${AGE_RECIPIENT:-}"
-SCRIPT_REPO="${SCRIPT_REPO:-https://github.com/${GITHUB_USER:-hydepwns}/dotfiles}"
+SCRIPT_REPO="${SCRIPT_REPO:-https://github.com/${GITHUB_USER:-DROOdotFOO}/dotfiles}"
 
 # Infrastructure (customize per-user via env vars)
 OP_VAULT="${OP_VAULT:-Private}"

@@ -1,10 +1,10 @@
 #!/bin/bash
-# Remote bootstrap script - run via: curl -fsSL https://raw.githubusercontent.com/Hydepwns/dotfiles/main/scripts/install/remote-bootstrap.sh | bash
+# Remote bootstrap script - run via: curl -fsSL https://raw.githubusercontent.com/DROOdotFOO/dotfiles/main/scripts/install/remote-bootstrap.sh | bash
 # This script bootstraps a fresh machine with DROO's dotfiles
 
 set -e
 
-REPO="https://github.com/Hydepwns/dotfiles.git"
+REPO="https://github.com/DROOdotFOO/dotfiles.git"
 DOTFILES_DIR="$HOME/.local/share/chezmoi"
 
 # Colors and logging defined inline (can't source logging.sh - repo not cloned yet)
@@ -310,7 +310,7 @@ print_next_steps() {
     echo "  6. Verify mise tool versions:"
     echo -e "     ${CYAN}make mise-status${NC}        # Show installed runtimes"
     echo ""
-    echo -e "Documentation: ${BLUE}https://github.com/Hydepwns/dotfiles${NC}"
+    echo -e "Documentation: ${BLUE}https://github.com/DROOdotFOO/dotfiles${NC}"
     echo ""
 }
 

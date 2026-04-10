@@ -27,7 +27,7 @@ if ! command -v chezmoi &> /dev/null; then
 fi
 
 # Initialize and apply dotfiles
-GITHUB_USER="${GITHUB_USER:-hydepwns}"
+GITHUB_USER="${GITHUB_USER:-DROOdotFOO}"
 chezmoi init --apply "https://github.com/${GITHUB_USER}/dotfiles.git"
 
 echo " Setup complete! Restart your terminal."

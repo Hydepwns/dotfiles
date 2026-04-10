@@ -4,7 +4,7 @@
 DOTFILES_ROOT := $(shell pwd)
 SCRIPTS_DIR := $(DOTFILES_ROOT)/scripts
 BACKUP_DIR := $(DOTFILES_ROOT)/backups
-GITHUB_USER ?= hydepwns
+GITHUB_USER ?= DROOdotFOO
 
 # Default target
 help: ## Show this help message
@@ -221,7 +221,7 @@ brew-update: ## Update Homebrew and all packages
 setup-ci: ## Setup CI/CD tools and pre-commit hooks
 	@$(SCRIPTS_DIR)/setup/setup-ci.sh
 
-# Claude Code skills (source: github.com/Hydepwns/agent-skills)
+# Claude Code skills (source: github.com/DROOdotFOO/agent-skills)
 skills-status: ## Show installed Claude Code skills
 	@echo "Skills (pinned version):"
 	@grep -o 'v[0-9.]*' home/.chezmoiexternal.toml 2>/dev/null || echo "  (unknown)"

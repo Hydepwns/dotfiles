@@ -78,7 +78,7 @@ DOTFILES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 source "$DOTFILES_ROOT/scripts/utils/constants.sh"
 
 echo " Testing GitHub API access..."
-if curl -s -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/user | grep -q "${GITHUB_USER:-hydepwns}"; then
+if curl -s -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/user | grep -q "${GITHUB_USER:-DROOdotFOO}"; then
     echo " GitHub API access working!"
     echo ""
     echo " Now you can run: chezmoi apply"
