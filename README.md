@@ -1,7 +1,7 @@
 # DROO's Dotfiles
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/DROOdotFOO/dotfiles)
+[![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/Hydepwns/dotfiles)
 [![Shell Startup](https://img.shields.io/badge/shell%20startup-~386ms-brightgreen.svg)](home/dot_zshrc.tmpl)
 [![Measured On](https://img.shields.io/badge/measured%20on-MacBook%20Pro%20M1-informational.svg)](Makefile)
 
@@ -15,10 +15,10 @@ My dotfiles. Managed with [chezmoi](https://chezmoi.io), themed in Synthwave84, 
 
 ```bash
 # Full bootstrap
-curl -fsSL https://raw.githubusercontent.com/DROOdotFOO/dotfiles/main/scripts/install/remote-bootstrap.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Hydepwns/dotfiles/main/scripts/install/remote-bootstrap.sh | bash
 
 # Or just the basics
-brew install chezmoi && chezmoi init --apply https://github.com/DROOdotFOO/dotfiles.git
+brew install chezmoi && chezmoi init --apply https://github.com/Hydepwns/dotfiles.git
 ```
 
 ## What's In Here
@@ -179,7 +179,13 @@ dotfiles/
 │   │   ├── fastfetch/                  # System info
 │   │   ├── starship/                   # Prompt
 │   │   └── direnv/                     # direnv layouts
-│   ├── .chezmoiexternal.toml           # External deps (agent-skills repo)
+│   ├── dot_agents/skills/              # Claude Code skills (auto-symlinked)
+│   │   ├── claude-api/                # Anthropic SDK reference
+│   │   ├── droo-stack/               # Polyglot patterns (Elixir/TS/Go/Rust/Py/Lua/Noir/Shell)
+│   │   ├── noir/                     # ZK circuits, Aztec contracts/security/e2e testing
+│   │   ├── solidity-audit/           # Solidity dev + security auditing
+│   │   ├── ethskills/                # Ethereum tooling + EIP/ERC reference
+│   │   └── raxol/                    # Raxol TUI/agent framework
 │   ├── dot_takopi/                     # takopi config (encrypted)
 │   └── private_dot_claude/             # Claude Code config + hooks
 ├── config/
@@ -216,16 +222,16 @@ chezmoi apply
 
 ## TODO
 
-- [x] Add Zig skill to droo-stack (zmin, cross-platform bindings)
-- [x] Add C skill to droo-stack (tree-sitter grammars, NIFs)
-- [x] Add Nix skill (language, flakes, NixOS, Home Manager, agent integration)
+- [ ] Add Zig skill to droo-stack (zmin, cross-platform bindings)
+- [ ] Add C skill to droo-stack (tree-sitter grammars, NIFs)
+- [ ] Add Nix/Nushell skill (nix-mox config framework)
 - [ ] Add Java skill to droo-stack (RuneLite plugin development)
 
 ## Related
 
-- [nix-mox](https://github.com/DROOdotFOO/nix-mox) -- Nix Home Manager config
-- [synthwave84-zed](https://github.com/DROOdotFOO/synthwave84-zed) -- Synthwave84 for Zed
-- [mona.nvim](https://github.com/DROOdotFOO/mona.nvim) -- Synthwave84 for Neovim
+- [nix-mox](https://github.com/Hydepwns/nix-mox) -- Nix Home Manager config
+- [synthwave84-zed](https://github.com/Hydepwns/synthwave84-zed) -- Synthwave84 for Zed
+- [mona.nvim](https://github.com/Hydepwns/mona.nvim) -- Synthwave84 for Neovim
 
 ---
 

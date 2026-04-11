@@ -143,67 +143,37 @@ Local skills (`ethskills/`, `solidity-audit/`, `noir/`) provide offline Ethereum
 
 Managed via `~/.mcp.json` (chezmoi template: `home/dot_mcp.json.tmpl`). Toggle in `chezmoi.toml`, then `chezmoi apply`.
 
-| Server     | Flag      | Transport  | Notes                             |
-| ---------- | --------- | ---------- | --------------------------------- |
-| context7   | always on | stdio      | Library docs via npx              |
-| blockscout | always on | http       | Blockchain data queries           |
-| datadog    | `datadog` | http/OAuth | us5.datadoghq.com, no secrets     |
-| sentry     | `sentry`  | http/OAuth | mcp.sentry.dev, no secrets        |
-| signoz     | `signoz`  | stdio      | API key from 1Password at runtime |
+| Server     | Flag      | Transport | Notes                              |
+| ---------- | --------- | --------- | ---------------------------------- |
+| context7   | always on | stdio     | Library docs via npx               |
+| blockscout | always on | http      | Blockchain data queries            |
+| datadog    | `datadog` | http/OAuth| us5.datadoghq.com, no secrets      |
+| sentry     | `sentry`  | http/OAuth| mcp.sentry.dev, no secrets         |
+| signoz     | `signoz`  | stdio     | API key from 1Password at runtime  |
 
 **Datadog:** Enable `datadog = true` in chezmoi.toml, `chezmoi apply`. OAuth via browser.
 
 **Sentry:** Enable `sentry = true` in chezmoi.toml, `chezmoi apply`. OAuth via browser.
 
 **SigNoz setup:**
-
 1. `make setup-signoz-mcp` (builds from source, requires Go)
 2. Store API key: `op item create --vault Employee --category login --title "SigNoz API Key" credential=<key>`
 3. Set `signoz = true` in chezmoi.toml, `chezmoi apply`
 
 ## Claude Code Skills
 
-Skills are sourced from [DROOdotFOO/agent-skills](https://github.com/DROOdotFOO/agent-skills) and pulled via `home/.chezmoiexternal.toml` on `chezmoi apply`. Deployed to `~/.agents/skills/` and symlinked to `~/.claude/skills/` by `run_onchange_after_sync-skills.sh.tmpl`.
+Skills in `home/dot_agents/skills/` are deployed to `~/.agents/skills/` via chezmoi and symlinked to `~/.claude/skills/` by `run_onchange_after_sync-skills.sh.tmpl`.
 
-| Skill          | Triggers on                                                                |
-| -------------- | -------------------------------------------------------------------------- |
-| claude-api     | `anthropic` imports, SDK usage                                             |
-| droo-stack     | Elixir, TS, Go, Rust, C, Zig, Python, Lua, Shell, Noir, Chezmoi            |
-| raxol          | Raxol TUI/agent imports, headless/MCP tools                                |
-| noir           | `.nr` files, Nargo.toml, ZK circuits, Aztec contracts/security/e2e testing |
-| solidity-audit | `.sol` files, foundry.toml, auditing, security review                      |
-| ethskills      | Ethereum tooling, EIP/ERC standards, framework selection                   |
-| design-ux      | Component design, layout, tokens, accessibility, TUI aesthetics, DESIGN.md |
-| nix            | `.nix` files, flakes, NixOS, Home Manager, agent-skills packaging, rigup   |
-| native-code    | NIFs (C/Rust), SIMD (Zig), erl_nif.h, Rustler, BEAM native boundary        |
+| Skill | Source | Triggers on |
+|-------|--------|-------------|
+| claude-api | Vendored (Anthropic) | `anthropic` imports, SDK usage |
+| droo-stack | Custom | Elixir, TS, Go, Rust, Python, Lua, Shell, Noir, Chezmoi |
+| raxol | Custom | Raxol TUI/agent imports, headless/MCP tools |
+| noir | Custom | `.nr` files, Nargo.toml, ZK circuits, Aztec contracts/security/e2e testing |
+| solidity-audit | Custom | `.sol` files, foundry.toml, auditing, security review |
+| ethskills | Custom | Ethereum tooling, EIP/ERC standards, framework selection |
 
-Skills provide detailed incorrect/correct code examples. CLAUDE.md provides preferences and philosophy. To add a new skill: add to the [agent-skills](https://github.com/DROOdotFOO/agent-skills) repo, tag a new version, bump the version in `home/.chezmoiexternal.toml`.
-
-**Skills map** -- how skills relate:
-
-```
-                    droo-stack (code patterns)
-                   /    |    \        \        \
-             Elixir   TS/JS   Go/Rust   C/Zig  Py/Lua/Shell
-               |       |                 |
-            raxol    design-ux     native-code
-          (TUI)    (UI/UX)      (NIFs + SIMD)
-               \       /
-            terminal aesthetics
-
-              ethskills (ecosystem)
-             /         \
-    solidity-audit    noir (ZK)
-    (contracts)     (circuits)
-
-         nix (Nix ecosystem)
-        / |  \
-  flakes NixOS Home Manager
-              \
-        agent-skills packaging
-```
-
-Each skill has "See also" cross-references in its SKILL.md.
+Skills provide detailed incorrect/correct code examples. CLAUDE.md provides preferences and philosophy. To add a new skill: create `home/dot_agents/skills/<name>/SKILL.md`, run `chezmoi apply`.
 
 ## Code Style
 
