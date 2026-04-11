@@ -162,18 +162,75 @@ Managed via `~/.mcp.json` (chezmoi template: `home/dot_mcp.json.tmpl`). Toggle i
 
 ## Claude Code Skills
 
-Skills in `home/dot_agents/skills/` are deployed to `~/.agents/skills/` via chezmoi and symlinked to `~/.claude/skills/` by `run_onchange_after_sync-skills.sh.tmpl`.
+Skills are sourced from [DROOdotFOO/agent-skills](https://github.com/DROOdotFOO/agent-skills) and pulled via `home/.chezmoiexternal.toml` on `chezmoi apply`. Deployed to `~/.agents/skills/` and symlinked to `~/.claude/skills/` by `run_onchange_after_sync-skills.sh.tmpl`.
 
-| Skill | Source | Triggers on |
-|-------|--------|-------------|
-| claude-api | Vendored (Anthropic) | `anthropic` imports, SDK usage |
-| droo-stack | Custom | Elixir, TS, Go, Rust, Python, Lua, Shell, Noir, Chezmoi |
-| raxol | Custom | Raxol TUI/agent imports, headless/MCP tools |
-| noir | Custom | `.nr` files, Nargo.toml, ZK circuits, Aztec contracts/security/e2e testing |
-| solidity-audit | Custom | `.sol` files, foundry.toml, auditing, security review |
-| ethskills | Custom | Ethereum tooling, EIP/ERC standards, framework selection |
+**Code pattern skills** -- language-specific examples and idioms:
 
-Skills provide detailed incorrect/correct code examples. CLAUDE.md provides preferences and philosophy. To add a new skill: create `home/dot_agents/skills/<name>/SKILL.md`, run `chezmoi apply`.
+| Skill       | Triggers on                                                                |
+| ----------- | -------------------------------------------------------------------------- |
+| claude-api  | `anthropic` imports, SDK usage                                             |
+| droo-stack  | Elixir, TS, Go, Rust, C, Zig, Python, Lua, Shell, Noir, Chezmoi           |
+| raxol       | Raxol TUI/agent imports, headless/MCP tools                                |
+| design-ux   | Component design, layout, tokens, accessibility, TUI aesthetics, DESIGN.md |
+| nix         | `.nix` files, flakes, NixOS, Home Manager, agent-skills packaging, rigup   |
+| native-code | NIFs (C/Rust), SIMD (Zig), erl_nif.h, Rustler, BEAM native boundary       |
+
+**Web3 skills** -- blockchain development, auditing, and data:
+
+| Skill          | Triggers on                                                                |
+| -------------- | -------------------------------------------------------------------------- |
+| ethskills      | Ethereum tooling, EIP/ERC standards, framework selection                   |
+| solidity-audit | `.sol` files, foundry.toml, auditing, security review                      |
+| noir           | `.nr` files, Nargo.toml, ZK circuits, Aztec contracts/security/e2e testing |
+| blockscout     | On-chain data queries, contract state, token balances, ENS, NFT holdings   |
+| coingecko      | Token prices, market caps, DEX pools, trending tokens, price history       |
+
+**MCP-companion skills** -- reference docs for MCP agent tools:
+
+| Skill        | Triggers on                                                   |
+| ------------ | ------------------------------------------------------------- |
+| autoresearch | Experiment status, "run another iteration", `/autoresearch`   |
+| patchbot     | Outdated dependencies, "update deps", `/patchbot`             |
+| prepper      | Project briefings, "catch me up", "prep me", `/prepper`       |
+| sentinel     | Contract monitoring, on-chain alerts, suspicious transactions |
+| watchdog     | Repo health, stale PRs, CI status, security advisories        |
+
+**Workflow skills** (40 total) -- architect, code-review, tdd, focused-fix, adversarial-reviewer, prd-to-plan, prd-to-issues, release, and more. Each has a SKILL.md with trigger conditions.
+
+Skills provide detailed incorrect/correct code examples. CLAUDE.md provides preferences and philosophy. To add a new skill: add to the [agent-skills](https://github.com/DROOdotFOO/agent-skills) repo, push to `main`, then `chezmoi apply --refresh-externals`.
+
+**Skills map** -- how skills relate:
+
+```
+                    droo-stack (code patterns)
+                   /    |    \        \        \
+             Elixir   TS/JS   Go/Rust   C/Zig  Py/Lua/Shell
+               |       |                 |
+            raxol    design-ux     native-code
+          (TUI)    (UI/UX)      (NIFs + SIMD)
+               \       /
+            terminal aesthetics
+
+              ethskills (ecosystem)
+             /    |    \
+    solidity    noir    blockscout -- coingecko
+    -audit     (ZK)    (on-chain)    (markets)
+  (contracts)           |
+                     sentinel (monitor)
+
+         nix (Nix ecosystem)
+        / |  \
+  flakes NixOS Home Manager
+              \
+        agent-skills packaging
+
+    MCP companions (agent tools)
+    /    |    \       \        \
+ auto  patch  prepper sentinel watchdog
+ research bot (brief) (chain)  (repo)
+```
+
+Each skill has "See also" cross-references in its SKILL.md.
 
 ## Code Style
 

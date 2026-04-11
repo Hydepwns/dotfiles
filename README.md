@@ -33,7 +33,7 @@ brew install chezmoi && chezmoi init --apply https://github.com/Hydepwns/dotfile
 | **System**    | btop, fastfetch, tldr (`help`)                                     |
 | **Windows**   | Hammerspoon + PaperWM (macOS)                                      |
 | **Launcher**  | Raycast (macOS)                                                    |
-| **AI**        | Claude Code (custom skills, MCP servers), takopi (Telegram bridge) |
+| **AI**        | Claude Code (47 skills, MCP companions, MCP servers), takopi       |
 | **Secrets**   | 1Password (SSH agent + age encryption), AWS CLI, Infisical         |
 | **Network**   | Tailscale with pre-configured hosts                                |
 | **Languages** | Elixir, Rust, Go, Python, Node.js, Lua (via mise)                  |

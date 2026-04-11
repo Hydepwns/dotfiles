@@ -1,6 +1,6 @@
 [".agents/skills"]
     type = "archive"
-    url = "https://github.com/DROOdotFOO/agent-skills/archive/v1.0.0.tar.gz"
+    url = "https://github.com/DROOdotFOO/agent-skills/archive/main.tar.gz"
     stripComponents = 2
     include = ["*/skills/**"]
-    refreshPeriod = "0"
+    refreshPeriod = "168h"
