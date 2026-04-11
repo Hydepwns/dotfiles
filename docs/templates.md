@@ -2,15 +2,15 @@
 
 ## Available Templates
 
-| Template | Description | Features |
-|----------|-------------|----------|
-| [web3](https://github.com/DROOdotFOO/dotfiles/tree/main/scripts/templates) | Full-stack blockchain | Foundry, Hardhat, Web3.js, Ethers.js |
-| [nextjs](https://nextjs.org/) | Modern React apps | TypeScript, Tailwind, ESLint, Prettier |
-| [rust](https://www.rust-lang.org/) | CLI tools & services | Cargo, Clippy, Testing, Documentation |
-| [elixir](https://elixir-lang.org/) | Phoenix web apps | Mix, ExUnit, Dialyzer, Documentation |
-| [node](https://nodejs.org/) | Node.js APIs | Express, Jest, ESLint, TypeScript |
-| [python](https://www.python.org/) | Python applications | Poetry, Pytest, Black, MyPy |
-| [go](https://golang.org/) | Go services | Modules, Testing, Linting, Documentation |
+| Template                                                                   | Description           | Features                                 |
+| -------------------------------------------------------------------------- | --------------------- | ---------------------------------------- |
+| [web3](https://github.com/DROOdotFOO/dotfiles/tree/main/scripts/templates) | Full-stack blockchain | Foundry, Hardhat, Web3.js, Ethers.js     |
+| [nextjs](https://nextjs.org/)                                              | Modern React apps     | TypeScript, Tailwind, ESLint, Prettier   |
+| [rust](https://www.rust-lang.org/)                                         | CLI tools & services  | Cargo, Clippy, Testing, Documentation    |
+| [elixir](https://elixir-lang.org/)                                         | Phoenix web apps      | Mix, ExUnit, Dialyzer, Documentation     |
+| [node](https://nodejs.org/)                                                | Node.js APIs          | Express, Jest, ESLint, TypeScript        |
+| [python](https://www.python.org/)                                          | Python applications   | Poetry, Pytest, Black, MyPy              |
+| [go](https://golang.org/)                                                  | Go services           | Modules, Testing, Linting, Documentation |
 
 ## Usage
 

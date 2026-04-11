@@ -7,9 +7,7 @@
     "globals": ["vim"]
   },
   "workspace": {
-    "library": [
-      "${3rd}/luv/library"
-    ],
+    "library": ["${3rd}/luv/library"],
     "checkThirdParty": false
   },
   "telemetry": {

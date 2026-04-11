@@ -143,19 +143,20 @@ Local skills (`ethskills/`, `solidity-audit/`, `noir/`) provide offline Ethereum
 
 Managed via `~/.mcp.json` (chezmoi template: `home/dot_mcp.json.tmpl`). Toggle in `chezmoi.toml`, then `chezmoi apply`.
 
-| Server     | Flag      | Transport | Notes                              |
-| ---------- | --------- | --------- | ---------------------------------- |
-| context7   | always on | stdio     | Library docs via npx               |
-| blockscout | always on | http      | Blockchain data queries            |
-| datadog    | `datadog` | http/OAuth| us5.datadoghq.com, no secrets      |
-| sentry     | `sentry`  | http/OAuth| mcp.sentry.dev, no secrets         |
-| signoz     | `signoz`  | stdio     | API key from 1Password at runtime  |
+| Server     | Flag      | Transport  | Notes                             |
+| ---------- | --------- | ---------- | --------------------------------- |
+| context7   | always on | stdio      | Library docs via npx              |
+| blockscout | always on | http       | Blockchain data queries           |
+| datadog    | `datadog` | http/OAuth | us5.datadoghq.com, no secrets     |
+| sentry     | `sentry`  | http/OAuth | mcp.sentry.dev, no secrets        |
+| signoz     | `signoz`  | stdio      | API key from 1Password at runtime |
 
 **Datadog:** Enable `datadog = true` in chezmoi.toml, `chezmoi apply`. OAuth via browser.
 
 **Sentry:** Enable `sentry = true` in chezmoi.toml, `chezmoi apply`. OAuth via browser.
 
 **SigNoz setup:**
+
 1. `make setup-signoz-mcp` (builds from source, requires Go)
 2. Store API key: `op item create --vault Employee --category login --title "SigNoz API Key" credential=<key>`
 3. Set `signoz = true` in chezmoi.toml, `chezmoi apply`
@@ -169,11 +170,11 @@ Skills are sourced from [DROOdotFOO/agent-skills](https://github.com/DROOdotFOO/
 | Skill       | Triggers on                                                                |
 | ----------- | -------------------------------------------------------------------------- |
 | claude-api  | `anthropic` imports, SDK usage                                             |
-| droo-stack  | Elixir, TS, Go, Rust, C, Zig, Python, Lua, Shell, Noir, Chezmoi           |
+| droo-stack  | Elixir, TS, Go, Rust, C, Zig, Python, Lua, Shell, Noir, Chezmoi            |
 | raxol       | Raxol TUI/agent imports, headless/MCP tools                                |
 | design-ux   | Component design, layout, tokens, accessibility, TUI aesthetics, DESIGN.md |
 | nix         | `.nix` files, flakes, NixOS, Home Manager, agent-skills packaging, rigup   |
-| native-code | NIFs (C/Rust), SIMD (Zig), erl_nif.h, Rustler, BEAM native boundary       |
+| native-code | NIFs (C/Rust), SIMD (Zig), erl_nif.h, Rustler, BEAM native boundary        |
 
 **Web3 skills** -- blockchain development, auditing, and data:
 
