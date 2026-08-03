@@ -117,9 +117,9 @@ Superpowers skills (if installed):
 - `/superpowers:brainstorm` - Refines ideas through questioning before implementation
 - `/superpowers:systematic-debugging` - Structured 4-phase root cause analysis
 
-## Claude Code Skills
+## Agent Skills
 
-Skills sourced from [DROOdotFOO/agent-skills](https://github.com/DROOdotFOO/agent-skills), installed to `~/.agents/skills/` and auto-loaded:
+Skills sourced from [DROOdotFOO/agent-skills](https://github.com/DROOdotFOO/agent-skills), installed to `~/.agents/skills/`. The **Raxol agent** is the primary host (`Raxol.Agent.Skills.Store` loads them as procedural memory, reached via the `skills_list`/`skill_view`/`skill_manage` tools); **Claude Code** is the secondary host (symlinked into `~/.claude/skills/`, auto-loaded when a skill's trigger matches):
 - `claude-api` -- Anthropic SDK reference (Python, TS, Go, Elixir, Rust, Lua, cURL)
 - `droo-stack` -- Polyglot patterns (Elixir, TS, Go, Rust, Python, Lua, Shell, Noir, Chezmoi)
 - `noir` -- ZK circuit design, Aztec contracts, constraint optimization, nargo testing

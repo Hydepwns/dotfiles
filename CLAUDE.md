@@ -174,9 +174,18 @@ Agent MCP servers (coingecko through patchbot) all share the same `<binary> serv
 
 **Sentry:** Enable `sentry = true` in chezmoi.toml, `chezmoi apply`. OAuth via browser.
 
-## Claude Code Skills
+## Agent Skills
 
-Skills are sourced from [DROOdotFOO/agent-skills](https://github.com/DROOdotFOO/agent-skills) and pulled via `home/.chezmoiexternal.toml` on `chezmoi apply` (refresh window 168h; force with `--refresh-externals`). Deployed to `~/.agents/skills/` and symlinked to `~/.claude/skills/` by `run_after_sync-skills.sh.tmpl`.
+Skills are portable `SKILL.md` files sourced from [DROOdotFOO/agent-skills](https://github.com/DROOdotFOO/agent-skills), pulled via `home/.chezmoiexternal.toml` on `chezmoi apply` (refresh window 168h; force with `--refresh-externals`) to `~/.agents/skills/`. Two hosts load the same files:
+
+- **Raxol agent (primary host).** `Raxol.Agent.Skills.Store` scans `~/.agents/skills/` and `~/.agents/skills-extra/` for `**/SKILL.md` and holds them as read-only procedural memory, reached by the agent via the `skills_list` / `skill_view` / `skill_manage` tools. Enabled by `config :raxol_agent, skills_provider: Raxol.Agent.Skills.Store` in the raxol repo (`packages/raxol_agent/config/config.exs`); external dirs are set alongside it.
+- **Claude Code (secondary host).** `run_after_sync-skills.sh.tmpl` symlinks `~/.agents/skills/*` and `~/.agents/skills-extra/*` into `~/.claude/skills/*`, where Claude Code auto-injects a skill when its trigger clause matches the conversation.
+
+**Skills roots:**
+
+- `~/.agents/skills/` -- the agent-skills collection (chezmoi external, read-only). To add/port a skill, add it under `skills/` in the [agent-skills](https://github.com/DROOdotFOO/agent-skills) repo, push to `main`, then `chezmoi apply --refresh-externals`.
+- `~/.agents/skills-extra/` -- chezmoi-vendored third-party skills the external does not manage (source: `home/dot_agents/skills-extra/`).
+- `~/.raxol/skills/` -- writable managed root for **agent-authored** skills only (the raxol curation loop writes here). Runtime state, left unmanaged by chezmoi. Human and vendored skills come from the chezmoi-managed externals above, never here.
 
 **Code pattern skills** -- language-specific examples and idioms:
 
