@@ -185,7 +185,7 @@ Skills are sourced from [DROOdotFOO/agent-skills](https://github.com/DROOdotFOO/
 | claude-api  | `anthropic` imports, SDK usage                                             |
 | droo-stack  | Elixir, TS, Go, Rust, C, Zig, Python, Lua, Shell, Noir, Chezmoi            |
 | raxol       | Raxol TUI/agent imports, headless/MCP tools                                |
-| raxol-payments | :raxol_payments/:raxol_acp, Xochi/Riddler, agent wallets, ACP jobs      |
+| raxol-payments | :raxol_payments/:raxol_earn, Xochi/Riddler, agent wallets, ACP jobs      |
 | raxol-symphony | :raxol_symphony, tracker-driven coding-agent orchestration             |
 | design-ux   | Component design, layout, tokens, accessibility, TUI aesthetics, DESIGN.md |
 | nix         | `.nix` files, flakes, NixOS, Home Manager, agent-skills packaging, rigup   |
