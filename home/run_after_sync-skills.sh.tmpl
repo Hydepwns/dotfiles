@@ -19,11 +19,18 @@ done
 
 mkdir -p "$CLAUDE_SKILLS_DIR"
 
-# True if a skill name exists in any source root.
+# A dir is a skill only if it holds a SKILL.md. Upstream skills/ also carries
+# non-skill dirs (support packages, hooks, a submodule placeholder) that must not
+# reach Claude Code; both hosts key off SKILL.md, so this is the selection point.
+is_skill_dir() {
+    [[ -f "$1/SKILL.md" ]]
+}
+
+# True if a name resolves to a real skill (SKILL.md present) in any source root.
 skill_exists() {
     local name="$1" root
     for root in "${SKILL_ROOTS[@]}"; do
-        [[ -d "$root/$name" ]] && return 0
+        is_skill_dir "$root/$name" && return 0
     done
     return 1
 }
@@ -31,7 +38,8 @@ skill_exists() {
 # Remove broken symlinks
 find "$CLAUDE_SKILLS_DIR" -maxdepth 1 -type l ! -exec test -e {} \; -delete 2>/dev/null || true
 
-# Remove stale symlinks (skill no longer exists in any source root)
+# Remove stale symlinks (name no longer resolves to a real skill in any root --
+# covers deleted skills and dirs that are no longer skills, e.g. lost SKILL.md)
 for link in "$CLAUDE_SKILLS_DIR"/*/; do
     [[ -L "${link%/}" ]] || continue
     link_name="$(basename "$link")"
@@ -47,6 +55,7 @@ for root in "${SKILL_ROOTS[@]}"; do
     rel="../../.agents/$(basename "$root")"
     for skill_dir in "$root"/*/; do
         [[ -d "$skill_dir" ]] || continue
+        is_skill_dir "${skill_dir%/}" || continue
         skill_name="$(basename "$skill_dir")"
         link_path="$CLAUDE_SKILLS_DIR/$skill_name"
         [[ -L "$link_path" ]] && continue
