@@ -4,3 +4,6 @@
     stripComponents = 2
     include = ["*/skills/**"]
     refreshPeriod = "168h"
+    # NOTE: this mirrors upstream skills/ verbatim, which includes non-skill dirs
+    # (support packages, hooks, a submodule placeholder). run_after_sync-skills.sh
+    # is the filter -- it only links dirs that contain a SKILL.md into Claude Code.
