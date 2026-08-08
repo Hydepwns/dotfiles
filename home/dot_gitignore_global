@@ -42,3 +42,6 @@ Temporary Items
 node_modules/
 __pycache__/
 .npm
+
+# Claude Code's machine-local layer: MCP toggles and per-machine overrides
+**/.claude/settings.local.json

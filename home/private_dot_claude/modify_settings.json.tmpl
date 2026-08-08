@@ -1,3 +1,24 @@
+#!/bin/sh
+# chezmoi `modify_` script -> ~/.claude/settings.json
+#
+# Claude Code writes its own keys into this file at runtime -- `model` and
+# `effortLevel` today, whatever `/config` gains tomorrow. A plain managed file
+# strips them on every `chezmoi apply`, which is why this file kept coming back
+# as `MM` in `chezmoi status`.
+#
+# A modify_ script receives the CURRENT target on stdin and its stdout becomes
+# the new target, so the managed block below is merged *over* whatever is
+# already there. jq's `*` merges objects recursively and lets the right-hand
+# side win, so managed keys are authoritative and unmanaged keys survive.
+#
+# Trade-off: deleting a key here no longer deletes it from the target, because
+# the merge only ever adds. Remove such keys from ~/.claude/settings.json by
+# hand (or via `/config`).
+
+set -eu
+
+managed=$(
+    cat <<'MANAGED_SETTINGS'
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 365,
@@ -58,3 +79,24 @@
   "alwaysThinkingEnabled": true,
   "autoUpdatesChannel": "stable"
 }
+MANAGED_SETTINGS
+)
+
+# Always drain stdin, even on the fallback paths, so chezmoi never sees EPIPE.
+current=$(cat)
+
+# Without jq there is no safe merge. Emitting the managed block loses the two
+# runtime keys, which Claude Code rewrites on next launch; emitting nothing
+# would truncate the file, so prefer the former.
+if ! command -v jq >/dev/null 2>&1; then
+    printf '%s\n' "$managed"
+    exit 0
+fi
+
+# Fresh machine, or a file that is empty or not valid JSON: start from managed.
+if [ -z "$current" ] || ! printf '%s' "$current" | jq -e . >/dev/null 2>&1; then
+    printf '%s\n' "$managed"
+    exit 0
+fi
+
+printf '%s' "$current" | jq --argjson managed "$managed" '. * $managed'
