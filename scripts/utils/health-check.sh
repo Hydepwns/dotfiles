@@ -71,6 +71,19 @@ print_section "Development"
 check_cmd mise warn
 check_cmd direnv warn
 check_cmd nvim warn
+check_cmd emacs warn
+
+# Emacs prefers ~/.emacs.d whenever it exists, without ever checking for an
+# init.el, so a stray directory there silently disables the XDG config.
+if command -v emacs &>/dev/null; then
+    if [[ -d "$HOME/.emacs.d" ]]; then
+        fail "Emacs ~/.emacs.d shadows ~/.config/emacs (remove it)"
+    elif [[ -f "$HOME/.config/emacs/init.el" ]]; then
+        ok "Emacs config active (~/.config/emacs)"
+    else
+        warn "Emacs installed but config missing (run: make setup-emacs)"
+    fi
+fi
 
 if command -v node &>/dev/null; then
     ok "node $(node --version 2>/dev/null || true)"

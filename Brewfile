@@ -9,6 +9,7 @@
 
 tap "hashicorp/tap"
 # homebrew/services is now built-in, no tap needed
+tap "d12frosted/emacs-plus"
 tap "infisical/get-cli"
 tap "kurtosis-tech/tap"
 
@@ -109,6 +110,10 @@ brew "osv-scanner"             # Dependency CVE scanning
 # =============================================================================
 
 brew "neovim"
+# emacs-plus over core emacs: native-comp, tree-sitter, and a real macOS GUI,
+# all on by default in this formula -- do not pass args, they disable bottles.
+# Config lives at ~/.config/emacs (see: make setup-emacs).
+brew "d12frosted/emacs-plus/emacs-plus@30"
 brew "autoconf"
 brew "automake"
 brew "libtool"

@@ -1,4 +1,4 @@
-.PHONY: help install update diff status backup clean doctor bootstrap sync sync-from-remote backup-full install-optional generate-template setup-age age-retrieve age-status setup-mise mise-status mise-upgrade mise-doctor setup-raycast raycast-export raycast-import raycast-status setup-signoz-mcp signoz-mcp-status signoz-mcp-update lint perf perf-report skills-status
+.PHONY: help install update diff status backup clean doctor bootstrap sync sync-from-remote backup-full install-optional generate-template setup-age age-retrieve age-status setup-mise mise-status mise-upgrade mise-doctor setup-raycast raycast-export raycast-import raycast-status setup-emacs emacs-grammars emacs-restart emacs-status setup-signoz-mcp signoz-mcp-status signoz-mcp-update lint perf perf-report skills-status
 
 # Configuration
 DOTFILES_ROOT := $(shell pwd)
@@ -164,6 +164,19 @@ setup-paperwm: ## Install PaperWM.spoon for Hammerspoon
 
 paperwm-status: ## Show PaperWM installation status
 	@$(SCRIPTS_DIR)/setup/setup-paperwm.sh status
+
+# Emacs
+setup-emacs: ## Install Emacs config, packages, and grammars
+	@$(SCRIPTS_DIR)/setup/setup-emacs.sh install
+
+emacs-grammars: ## Compile missing tree-sitter grammars
+	@$(SCRIPTS_DIR)/setup/setup-emacs.sh grammars
+
+emacs-restart: ## Restart the Emacs daemon
+	@$(SCRIPTS_DIR)/setup/setup-emacs.sh restart
+
+emacs-status: ## Show Emacs installation status
+	@$(SCRIPTS_DIR)/setup/setup-emacs.sh status
 
 # Raycast
 setup-raycast: ## Verify Raycast installation

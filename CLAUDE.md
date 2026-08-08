@@ -42,13 +42,14 @@ make lazy-load-stats      # Show lazy loading stats
 ```
 # Identity: name, email, github, gpg_signing_key, age_recipient, brewPrefix
 # Shell:    starship, ohmyzsh, oh_my_zsh_theme, oh_my_zsh_plugins
-# Tools:    mise, rust, elixir, erlang, lua, direnv, devenv, nix
+# Tools:    mise, rust, elixir, erlang, lua, direnv, devenv, nix, emacs
 # Services: tailscale, onepassword, aws, infisical, orbstack
 # macOS:    paperwm, raycast, llvm, postgres, psql
 # Web3:     foundry, huff, solana
 # Apps:     work, personal
 # MCP:      datadog, sentry, signoz, regen, coingecko, digest, recall, autoresearch, watchdog, prepper, sentinel, patchbot
 # Theme:    [data.theme] -- full Synthwave84 palette (bg, fg, accent, ANSI colors)
+#           [data.theme.soft] -- Synthwave84 Soft variant + syntax roles (Zed/Emacs)
 ```
 
 Use in templates: `{{- if .rust -}}...{{- end -}}`. Use `{{- -}}` to trim whitespace.
@@ -107,6 +108,10 @@ Commits run: trailing-whitespace, end-of-file-fixer, check-yaml, check-added-lar
 ## Theming
 
 Single source of truth: `[data.theme]` in `chezmoi.toml` (Synthwave84 palette). Templates reference colors as `{{ .theme.bg }}`, `{{ .theme.accent }}`, etc. Applied to: fzf (`tools.zsh.tmpl`), Starship (`starship.toml.tmpl`), Hammerspoon alerts. Static theme files in `config/theme/synthwave84.toml` for tools that can't use chezmoi templates.
+
+**Two variants.** `[data.theme]` is the base palette (Ghostty, tmux, fzf, Starship, btop, yazi). `[data.theme.soft]` is the lower-contrast **Synthwave84 Soft** variant that Zed uses, and it is the only block carrying syntax roles (`keyword`, `string`, `function`, `type`, ...) plus diagnostic and git colors. Emacs consumes `{{ .theme.soft.* }}` for UI and syntax, but reuses the base `{{ .theme.* }}` ANSI keys for terminal faces -- Zed's Soft variant leaves `terminal.ansi.*` at base values, so shell buffers match Ghostty exactly.
+
+Authoritative source for both is the shipped Zed theme JSON (`~/Library/Application Support/Zed/extensions/installed/synthwave84/themes/synthwave84.json`), not `config/theme/synthwave84.toml`, which had drifted on `keyword` and `type`.
 
 ## Adding Features
 
