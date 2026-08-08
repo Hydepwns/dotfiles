@@ -199,6 +199,8 @@ dotfiles/
 
 Everything runs Synthwave84. The palette lives in `config/theme/synthwave84.toml` and gets templated into Ghostty, tmux, fzf, Neovim (mona.nvim), btop, yazi, fastfetch, Starship, and Hammerspoon.
 
+Zed and Emacs run the lower-contrast **Synthwave84 Soft** variant, driven from `[data.theme.soft]` in `chezmoi.toml`. Emacs keeps the base ANSI palette for terminal buffers, so shells inside Emacs still match Ghostty.
+
 ## Forking
 
 This is meant to be forked. On first `chezmoi init`, you get prompted for your name, email, and GitHub username. Everything adapts from there -- git config, SSH, encrypted secrets, the works.

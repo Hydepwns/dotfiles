@@ -32,12 +32,12 @@ comment = "#848bbd"
 line_highlight = "#2a2139"
 
 # Syntax colors
-keyword = "#ff7edb"         # Pink - keywords, operators
+keyword = "#fede5d"         # Yellow - keywords, operators
 string = "#ff8b39"          # Orange - strings
 number = "#f97e72"          # Coral - numbers
 function = "#36f9f6"        # Cyan - functions
 variable = "#ff7edb"        # Pink - variables
-type = "#72f1b8"            # Green - types
+type = "#ff7edb"            # Pink - types
 constant = "#f97e72"        # Coral - constants
 parameter = "#fe4450"       # Red - parameters
 

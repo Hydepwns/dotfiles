@@ -18,6 +18,7 @@ personal = true
 rust = true
 ohmyzsh = true
 mise = true
+emacs = true
 elixir = true
 erlang = true
 lua = true
@@ -79,6 +80,51 @@ bright_blue = "#03edf9"
 bright_magenta = "#ff7edb"
 bright_cyan = "#36f9f6"
 bright_white = "#ffffff"
+
+# Synthwave84 Soft -- the variant Zed uses ("Synthwave84 Soft" in zed/settings.json).
+# Lower contrast than the base palette above, and it carries the syntax roles the base
+# block lacks. Consumed by the Emacs theme. Source of truth is the shipped Zed theme:
+# ~/Library/Application Support/Zed/extensions/installed/synthwave84/themes/synthwave84.json
+# ANSI/terminal colors are deliberately absent -- Zed's Soft variant reuses the base ANSI
+# palette above, so terminal faces stay identical to Ghostty.
+[data.theme.soft]
+name = "Synthwave84 Soft"
+bg = "#2e2a3e"
+bg_dark = "#2a2139"
+bg_light = "#332e42"
+fg = "#f0f0f0"
+# Flattened from Zed's alpha colors over bg: #f0f0f080 and #f0f0f073 respectively.
+fg_dim = "#8f8d97"
+fg_subtle = "#85838e"
+accent = "#ff92e0"
+accent2 = "#5af5f3"
+cursor = "#ff92e0"
+selection_bg = "#4e4570"
+selection_fg = "#f0f0f0"
+border = "#5a5f8d"
+border_focus = "#9933aa"
+comment = "#848bbd"
+keyword = "#fee380"
+string = "#ffa15a"
+string_escape = "#85f3c3"
+number = "#fa9890"
+constant = "#fa9890"
+function = "#5af5f3"
+variable = "#ff92e0"
+type = "#ff92e0"
+property = "#ff92e0"
+operator = "#fee380"
+punctuation = "#f0f0f0"
+preproc = "#ff92e0"
+link = "#85f3c3"
+error = "#fe6670"
+warning = "#fee380"
+info = "#33f0fc"
+success = "#85f3c3"
+hint = "#33f0fc"
+git_added = "#85f3c3"
+git_modified = "#fee380"
+git_deleted = "#fe6670"
 
 [age]
     command = "~/.config/chezmoi/age-op-decrypt.sh"

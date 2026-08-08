@@ -104,6 +104,12 @@ alias ......="cd ../../../.."
 alias v="nvim"
 alias nv="nvim"
 
+# Emacs via the daemon (brew services runs it). The -a fallback starts a
+# standalone Emacs if the daemon is down, so these never fail outright.
+alias e="emacsclient -nw -a emacs"      # terminal frame in this shell
+alias eg="emacsclient -c -n -a emacs"   # new GUI frame, returns immediately
+alias ekill="emacsclient -e '(kill-emacs)'"
+
 # Network utilities
 alias myip="curl -s https://ipinfo.io/ip"
 alias speedtest="curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -"
