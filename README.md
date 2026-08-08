@@ -23,21 +23,21 @@ brew install chezmoi && chezmoi init --apply https://github.com/DROOdotFOO/dotfi
 
 ## What's In Here
 
-| Category      | Tools                                                        |
-| ------------- | ------------------------------------------------------------ |
-| **Terminal**  | Ghostty, tmux                                                |
-| **Editors**   | Zed, Neovim (27 plugins, mona.nvim)                          |
-| **Shell**     | Zsh + Starship + fzf + zoxide                                |
-| **CLI**       | eza, bat, fd, ripgrep, delta, jq, yq                         |
-| **Files**     | yazi with image/PDF/archive preview                          |
-| **System**    | btop, fastfetch, tldr (`help`)                               |
-| **Windows**   | Hammerspoon + PaperWM (macOS)                                |
-| **Launcher**  | Raycast (macOS)                                              |
-| **AI**        | Claude Code (54 skills, 8 agents, 31 MCP tools)             |
-| **Secrets**   | 1Password (SSH agent + age encryption), AWS CLI, Infisical   |
-| **Network**   | Tailscale with pre-configured hosts                          |
-| **Languages** | Elixir, Rust, Go, Python, Node.js, Lua (via mise)            |
-| **Fonts**     | Monaspace + Nerd Font                                        |
+| Category      | Tools                                                           |
+| ------------- | --------------------------------------------------------------- |
+| **Terminal**  | Ghostty, tmux                                                   |
+| **Editors**   | Zed, Neovim (27 plugins, mona.nvim), Emacs 30 (eglot + treesit) |
+| **Shell**     | Zsh + Starship + fzf + zoxide                                   |
+| **CLI**       | eza, bat, fd, ripgrep, delta, jq, yq                            |
+| **Files**     | yazi with image/PDF/archive preview                             |
+| **System**    | btop, fastfetch, tldr (`help`)                                  |
+| **Windows**   | Hammerspoon + PaperWM (macOS)                                   |
+| **Launcher**  | Raycast (macOS)                                                 |
+| **AI**        | Claude Code (54 skills, 8 agents, 31 MCP tools)                 |
+| **Secrets**   | 1Password (SSH agent + age encryption), AWS CLI, Infisical      |
+| **Network**   | Tailscale with pre-configured hosts                             |
+| **Languages** | Elixir, Rust, Go, Python, Node.js, Lua (via mise)               |
+| **Fonts**     | Monaspace + Nerd Font                                           |
 
 ## Terminal Tools
 
@@ -101,6 +101,20 @@ PaperWM tiling -- enable with `paperwm = true` in chezmoi.toml, then `make setup
 | `s`          | Flash jump             |
 | `gd`         | Go to definition       |
 
+### Emacs
+
+Runs as a daemon under `brew services`. `e` opens a terminal frame, `eg` a GUI frame.
+
+| Key       | Action                       |
+| --------- | ---------------------------- |
+| `C-s`     | Search buffer (consult-line) |
+| `C-x b`   | Switch buffer                |
+| `C-x g`   | Magit status                 |
+| `C-x p f` | Find file in project         |
+| `C-.`     | Context actions (embark)     |
+| `C-c l r` | LSP rename (eglot)           |
+| `M-n`     | Next diagnostic              |
+
 ## Commands
 
 ```bash
@@ -112,7 +126,7 @@ chezmoi apply         # Apply local changes
 # Tools
 make brew-install     # Install Brewfile packages
 make lint             # Shellcheck everything
-make doctor           # 32-point health check
+make doctor           # Health check (tools, config, security)
 make setup-secrets    # 1Password, AWS, Infisical, Tailscale
 make setup-paperwm    # PaperWM.spoon for Hammerspoon
 make dashboard        # Service status overview
@@ -173,6 +187,7 @@ dotfiles/
 │   │   ├── ghostty/                    # Terminal
 │   │   ├── zed/                        # Editor
 │   │   ├── nvim/                       # Neovim (27 plugins)
+│   │   ├── emacs/                      # Emacs 30 (XDG; theme is templated)
 │   │   ├── btop/                       # System monitor
 │   │   ├── yazi/                       # File manager
 │   │   ├── fastfetch/                  # System info
