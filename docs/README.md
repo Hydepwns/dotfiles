@@ -41,7 +41,9 @@ dvs                   # devenv shell
 ```bash
 docs/
 ├── README.md              # This file
-├── advanced-usage.md      # Advanced configuration
+├── nixos-installation.md  # NixOS setup
+├── nvim-plugins.md        # Neovim plugin reference
+├── performance.md         # Shell startup profiling
 └── templates.md           # Project templates
 ```
 
@@ -51,4 +53,4 @@ docs/
 - [direnv Documentation](https://direnv.net/)
 - [devenv Documentation](https://devenv.sh/)
 - [Zsh Documentation](https://zsh.sourceforge.io/Doc/)
-- [Kitty Terminal](https://sw.kovidgoyal.net/kitty/)
+- [Ghostty Terminal](https://ghostty.org/docs)
