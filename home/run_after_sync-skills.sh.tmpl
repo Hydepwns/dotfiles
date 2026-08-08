@@ -7,7 +7,12 @@
 
 set -euo pipefail
 
-SKILL_ROOTS=("$HOME/.agents/skills" "$HOME/.agents/skills-extra")
+# skills-extra first: it is chezmoi-managed, whereas skills/ is an unpacked
+# archive that chezmoi never prunes, so it can retain a stale copy of a skill
+# that has since moved to skills-extra. Raxol resolves the same clash the same
+# way (its Skills.Store scans skills_external_dirs in order and later inserts
+# overwrite earlier ones, so its last entry wins), and both hosts must agree.
+SKILL_ROOTS=("$HOME/.agents/skills-extra" "$HOME/.agents/skills")
 CLAUDE_SKILLS_DIR="$HOME/.claude/skills"
 
 # Nothing to do until at least one source root exists.
@@ -49,7 +54,7 @@ for link in "$CLAUDE_SKILLS_DIR"/*/; do
     fi
 done
 
-# Create symlinks for each skill; earlier roots win on name clash (skills/ over skills-extra/).
+# Create symlinks for each skill; earlier roots win on name clash (skills-extra/ over skills/).
 for root in "${SKILL_ROOTS[@]}"; do
     [[ -d "$root" ]] || continue
     rel="../../.agents/$(basename "$root")"

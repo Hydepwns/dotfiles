@@ -4,6 +4,11 @@
     stripComponents = 2
     include = ["*/skills/**"]
     refreshPeriod = "168h"
-    # NOTE: this mirrors upstream skills/ verbatim, which includes non-skill dirs
-    # (support packages, hooks, a submodule placeholder). run_after_sync-skills.sh
-    # is the filter -- it only links dirs that contain a SKILL.md into Claude Code.
+    # NOTE: `include` correctly limits extraction to upstream skills/, but chezmoi
+    # never PRUNES an archive external -- entries written by an earlier refresh
+    # survive after they disappear upstream. Earlier layouts had more top-level
+    # dirs, and with stripComponents = 2 their children landed here (agents/scribe
+    # -> scribe, .github/workflows -> workflows, benchmarks/suites -> suites, ...).
+    # Those leftovers are inert: run_after_sync-skills.sh only links dirs holding a
+    # SKILL.md. If this directory accumulates non-skill entries again, delete them
+    # by hand -- a refresh will not.
