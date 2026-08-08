@@ -26,14 +26,14 @@ brew install chezmoi && chezmoi init --apply https://github.com/DROOdotFOO/dotfi
 | Category      | Tools                                                           |
 | ------------- | --------------------------------------------------------------- |
 | **Terminal**  | Ghostty, tmux                                                   |
-| **Editors**   | Zed, Neovim (27 plugins, mona.nvim), Emacs 30 (eglot + treesit) |
+| **Editors**   | Zed, Neovim (30 plugins, mona.nvim), Emacs 30 (eglot + treesit) |
 | **Shell**     | Zsh + Starship + fzf + zoxide                                   |
 | **CLI**       | eza, bat, fd, ripgrep, delta, jq, yq                            |
 | **Files**     | yazi with image/PDF/archive preview                             |
 | **System**    | btop, fastfetch, tldr (`help`)                                  |
 | **Windows**   | Hammerspoon + PaperWM (macOS)                                   |
 | **Launcher**  | Raycast (macOS)                                                 |
-| **AI**        | Claude Code (54 skills, 8 agents, 31 MCP tools)                 |
+| **AI**        | Claude Code (60 skills, 14 MCP servers)                         |
 | **Secrets**   | 1Password (SSH agent + age encryption), AWS CLI, Infisical      |
 | **Network**   | Tailscale with pre-configured hosts                             |
 | **Languages** | Elixir, Rust, Go, Python, Node.js, Lua (via mise)               |
@@ -186,7 +186,7 @@ dotfiles/
 │   ├── private_dot_config/
 │   │   ├── ghostty/                    # Terminal
 │   │   ├── zed/                        # Editor
-│   │   ├── nvim/                       # Neovim (27 plugins)
+│   │   ├── nvim/                       # Neovim (30 plugins)
 │   │   ├── emacs/                      # Emacs 30 (XDG; theme is templated)
 │   │   ├── btop/                       # System monitor
 │   │   ├── yazi/                       # File manager
