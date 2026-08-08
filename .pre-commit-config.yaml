@@ -27,4 +27,6 @@ repos:
     rev: v3.1.0
     hooks:
       - id: prettier
-        types: [json, yaml, markdown]
+        # types_or, not types: pre-commit ANDs `types`, so a single file could
+        # never be json AND yaml AND markdown, and the hook matched nothing.
+        types_or: [json, yaml, markdown]

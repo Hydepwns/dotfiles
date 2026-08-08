@@ -23,21 +23,21 @@ brew install chezmoi && chezmoi init --apply https://github.com/DROOdotFOO/dotfi
 
 ## What's In Here
 
-| Category      | Tools                                                        |
-| ------------- | ------------------------------------------------------------ |
-| **Terminal**  | Ghostty, tmux                                                |
+| Category      | Tools                                                           |
+| ------------- | --------------------------------------------------------------- |
+| **Terminal**  | Ghostty, tmux                                                   |
 | **Editors**   | Zed, Neovim (27 plugins, mona.nvim), Emacs 30 (eglot + treesit) |
-| **Shell**     | Zsh + Starship + fzf + zoxide                                |
-| **CLI**       | eza, bat, fd, ripgrep, delta, jq, yq                         |
-| **Files**     | yazi with image/PDF/archive preview                          |
-| **System**    | btop, fastfetch, tldr (`help`)                               |
-| **Windows**   | Hammerspoon + PaperWM (macOS)                                |
-| **Launcher**  | Raycast (macOS)                                              |
-| **AI**        | Claude Code (54 skills, 8 agents, 31 MCP tools)             |
-| **Secrets**   | 1Password (SSH agent + age encryption), AWS CLI, Infisical   |
-| **Network**   | Tailscale with pre-configured hosts                          |
-| **Languages** | Elixir, Rust, Go, Python, Node.js, Lua (via mise)            |
-| **Fonts**     | Monaspace + Nerd Font                                        |
+| **Shell**     | Zsh + Starship + fzf + zoxide                                   |
+| **CLI**       | eza, bat, fd, ripgrep, delta, jq, yq                            |
+| **Files**     | yazi with image/PDF/archive preview                             |
+| **System**    | btop, fastfetch, tldr (`help`)                                  |
+| **Windows**   | Hammerspoon + PaperWM (macOS)                                   |
+| **Launcher**  | Raycast (macOS)                                                 |
+| **AI**        | Claude Code (54 skills, 8 agents, 31 MCP tools)                 |
+| **Secrets**   | 1Password (SSH agent + age encryption), AWS CLI, Infisical      |
+| **Network**   | Tailscale with pre-configured hosts                             |
+| **Languages** | Elixir, Rust, Go, Python, Node.js, Lua (via mise)               |
+| **Fonts**     | Monaspace + Nerd Font                                           |
 
 ## Terminal Tools
 
@@ -126,7 +126,7 @@ chezmoi apply         # Apply local changes
 # Tools
 make brew-install     # Install Brewfile packages
 make lint             # Shellcheck everything
-make doctor           # 32-point health check
+make doctor           # Health check (tools, config, security)
 make setup-secrets    # 1Password, AWS, Infisical, Tailscale
 make setup-paperwm    # PaperWM.spoon for Hammerspoon
 make dashboard        # Service status overview

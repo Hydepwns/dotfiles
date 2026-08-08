@@ -108,9 +108,9 @@ Setup scripts follow the pattern: `scripts/setup/setup-<tool>.sh` with subcomman
 
 ## Pre-commit Hooks
 
-Commits run: trailing-whitespace, end-of-file-fixer, check-yaml, check-added-large-files (500KB), check-merge-conflict, shellcheck (error level, `-x` to follow sources, excludes `home/dot_zsh/*.zsh`), black (Python). Encrypted files (`encrypted_*`) are excluded from whitespace hooks.
+Commits run: trailing-whitespace, end-of-file-fixer, check-yaml, check-added-large-files (500KB), check-merge-conflict, shellcheck (error level, `-x` to follow sources, excludes `home/dot_zsh/*.zsh`), black (Python), prettier (JSON/YAML/Markdown). Encrypted files (`encrypted_*`) are excluded from whitespace hooks.
 
-The prettier hook is configured but **never runs**: it uses `types: [json, yaml, markdown]`, and pre-commit treats `types` as an AND, so no single file can match all three. Changing it to `types_or` would activate it -- and reformat every JSON/YAML/Markdown file in the repo in one commit.
+Note the prettier hook uses `types_or`, not `types` -- pre-commit ANDs `types`, so the original `types: [json, yaml, markdown]` matched nothing and the hook silently never ran. Chezmoi templates are unaffected either way: a `.json.tmpl` is not detected as JSON.
 
 ## Theming
 
@@ -128,7 +128,7 @@ Layout: `early-init.el.tmpl` (pre-frame), `init.el`, `lisp/droo-{defaults,ui,com
 
 Four things that are easy to get wrong:
 
-- **`~/.emacs.d` silently wins.** `startup--xdg-or-homedot` (`startup.el`) returns `~/.emacs.d` whenever that directory merely *exists* -- it never checks for an `init.el`. If it reappears, the entire XDG config is ignored with no error. `make doctor` fails on this, and `setup-emacs.sh` offers to trash it.
+- **`~/.emacs.d` silently wins.** `startup--xdg-or-homedot` (`startup.el`) returns `~/.emacs.d` whenever that directory merely _exists_ -- it never checks for an `init.el`. If it reappears, the entire XDG config is ignored with no error. `make doctor` fails on this, and `setup-emacs.sh` offers to trash it.
 - **Runtime state must stay out of the config tree.** `~/.config/emacs` is chezmoi-managed, so anything Emacs writes there becomes `chezmoi verify` drift. `early-init.el` redirects `package-user-dir`, the eln cache, `custom-file`, and grammars to XDG data/cache/state. This is why no `home/.chezmoiignore` was needed -- adding one would newly activate as chezmoi's real ignore file.
 - **The daemon does not inherit mise.** mise activates from `.zshrc`, which `exec-path-from-shell -l` never sources, so mise-managed servers (`ruff`, `rust-analyzer`) are invisible. `droo-defaults.el` adds `~/.local/share/mise/shims` to `exec-path` explicitly.
 - **Language modes and eglot are gated.** `droo-lang.el` only remaps a major mode when its tree-sitter grammar is present, and `droo-lsp.el` only hooks `eglot-ensure` when the server binary is on `PATH` -- missing pieces degrade quietly instead of erroring. Both decide at load time, so **restart the daemon after `make emacs-grammars`** or installing a server.
@@ -170,22 +170,22 @@ Local skills (`ethskills/`, `solidity-auditor/`, `noir/`) provide offline Ethere
 
 Managed via `~/.mcp.json` (chezmoi template: `home/dot_mcp.json.tmpl`). Toggle in `chezmoi.toml`, then `chezmoi apply`.
 
-| Server       | Flag             | Transport  | Notes                             |
-| ------------ | ---------------- | ---------- | --------------------------------- |
-| context7     | always on        | stdio      | Library docs via npx              |
-| blockscout   | always on        | http       | Blockchain data queries           |
-| coingecko    | `coingecko`      | http       | Crypto market data                |
-| digest       | `digest`         | stdio      | Multi-platform activity digest    |
-| recall       | `recall`         | stdio      | Knowledge capture/retrieval (FTS5) |
-| autoresearch | `autoresearch`   | stdio      | Autonomous experiment runner      |
-| watchdog     | `watchdog`       | stdio      | Repo health monitor               |
-| prepper      | `prepper`        | stdio      | Pre-session context builder       |
-| sentinel     | `sentinel`       | stdio      | On-chain contract monitor         |
-| patchbot     | `patchbot`       | stdio      | Polyglot dependency updater       |
-| signoz       | `signoz`         | stdio      | Primary observability. API key from 1Password at runtime |
-| regen        | `regen`          | stdio      | Fluidify Regen incidents; wrapper injects `regen_url` (+ optional cookie). Correlates with signoz |
-| datadog      | `datadog`        | http/OAuth | Disabled fallback (`datadog = false`). us5.datadoghq.com, no secrets |
-| sentry       | `sentry`         | http/OAuth | mcp.sentry.dev, no secrets        |
+| Server       | Flag           | Transport  | Notes                                                                                             |
+| ------------ | -------------- | ---------- | ------------------------------------------------------------------------------------------------- |
+| context7     | always on      | stdio      | Library docs via npx                                                                              |
+| blockscout   | always on      | http       | Blockchain data queries                                                                           |
+| coingecko    | `coingecko`    | http       | Crypto market data                                                                                |
+| digest       | `digest`       | stdio      | Multi-platform activity digest                                                                    |
+| recall       | `recall`       | stdio      | Knowledge capture/retrieval (FTS5)                                                                |
+| autoresearch | `autoresearch` | stdio      | Autonomous experiment runner                                                                      |
+| watchdog     | `watchdog`     | stdio      | Repo health monitor                                                                               |
+| prepper      | `prepper`      | stdio      | Pre-session context builder                                                                       |
+| sentinel     | `sentinel`     | stdio      | On-chain contract monitor                                                                         |
+| patchbot     | `patchbot`     | stdio      | Polyglot dependency updater                                                                       |
+| signoz       | `signoz`       | stdio      | Primary observability. API key from 1Password at runtime                                          |
+| regen        | `regen`        | stdio      | Fluidify Regen incidents; wrapper injects `regen_url` (+ optional cookie). Correlates with signoz |
+| datadog      | `datadog`      | http/OAuth | Disabled fallback (`datadog = false`). us5.datadoghq.com, no secrets                              |
+| sentry       | `sentry`       | http/OAuth | mcp.sentry.dev, no secrets                                                                        |
 
 Agent MCP servers (coingecko through patchbot) all share the same `<binary> serve` invocation pattern — they're CLIs from [agent-skills](https://github.com/DROOdotFOO/agent-skills) that double as MCP stdio servers.
 
@@ -216,26 +216,26 @@ Skills are portable `SKILL.md` files sourced from [DROOdotFOO/agent-skills](http
 
 **Code pattern skills** -- language-specific examples and idioms:
 
-| Skill       | Triggers on                                                                |
-| ----------- | -------------------------------------------------------------------------- |
-| claude-api  | `anthropic` imports, SDK usage                                             |
-| droo-stack  | Elixir, TS, Go, Rust, C, Zig, Python, Lua, Shell, Noir, Chezmoi            |
-| raxol       | Raxol TUI/agent imports, headless/MCP tools                                |
-| raxol-payments | :raxol_payments/:raxol_earn, Xochi/Riddler, agent wallets, ACP jobs      |
-| raxol-symphony | :raxol_symphony, tracker-driven coding-agent orchestration             |
-| design-ux   | Component design, layout, tokens, accessibility, TUI aesthetics, DESIGN.md |
-| nix         | `.nix` files, flakes, NixOS, Home Manager, agent-skills packaging, rigup   |
-| native-code | NIFs (C/Rust), SIMD (Zig), erl_nif.h, Rustler, BEAM native boundary        |
+| Skill          | Triggers on                                                                |
+| -------------- | -------------------------------------------------------------------------- |
+| claude-api     | `anthropic` imports, SDK usage                                             |
+| droo-stack     | Elixir, TS, Go, Rust, C, Zig, Python, Lua, Shell, Noir, Chezmoi            |
+| raxol          | Raxol TUI/agent imports, headless/MCP tools                                |
+| raxol-payments | :raxol_payments/:raxol_earn, Xochi/Riddler, agent wallets, ACP jobs        |
+| raxol-symphony | :raxol_symphony, tracker-driven coding-agent orchestration                 |
+| design-ux      | Component design, layout, tokens, accessibility, TUI aesthetics, DESIGN.md |
+| nix            | `.nix` files, flakes, NixOS, Home Manager, agent-skills packaging, rigup   |
+| native-code    | NIFs (C/Rust), SIMD (Zig), erl_nif.h, Rustler, BEAM native boundary        |
 
 **Web3 skills** -- blockchain development, auditing, and data:
 
-| Skill          | Triggers on                                                                |
-| -------------- | -------------------------------------------------------------------------- |
-| ethskills      | Ethereum tooling, EIP/ERC standards, framework selection                   |
+| Skill            | Triggers on                                                                |
+| ---------------- | -------------------------------------------------------------------------- |
+| ethskills        | Ethereum tooling, EIP/ERC standards, framework selection                   |
 | solidity-auditor | `.sol` files, foundry.toml, auditing, security review                      |
-| noir           | `.nr` files, Nargo.toml, ZK circuits, Aztec contracts/security/e2e testing |
-| blockscout     | On-chain data queries, contract state, token balances, ENS, NFT holdings   |
-| coingecko      | Token prices, market caps, DEX pools, trending tokens, price history       |
+| noir             | `.nr` files, Nargo.toml, ZK circuits, Aztec contracts/security/e2e testing |
+| blockscout       | On-chain data queries, contract state, token balances, ENS, NFT holdings   |
+| coingecko        | Token prices, market caps, DEX pools, trending tokens, price history       |
 
 **MCP-companion skills** -- reference docs for MCP agent tools:
 
