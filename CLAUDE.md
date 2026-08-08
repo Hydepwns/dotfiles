@@ -77,7 +77,9 @@ Two constraints when writing one:
 - **It must be idempotent.** chezmoi runs the script for `status` and `diff` too, so if `f(current) != current` once converged, the file reports drift forever. Verify with `chezmoi status <target>` after applying.
 - **Deletion stops propagating.** A merge only adds, so removing a key from the source no longer removes it from the target; delete it by hand.
 
-Still-unconverted candidates, both known to rewrite themselves: `~/.config/zed/settings.json` (Zed writes UI setting changes) and `~/.gitconfig` (`gh auth setup-git` rewrites its credential blocks with tabs and a trailing space -- see the caveat in `dot_gitconfig.tmpl`).
+`home/private_dot_config/zed/modify_private_settings.json.tmpl` is the same recipe for Zed, which rewrites `settings.json` on every UI setting change. Note the attribute order in that filename: `modify_` precedes `private_`, and the target still lands at `0600`.
+
+Still unconverted: `~/.gitconfig`. `gh auth setup-git` rewrites its credential blocks with tabs and a trailing space, re-drifting from the space-indented source (see the caveat in `dot_gitconfig.tmpl`). It is INI rather than JSON, so `jq` does not apply -- a `modify_` script there would need `git config -f` against a temp file. The drift is cosmetic, so it is documented rather than fixed.
 
 **Age encryption**: Sensitive files use `encrypted_` prefix. Decryption key is stored in 1Password (secure note "AGE-SECRET-KEY" in Employee vault) and accessed via `~/.config/chezmoi/age-op-decrypt.sh` wrapper -- no plaintext key on disk. To edit encrypted templates, decrypt with `age -d -i <(op read "op://Employee/AGE-SECRET-KEY/notesPlain" | grep "^AGE-SECRET-KEY-")`, edit, re-encrypt with `age -r "<recipient>"`, verify with `chezmoi diff`. `chezmoi re-add` does NOT work for encrypted files.
 
