@@ -143,13 +143,17 @@
 
 # GitHub/Gist HTTPS auth delegated to the gh CLI (gh auth setup-git).
 # Empty helper resets any inherited helper so gh is the sole credential source.
-# Caveat: `gh auth setup-git` rewrites these blocks into ~/.gitconfig with tabs and
-# a trailing space, re-drifting from this (space-indented) source. When `chezmoi diff`
-# shows only whitespace/format changes on these lines it is benign -- renormalize with
-# `chezmoi apply --force ~/.gitconfig`.
+#
+# These two blocks are byte-for-byte what `git config` writes, because
+# `gh auth setup-git` rewrites them through git and would otherwise re-drift from
+# this file on every run. That means a literal tab for indentation, and a trailing
+# space after the empty `helper =`. The trailing space is emitted by {{ "{{ \" \" }}" }}
+# rather than typed, because the trailing-whitespace pre-commit hook would strip a
+# real one and silently reintroduce the drift. Verify with:
+#   gh auth setup-git && chezmoi status ~/.gitconfig    # must stay clean
 [credential "https://github.com"]
-    helper =
-    helper = !{{ .brewPrefix }}/bin/gh auth git-credential
+	helper ={{ " " }}
+	helper = !{{ .brewPrefix }}/bin/gh auth git-credential
 [credential "https://gist.github.com"]
-    helper =
-    helper = !{{ .brewPrefix }}/bin/gh auth git-credential
+	helper ={{ " " }}
+	helper = !{{ .brewPrefix }}/bin/gh auth git-credential
