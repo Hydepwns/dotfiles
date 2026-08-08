@@ -196,6 +196,19 @@
    `(which-key-group-description-face   ((,class (:foreground ,accent))))
    `(which-key-separator-face       ((,class (:foreground ,fg-subtle))))
 
+   ;; ----------------------------------------------------------- dashboard ----
+   `(dashboard-banner-logo-title ((,class (:foreground ,accent2 :weight bold))))
+   `(dashboard-heading           ((,class (:foreground ,accent :weight bold))))
+   `(dashboard-items-face        ((,class (:foreground ,fg))))
+   `(dashboard-no-items-face     ((,class (:foreground ,fg-subtle :slant italic))))
+   `(dashboard-navigator         ((,class (:foreground ,accent2))))
+   `(dashboard-footer            ((,class (:foreground ,fg-dim :slant italic))))
+   ;; The banner is rendered as plain text, so it picks up the default face --
+   ;; tint it with the accent to match the Zed titlebar.
+   `(dashboard-text-banner       ((,class (:foreground ,accent :weight bold))))
+   `(widget-button               ((,class (:foreground ,link :weight normal))))
+   `(widget-button-pressed       ((,class (:foreground ,accent))))
+
    ;; ------------------------------------------------- rainbow-delimiters ----
    `(rainbow-delimiters-depth-1-face ((,class (:foreground ,accent))))
    `(rainbow-delimiters-depth-2-face ((,class (:foreground ,accent2))))

@@ -60,10 +60,13 @@
 
 ;;; Startup and prompts
 
+;; The startup screen is suppressed because droo-ui points
+;; `initial-buffer-choice' at the dashboard instead.
 (setq inhibit-startup-screen t
       inhibit-startup-echo-area-message user-login-name
-      initial-scratch-message nil
-      initial-major-mode 'fundamental-mode
+      initial-scratch-message
+      ";; *scratch* -- C-j evaluates the form before point.\n\n"
+      initial-major-mode 'lisp-interaction-mode
       ring-bell-function #'ignore
       use-short-answers t
       confirm-kill-emacs #'yes-or-no-p
@@ -85,7 +88,13 @@
 
 (save-place-mode 1)
 (recentf-mode 1)
-(setq recentf-max-saved-items 300)
+(setq recentf-max-saved-items 300
+      ;; Keep scratch dirs and package sources out of the recents list -- they
+      ;; are noise on the dashboard and are never worth reopening.
+      recentf-exclude
+      (list "\\`/private/tmp/" "\\`/tmp/" "\\`/var/folders/"
+            (regexp-quote (expand-file-name "emacs/elpa" droo/xdg-data))
+            "/\\.git/" "COMMIT_EDITMSG\\'" "\\.gpg\\'"))
 
 (savehist-mode 1)
 (setq history-length 1000

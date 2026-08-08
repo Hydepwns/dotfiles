@@ -82,6 +82,33 @@ Monaspace installed still gets a usable Emacs rather than a broken one."
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
+;;; Entrypoint
+
+(use-package dashboard
+  :init
+  (setq dashboard-banner-logo-title "GNU Emacs 30 -- Synthwave84 Soft"
+        dashboard-startup-banner (expand-file-name "banner.txt" user-emacs-directory)
+        dashboard-center-content t
+        dashboard-vertically-center-content t
+        dashboard-items '((recents   . 8)
+                          (projects  . 5)
+                          (bookmarks . 5))
+        dashboard-projects-backend 'project-el
+        dashboard-set-footer nil
+        ;; No icon packages -- keeps the dashboard ASCII and dependency-free.
+        dashboard-display-icons-p nil
+        dashboard-set-heading-icons nil
+        dashboard-set-file-icons nil)
+  :config
+  (dashboard-setup-startup-hook)
+  ;; Under a daemon, emacsclient frames never run the startup sequence that
+  ;; normally renders the dashboard, so they would land on *scratch*. Render it
+  ;; on demand instead; `initial-buffer-choice' is consulted for each new frame.
+  (setq initial-buffer-choice
+        (lambda ()
+          (dashboard-refresh-buffer)
+          (get-buffer dashboard-buffer-name))))
+
 (use-package pulsar
   :init
   (setq pulsar-pulse t
