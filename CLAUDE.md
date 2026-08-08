@@ -214,6 +214,18 @@ Skills are portable `SKILL.md` files sourced from [DROOdotFOO/agent-skills](http
 - `~/.agents/skills-extra/` -- chezmoi-vendored third-party skills the external does not manage (source: `home/dot_agents/skills-extra/`).
 - `~/.raxol/skills/` -- writable managed root for **agent-authored** skills only (the raxol curation loop writes here). Runtime state, left unmanaged by chezmoi. Human and vendored skills come from the chezmoi-managed externals above, never here.
 
+**Name clashes: `skills-extra/` wins in both hosts.** chezmoi never prunes an archive external, so `~/.agents/skills/` can keep serving a stale copy of a skill that has since moved to `skills-extra/`. Raxol resolves this via `skills_external_dirs: ["~/.agents/skills", "~/.agents/skills-extra"]` -- `Skills.Store` scans in order and later `:ets.insert` calls overwrite earlier ones, so the **last** root wins. `run_after_sync-skills.sh` links the **first** root, so its `SKILL_ROOTS` is ordered `skills-extra` then `skills` to reach the same answer. Changing either without the other silently desyncs the two hosts.
+
+One further asymmetry: Raxol globs `**/SKILL.md` (any depth) while the sync script only looks one level down. No skill is nested today, so both index the same set -- but a nested `SKILL.md` would appear in Raxol and not in Claude Code.
+
+**Skill accounting** (re-derive with `find -L ~/.agents/skills ~/.agents/skills-extra -name SKILL.md`, don't trust this prose):
+
+| Source                     | Count  | Notes                                                                               |
+| -------------------------- | ------ | ----------------------------------------------------------------------------------- |
+| agent-skills `skills/`     | 58     | upstream also ships one empty placeholder dir with no `SKILL.md`, which never loads |
+| `skills-extra/` (vendored) | 2      | `virtuals-protocol-acp`, `hf-cli` (the latter originally installed by the `hf` CLI) |
+| **loaded by Claude Code**  | **60** | symlinks in `~/.claude/skills/`                                                     |
+
 **Code pattern skills** -- language-specific examples and idioms:
 
 | Skill          | Triggers on                                                                |
