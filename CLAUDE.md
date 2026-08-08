@@ -68,6 +68,19 @@ Use in templates: `{{- if .rust -}}...{{- end -}}`. Use `{{- -}}` to trim whites
 - `run_onchange_after_reload-hammerspoon.sh.tmpl` -- reloads Hammerspoon on config change (macOS)
 - `run_after_sync-skills.sh.tmpl` -- symlinks skills from `~/.agents/skills/` to `~/.claude/skills/` (always runs; script is idempotent)
 
+**Files the app also writes (`modify_` scripts)**: a plain managed file is authoritative, so `chezmoi apply` deletes any key the app added at runtime. That is the recurring `MM` in `chezmoi status`. When both chezmoi and an application own parts of a file, use a `modify_` source instead: chezmoi pipes the **current target** to the script on stdin and takes its stdout as the new target, so it can merge rather than overwrite.
+
+`home/private_dot_claude/modify_settings.json.tmpl` is the worked example. It embeds the managed JSON in a quoted heredoc and merges it over the existing file with `jq '. * $managed'` -- managed keys win, unmanaged keys (`model`, `effortLevel`, anything `/config` adds later) survive. It falls back to emitting the managed block when stdin is empty, invalid JSON, or `jq` is missing, so a fresh machine still gets a correct file.
+
+Two constraints when writing one:
+
+- **It must be idempotent.** chezmoi runs the script for `status` and `diff` too, so if `f(current) != current` once converged, the file reports drift forever. Verify with `chezmoi status <target>` after applying.
+- **Deletion stops propagating.** A merge only adds, so removing a key from the source no longer removes it from the target; delete it by hand.
+
+`home/private_dot_config/zed/modify_private_settings.json.tmpl` is the same recipe for Zed, which rewrites `settings.json` on every UI setting change. Note the attribute order in that filename: `modify_` precedes `private_`, and the target still lands at `0600`.
+
+Still unconverted: `~/.gitconfig`. `gh auth setup-git` rewrites its credential blocks with tabs and a trailing space, re-drifting from the space-indented source (see the caveat in `dot_gitconfig.tmpl`). It is INI rather than JSON, so `jq` does not apply -- a `modify_` script there would need `git config -f` against a temp file. The drift is cosmetic, so it is documented rather than fixed.
+
 **Age encryption**: Sensitive files use `encrypted_` prefix. Decryption key is stored in 1Password (secure note "AGE-SECRET-KEY" in Employee vault) and accessed via `~/.config/chezmoi/age-op-decrypt.sh` wrapper -- no plaintext key on disk. To edit encrypted templates, decrypt with `age -d -i <(op read "op://Employee/AGE-SECRET-KEY/notesPlain" | grep "^AGE-SECRET-KEY-")`, edit, re-encrypt with `age -r "<recipient>"`, verify with `chezmoi diff`. `chezmoi re-add` does NOT work for encrypted files.
 
 Encrypted files:

@@ -1,3 +1,23 @@
+#!/bin/sh
+# chezmoi `modify_` script -> ~/.config/zed/settings.json
+#
+# Zed writes this file itself whenever a setting changes in the UI (theme
+# picker, font size, panel docks, dismissed prompts). A plain managed file is
+# authoritative and would delete all of that on the next `chezmoi apply` --
+# the same failure mode fixed for ~/.claude/settings.json.
+#
+# stdin is the current target, stdout becomes the new target, so the managed
+# block below is merged *over* whatever Zed last wrote. jq's `*` merges objects
+# recursively with the right-hand side winning: managed keys stay authoritative,
+# everything Zed added survives.
+#
+# Trade-off: the merge only adds, so deleting a key here no longer removes it
+# from the target. Remove it from ~/.config/zed/settings.json by hand.
+
+set -eu
+
+managed=$(
+    cat <<'MANAGED_SETTINGS'
 {
   "agent": {
     "dock": "right",
@@ -193,3 +213,24 @@
     }
   }
 }
+MANAGED_SETTINGS
+)
+
+# Always drain stdin, even on the fallback paths, so chezmoi never sees EPIPE.
+current=$(cat)
+
+# Without jq there is no safe merge. Emitting the managed block loses whatever
+# Zed last wrote; emitting nothing would truncate settings.json entirely, so
+# prefer the former.
+if ! command -v jq >/dev/null 2>&1; then
+    printf '%s\n' "$managed"
+    exit 0
+fi
+
+# Fresh machine, or a file that is empty or not valid JSON: start from managed.
+if [ -z "$current" ] || ! printf '%s' "$current" | jq -e . >/dev/null 2>&1; then
+    printf '%s\n' "$managed"
+    exit 0
+fi
+
+printf '%s' "$current" | jq --argjson managed "$managed" '. * $managed'
