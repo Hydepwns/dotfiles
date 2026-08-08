@@ -3,8 +3,10 @@
 ## Index
 
 - **[Main README](../README.md)** - Quick start and overview
-- **[Advanced Usage](advanced-usage.md)** - Configuration and customization
 - **[Project Templates](templates.md)** - Template reference
+- **[Performance](performance.md)** - Shell startup profiling
+- **[Neovim Plugins](nvim-plugins.md)** - Plugin reference
+- **[NixOS Installation](nixos-installation.md)** - NixOS setup
 
 ## Quick Reference
 
@@ -19,7 +21,7 @@ make generate-template web3 my-project --with-direnv
 make doctor
 
 # Performance monitoring
-make performance-monitor ACTION=measure
+make perf
 ```
 
 ## Environment Shortcuts

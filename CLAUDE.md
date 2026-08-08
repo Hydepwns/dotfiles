@@ -16,7 +16,7 @@ chezmoi apply             # Apply local source changes to home directory
 chezmoi apply --force     # Skip prompts for modified target files
 
 make lint                 # shellcheck on scripts/ and utils/
-make doctor               # Health check (32 checks across tools, config, security)
+make doctor               # Health check across tools, config, security
 make perf                 # 5-run shell startup benchmark
 make perf-report          # Bare vs configured startup breakdown
 make test                 # Test suite (zsh syntax, module loading)
@@ -31,6 +31,11 @@ make setup-secrets        # Install 1Password, AWS CLI, Infisical, Tailscale
 make rotate-keys          # SSH key rotation via 1Password + Tailscale sync
 make theme-generate       # Generate all tool configs from unified theme
 make lazy-load-stats      # Show lazy loading stats
+
+make setup-emacs          # Emacs config, packages, grammars, daemon restart
+make emacs-status         # Emacs version, daemon, packages, grammars
+make emacs-grammars       # Compile missing tree-sitter grammars
+make emacs-restart        # Restart the Emacs daemon
 ```
 
 ## Chezmoi Architecture
@@ -103,7 +108,9 @@ Setup scripts follow the pattern: `scripts/setup/setup-<tool>.sh` with subcomman
 
 ## Pre-commit Hooks
 
-Commits run: trailing-whitespace, end-of-file-fixer, check-yaml, check-added-large-files (500KB), check-merge-conflict, shellcheck (error level, `-x` to follow sources, excludes `home/dot_zsh/*.zsh`), black (Python), prettier (JSON/YAML/Markdown). Encrypted files (`encrypted_*`) are excluded from whitespace hooks.
+Commits run: trailing-whitespace, end-of-file-fixer, check-yaml, check-added-large-files (500KB), check-merge-conflict, shellcheck (error level, `-x` to follow sources, excludes `home/dot_zsh/*.zsh`), black (Python). Encrypted files (`encrypted_*`) are excluded from whitespace hooks.
+
+The prettier hook is configured but **never runs**: it uses `types: [json, yaml, markdown]`, and pre-commit treats `types` as an AND, so no single file can match all three. Changing it to `types_or` would activate it -- and reformat every JSON/YAML/Markdown file in the repo in one commit.
 
 ## Theming
 
@@ -112,6 +119,21 @@ Single source of truth: `[data.theme]` in `chezmoi.toml` (Synthwave84 palette). 
 **Two variants.** `[data.theme]` is the base palette (Ghostty, tmux, fzf, Starship, btop, yazi). `[data.theme.soft]` is the lower-contrast **Synthwave84 Soft** variant that Zed uses, and it is the only block carrying syntax roles (`keyword`, `string`, `function`, `type`, ...) plus diagnostic and git colors. Emacs consumes `{{ .theme.soft.* }}` for UI and syntax, but reuses the base `{{ .theme.* }}` ANSI keys for terminal faces -- Zed's Soft variant leaves `terminal.ansi.*` at base values, so shell buffers match Ghostty exactly.
 
 Authoritative source for both is the shipped Zed theme JSON (`~/Library/Application Support/Zed/extensions/installed/synthwave84/themes/synthwave84.json`), not `config/theme/synthwave84.toml`, which had drifted on `keyword` and `type`.
+
+## Emacs
+
+Vanilla Emacs 30 (`emacs-plus@30`) at `~/.config/emacs`, source `home/private_dot_config/emacs/`. Runs as a daemon under `brew services`; `e` and `eg` (in `aliases/dev.zsh`) open terminal and GUI frames. `EDITOR` stays `nvim`.
+
+Layout: `early-init.el.tmpl` (pre-frame), `init.el`, `lisp/droo-{defaults,ui,completion,git,lang,lsp}.el`, `themes/synthwave84-soft-theme.el.tmpl`, `banner.txt`. Only the two `.tmpl` files interpolate -- colors live solely in the theme.
+
+Four things that are easy to get wrong:
+
+- **`~/.emacs.d` silently wins.** `startup--xdg-or-homedot` (`startup.el`) returns `~/.emacs.d` whenever that directory merely *exists* -- it never checks for an `init.el`. If it reappears, the entire XDG config is ignored with no error. `make doctor` fails on this, and `setup-emacs.sh` offers to trash it.
+- **Runtime state must stay out of the config tree.** `~/.config/emacs` is chezmoi-managed, so anything Emacs writes there becomes `chezmoi verify` drift. `early-init.el` redirects `package-user-dir`, the eln cache, `custom-file`, and grammars to XDG data/cache/state. This is why no `home/.chezmoiignore` was needed -- adding one would newly activate as chezmoi's real ignore file.
+- **The daemon does not inherit mise.** mise activates from `.zshrc`, which `exec-path-from-shell -l` never sources, so mise-managed servers (`ruff`, `rust-analyzer`) are invisible. `droo-defaults.el` adds `~/.local/share/mise/shims` to `exec-path` explicitly.
+- **Language modes and eglot are gated.** `droo-lang.el` only remaps a major mode when its tree-sitter grammar is present, and `droo-lsp.el` only hooks `eglot-ensure` when the server binary is on `PATH` -- missing pieces degrade quietly instead of erroring. Both decide at load time, so **restart the daemon after `make emacs-grammars`** or installing a server.
+
+Adding a language: add the grammar to `treesit-language-source-alist` and the mode to `auto-mode-alist` (or `major-mode-remap-alist`) in `droo-lang.el`, add the server to `droo/eglot-servers` in `droo-lsp.el`, then `make emacs-grammars && make emacs-restart`.
 
 ## Adding Features
 

@@ -26,7 +26,7 @@ brew install chezmoi && chezmoi init --apply https://github.com/DROOdotFOO/dotfi
 | Category      | Tools                                                        |
 | ------------- | ------------------------------------------------------------ |
 | **Terminal**  | Ghostty, tmux                                                |
-| **Editors**   | Zed, Neovim (27 plugins, mona.nvim)                          |
+| **Editors**   | Zed, Neovim (27 plugins, mona.nvim), Emacs 30 (eglot + treesit) |
 | **Shell**     | Zsh + Starship + fzf + zoxide                                |
 | **CLI**       | eza, bat, fd, ripgrep, delta, jq, yq                         |
 | **Files**     | yazi with image/PDF/archive preview                          |
@@ -101,6 +101,20 @@ PaperWM tiling -- enable with `paperwm = true` in chezmoi.toml, then `make setup
 | `s`          | Flash jump             |
 | `gd`         | Go to definition       |
 
+### Emacs
+
+Runs as a daemon under `brew services`. `e` opens a terminal frame, `eg` a GUI frame.
+
+| Key       | Action                       |
+| --------- | ---------------------------- |
+| `C-s`     | Search buffer (consult-line) |
+| `C-x b`   | Switch buffer                |
+| `C-x g`   | Magit status                 |
+| `C-x p f` | Find file in project         |
+| `C-.`     | Context actions (embark)     |
+| `C-c l r` | LSP rename (eglot)           |
+| `M-n`     | Next diagnostic              |
+
 ## Commands
 
 ```bash
@@ -173,6 +187,7 @@ dotfiles/
 │   │   ├── ghostty/                    # Terminal
 │   │   ├── zed/                        # Editor
 │   │   ├── nvim/                       # Neovim (27 plugins)
+│   │   ├── emacs/                      # Emacs 30 (XDG; theme is templated)
 │   │   ├── btop/                       # System monitor
 │   │   ├── yazi/                       # File manager
 │   │   ├── fastfetch/                  # System info
