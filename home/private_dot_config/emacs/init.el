@@ -4,7 +4,7 @@
 
 ;;; Commentary:
 
-;; Vanilla Emacs 30 with package.el and the built-in use-package.  Runtime state
+;; Vanilla Emacs 31 with package.el and the built-in use-package.  Runtime state
 ;; lives under XDG directories (see early-init.el); this tree stays read-only as
 ;; far as Emacs is concerned.
 ;;

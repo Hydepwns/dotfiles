@@ -86,7 +86,9 @@ Monaspace installed still gets a usable Emacs rather than a broken one."
 
 (use-package dashboard
   :init
-  (setq dashboard-banner-logo-title "GNU Emacs 30 -- Synthwave84 Soft"
+  ;; Derived, not hardcoded -- the literal drifted behind the installed Emacs.
+  (setq dashboard-banner-logo-title
+        (format "GNU Emacs %d -- Synthwave84 Soft" emacs-major-version)
         dashboard-startup-banner (expand-file-name "banner.txt" user-emacs-directory)
         dashboard-center-content t
         dashboard-vertically-center-content t
