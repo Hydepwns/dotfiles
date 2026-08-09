@@ -7,7 +7,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 EMACS_CONFIG_DIR="$HOME/.config/emacs"
 EMACS_DOTDIR="$HOME/.emacs.d"
-BREW_FORMULA="emacs-plus@30"
+BREW_FORMULA="emacs-plus@31"
 
 # Source centralized logging
 # shellcheck source=../utils/logging.sh

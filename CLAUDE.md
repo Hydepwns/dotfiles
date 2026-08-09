@@ -135,12 +135,18 @@ Authoritative source for both is the shipped Zed theme JSON (`~/Library/Applicat
 
 ## Emacs
 
-Vanilla Emacs 30 (`emacs-plus@30`) at `~/.config/emacs`, source `home/private_dot_config/emacs/`. Runs as a daemon under `brew services`; `e` and `eg` (in `aliases/dev.zsh`) open terminal and GUI frames. `EDITOR` stays `nvim`.
+Vanilla Emacs 31 (`emacs-plus@31`) at `~/.config/emacs`, source `home/private_dot_config/emacs/`. Runs as a daemon under `brew services`; `e` and `eg` (in `aliases/dev.zsh`) open terminal and GUI frames. `EDITOR` stays `nvim`.
+
+`31.0.91` is a **pretest** off the `emacs-31` branch, not a release -- the tap's `emacs-plus@32` (`32.0.50`) is master, not a newer stable. The tap is untrusted by default under current Homebrew, so a fresh machine needs `brew trust d12frosted/emacs-plus` before the formula will even load.
 
 Layout: `early-init.el.tmpl` (pre-frame), `init.el`, `lisp/droo-{defaults,ui,completion,git,lang,lsp}.el`, `themes/synthwave84-soft-theme.el.tmpl`, `banner.txt`. Only the two `.tmpl` files interpolate -- colors live solely in the theme.
 
-Four things that are easy to get wrong:
+Six things that are easy to get wrong:
 
+- **Upgrading the formula does not change which Emacs runs.** `emacs-plus`'s `bin/emacs` is a 5-line wrapper that execs the first of `/Applications/Emacs.app`, `~/Applications/Emacs.app`, then its own keg. The `brew services` block runs that wrapper, so with a stale `/Applications/Emacs.app` the `@31` service happily launches Emacs 30 -- `emacs --version` reports the old version from the new keg, which reads like a broken build. Replace the app bundle too (`ditto <keg>/Emacs.app /Applications/Emacs.app`), then `brew unlink emacs-plus@<old> && brew link emacs-plus@<new>`.
+- **A major-version upgrade invalidates every `.elc`.** `define-minor-mode` expands differently across versions, so packages compiled by the old Emacs fail at runtime with things like `Symbol's value as variable is void: corfu-mode--set-explicitly`. Fix with `package-recompile-all` (not `byte-recompile-directory`, which has no package load-path in `-Q` and fails most files):
+  `emacs --batch -l ~/.config/emacs/early-init.el --eval '(progn (require (quote package)) (package-initialize) (package-recompile-all))'`
+  Tree-sitter grammars survive a library bump and do not need rebuilding; `make emacs-grammars` reports them "already available", which is itself a load test.
 - **`~/.emacs.d` silently wins.** `startup--xdg-or-homedot` (`startup.el`) returns `~/.emacs.d` whenever that directory merely _exists_ -- it never checks for an `init.el`. If it reappears, the entire XDG config is ignored with no error. `make doctor` fails on this, and `setup-emacs.sh` offers to trash it.
 - **Runtime state must stay out of the config tree.** `~/.config/emacs` is chezmoi-managed, so anything Emacs writes there becomes `chezmoi verify` drift. `early-init.el` redirects `package-user-dir`, the eln cache, `custom-file`, and grammars to XDG data/cache/state. This is why no `home/.chezmoiignore` was needed -- adding one would newly activate as chezmoi's real ignore file.
 - **The daemon does not inherit mise.** mise activates from `.zshrc`, which `exec-path-from-shell -l` never sources, so mise-managed servers (`ruff`, `rust-analyzer`) are invisible. `droo-defaults.el` adds `~/.local/share/mise/shims` to `exec-path` explicitly.
