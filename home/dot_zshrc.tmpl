@@ -30,3 +30,11 @@ if [[ $- == *i* ]] && [[ ${SHLVL:-1} -le 2 ]]; then
         precmd_functions+=(_fastfetch_precmd)
     fi
 fi
+
+# grok
+export PATH=/Users/droo/.grok/bin:$PATH
+export PATH="$HOME/.aztec/current/bin:$HOME/.aztec/current/node_modules/.bin:$HOME/.aztec/bin:$PATH"
+
+export NARGO_HOME="/Users/droo/.nargo"
+
+export PATH="$PATH:$NARGO_HOME/bin"

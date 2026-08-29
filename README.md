@@ -33,7 +33,7 @@ brew install chezmoi && chezmoi init --apply https://github.com/DROOdotFOO/dotfi
 | **System**    | btop, fastfetch, tldr (`help`)                                  |
 | **Windows**   | Hammerspoon + PaperWM (macOS)                                   |
 | **Launcher**  | Raycast (macOS)                                                 |
-| **AI**        | Claude Code (61 skills, 14 MCP servers)                         |
+| **AI**        | Codex, Claude Code, Raxol (61 shared skills, 15 MCP servers)    |
 | **Secrets**   | 1Password (SSH agent + age encryption), AWS CLI, Infisical      |
 | **Network**   | Tailscale with pre-configured hosts                             |
 | **Languages** | Elixir, Rust, Go, Python, Node.js, Lua (via mise)               |
@@ -135,8 +135,11 @@ make dashboard        # Service status overview
 make rotate-keys      # Generate, store in 1Password, sync to hosts
 make sync-keys        # Push public key to Tailscale nodes
 
-# Claude Code
+# Agent hosts
 make skills-status    # Show installed AI coding skills
+make codex-check      # Validate Codex skills, MCP, instructions, and hooks
+make codex-diff       # Preview only Codex-owned target changes
+make codex-apply      # Apply Codex target without reconciling unrelated dotfiles
 ```
 
 ## Secrets
@@ -193,13 +196,8 @@ dotfiles/
 │   │   ├── fastfetch/                  # System info
 │   │   ├── starship/                   # Prompt
 │   │   └── direnv/                     # direnv layouts
-│   ├── dot_agents/skills/              # Claude Code skills (auto-symlinked)
-│   │   ├── claude-api/                # Anthropic SDK reference
-│   │   ├── droo-stack/               # Polyglot patterns (Elixir/TS/Go/Rust/Py/Lua/Noir/Shell)
-│   │   ├── noir/                     # ZK circuits, Aztec contracts/security/e2e testing
-│   │   ├── solidity-auditor/           # Solidity dev + security auditing
-│   │   ├── ethskills/                # Ethereum tooling + EIP/ERC reference
-│   │   └── raxol/                    # Raxol TUI/agent framework
+│   ├── dot_agents/skills-extra/        # Vendored skills merged with upstream
+│   ├── private_dot_codex/              # Codex guidance + hooks
 │   └── private_dot_claude/             # Claude Code config + hooks
 ├── config/
 │   ├── raycast/                        # Raycast settings

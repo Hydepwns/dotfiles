@@ -119,7 +119,7 @@ Superpowers skills (if installed):
 
 ## Agent Skills
 
-Skills sourced from [DROOdotFOO/agent-skills](https://github.com/DROOdotFOO/agent-skills), installed to `~/.agents/skills/`. The **Raxol agent** is the primary host (`Raxol.Agent.Skills.Store` loads them as procedural memory, reached via the `skills_list`/`skill_view`/`skill_manage` tools); **Claude Code** is the secondary host (symlinked into `~/.claude/skills/`, auto-loaded when a skill's trigger matches):
+Skills sourced from [DROOdotFOO/agent-skills](https://github.com/DROOdotFOO/agent-skills) and merged with vendored extras under `~/.agents/skills/`. **Raxol** reads that shared inventory as procedural memory, **Codex** discovers it directly, and **Claude Code** receives matching symlinks under `~/.claude/skills/`:
 - `claude-api` -- Anthropic SDK reference (Python, TS, Go, Elixir, Rust, Lua, cURL)
 - `droo-stack` -- Polyglot patterns (Elixir, TS, Go, Rust, Python, Lua, Shell, Noir, Chezmoi)
 - `noir` -- ZK circuit design, Aztec contracts, constraint optimization, nargo testing

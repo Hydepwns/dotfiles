@@ -1,70 +1,101 @@
-#!/bin/bash
-# Sync skills: ~/.agents/skills/* and ~/.agents/skills-extra/* -> ~/.claude/skills/* (symlinks).
-# skills/ comes from the agent-skills tarball (chezmoi external); skills-extra/ holds vendored
-# third-party skills (e.g. virtuals-protocol-acp) the external does not manage.
-# Runs on every apply (script is idempotent; previous run_onchange_ trigger keyed
-# off .chezmoiexternal.toml hash and missed external content refreshes).
+#!/usr/bin/env bash
+# Build one merged skill view for Codex, Claude Code, and Raxol.
 
 set -euo pipefail
 
-# skills-extra first: it is chezmoi-managed, whereas skills/ is an unpacked
-# archive that chezmoi never prunes, so it can retain a stale copy of a skill
-# that has since moved to skills-extra. Raxol resolves the same clash the same
-# way (its Skills.Store scans skills_external_dirs in order and later inserts
-# overwrite earlier ones, so its last entry wins), and both hosts must agree.
-SKILL_ROOTS=("$HOME/.agents/skills-extra" "$HOME/.agents/skills")
+SKILL_SOURCE_ROOTS=("$HOME/.agents/skills-extra" "$HOME/.agents/skills-upstream")
+MERGED_SKILLS_DIR="$HOME/.agents/skills"
 CLAUDE_SKILLS_DIR="$HOME/.claude/skills"
+LEGACY_BACKUP_DIR="$HOME/.agents/skills-before-codex-merge"
 
-# Nothing to do until at least one source root exists.
-have_root=0
-for root in "${SKILL_ROOTS[@]}"; do
-    [[ -d "$root" ]] && have_root=1
-done
-[[ "$have_root" -eq 1 ]] || exit 0
-
-mkdir -p "$CLAUDE_SKILLS_DIR"
-
-# A dir is a skill only if it holds a SKILL.md. Upstream skills/ also carries
-# non-skill dirs (support packages, hooks, a submodule placeholder) that must not
-# reach Claude Code; both hosts key off SKILL.md, so this is the selection point.
 is_skill_dir() {
     [[ -f "$1/SKILL.md" ]]
 }
 
-# True if a name resolves to a real skill (SKILL.md present) in any source root.
 skill_exists() {
     local name="$1" root
-    for root in "${SKILL_ROOTS[@]}"; do
+    for root in "${SKILL_SOURCE_ROOTS[@]}"; do
         is_skill_dir "$root/$name" && return 0
     done
     return 1
 }
 
-# Remove broken symlinks
-find "$CLAUDE_SKILLS_DIR" -maxdepth 1 -type l ! -exec test -e {} \; -delete 2>/dev/null || true
+have_source=0
+for root in "${SKILL_SOURCE_ROOTS[@]}"; do
+    [[ -d "$root" ]] && have_source=1
+done
+[[ "$have_source" -eq 1 ]] || exit 0
 
-# Remove stale symlinks (name no longer resolves to a real skill in any root --
-# covers deleted skills and dirs that are no longer skills, e.g. lost SKILL.md)
-for link in "$CLAUDE_SKILLS_DIR"/*/; do
-    [[ -L "${link%/}" ]] || continue
-    link_name="$(basename "$link")"
-    if ! skill_exists "$link_name"; then
-        rm -f "$CLAUDE_SKILLS_DIR/$link_name"
-        echo "[chezmoi] Removed stale skill link: $link_name"
+# Older revisions unpacked the archive directly into ~/.agents/skills. Preserve
+# that tree once, then replace it with a symlink-only merged view.
+needs_migration=0
+if [[ -d "$MERGED_SKILLS_DIR" ]]; then
+    for entry in "$MERGED_SKILLS_DIR"/*; do
+        [[ -e "$entry" || -L "$entry" ]] || continue
+        if [[ ! -L "$entry" ]]; then
+            needs_migration=1
+            break
+        fi
+    done
+fi
+
+if [[ "$needs_migration" -eq 1 ]]; then
+    if [[ -e "$LEGACY_BACKUP_DIR" || -L "$LEGACY_BACKUP_DIR" ]]; then
+        printf '[chezmoi] Refusing to replace %s: backup already exists at %s\n' \
+            "$MERGED_SKILLS_DIR" "$LEGACY_BACKUP_DIR" >&2
+        exit 1
     fi
+    mv "$MERGED_SKILLS_DIR" "$LEGACY_BACKUP_DIR"
+    printf '[chezmoi] Preserved legacy skill tree at %s\n' "$LEGACY_BACKUP_DIR"
+fi
+
+mkdir -p "$MERGED_SKILLS_DIR" "$CLAUDE_SKILLS_DIR"
+
+# Rebuild entries created by this merger. Removing symlinks is safe and makes
+# the source-root priority deterministic when a skill moves between roots.
+# Non-symlink user content is never deleted.
+for link in "$MERGED_SKILLS_DIR"/*; do
+    [[ -L "$link" ]] || continue
+    rm -f "$link"
 done
 
-# Create symlinks for each skill; earlier roots win on name clash (skills-extra/ over skills/).
-for root in "${SKILL_ROOTS[@]}"; do
+# Earlier roots win, so vendored skills-extra overrides the upstream archive.
+for root in "${SKILL_SOURCE_ROOTS[@]}"; do
     [[ -d "$root" ]] || continue
-    rel="../../.agents/$(basename "$root")"
+    relative_root="../$(basename "$root")"
     for skill_dir in "$root"/*/; do
         [[ -d "$skill_dir" ]] || continue
         is_skill_dir "${skill_dir%/}" || continue
-        skill_name="$(basename "$skill_dir")"
-        link_path="$CLAUDE_SKILLS_DIR/$skill_name"
-        [[ -L "$link_path" ]] && continue
-        ln -s "$rel/$skill_name" "$link_path"
-        echo "[chezmoi] Linked skill: $skill_name"
+        name="$(basename "$skill_dir")"
+        link="$MERGED_SKILLS_DIR/$name"
+        desired="$relative_root/$name"
+
+        if [[ ! -e "$link" && ! -L "$link" ]]; then
+            ln -s "$desired" "$link"
+        fi
     done
+done
+
+# Claude Code receives the same merged inventory. Codex reads the merged root
+# directly, and Raxol can continue scanning it as its first external directory.
+for link in "$CLAUDE_SKILLS_DIR"/*; do
+    [[ -L "$link" ]] || continue
+    name="$(basename "$link")"
+    if ! skill_exists "$name"; then
+        rm -f "$link"
+        printf '[chezmoi] Removed stale Claude skill link: %s\n' "$name"
+    fi
+done
+
+for skill_dir in "$MERGED_SKILLS_DIR"/*/; do
+    [[ -d "$skill_dir" ]] || continue
+    is_skill_dir "${skill_dir%/}" || continue
+    name="$(basename "$skill_dir")"
+    link="$CLAUDE_SKILLS_DIR/$name"
+    desired="../../.agents/skills/$name"
+    if [[ -L "$link" ]]; then
+        [[ "$(readlink "$link")" == "$desired" ]] || ln -sfn "$desired" "$link"
+    elif [[ ! -e "$link" ]]; then
+        ln -s "$desired" "$link"
+    fi
 done

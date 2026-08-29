@@ -1,14 +1,10 @@
-[".agents/skills"]
+[".agents/skills-upstream"]
     type = "archive"
     url = "https://github.com/DROOdotFOO/agent-skills/archive/main.tar.gz"
+    exact = true
     stripComponents = 2
     include = ["*/skills/**"]
     refreshPeriod = "168h"
-    # NOTE: `include` correctly limits extraction to upstream skills/, but chezmoi
-    # never PRUNES an archive external -- entries written by an earlier refresh
-    # survive after they disappear upstream. Earlier layouts had more top-level
-    # dirs, and with stripComponents = 2 their children landed here (agents/scribe
-    # -> scribe, .github/workflows -> workflows, benchmarks/suites -> suites, ...).
-    # Those leftovers are inert: run_after_sync-skills.sh only links dirs holding a
-    # SKILL.md. If this directory accumulates non-skill entries again, delete them
-    # by hand -- a refresh will not.
+    # Keep this exact source root separate from the host-facing
+    # ~/.agents/skills view. Chezmoi prunes files removed from the archive, then
+    # run_after_sync-skills.sh safely rebuilds the merged symlink inventory.

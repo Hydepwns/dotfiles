@@ -1,4 +1,4 @@
-.PHONY: help install update diff status backup clean doctor bootstrap sync sync-from-remote backup-full install-optional generate-template setup-age age-retrieve age-status setup-mise mise-status mise-upgrade mise-doctor setup-raycast raycast-export raycast-import raycast-status setup-emacs emacs-grammars emacs-restart emacs-status setup-signoz-mcp signoz-mcp-status signoz-mcp-update lint perf perf-report skills-status
+.PHONY: help install update diff status backup clean doctor bootstrap sync sync-from-remote backup-full install-optional generate-template setup-age age-retrieve age-status setup-mise mise-status mise-upgrade mise-doctor setup-raycast raycast-export raycast-import raycast-status setup-emacs emacs-grammars emacs-restart emacs-status setup-signoz-mcp signoz-mcp-status signoz-mcp-update lint test codex-check codex-diff codex-apply perf perf-report skills-status
 
 # Configuration
 DOTFILES_ROOT := $(shell pwd)
@@ -73,6 +73,15 @@ lint: ## Run shellcheck on scripts
 test: ## Run comprehensive dotfiles test suite
 	@echo "Running Dotfiles Test Suite..."
 	@$(SCRIPTS_DIR)/utils/test-suite.sh
+
+codex-check: ## Validate Codex skills, MCP, instructions, and hooks
+	@$(SCRIPTS_DIR)/utils/test-codex-target.sh
+
+codex-diff: ## Preview only the Codex-owned target files
+	@$(SCRIPTS_DIR)/utils/apply-codex-target.sh --dry-run
+
+codex-apply: ## Apply only Codex skills, instructions, hooks, and MCP servers
+	@$(SCRIPTS_DIR)/utils/apply-codex-target.sh
 
 perf: ## Benchmark shell startup time
 	@$(SCRIPTS_DIR)/utils/performance-monitor.sh measure
@@ -221,15 +230,15 @@ brew-update: ## Update Homebrew and all packages
 setup-ci: ## Setup CI/CD tools and pre-commit hooks
 	@$(SCRIPTS_DIR)/setup/setup-ci.sh
 
-# Claude Code skills (source: github.com/DROOdotFOO/agent-skills)
-skills-status: ## Show installed Claude Code skills
-	@echo "Skills (pinned version):"
+# Shared agent skills (source: github.com/DROOdotFOO/agent-skills)
+skills-status: ## Show installed Codex, Claude Code, and Raxol skills
+	@echo "Skills (upstream version):"
 	@grep -o 'v[0-9.]*' home/.chezmoiexternal.toml 2>/dev/null || echo "  (unknown)"
 	@echo ""
-	@echo "Skills (deployed):"
+	@echo "Skills (merged for Codex/Raxol):"
 	@ls -1 ~/.agents/skills/ 2>/dev/null || echo "  (none)"
 	@echo ""
-	@echo "Skills (symlinked):"
+	@echo "Skills (mirrored for Claude Code):"
 	@ls -la ~/.claude/skills/ 2>/dev/null || echo "  (none)"
 
 # Template generation

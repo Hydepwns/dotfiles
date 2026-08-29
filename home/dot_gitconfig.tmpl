@@ -1,9 +1,7 @@
 [user]
     name = {{ .name }}
     email = {{ .email }}
-{{- if .gpg_signing_key }}
-    signingkey = {{ .gpg_signing_key }}
-{{- end }}
+{{ "\t" }}signingkey = key::ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPUSQxidN3mlV514FqrtPyridWtUoa6IxCXHMPdQPF9H
 
 [core]
     editor = zed --wait
@@ -39,9 +37,10 @@
 
 [gpg]
     program = gpg
+{{ "\t" }}format = ssh
 
 [commit]
-    gpgsign = false
+{{ "\t" }}gpgsign = true
 
 [push]
     default = current
@@ -157,3 +156,5 @@
 [credential "https://gist.github.com"]
 	helper ={{ " " }}
 	helper = !{{ .brewPrefix }}/bin/gh auth git-credential
+[gpg "ssh"]
+{{ "\t" }}allowedSignersFile = {{ .chezmoi.homeDir }}/.config/git/allowed_signers
