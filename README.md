@@ -33,7 +33,7 @@ brew install chezmoi && chezmoi init --apply https://github.com/DROOdotFOO/dotfi
 | **System**    | btop, fastfetch, tldr (`help`)                                  |
 | **Windows**   | Hammerspoon + PaperWM (macOS)                                   |
 | **Launcher**  | Raycast (macOS)                                                 |
-| **AI**        | Claude Code (60 skills, 14 MCP servers)                         |
+| **AI**        | Claude Code (61 skills, 14 MCP servers)                         |
 | **Secrets**   | 1Password (SSH agent + age encryption), AWS CLI, Infisical      |
 | **Network**   | Tailscale with pre-configured hosts                             |
 | **Languages** | Elixir, Rust, Go, Python, Node.js, Lua (via mise)               |

@@ -241,9 +241,9 @@ One further asymmetry: Raxol globs `**/SKILL.md` (any depth) while the sync scri
 
 | Source                     | Count  | Notes                                                                               |
 | -------------------------- | ------ | ----------------------------------------------------------------------------------- |
-| agent-skills `skills/`     | 58     | upstream also ships one empty placeholder dir with no `SKILL.md`, which never loads |
+| agent-skills `skills/`     | 59     | upstream also ships one empty placeholder dir with no `SKILL.md`, which never loads |
 | `skills-extra/` (vendored) | 2      | `virtuals-protocol-acp`, `hf-cli` (the latter originally installed by the `hf` CLI) |
-| **loaded by Claude Code**  | **60** | symlinks in `~/.claude/skills/`                                                     |
+| **loaded by Claude Code**  | **61** | symlinks in `~/.claude/skills/`                                                     |
 
 **Code pattern skills** -- language-specific examples and idioms:
 
@@ -254,7 +254,7 @@ One further asymmetry: Raxol globs `**/SKILL.md` (any depth) while the sync scri
 | raxol          | Raxol TUI/agent imports, headless/MCP tools                                |
 | raxol-payments | :raxol_payments/:raxol_earn, Xochi/Riddler, agent wallets, ACP jobs        |
 | raxol-symphony | :raxol_symphony, tracker-driven coding-agent orchestration                 |
-| design-ux      | Component design, layout, tokens, accessibility, TUI aesthetics, DESIGN.md |
+| design-ux      | Component design, layout, tokens, motion, accessibility, TUI aesthetics    |
 | nix            | `.nix` files, flakes, NixOS, Home Manager, agent-skills packaging, rigup   |
 | native-code    | NIFs (C/Rust), SIMD (Zig), erl_nif.h, Rustler, BEAM native boundary        |
 
@@ -278,7 +278,7 @@ One further asymmetry: Raxol globs `**/SKILL.md` (any depth) while the sync scri
 | sentinel     | Contract monitoring, on-chain alerts, suspicious transactions |
 | watchdog     | Repo health, stale PRs, CI status, security advisories        |
 
-**Workflow skills** (40 total) -- architect, code-review, tdd, focused-fix, adversarial-reviewer, prd-to-plan, prd-to-issues, release, and more. Each has a SKILL.md with trigger conditions.
+**Workflow skills** (41 total) -- architect, code-review, tdd, focused-fix, adversarial-reviewer, prd-to-plan, prd-to-issues, release, frontend-slop-audit, and more. Each has a SKILL.md with trigger conditions.
 
 Skills provide detailed incorrect/correct code examples. CLAUDE.md provides preferences and philosophy. To add a new skill: add to the [agent-skills](https://github.com/DROOdotFOO/agent-skills) repo, push to `main`, then `chezmoi apply --refresh-externals`.
 
