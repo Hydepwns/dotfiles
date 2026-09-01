@@ -20,6 +20,12 @@
       "args": ["serve"]
     }
 {{- end }}
+{{- if or .digest .recall .autoresearch .watchdog .prepper .sentinel .patchbot .regen }},
+    "scribe": {
+      "command": "scribe",
+      "args": ["serve"]
+    }
+{{- end }}
 {{- if .recall }},
     "recall": {
       "command": "recall",

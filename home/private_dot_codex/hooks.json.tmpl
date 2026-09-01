@@ -1,0 +1,35 @@
+{
+  "description": "Personal Codex safety and project-context hooks.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "^Bash$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": {{ printf "%s/.claude/hooks/block-rm-rf.sh" .chezmoi.homeDir | toJson }},
+            "statusMessage": "Checking destructive file operations"
+          },
+          {
+            "type": "command",
+            "command": {{ printf "%s/.claude/hooks/block-destructive-git.sh" .chezmoi.homeDir | toJson }},
+            "statusMessage": "Checking destructive git operations"
+          }
+        ]
+      }
+    ]{{- if .prepper }},
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": {{ printf "%s/CODE/agent-skills/scripts/hooks/prepper-session-start.sh" .chezmoi.homeDir | toJson }},
+            "timeout": 30,
+            "statusMessage": "Loading project briefing"
+          }
+        ]
+      }
+    ]{{- end }}
+  }
+}

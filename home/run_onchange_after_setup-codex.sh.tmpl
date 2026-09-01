@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+# Register Codex MCP servers without replacing model, trust, or other app-owned config.
+
+set -euo pipefail
+
+if ! command -v codex &>/dev/null; then
+    printf '[chezmoi] codex not found; skipping Codex MCP setup\n' >&2
+    exit 0
+fi
+
+remove_server() {
+    codex mcp remove "$1" >/dev/null 2>&1 || true
+}
+
+add_stdio() {
+    local name="$1"
+    shift
+    remove_server "$name"
+    codex mcp add "$name" -- "$@" >/dev/null
+}
+
+add_http() {
+    local name="$1" url="$2"
+    remove_server "$name"
+    codex mcp add "$name" --url "$url" >/dev/null
+}
+
+add_stdio context7 npx -y @upstash/context7-mcp@latest
+add_http blockscout https://mcp.blockscout.com/mcp
+
+{{- if .coingecko }}
+add_http coingecko https://mcp.api.coingecko.com/mcp
+{{- else }}
+remove_server coingecko
+{{- end }}
+
+{{- if or .digest .recall .autoresearch .watchdog .prepper .sentinel .patchbot .regen }}
+add_stdio scribe scribe serve
+{{- else }}
+remove_server scribe
+{{- end }}
+{{- if .digest }}
+add_stdio digest digest serve
+{{- else }}
+remove_server digest
+{{- end }}
+{{- if .recall }}
+add_stdio recall recall serve
+{{- else }}
+remove_server recall
+{{- end }}
+{{- if .autoresearch }}
+add_stdio autoresearch autoresearch serve
+{{- else }}
+remove_server autoresearch
+{{- end }}
+{{- if .watchdog }}
+add_stdio watchdog watchdog serve
+{{- else }}
+remove_server watchdog
+{{- end }}
+{{- if .prepper }}
+add_stdio prepper prepper serve
+{{- else }}
+remove_server prepper
+{{- end }}
+{{- if .sentinel }}
+add_stdio sentinel sentinel serve
+{{- else }}
+remove_server sentinel
+{{- end }}
+{{- if .patchbot }}
+add_stdio patchbot patchbot serve
+{{- else }}
+remove_server patchbot
+{{- end }}
+{{- if .signoz }}
+add_stdio signoz "{{ .chezmoi.homeDir }}/.local/bin/signoz-mcp-wrapper.sh"
+{{- else }}
+remove_server signoz
+{{- end }}
+{{- if .regen }}
+add_stdio regen "{{ .chezmoi.homeDir }}/.local/bin/regen-mcp-wrapper.sh"
+{{- else }}
+remove_server regen
+{{- end }}
+{{- if .datadog }}
+add_http datadog "https://mcp.{{ .datadog_site }}/api/unstable/mcp-server/mcp"
+{{- else }}
+remove_server datadog
+{{- end }}
+{{- if .sentry }}
+add_http sentry https://mcp.sentry.dev/sse
+{{- else }}
+remove_server sentry
+{{- end }}
+
+printf '[chezmoi] Codex MCP configuration updated\n'

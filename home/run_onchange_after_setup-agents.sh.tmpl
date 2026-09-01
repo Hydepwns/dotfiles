@@ -2,7 +2,7 @@
 {{- if or .digest .recall .autoresearch .watchdog .prepper .sentinel .patchbot .regen }}
 # agents pyproject hash: {{ output "bash" "-c" (print "cat " .chezmoi.homeDir "/CODE/agent-skills/agents/*/pyproject.toml 2>/dev/null | shasum -a 256 | cut -d' ' -f1 || true") }}
 # Editable-install the agent-skills MCP CLIs into mise's pinned Python so the servers
-# referenced by ~/.mcp.json actually exist. Re-runs when any agent pyproject changes.
+# referenced by Claude Code and Codex MCP configuration actually exist. Re-runs when any agent pyproject changes.
 # Must sort after mise-install (provides python) -- hence the "setup-agents" name.
 
 set -euo pipefail

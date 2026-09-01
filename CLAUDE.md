@@ -20,6 +20,8 @@ make doctor               # Health check across tools, config, security
 make perf                 # 5-run shell startup benchmark
 make perf-report          # Bare vs configured startup breakdown
 make test                 # Test suite (zsh syntax, module loading)
+make codex-diff           # Preview only Codex-owned target changes
+make codex-apply          # Apply Codex target from this checkout only
 
 make brew-install         # Install Brewfile packages
 make brew-dump            # Update Brewfile from current system
@@ -66,7 +68,12 @@ Use in templates: `{{- if .rust -}}...{{- end -}}`. Use `{{- -}}` to trim whites
 - `run_onchange_after_brew-bundle.sh.tmpl` -- runs `brew bundle install` when Brewfile hash changes
 - `run_onchange_after_mise-install.sh.tmpl` -- runs `mise install` when mise config changes
 - `run_onchange_after_reload-hammerspoon.sh.tmpl` -- reloads Hammerspoon on config change (macOS)
-- `run_after_sync-skills.sh.tmpl` -- symlinks skills from `~/.agents/skills/` to `~/.claude/skills/` (always runs; script is idempotent)
+- `run_after_sync-skills.sh.tmpl` -- merges upstream and vendored skills into `~/.agents/skills/`, then mirrors that inventory into `~/.claude/skills/`
+- `run_onchange_after_setup-codex.sh.tmpl` -- registers enabled MCP servers through the Codex CLI without replacing app-owned config
+
+For Codex-only rollout, use `make codex-diff` followed by `make codex-apply`.
+These targets bind `--source` to this checkout and select only Codex-owned
+targets; do not use an unscoped `chezmoi apply` for that rollout.
 
 **Files the app also writes (`modify_` scripts)**: a plain managed file is authoritative, so `chezmoi apply` deletes any key the app added at runtime. That is the recurring `MM` in `chezmoi status`. When both chezmoi and an application own parts of a file, use a `modify_` source instead: chezmoi pipes the **current target** to the script on stdin and takes its stdout as the new target, so it can merge rather than overwrite.
 
@@ -183,17 +190,18 @@ Local skills (`ethskills/`, `solidity-auditor/`, `noir/`) provide offline Ethere
 | Standards  | `ethskills.com/standards/SKILL.md` | ERC-8004, EIP-7702, token standards         |
 | Gas        | `ethskills.com/gas/SKILL.md`       | Current costs (mainnet ~$0.002, L2 ~$0.002) |
 
-**Blockscout MCP**: Configured in `~/.mcp.json`. Provides type-safe blockchain data queries (balances, tokens, NFTs, contracts) across multiple chains via Model Context Protocol.
+**Blockscout MCP**: Configured for Claude Code in `~/.mcp.json` and for Codex in `~/.codex/config.toml`. Provides type-safe blockchain data queries across multiple chains.
 
 ## MCP Servers
 
-Managed via `~/.mcp.json` (chezmoi template: `home/dot_mcp.json.tmpl`). Toggle in `chezmoi.toml`, then `chezmoi apply`.
+Claude Code uses `~/.mcp.json` (`home/dot_mcp.json.tmpl`). Codex entries are registered idempotently by `home/run_onchange_after_setup-codex.sh.tmpl`, preserving Codex-owned model and project settings. Toggle either host's inventory through the same flags in `chezmoi.toml`, then run `chezmoi apply`.
 
 | Server       | Flag           | Transport  | Notes                                                                                             |
 | ------------ | -------------- | ---------- | ------------------------------------------------------------------------------------------------- |
 | context7     | always on      | stdio      | Library docs via npx                                                                              |
 | blockscout   | always on      | http       | Blockchain data queries                                                                           |
 | coingecko    | `coingecko`    | http       | Crypto market data                                                                                |
+| scribe       | any agent flag | stdio      | Session insight extractor shared by agent workflows                                               |
 | digest       | `digest`       | stdio      | Multi-platform activity digest                                                                    |
 | recall       | `recall`       | stdio      | Knowledge capture/retrieval (FTS5)                                                                |
 | autoresearch | `autoresearch` | stdio      | Autonomous experiment runner                                                                      |
@@ -222,28 +230,30 @@ Agent MCP servers (coingecko through patchbot) all share the same `<binary> serv
 
 ## Agent Skills
 
-Skills are portable `SKILL.md` files sourced from [DROOdotFOO/agent-skills](https://github.com/DROOdotFOO/agent-skills), pulled via `home/.chezmoiexternal.toml` on `chezmoi apply` (refresh window 168h; force with `--refresh-externals`) to `~/.agents/skills/`. Two hosts load the same files:
+Skills are portable `SKILL.md` files sourced from [DROOdotFOO/agent-skills](https://github.com/DROOdotFOO/agent-skills). Chezmoi unpacks the archive into `~/.agents/skills-upstream/`; `run_after_sync-skills.sh.tmpl` merges it with vendored extras into the host-facing `~/.agents/skills/` view. Three hosts load the same files:
 
 - **Raxol agent (primary host).** `Raxol.Agent.Skills.Store` scans `~/.agents/skills/` and `~/.agents/skills-extra/` for `**/SKILL.md` and holds them as read-only procedural memory, reached by the agent via the `skills_list` / `skill_view` / `skill_manage` tools. Enabled by `config :raxol_agent, skills_provider: Raxol.Agent.Skills.Store` in the raxol repo (`packages/raxol_agent/config/config.exs`); external dirs are set alongside it.
-- **Claude Code (secondary host).** `run_after_sync-skills.sh.tmpl` symlinks `~/.agents/skills/*` and `~/.agents/skills-extra/*` into `~/.claude/skills/*`, where Claude Code auto-injects a skill when its trigger clause matches the conversation.
+- **Codex.** Reads the merged `~/.agents/skills/` view directly and loads `~/.codex/AGENTS.md` plus repository AGENTS.md guidance.
+- **Claude Code.** Receives symlinks to the same merged view under `~/.claude/skills/`.
 
 **Skills roots:**
 
-- `~/.agents/skills/` -- the agent-skills collection (chezmoi external, read-only). To add/port a skill, add it under `skills/` in the [agent-skills](https://github.com/DROOdotFOO/agent-skills) repo, push to `main`, then `chezmoi apply --refresh-externals`.
-- `~/.agents/skills-extra/` -- chezmoi-vendored third-party skills the external does not manage (source: `home/dot_agents/skills-extra/`).
+- `~/.agents/skills/` -- symlink-only merged view consumed by all hosts.
+- `~/.agents/skills-upstream/` -- read-only agent-skills archive external.
+- `~/.agents/skills-extra/` -- chezmoi-vendored third-party source root.
 - `~/.raxol/skills/` -- writable managed root for **agent-authored** skills only (the raxol curation loop writes here). Runtime state, left unmanaged by chezmoi. Human and vendored skills come from the chezmoi-managed externals above, never here.
 
-**Name clashes: `skills-extra/` wins in both hosts.** chezmoi never prunes an archive external, so `~/.agents/skills/` can keep serving a stale copy of a skill that has since moved to `skills-extra/`. Raxol resolves this via `skills_external_dirs: ["~/.agents/skills", "~/.agents/skills-extra"]` -- `Skills.Store` scans in order and later `:ets.insert` calls overwrite earlier ones, so the **last** root wins. `run_after_sync-skills.sh` links the **first** root, so its `SKILL_ROOTS` is ordered `skills-extra` then `skills` to reach the same answer. Changing either without the other silently desyncs the two hosts.
+**Name clashes: `skills-extra/` wins.** The merger rebuilds symlinks in source priority order, so Codex and Claude Code resolve the same file. Raxol's later `skills-extra` scan resolves to that same preferred copy.
 
-One further asymmetry: Raxol globs `**/SKILL.md` (any depth) while the sync script only looks one level down. No skill is nested today, so both index the same set -- but a nested `SKILL.md` would appear in Raxol and not in Claude Code.
+The merger intentionally supports one skill directory level, matching Codex and Claude Code discovery. Do not nest skill entry points.
 
-**Skill accounting** (re-derive with `find -L ~/.agents/skills ~/.agents/skills-extra -name SKILL.md`, don't trust this prose):
+**Skill accounting** (re-derive with `find -L ~/.agents/skills -name SKILL.md`):
 
 | Source                     | Count  | Notes                                                                               |
 | -------------------------- | ------ | ----------------------------------------------------------------------------------- |
-| agent-skills `skills/`     | 59     | upstream also ships one empty placeholder dir with no `SKILL.md`, which never loads |
-| `skills-extra/` (vendored) | 2      | `virtuals-protocol-acp`, `hf-cli` (the latter originally installed by the `hf` CLI) |
-| **loaded by Claude Code**  | **61** | symlinks in `~/.claude/skills/`                                                     |
+| `skills-upstream/`         | 59     | the optional git submodule is absent from source archives                           |
+| `skills-extra/` (vendored) | 2      | `virtuals-protocol-acp`, `hf-cli`                                                    |
+| **merged host inventory**  | **61** | loaded by Codex, Claude Code, and Raxol                                              |
 
 **Code pattern skills** -- language-specific examples and idioms:
 
